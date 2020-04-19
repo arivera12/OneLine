@@ -7,6 +7,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneLine", "OneLine\OneLine.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneLine.Common", "OneLine.Common\OneLine.Common.csproj", "{713ACE6A-2843-43D8-B143-B135C083DD06}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlScripts", "SqlScripts", "{A09E3E2D-8BBB-4CB6-9B54-9F4B797C7D05}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{1EA007EA-B9A3-4E44-8AC6-0C6E170F0E2F}"
+	ProjectSection(SolutionItems) = preProject
+		AspNetIdentityTables.sql = AspNetIdentityTables.sql
+		AuditTrails.sql = AuditTrails.sql
+		ExceptionLogs.sql = ExceptionLogs.sql
+		UserBlobs.sql = UserBlobs.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +34,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1EA007EA-B9A3-4E44-8AC6-0C6E170F0E2F} = {A09E3E2D-8BBB-4CB6-9B54-9F4B797C7D05}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31771D0A-435A-4C14-96DD-F0D8A7BC4148}

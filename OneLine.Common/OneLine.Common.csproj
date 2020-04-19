@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0-preview.2.20160.3" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0-preview.2.20160.3" />
+    <PackageReference Include="Sendgrid" Version="9.14.0" />
+    <PackageReference Include="FluentValidation" Version="9.0.0-preview3" />
+    <PackageReference Include="CsvHelper" Version="15.0.5" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.24" />
+    <PackageReference Include="System.Text.Json" Version="5.0.0-preview.2.20160.6" />
+  </ItemGroup>
+
+</Project>

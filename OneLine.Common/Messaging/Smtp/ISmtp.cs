@@ -9,49 +9,49 @@ namespace OneLine.Messaging
         ISmtpSettings SmtpSettings { get; set; }
         void SendEmail(
             MailAddress from,
-            List<MailAddress> toMailAddresses,
+            IList<MailAddress> toMailAddresses,
             string subject,
             string body,
             bool IsBodyHtml = true,
             MailPriority MailPriority = MailPriority.Normal,
-            List<MailAddress> replyToMailAddresses = null,
-            List<MailAddress> mailAddressesBcc = null,
-            List<MailAddress> mailAddressesCc = null,
-            List<Attachment> attachments = null,
-            Dictionary<string, string> headers = null);
+            IList<MailAddress> replyToMailAddresses = null,
+            IList<MailAddress> mailAddressesBcc = null,
+            IList<MailAddress> mailAddressesCc = null,
+            IList<Attachment> attachments = null,
+            IDictionary<string, string> headers = null);
         void SendEmail(
-            List<MailAddress> toMailAddresses,
+            IList<MailAddress> toMailAddresses,
             string subject,
             string body,
             bool IsBodyHtml = true,
             MailPriority MailPriority = MailPriority.Normal,
-            List<MailAddress> replyToMailAddresses = null,
-            List<MailAddress> mailAddressesBcc = null,
-            List<MailAddress> mailAddressesCc = null,
-            List<Attachment> attachments = null,
-            Dictionary<string, string> headers = null);
+            IList<MailAddress> replyToMailAddresses = null,
+            IList<MailAddress> mailAddressesBcc = null,
+            IList<MailAddress> mailAddressesCc = null,
+            IList<Attachment> attachments = null,
+            IDictionary<string, string> headers = null);
         Task SendEmailAsync(
             MailAddress from,
-            List<MailAddress> toMailAddresses,
+            IList<MailAddress> toMailAddresses,
             string subject,
             string body,
             bool IsBodyHtml = true,
             MailPriority MailPriority = MailPriority.Normal,
-            List<MailAddress> replyToMailAddresses = null,
-            List<MailAddress> mailAddressesBcc = null,
-            List<MailAddress> mailAddressesCc = null,
-            List<Attachment> attachments = null,
-            Dictionary<string, string> headers = null);
+            IList<MailAddress> replyToMailAddresses = null,
+            IList<MailAddress> mailAddressesBcc = null,
+            IList<MailAddress> mailAddressesCc = null,
+            IList<Attachment> attachments = null,
+            IDictionary<string, string> headers = null);
         Task SendEmailAsync(
-            List<MailAddress> toMailAddresses,
+            IList<MailAddress> toMailAddresses,
             string subject,
             string body,
             bool IsBodyHtml = true,
             MailPriority MailPriority = MailPriority.Normal,
-            List<MailAddress> replyToMailAddresses = null,
-            List<MailAddress> mailAddressesBcc = null,
-            List<MailAddress> mailAddressesCc = null,
-            List<Attachment> attachments = null,
-            Dictionary<string, string> headers = null);
+            IList<MailAddress> replyToMailAddresses = null,
+            IList<MailAddress> mailAddressesBcc = null,
+            IList<MailAddress> mailAddressesCc = null,
+            IList<Attachment> attachments = null,
+            IDictionary<string, string> headers = null);
     }
 }

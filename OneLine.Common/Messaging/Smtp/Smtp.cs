@@ -21,16 +21,16 @@ namespace OneLine.Messaging
         }
         public void SendEmail(
             MailAddress from,
-            List<MailAddress> toMailAddresses,
+            IList<MailAddress> toMailAddresses,
             string subject,
             string body,
             bool IsBodyHtml = true,
             MailPriority MailPriority = MailPriority.Normal,
-            List<MailAddress> replyToMailAddresses = null,
-            List<MailAddress> mailAddressesBcc = null,
-            List<MailAddress> mailAddressesCc = null,
-            List<Attachment> attachments = null,
-            Dictionary<string, string> headers = null)
+            IList<MailAddress> replyToMailAddresses = null,
+            IList<MailAddress> mailAddressesBcc = null,
+            IList<MailAddress> mailAddressesCc = null,
+            IList<Attachment> attachments = null,
+            IDictionary<string, string> headers = null)
         {
             if (from is null)
                 throw new ArgumentNullException("The From mail address param is null");
@@ -109,16 +109,16 @@ namespace OneLine.Messaging
         }
 
         public void SendEmail(
-            List<MailAddress> toMailAddresses,
+            IList<MailAddress> toMailAddresses,
             string subject,
             string body,
             bool IsBodyHtml = true,
             MailPriority MailPriority = MailPriority.Normal,
-            List<MailAddress> replyToMailAddresses = null,
-            List<MailAddress> mailAddressesBcc = null,
-            List<MailAddress> mailAddressesCc = null,
-            List<Attachment> attachments = null,
-            Dictionary<string, string> headers = null)
+            IList<MailAddress> replyToMailAddresses = null,
+            IList<MailAddress> mailAddressesBcc = null,
+            IList<MailAddress> mailAddressesCc = null,
+            IList<Attachment> attachments = null,
+            IDictionary<string, string> headers = null)
         {
             if (SmtpSettings is null)
                 throw new ArgumentNullException("The SmtpSettings is null. Check that this config exist in the appSettings.json");
@@ -205,16 +205,16 @@ namespace OneLine.Messaging
         }
         public async Task SendEmailAsync(
             MailAddress from,
-            List<MailAddress> toMailAddresses,
+            IList<MailAddress> toMailAddresses,
             string subject,
             string body,
             bool IsBodyHtml = true,
             MailPriority MailPriority = MailPriority.Normal,
-            List<MailAddress> replyToMailAddresses = null,
-            List<MailAddress> mailAddressesBcc = null,
-            List<MailAddress> mailAddressesCc = null,
-            List<Attachment> attachments = null,
-            Dictionary<string, string> headers = null)
+            IList<MailAddress> replyToMailAddresses = null,
+            IList<MailAddress> mailAddressesBcc = null,
+            IList<MailAddress> mailAddressesCc = null,
+            IList<Attachment> attachments = null,
+            IDictionary<string, string> headers = null)
         {
             if (from is null)
                 throw new ArgumentNullException("The From mail address param is null");
@@ -293,16 +293,16 @@ namespace OneLine.Messaging
         }
 
         public async Task SendEmailAsync(
-            List<MailAddress> toMailAddresses,
+            IList<MailAddress> toMailAddresses,
             string subject,
             string body,
             bool IsBodyHtml = true,
             MailPriority MailPriority = MailPriority.Normal,
-            List<MailAddress> replyToMailAddresses = null,
-            List<MailAddress> mailAddressesBcc = null,
-            List<MailAddress> mailAddressesCc = null,
-            List<Attachment> attachments = null,
-            Dictionary<string, string> headers = null)
+            IList<MailAddress> replyToMailAddresses = null,
+            IList<MailAddress> mailAddressesBcc = null,
+            IList<MailAddress> mailAddressesCc = null,
+            IList<Attachment> attachments = null,
+            IDictionary<string, string> headers = null)
         {
             if (SmtpSettings is null)
                 throw new ArgumentNullException("The SmtpSettings is null. Check that this config exist in the appSettings.json");

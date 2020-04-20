@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
+using OneLine.Models;
 
-namespace OneLine.Models.UserBlobsValidator
+namespace OneLine.Validators
 {
     public class UserBlobsValidator : AbstractValidator<IUserBlobs>
     {

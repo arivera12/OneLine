@@ -5,10 +5,10 @@
         /// <summary>
         /// Public web server path
         /// </summary>
-        string PublicWebServerBaseUploadFilePath { get; set; }
+        string PublicUploadFilePath { get; set; }
         /// <summary>
         /// Private web server path
         /// </summary>
-        string PrivateWebServerBaseUploadFilePath { get; set; }
+        string PrivateUploadFilePath { get; set; }
     }
 }

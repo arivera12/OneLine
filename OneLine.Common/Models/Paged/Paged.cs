@@ -1,6 +1,4 @@
-﻿
-
-namespace OneLine.Models
+﻿namespace OneLine.Models
 {
     public class Paged<T> : IPaged<T>
     {

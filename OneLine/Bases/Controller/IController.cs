@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface IController<T, TViewModel, TIdentifier, TSearchPaging, TSearchExtraParams, TSaveReplaceList, TAuditTrails, TExceptionsLogs, TUserBlobs>
+    public interface IController<T, TViewModel, TIdentifier, TSearchPaging, TSearchExtraParams, TSaveReplaceList, TAuditTrails, TExceptionLogs, TUserBlobs>
         where TAuditTrails : AuditTrails, IAuditTrails
-        where TExceptionsLogs : ExceptionsLogs, IExceptionsLogs
+        where TExceptionLogs : ExceptionLogs, IExceptionLogs
         where TUserBlobs : UserBlobs, IUserBlobs
     {
-        BaseDbContext<TAuditTrails, TExceptionsLogs, TUserBlobs> BaseDbContext { get; set; }
+        BaseDbContext<TAuditTrails, TExceptionLogs, TUserBlobs> BaseDbContext { get; set; }
         IBlobStorage BaseBlobStorage { get; set; }
         Task<IActionResult> Add([FromBody]TViewModel viewModel);
         Task<IActionResult> Update([FromBody]TViewModel viewModel);

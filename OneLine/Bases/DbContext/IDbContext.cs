@@ -3,13 +3,13 @@ using OneLine.Models;
 
 namespace OneLine.Bases
 {
-    public interface IDbContext<TAuditTrails, TExceptionsLogs, TUserBlobs>
+    public interface IDbContext<TAuditTrails, TExceptionLogs, TUserBlobs>
         where TAuditTrails : AuditTrails, IAuditTrails
-        where TExceptionsLogs : ExceptionsLogs, IExceptionsLogs
+        where TExceptionLogs : ExceptionLogs, IExceptionLogs
         where TUserBlobs : UserBlobs, IUserBlobs
     {
         DbSet<TAuditTrails> AuditTrails { get; set; }
-        DbSet<TExceptionsLogs> ExceptionsLogs { get; set; }
+        DbSet<TExceptionLogs> ExceptionLogs { get; set; }
         DbSet<TUserBlobs> UserBlobs { get; set; }
     }
 }

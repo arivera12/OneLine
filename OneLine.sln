@@ -11,10 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlScripts", "SqlScripts", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{1EA007EA-B9A3-4E44-8AC6-0C6E170F0E2F}"
 	ProjectSection(SolutionItems) = preProject
-		AspNetIdentityTables.sql = AspNetIdentityTables.sql
-		AuditTrails.sql = AuditTrails.sql
-		ExceptionLogs.sql = ExceptionLogs.sql
-		UserBlobs.sql = UserBlobs.sql
+		SqlScripts\SqlServer\AspNetIdentityTables.sql = SqlScripts\SqlServer\AspNetIdentityTables.sql
+		SqlScripts\SqlServer\AuditTrails.sql = SqlScripts\SqlServer\AuditTrails.sql
+		SqlScripts\SqlServer\ExceptionLogs.sql = SqlScripts\SqlServer\ExceptionLogs.sql
+		SqlScripts\SqlServer\UserBlobs.sql = SqlScripts\SqlServer\UserBlobs.sql
 	EndProjectSection
 EndProject
 Global

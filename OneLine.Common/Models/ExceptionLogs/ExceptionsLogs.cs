@@ -3,7 +3,7 @@ using System;
 
 namespace OneLine.Models
 {
-    public class ExceptionsLogs : IExceptionsLogs
+    public class ExceptionLogs : IExceptionLogs
     {
         /// <summary>
         /// The System Exception Log Identifier

@@ -26,7 +26,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<bool>> IsBlobOwnerAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<bool>> IsBlobOwnerAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null)
             {
@@ -45,7 +45,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="userBlob"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<bool>> IsBlobOwnerAndFileExistsAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<bool>> IsBlobOwnerAndFileExistsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null)
             {
@@ -75,7 +75,7 @@ namespace OneLine.Extensions
         /// <param name="predicate"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<bool>> IsFormFileUploadedAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<bool>> IsFormFileUploadedAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var any = predicate == null ? files.Any() : files.Any(predicate);
             if (!any)
@@ -104,7 +104,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">Set this param if you want to read a file from a specific form field name.</param>
         /// <param name="formFileRules">The rules to apply to the file uploaded.</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<UserBlobs>> CreateAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<UserBlobs>> CreateAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var any = predicate == null ? files.Any() : files.Any(predicate);
             if (!any)
@@ -139,7 +139,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">Set this param if you want to read a file from a specific form field name.</param>
         /// <param name="formFileRules">The rules to apply to the file uploaded.</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateRangeAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateRangeAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var any = predicate == null ? files.Any() : files.Any(predicate);
             if (any)
@@ -182,7 +182,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">The form file field name</param>
         /// <param name="formFileRules">The rules for the files</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<UserBlobs>> CreateAndBindAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, object model, string propertyName, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<UserBlobs>> CreateAndBindAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, object model, string propertyName, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isFormFileUploadedApiResponse = await dbContext.IsFormFileUploadedAsync(files, predicate, formFileRules, userId, controllerName, actionName, remoteIpAddress);
             if (isFormFileUploadedApiResponse.Status == ApiResponseStatus.Failed || !isFormFileUploadedApiResponse.Data)
@@ -205,7 +205,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">The form file field name</param>
         /// <param name="formFileRules">The rules for the files</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateRangeAndBindAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, object model, string propertyName, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateRangeAndBindAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, object model, string propertyName, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isFormFileUploadedApiResponse = await dbContext.IsFormFileUploadedAsync(files, predicate, formFileRules, userId, controllerName, actionName, remoteIpAddress);
             if (isFormFileUploadedApiResponse.Status == ApiResponseStatus.Failed || !isFormFileUploadedApiResponse.Data)
@@ -230,7 +230,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to delete</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<UserBlobs>> DeleteAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool IgnoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<UserBlobs>> DeleteAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool IgnoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, IgnoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
@@ -247,7 +247,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to delete</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<UserBlobs>> DeleteForcedAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<UserBlobs>> DeleteForcedAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             await blobStorage.DeleteAsync(userBlobs.FilePath);
             await dbContext.RemoveAuditedAsync(userBlobs, userId, controllerName, actionName, remoteIpAddress);
@@ -259,7 +259,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blobs to delete</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> DeleteRangeAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> DeleteRangeAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null || !userBlobs.Any())
             {
@@ -284,7 +284,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blobs to delete</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> DeleteRangeForcedAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> DeleteRangeForcedAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null || !userBlobs.Any())
             {
@@ -311,7 +311,7 @@ namespace OneLine.Extensions
         /// <param name="actionName"></param>
         /// <param name="remoteIpAddress"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<IEnumerable<IApiResponse<IEnumerable<UserBlobs>>>>> DeleteUserBlobsFromObjectAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, object model, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<IApiResponse<IEnumerable<UserBlobs>>>>> DeleteUserBlobsFromObjectAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, object model, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             bool anyError = false;
             var apiResponse = new ApiResponse<IEnumerable<IApiResponse<IEnumerable<UserBlobs>>>>();
@@ -372,7 +372,7 @@ namespace OneLine.Extensions
         /// <param name="actionName"></param>
         /// <param name="remoteIpAddress"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntityAsync<TEntity>(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, TEntity entity, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntityAsync<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, TEntity entity, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where TEntity : class
         {
             if (entity== null)
@@ -403,7 +403,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">Set this param if you want to read a file from a specific form field name.</param>
         /// <param name="formFileRules">The rules to apply to the file uploaded.</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<Tuple<UserBlobs, UserBlobs>>> UpdateAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<Tuple<UserBlobs, UserBlobs>>> UpdateAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var addHttpBlobApiResponse = await dbContext.CreateAsync(files, predicate, formFileRules, blobStorage, userId, controllerName, actionName, remoteIpAddress);
             if (addHttpBlobApiResponse.Status == ApiResponseStatus.Failed)
@@ -425,7 +425,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">The form file field name</param>
         /// <param name="formFileRules">The rules for the files</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<Tuple<UserBlobs, UserBlobs>>> UpdateAndBindAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, object model, string propertyName, UserBlobs userBlobs, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<Tuple<UserBlobs, UserBlobs>>> UpdateAndBindAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, object model, string propertyName, UserBlobs userBlobs, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var blob = await dbContext.UpdateAsync(userBlobs, files, predicate, formFileRules, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             model.GetType().GetProperty(propertyName).SetValue(model, JsonConvert.SerializeObject(blob.Data.Item1));
@@ -438,7 +438,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">Set this param if you want to read a file from a specific form field name.</param>
         /// <param name="formFileRules">The rules to apply to the file uploaded.</param>
         /// <returns></returns>
-        public static async Task<ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>> UpdateAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> UserBlobs, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>> UpdateAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> UserBlobs, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var addMultipleApiResponse = await dbContext.CreateRangeAsync(files, predicate, formFileRules, blobStorage, userId, controllerName, actionName, remoteIpAddress);
             if (addMultipleApiResponse.Status == ApiResponseStatus.Failed)
@@ -460,7 +460,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">The form file field name</param>
         /// <param name="formFileRules">The rules for the files</param>
         /// <returns></returns>
-        public static async Task<ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>> UpdateAndBindAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, object model, string propertyName, IEnumerable<UserBlobs> UserBlobs, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>> UpdateAndBindAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, object model, string propertyName, IEnumerable<UserBlobs> UserBlobs, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var blobs = await dbContext.UpdateAsync(UserBlobs, files, predicate, formFileRules, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             model.GetType().GetProperty(propertyName).SetValue(model, JsonConvert.SerializeObject(blobs.Data.Item1));
@@ -484,7 +484,7 @@ namespace OneLine.Extensions
         /// <param name="Descending"></param>
         /// <param name="Count"></param>
         /// <returns></returns>
-        public static IApiResponse<IPaged<IEnumerable<UserBlobs>>> SearchPaged(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, string SearchTerm, IList<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
+        public static IApiResponse<IPaged<IEnumerable<UserBlobs>>> SearchPaged(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string SearchTerm, IList<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
         {
             var query = dbContext.UserBlobs.AsQueryable();
             query = query.Where(w => UserBlobId.Any() ?
@@ -528,7 +528,7 @@ namespace OneLine.Extensions
         /// <param name="Descending"></param>
         /// <param name="Count"></param>
         /// <returns></returns>
-        public static IApiResponse<IPaged<IEnumerable<UserBlobs>>> ListPaged(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, string SearchTerm, IList<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
+        public static IApiResponse<IPaged<IEnumerable<UserBlobs>>> ListPaged(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string SearchTerm, IList<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
         {
             var query = dbContext.UserBlobs.AsQueryable();
             query = query.Where(w => UserBlobId.Any() ?
@@ -564,7 +564,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="userBlob"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<UserBlobs>> GetOneAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IIdentifier<string> identifier)
+        public static async Task<IApiResponse<UserBlobs>> GetOneAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier)
         {
             if (identifier == null || string.IsNullOrWhiteSpace(identifier.Model))
             {
@@ -578,7 +578,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="userBlob"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<UserBlobs>> GetOneAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IIdentifier<string> identifier, string userId)
+        public static async Task<IApiResponse<UserBlobs>> GetOneAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, string userId)
         {
             var record = await dbContext.UserBlobs.FirstOrDefaultAsync(x => x.UserBlobId == identifier.Model && x.CreatedBy == userId);
             return record == null ? record.ToApiResponseFailed("RecordNotFound") : record.ToApiResponse();
@@ -593,7 +593,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<Stream> ReadBlobAsStreamAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<Stream> ReadBlobAsStreamAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
@@ -608,7 +608,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blobs to search</param>
         /// <returns></returns>
-        public static async Task<IEnumerable<Stream>> ReadBlobAsStreamAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IEnumerable<Stream>> ReadBlobAsStreamAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null || !userBlobs.Any())
             {
@@ -627,7 +627,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<Stream>> ReadBlobAsStreamApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<Stream>> ReadBlobAsStreamApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
@@ -643,7 +643,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IEnumerable<IApiResponse<Stream>>> ReadBlobAsStreamApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IEnumerable<IApiResponse<Stream>>> ReadBlobAsStreamApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null || !userBlobs.Any())
             {
@@ -663,7 +663,7 @@ namespace OneLine.Extensions
         /// <param name="UserBlobsViewModels">The user blob to search</param>
         /// <param name="zipFilename">The zip file name. (Remember include *.zip extension)</param>
         /// <returns></returns>
-        public static async Task<Stream> ReadBlobsIntoZipFolderStreamAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<Stream> ReadBlobsIntoZipFolderStreamAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             using (MemoryStream zipStream = new MemoryStream())
             {
@@ -695,7 +695,7 @@ namespace OneLine.Extensions
         /// <param name="UserBlobsViewModels">The user blob to search</param>
         /// <param name="zipFilename">The zip file name. (Remember include *.zip extension)</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<Stream>> ReadBlobsIntoZipFolderStreamApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<Stream>> ReadBlobsIntoZipFolderStreamApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null || !userBlobs.Any())
             {
@@ -736,7 +736,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<byte[]> ReadBlobAsByteArrayAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<byte[]> ReadBlobAsByteArrayAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             return (await dbContext.ReadBlobAsStreamAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress)).ToByteArray();
         }
@@ -745,7 +745,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IEnumerable<byte[]>> ReadBlobAsByteArrayAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IEnumerable<byte[]>> ReadBlobAsByteArrayAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null || !userBlobs.Any())
             {
@@ -764,7 +764,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<byte[]>> ReadBlobAsByteArrayApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<byte[]>> ReadBlobAsByteArrayApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
@@ -780,7 +780,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IEnumerable<IApiResponse<byte[]>>> ReadBlobAsByteArrayApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IEnumerable<IApiResponse<byte[]>>> ReadBlobAsByteArrayApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null || !userBlobs.Any())
             {
@@ -799,7 +799,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobsViewModels">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<byte[]> ReadBlobsIntoZipFolderByteArrayAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<byte[]> ReadBlobsIntoZipFolderByteArrayAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             return (await dbContext.ReadBlobsIntoZipFolderStreamAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress)).ToByteArray();
         }
@@ -808,7 +808,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobsViewModels">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<ApiResponse<byte[]>> ReadBlobsIntoZipFolderByteArrayApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<ApiResponse<byte[]>> ReadBlobsIntoZipFolderByteArrayApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var streamApiResponse = await dbContext.ReadBlobsIntoZipFolderStreamApiResponseAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             return new ApiResponse<byte[]>() { Data = streamApiResponse.Data?.ToByteArray(), Message = streamApiResponse.Message, Status = streamApiResponse.Status };
@@ -823,7 +823,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<string> ReadBlobAsBase64Async(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<string> ReadBlobAsBase64Async(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             return Convert.ToBase64String(await dbContext.ReadBlobAsByteArrayAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress));
         }
@@ -832,7 +832,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IEnumerable<string>> ReadBlobAsBase64Async(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IEnumerable<string>> ReadBlobAsBase64Async(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null || !userBlobs.Any())
             {
@@ -851,7 +851,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<string>> ReadBlobAsBase64ApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<string>> ReadBlobAsBase64ApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
@@ -867,7 +867,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IEnumerable<IApiResponse<string>>> ReadBlobAsBase64ApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IEnumerable<IApiResponse<string>>> ReadBlobAsBase64ApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             if (userBlobs == null || !userBlobs.Any())
             {
@@ -886,7 +886,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobsViewModels">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<string> ReadBlobsIntoZipFolderBase64Async(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<string> ReadBlobsIntoZipFolderBase64Async(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             return Convert.ToBase64String(await dbContext.ReadBlobsIntoZipFolderByteArrayAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress));
         }
@@ -895,7 +895,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobsViewModels">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<string>> ReadBlobsIntoZipFolderBase64ApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<string>> ReadBlobsIntoZipFolderBase64ApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var streamApiResponse = await dbContext.ReadBlobsIntoZipFolderByteArrayApiResponseAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             return new ApiResponse<string>() { Data = Convert.ToBase64String(streamApiResponse.Data), Message = streamApiResponse.Message, Status = streamApiResponse.Status };
@@ -910,7 +910,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="UserBlobs">The user blob to search</param>
         /// <returns></returns>
-        public static async Task<IActionResult> ReadBlobAsFileStreamResult(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IActionResult> ReadBlobAsFileStreamResult(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
@@ -932,7 +932,7 @@ namespace OneLine.Extensions
         /// <param name="UserBlobsViewModels">The user blob to search</param>
         /// <param name="zipFilename">The zip file name. (Remember include *.zip extension)</param>
         /// <returns></returns>
-        public static async Task<IActionResult> ReadBlobsIntoZipFolderAsFileStreamResult(this BaseDbContext<AuditTrails, ExceptionsLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, string zipFilename = null, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IActionResult> ReadBlobsIntoZipFolderAsFileStreamResult(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, string zipFilename = null, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             using (MemoryStream zipStream = new MemoryStream())
             {

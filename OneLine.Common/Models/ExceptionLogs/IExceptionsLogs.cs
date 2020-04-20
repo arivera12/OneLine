@@ -2,7 +2,7 @@
 
 namespace OneLine.Models
 {
-    public interface IExceptionsLogs
+    public interface IExceptionLogs
     {
         /// <summary>
         /// The System Exception Log Identifier

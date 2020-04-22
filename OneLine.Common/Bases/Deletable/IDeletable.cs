@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
@@ -12,6 +13,12 @@ namespace OneLine.Bases
     public interface IDeletable<T>
     {
         Task Delete();
+        Action<Action> OnBeforeDelete { get; set; }
+        Action<T> OnAfterDelete { get; set; }
+    }
+    public interface IDeletableWithValidation<T>
+    {
+        Task Delete(IValidator validator);
         Action<Action> OnBeforeDelete { get; set; }
         Action<T> OnAfterDelete { get; set; }
     }

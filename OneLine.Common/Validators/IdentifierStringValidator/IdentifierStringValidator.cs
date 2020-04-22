@@ -3,8 +3,7 @@ using OneLine.Models;
 
 namespace OneLine.Validators
 {
-    public class IdentifierStringValidator<T> : AbstractValidator<T> 
-        where T : IIdentifier<string>
+    public class IdentifierStringValidator : AbstractValidator<IIdentifier<string>>
     {
         public IdentifierStringValidator()
         {

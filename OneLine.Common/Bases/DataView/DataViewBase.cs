@@ -9,15 +9,12 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public class ListViewBase<T, TValidator, TIdentifier, TId, TIdentifierValidator, THttpService, TSearchExtraParams, TBlobData, TBlobValidator, TUserBlobs> :
-        IListView<T, TValidator, TIdentifier, TIdentifierValidator, THttpService, TSearchExtraParams, TBlobData, TBlobValidator, TUserBlobs>
+    public class DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+        IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : new()
-        where TValidator : IValidator, new()
         where TIdentifier : IIdentifier<TId>, new()
         where TId : class
-        where TIdentifierValidator : IValidator, new()
-        where THttpService : IHttpService<T, TValidator, TIdentifier, TIdentifierValidator, TSearchExtraParams, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TSearchExtraParams : class
+        where THttpService : IHttpService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : IBlobData
         where TBlobValidator : IValidator, new()
         where TUserBlobs : IUserBlobs
@@ -25,9 +22,7 @@ namespace OneLine.Bases
         public virtual TIdentifier Identifier { get; set; } = new TIdentifier();
         public virtual T Record { get; set; } = new T();
         public virtual IEnumerable<T> Records { get; set; }
-        public virtual TValidator Validator { get; set; } = new TValidator();
-        public virtual TIdentifierValidator IdentifierValidator { get; set; } = new TIdentifierValidator();
-        public virtual TSearchExtraParams SearchExtraParams { get; set; }
+        public virtual object SearchExtraParams { get; set; }
         public virtual IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>> ResponsePaged { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePaged { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedSucceeded { get; set; }

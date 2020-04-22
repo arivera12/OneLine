@@ -14,21 +14,15 @@ namespace OneLine.Bases
     /// This is a base class to be used as an HttpClient Service
     /// </summary>
     /// <typeparam name="T">The type</typeparam>
-    /// <typeparam name="TValidator"></typeparam>
     /// <typeparam name="TIdentifier"></typeparam>
     /// <typeparam name="TId"></typeparam>
-    /// <typeparam name="TIdentifierValidator"></typeparam>
-    /// <typeparam name="TSearchExtraParams"></typeparam>
     /// <typeparam name="TBlobData"></typeparam>
     /// <typeparam name="TBlobValidator"></typeparam>
     /// <typeparam name="TUserBlobs"></typeparam>
-    public class HttpServiceBase<T, TValidator, TIdentifier, TId, TIdentifierValidator, TSearchExtraParams, TBlobData, TBlobValidator, TUserBlobs> :
-        IHttpService<T, TValidator, TIdentifier, TIdentifierValidator, TSearchExtraParams, TBlobData, TBlobValidator, TUserBlobs>
+    public class HttpServiceBase<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs> : IHttpService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
         where T : new()
-        where TValidator : IValidator, new()
         where TIdentifier : IIdentifier<TId>
         where TId : class
-        where TIdentifierValidator : IValidator, new()
         where TBlobData : IBlobData
         where TBlobValidator : IValidator, new()
         where TUserBlobs : IUserBlobs
@@ -41,8 +35,6 @@ namespace OneLine.Bases
         public virtual string SearchMethod { get; set; } = "search";
         public virtual string BaseAddress { get; set; }
         public virtual HttpClient HttpClient { get; set; }
-        public virtual TValidator Validator { get; set; } = new TValidator();
-        public virtual TIdentifierValidator IdentifierValidator { get; set; } = new TIdentifierValidator();
         public virtual TBlobValidator BlobValidator { get; set; } = new TBlobValidator();
         public HttpServiceBase()
         {
@@ -93,9 +85,9 @@ namespace OneLine.Bases
                 HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
             }
         }
-        public virtual async Task<IResponseResult<IApiResponse<T>>> Add(T record)
+        public virtual async Task<IResponseResult<IApiResponse<T>>> Add(T record, IValidator validator)
         {
-            var validationResult = await Validator.ValidateAsync(record);
+            var validationResult = await validator.ValidateAsync(record);
             if (!validationResult.IsValid)
             {
                 return new ResponseResult<IApiResponse<T>>
@@ -111,9 +103,9 @@ namespace OneLine.Bases
             }
             return await HttpClient.PostJsonResponseResultAsync<IApiResponse<T>>($"/{ControllerName}/{AddMethod}", record);
         }
-        public virtual async Task<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> Add(T record, IEnumerable<TBlobData> blobDatas)
+        public virtual async Task<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> Add(T record, IValidator validator, IEnumerable<TBlobData> blobDatas)
         {
-            var validationResult = await Validator.ValidateAsync(record);
+            var validationResult = await validator.ValidateAsync(record);
             if (!validationResult.IsValid)
             {
                 return new ResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>
@@ -151,9 +143,9 @@ namespace OneLine.Bases
             }
             return await HttpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>(new HttpRequestMessage(HttpMethod.Post, $"/{ControllerName}/{AddMethod}"), record, multipartFormDataContent);
         }
-        public virtual async Task<IResponseResult<IApiResponse<T>>> Update(T record)
+        public virtual async Task<IResponseResult<IApiResponse<T>>> Update(T record, IValidator validator)
         {
-            var validationResult = await Validator.ValidateAsync(record);
+            var validationResult = await validator.ValidateAsync(record);
             if (!validationResult.IsValid)
             {
                 return new ResponseResult<IApiResponse<T>>
@@ -169,9 +161,9 @@ namespace OneLine.Bases
             }
             return await HttpClient.PutJsonResponseResultAsync<IApiResponse<T>>($"/{ControllerName}/{UpdateMethod}", record);
         }
-        public virtual async Task<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> Update(T record, IEnumerable<TBlobData> blobDatas)
+        public virtual async Task<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> Update(T record, IValidator validator, IEnumerable<TBlobData> blobDatas)
         {
-            var validationResult = await Validator.ValidateAsync(record);
+            var validationResult = await validator.ValidateAsync(record);
             if (!validationResult.IsValid)
             {
                 return new ResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>
@@ -209,9 +201,9 @@ namespace OneLine.Bases
             }
             return await HttpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>(new HttpRequestMessage(HttpMethod.Put, $"/{ControllerName}/{UpdateMethod}"), record, multipartFormDataContent);
         }
-        public virtual async Task<IResponseResult<IApiResponse<T>>> Delete(TIdentifier identifier)
+        public virtual async Task<IResponseResult<IApiResponse<T>>> Delete(TIdentifier identifier, IValidator validator)
         {
-            var validationResult = await IdentifierValidator.ValidateAsync(identifier);
+            var validationResult = await validator.ValidateAsync(identifier);
             if (!validationResult.IsValid)
             {
                 return new ResponseResult<IApiResponse<T>>
@@ -227,9 +219,9 @@ namespace OneLine.Bases
             }
             return await HttpClient.PutJsonResponseResultAsync<IApiResponse<T>>($"/{ControllerName}/{DeleteMethod}", identifier);
         }
-        public virtual async Task<IResponseResult<IApiResponse<T>>> GetOne(TIdentifier identifier)
+        public virtual async Task<IResponseResult<IApiResponse<T>>> GetOne(TIdentifier identifier, IValidator validator)
         {
-            var validationResult = await IdentifierValidator.ValidateAsync(identifier);
+            var validationResult = await validator.ValidateAsync(identifier);
             if (!validationResult.IsValid)
             {
                 return new ResponseResult<IApiResponse<T>>
@@ -245,7 +237,7 @@ namespace OneLine.Bases
             }
             return await HttpClient.PutJsonResponseResultAsync<IApiResponse<T>>($"/{ControllerName}/{GetOneMethod}", identifier);
         }
-        public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> Search(ISearchPaging SearchPaging, TSearchExtraParams searchExtraParams)
+        public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> Search(ISearchPaging SearchPaging, object searchExtraParams)
         {
             return await HttpClient.GetJsonResponseResultAsync<IApiResponse<IPaged<IEnumerable<T>>>>($"/{ControllerName}/{SearchMethod}", new { SearchPaging, searchExtraParams });
         }

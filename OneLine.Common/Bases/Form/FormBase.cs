@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
+using OneLine.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,26 +11,20 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public class FormBase<T, TValidator, TIdentifier, TId, TIdentifierValidator, THttpService, TSearchExtraParams, TBlobData, TBlobValidator, TUserBlobs> : 
-        IForm<T, TValidator, TIdentifier, TIdentifierValidator, THttpService, TSearchExtraParams, TBlobData, TBlobValidator, TUserBlobs>
+    public class FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> : 
+        IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : new()
-        where TValidator : IValidator, new()
         where TIdentifier : IIdentifier<TId>, new()
         where TId : class
-        where TIdentifierValidator : IValidator, new()
-        where THttpService : IHttpService<T, TValidator, TIdentifier, TIdentifierValidator, TSearchExtraParams, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TSearchExtraParams : class
+        where THttpService : IHttpService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : IBlobData
         where TBlobValidator : IValidator, new()
         where TUserBlobs : IUserBlobs
     {
         public virtual T Record { get; set; } = new T();
         public virtual IEnumerable<T> Records { get; set; }
-        public virtual TValidator Validator { get; set; } = new TValidator();
         public virtual TIdentifier Identifier { get; set; } = new TIdentifier();
-        public virtual TIdentifierValidator IdentifierValidator { get; set; } = new TIdentifierValidator();
         public virtual THttpService HttpService { get; set; } = new THttpService();
-        public virtual TSearchExtraParams SearchExtraParams { get; set; }
         public virtual IList<TBlobData> BlobDatas { get; set; } = new List<TBlobData>();
         public virtual IConfiguration Configuration { get; set; }
         public virtual FormState FormState { get; set; }
@@ -64,7 +59,7 @@ namespace OneLine.Bases
         {
             if(Identifier != null)
             {
-                Response = await HttpService.GetOne(Identifier);
+                Response = await HttpService.GetOne(Identifier, new EmptyValidator());
                 if(Response.Succeed && Response.Response.Status.Succeeded())
                 {
                     Record = Response.Response.Data;
@@ -81,7 +76,7 @@ namespace OneLine.Bases
             }
             OnLoad?.Invoke(Response);
         }
-        public virtual async Task Save()
+        public virtual async Task Save(IValidator validator)
         {
             if(FormState == FormState.Copy || FormState == FormState.Create || FormState == FormState.Edit)
             {
@@ -89,31 +84,31 @@ namespace OneLine.Bases
                 {
                     if(OnAfterSave == null)
                     {
-                        await InternalUpdate();
+                        await InternalUpdate(validator);
                     }
                     else
                     {
-                        OnBeforeSave.Invoke(async () => await InternalUpdate());
+                        OnBeforeSave.Invoke(async () => await InternalUpdate(validator));
                     }
                 }
                 else
                 {
                     if (OnAfterSave == null)
                     {
-                        await InternalCreate();
+                        await InternalCreate(validator);
                     }
                     else
                     {
-                        OnBeforeSave.Invoke(async () => await InternalCreate());
+                        OnBeforeSave.Invoke(async () => await InternalCreate(validator));
                     }
                 }
             }
         }
-        private async Task InternalCreate()
+        private async Task InternalCreate(IValidator validator)
         {
             if (BlobDatas.Any())
             {
-                ResponseAddWithBlobs = await HttpService.Add(Record, BlobDatas);
+                ResponseAddWithBlobs = await HttpService.Add(Record, validator, BlobDatas);
                 OnResponseAddWithBlobs?.Invoke(ResponseAddWithBlobs);
                 if (Response.Succeed && Response.Response.Status.Succeeded())
                 {
@@ -132,16 +127,16 @@ namespace OneLine.Bases
             }
             else
             {
-                Response = await HttpService.Add(Record);
+                Response = await HttpService.Add(Record, validator);
                 InternalResponse(FormState.Edit);
             }
             OnAfterSave?.Invoke();
         }
-        private async Task InternalUpdate()
+        private async Task InternalUpdate(IValidator validator)
         {
             if (BlobDatas.Any())
             {
-                ResponseUpdateWithBlobs = await HttpService.Update(Record, BlobDatas);
+                ResponseUpdateWithBlobs = await HttpService.Update(Record, validator, BlobDatas);
                 OnResponseUpdateWithBlobs?.Invoke(ResponseUpdateWithBlobs);
                 if (Response.Succeed && Response.Response.Status.Succeeded())
                 {
@@ -160,7 +155,7 @@ namespace OneLine.Bases
             }
             else
             {
-                Response = await HttpService.Update(Record);
+                Response = await HttpService.Update(Record, validator);
                 InternalResponse(FormState.Edit);
             }
             OnAfterSave?.Invoke();
@@ -183,19 +178,19 @@ namespace OneLine.Bases
                 OnResponseFailed?.Invoke(Response);
             }
         }
-        public virtual async Task Delete()
+        public virtual async Task Delete(IValidator validator)
         {
             if (FormState == FormState.Delete)
             {
                 if(OnBeforeDelete == null)
                 {
-                    Response = await HttpService.Delete(Identifier);
+                    Response = await HttpService.Delete(Identifier, validator);
                     InternalResponse(FormState.Deleted);
                 }
                 else
                 {
                     OnBeforeDelete.Invoke(async () => { 
-                        Response = await HttpService.Delete(Identifier); 
+                        Response = await HttpService.Delete(Identifier, validator); 
                         InternalResponse(FormState.Deleted); 
                     });
                 }

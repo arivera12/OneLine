@@ -1,17 +1,15 @@
 ﻿namespace OneLine.Bases
 {
-    public interface IForm<T, TValidator, TIdentifier, TIdentifierValidator, THttpService, TSearchExtraParams, TBlobData, TBlobValidator, TUserBlobs> :
+    public interface IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         IModel<T, TIdentifier>,
-        IModelValidator<TValidator, TIdentifierValidator>,
         IHttpServiceable<THttpService>,
-        ISearchExtraParams<TSearchExtraParams>,
         IBlobData<TBlobData>,
         IApiResponseable<T>,
         IApiResponseableWithBlobs<T, TUserBlobs>,
         IConfigurable,
-        ISaveable,
+        ISaveableWithValidator,
         ILoadableApiResponseable<T>,
-        IDeletable<T>,
+        IDeletableWithValidation<T>,
         IResettable,
         ICancelable
     {

@@ -12,7 +12,7 @@ namespace OneLine.Bases
         public BaseDbContext()
         {
         }
-        public BaseDbContext(DbContextOptions<BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs>> options)
+        public BaseDbContext(DbContextOptions<BaseDbContext<TAuditTrails, TExceptionLogs, TUserBlobs>> options)
             : base(options)
         {
         }

@@ -12,8 +12,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added new interfaces, removed unnecesarry interfaces from base classes, Fixed IdentifierStringValidator, Added empty validator. ListView was renamed to DataView. Fixed Http, http extended, form and  Data bases.</PackageReleaseNotes>
-    <Version>2.0.5</Version>
+    <PackageReleaseNotes>Fixed Bases.</PackageReleaseNotes>
+    <Version>2.0.6</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

@@ -16,7 +16,7 @@ namespace OneLine.Bases
         where T : new()
         where TIdentifier : IIdentifier<TId>, new()
         where TId : class
-        where THttpService : IHttpService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
+        where THttpService : HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : IBlobData
         where TBlobValidator : IValidator, new()
         where TUserBlobs : IUserBlobs
@@ -59,7 +59,7 @@ namespace OneLine.Bases
         {
             if(Identifier != null)
             {
-                Response = await HttpService.GetOne(Identifier, new EmptyValidator());
+                Response = await HttpService.GetOne<T>(Identifier, new EmptyValidator());
                 if(Response.Succeed && Response.Response.Status.Succeeded())
                 {
                     Record = Response.Response.Data;
@@ -127,7 +127,7 @@ namespace OneLine.Bases
             }
             else
             {
-                Response = await HttpService.Add(Record, validator);
+                Response = await HttpService.Add<T>(Record, validator);
                 InternalResponse(FormState.Edit);
             }
             OnAfterSave?.Invoke();
@@ -155,7 +155,7 @@ namespace OneLine.Bases
             }
             else
             {
-                Response = await HttpService.Update(Record, validator);
+                Response = await HttpService.Update<T>(Record, validator);
                 InternalResponse(FormState.Edit);
             }
             OnAfterSave?.Invoke();
@@ -184,13 +184,13 @@ namespace OneLine.Bases
             {
                 if(OnBeforeDelete == null)
                 {
-                    Response = await HttpService.Delete(Identifier, validator);
+                    Response = await HttpService.Delete<T>(Identifier, validator);
                     InternalResponse(FormState.Deleted);
                 }
                 else
                 {
                     OnBeforeDelete.Invoke(async () => { 
-                        Response = await HttpService.Delete(Identifier, validator); 
+                        Response = await HttpService.Delete<T>(Identifier, validator); 
                         InternalResponse(FormState.Deleted); 
                     });
                 }

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public class HttpServiceBaseExtended<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs> :
-        HttpServiceBase<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>,
-        IHttpServiceExtended<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
+    public class HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs> :
+        HttpBaseCrudService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>,
+        IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
         where T : new()
         where TIdentifier : IIdentifier<TId>
         where TId : class
@@ -21,7 +21,7 @@ namespace OneLine.Bases
         public virtual string ListMethod { get; set; } = "list";
         public virtual string DownloadCsvExcelMethod { get; set; } = "downloadcsvexcel";
         public virtual string SaveReplaceListMethod { get; set; } = "savereplacelist";
-        public HttpServiceBaseExtended()
+        public HttpBaseCrudExtendedService()
         {
             if (!string.IsNullOrWhiteSpace(BaseAddress))
             {
@@ -35,18 +35,18 @@ namespace OneLine.Bases
                 HttpClient = new HttpClient();
             }
         }
-        public HttpServiceBaseExtended(HttpClient httpClient) : base(httpClient) 
+        public HttpBaseCrudExtendedService(HttpClient httpClient) : base(httpClient)
         {
             HttpClient = httpClient;
         }
-        public HttpServiceBaseExtended(Uri baseAddress) : base(baseAddress) 
+        public HttpBaseCrudExtendedService(Uri baseAddress) : base(baseAddress)
         {
             HttpClient = new HttpClient
             {
                 BaseAddress = baseAddress
             };
         }
-        public HttpServiceBaseExtended(string AuthorizationToken, bool AddBearerScheme = true) : base(AuthorizationToken, AddBearerScheme)
+        public HttpBaseCrudExtendedService(string AuthorizationToken, bool AddBearerScheme = true) : base(AuthorizationToken, AddBearerScheme)
         {
             HttpClient = new HttpClient
             {
@@ -58,7 +58,7 @@ namespace OneLine.Bases
                 HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
             }
         }
-        public HttpServiceBaseExtended(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
+        public HttpBaseCrudExtendedService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
             HttpClient = new HttpClient
             {
@@ -70,17 +70,17 @@ namespace OneLine.Bases
                 HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
             }
         }
-        public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> List(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<TResponse>>>>> List<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.GetJsonResponseResultAsync<IApiResponse<IPaged<IEnumerable<T>>>>($"/{ControllerName}/{ListMethod}", new { SearchPaging, searchExtraParams });
+            return await HttpClient.GetJsonResponseResultAsync<IApiResponse<IPaged<IEnumerable<TResponse>>>>($"/{ControllerName}/{ListMethod}", new { SearchPaging, searchExtraParams });
         }
         public virtual async Task<IResponseResult<byte[]>> DownloadCsvExcel(ISearchPaging SearchPaging, object searchExtraParams)
         {
             return await HttpClient.SendJsonDownloadBlobAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"/{ControllerName}/{DownloadCsvExcelMethod}"), new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<IApiResponse<IEnumerable<T>>>> SaveReplaceList(ISaveReplaceList<IEnumerable<T>> SaveReplaceListModel)
+        public virtual async Task<IResponseResult<IApiResponse<IEnumerable<TResponse>>>> SaveReplaceList<TResponse>(ISaveReplaceList<IEnumerable<T>> SaveReplaceListModel)
         {
-            return await HttpClient.PostJsonResponseResultAsync<IApiResponse<IEnumerable<T>>>($"/{ControllerName}/{SaveReplaceListMethod}", SaveReplaceListModel);
+            return await HttpClient.PostJsonResponseResultAsync<IApiResponse<IEnumerable<TResponse>>>($"/{ControllerName}/{SaveReplaceListMethod}", SaveReplaceListModel);
         }
     }
 }

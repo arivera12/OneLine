@@ -14,7 +14,7 @@ namespace OneLine.Bases
         where T : new()
         where TIdentifier : IIdentifier<TId>, new()
         where TId : class
-        where THttpService : IHttpService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
+        where THttpService : HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : IBlobData
         where TBlobValidator : IValidator, new()
         where TUserBlobs : IUserBlobs
@@ -43,7 +43,7 @@ namespace OneLine.Bases
         public virtual Action OnMaximumRecordSelectionsReached { get; set; }
         public virtual async Task Search()
         {
-            ResponsePaged = await HttpService.Search(SearchPaging, SearchExtraParams);
+            ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
             if (ResponsePaged.Succeed && ResponsePaged.Response.Status.Succeeded())
             {
                 Records = ResponsePaged.Response.Data.Data;

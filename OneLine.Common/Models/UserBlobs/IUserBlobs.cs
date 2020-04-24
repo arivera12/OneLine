@@ -11,6 +11,7 @@ namespace OneLine.Models
         string Name { get; set; }
         long Length { get; set; }
         string FilePath { get; set; }
+        string TableName { get; set; }
         bool IsDeleted { get; set; }
         DateTime? CreatedOn { get; set; }
         string CreatedBy { get; set; }

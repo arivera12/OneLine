@@ -15,7 +15,7 @@ namespace OneLine.Extensions
     public static class HttpClientExtensions
     {
         #region Add JWT Request Header
-        
+
         public static void AddJwtAuthorizationBearerHeader(this HttpClient HttpClient, string AuthorizationToken, bool AddBearerScheme = true)
         {
             if (!string.IsNullOrWhiteSpace(AuthorizationToken))
@@ -28,7 +28,7 @@ namespace OneLine.Extensions
         #endregion
 
         #region Send and Receive json data
-        
+
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri)
             => JsonSerializer.Deserialize<T>(await httpClient.GetStringAsync(requestUri));
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri, object queryStringParameters)
@@ -169,6 +169,37 @@ namespace OneLine.Extensions
             }
             return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, content);
         }
+        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator)
+        {
+            if (contents == null || !contents.Any())
+            {
+                return new ResponseResult<IApiResponse<TResponse>>
+                {
+                    Response = new ApiResponse<TResponse>()
+                    {
+                        Status = ApiResponseStatus.Failed,
+                        Message = "FileIsNullOrEmpty"
+                    }
+                };
+            }
+            foreach (var content in contents)
+            {
+                var validationResult = await validator.ValidateAsync(content);
+                if (!validationResult.IsValid)
+                {
+                    return new ResponseResult<IApiResponse<TResponse>>
+                    {
+                        Response = new ApiResponse<TResponse>()
+                        {
+                            Status = ApiResponseStatus.Failed,
+                            Message = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                            ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
+                        }
+                    };
+                }
+            }
+            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, contents);
+        }
         public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent, TValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content)
             where TValidator : IValidator, new()
         {
@@ -188,7 +219,40 @@ namespace OneLine.Extensions
             }
             return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, content);
         }
-       
+        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent, TValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents)
+            where TValidator : IValidator, new()
+        {
+            if (contents == null || !contents.Any())
+            {
+                return new ResponseResult<IApiResponse<TResponse>>
+                {
+                    Response = new ApiResponse<TResponse>()
+                    {
+                        Status = ApiResponseStatus.Failed,
+                        Message = "FileIsNullOrEmpty"
+                    }
+                };
+            }
+            TValidator validator = new TValidator();
+            foreach (var content in contents)
+            {
+                var validationResult = await validator.ValidateAsync(content);
+                if (!validationResult.IsValid)
+                {
+                    return new ResponseResult<IApiResponse<TResponse>>
+                    {
+                        Response = new ApiResponse<TResponse>()
+                        {
+                            Status = ApiResponseStatus.Failed,
+                            Message = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                            ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
+                        }
+                    };
+                }
+            }
+            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, contents);
+        }
+
         #endregion
 
         #region Send Multipart Form Data
@@ -212,11 +276,54 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex);
             }
         }
+        public static async Task<IApiResponse<TResponse>> SendBlobDataAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
+            where TBlobData : IBlobData
+        {
+            var multipartFormDataContent = new MultipartFormDataContent();
+            if (blobDatas != null && blobDatas.Any())
+            {
+                foreach (var blob in blobDatas)
+                {
+                    var blobValidationResult = await blobValidator.ValidateAsync(blob);
+                    if (!blobValidationResult.IsValid)
+                    {
+                        return new ApiResponse<TResponse>()
+                        {
+                            Status = ApiResponseStatus.Failed,
+                            Message = blobValidationResult.Errors.FirstOrDefault().ErrorMessage,
+                            ErrorMessages = blobValidationResult.Errors.Select(x => x.ErrorMessage)
+                        };
+                    }
+                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
+                }
+            }
+            httpRequestMessage.Content = multipartFormDataContent;
+            var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
+            var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
+            return new ApiResponse<TResponse>()
+            {
+                Status = ApiResponseStatus.Succeeded,
+                Data = JsonSerializer.Deserialize<TResponse>(strResponse)
+            };
+        }
+        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendBlobDataResponseResultAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
+            where TBlobData : IBlobData
+        {
+            try
+            {
+                var response = await httpClient.SendBlobDataAsync<TResponse, TBlobData>(httpRequestMessage, blobDatas, blobValidator);
+                return new ResponseResult<IApiResponse<TResponse>>(response, null);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult<IApiResponse<TResponse>>(default, ex);
+            }
+        }
 
         #endregion
 
         #region Send Multipart Form Data With Http Contents
-        
+
         public static async Task<T> SendHttpContentsAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<HttpContent> httpContents)
         {
             var multipartFormDataContent = new MultipartFormDataContent();
@@ -402,7 +509,7 @@ namespace OneLine.Extensions
         #endregion
 
         #region Download file as byte array
-        
+
         public static async Task<byte[]> DownloadBlobAsByteArrayAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
             var response = await httpClient.SendAsync(httpRequestMessage);
@@ -448,6 +555,83 @@ namespace OneLine.Extensions
                 return new ResponseResult<byte[]>(default, ex);
             }
         }
+        public static async Task<byte[]> SendJsonDownloadBlobAsByteArrayAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
+            where TContent : class
+        {
+            var validationResult = await validator.ValidateAsync(content);
+            if (!validationResult.IsValid)
+            {
+                return null;
+            }
+            //Send content over url
+            if (httpRequestMessage.Method == HttpMethod.Get)
+            {
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+            }
+            //Send content
+            else
+            {
+                var requestJson = JsonSerializer.Serialize(content);
+                httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            }
+            var response = await httpClient.SendAsync(httpRequestMessage);
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+        public static async Task<IResponseResult<byte[]>> SendJsonDownloadBlobAsByteArrayResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
+            where TContent : class
+        {
+            try
+            {
+                var response = await httpClient.SendJsonDownloadBlobAsByteArrayAsync(httpRequestMessage, content, validator);
+                return new ResponseResult<byte[]>(response, null);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult<byte[]>(default, ex);
+            }
+        }
+        public static async Task<byte[]> SendJsonRangeDownloadBlobAsByteArrayAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
+            where TContent : class
+        {
+            if (contents == null || !contents.Any())
+            {
+                return null;
+            }
+            foreach (var content in contents)
+            {
+                var validationResult = await validator.ValidateAsync(content);
+                if (!validationResult.IsValid)
+                {
+                    return null;
+                }
+            }
+            //Send content over url
+            if (httpRequestMessage.Method == HttpMethod.Get)
+            {
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents.ToQueryString()}");
+            }
+            //Send content
+            else
+            {
+                var requestJson = JsonSerializer.Serialize(contents);
+                httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            }
+            var response = await httpClient.SendAsync(httpRequestMessage);
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+        public static async Task<IResponseResult<byte[]>> SendJsonRangeDownloadBlobAsByteArrayResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
+            where TContent : class
+        {
+            try
+            {
+                var response = await httpClient.SendJsonRangeDownloadBlobAsByteArrayAsync(httpRequestMessage, contents, validator);
+                return new ResponseResult<byte[]>(response, null);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult<byte[]>(default, ex);
+            }
+        }
 
         #endregion
 
@@ -483,7 +667,7 @@ namespace OneLine.Extensions
                 var requestJson = JsonSerializer.Serialize(content);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
-            var response = await httpClient.SendAsync(httpRequestMessage); 
+            var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
         }
         public static async Task<IResponseResult<Stream>> SendJsonDownloadBlobAsStreamResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
@@ -491,6 +675,87 @@ namespace OneLine.Extensions
             try
             {
                 var response = await httpClient.SendJsonDownloadBlobAsStreamAsync(httpRequestMessage, content);
+                return new ResponseResult<Stream>(response, null);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult<Stream>(default, ex);
+            }
+        }
+        public static async Task<Stream> SendJsonDownloadBlobAsStreamAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
+            where TContent : class
+        {
+            if (content == null)
+            {
+                return null;
+            }
+            var validationResult = await validator.ValidateAsync(content);
+            if (!validationResult.IsValid)
+            {
+                return null;
+            }
+            //Send content over url
+            if (httpRequestMessage.Method == HttpMethod.Get)
+            {
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+            }
+            //Send content
+            else
+            {
+                var requestJson = JsonSerializer.Serialize(content);
+                httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            }
+            var response = await httpClient.SendAsync(httpRequestMessage);
+            return await response.Content.ReadAsStreamAsync();
+        }
+        public static async Task<IResponseResult<Stream>> SendJsonDownloadBlobAsStreamResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
+            where TContent : class
+        {
+            try
+            {
+                var response = await httpClient.SendJsonDownloadBlobAsStreamAsync(httpRequestMessage, content, validator);
+                return new ResponseResult<Stream>(response, null);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult<Stream>(default, ex);
+            }
+        }
+        public static async Task<Stream> SendJsonRangeDownloadBlobAsStreamAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
+            where TContent : class
+        {
+            if (contents == null || !contents.Any())
+            {
+                return null;
+            }
+            foreach (var content in contents)
+            {
+                var validationResult = await validator.ValidateAsync(content);
+                if (!validationResult.IsValid)
+                {
+                    return null;
+                }
+            }
+            //Send content over url
+            if (httpRequestMessage.Method == HttpMethod.Get)
+            {
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents.ToQueryString()}");
+            }
+            //Send content
+            else
+            {
+                var requestJson = JsonSerializer.Serialize(contents);
+                httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            }
+            var response = await httpClient.SendAsync(httpRequestMessage);
+            return await response.Content.ReadAsStreamAsync();
+        }
+        public static async Task<IResponseResult<Stream>> SendJsonRangeDownloadBlobAsStreamResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
+            where TContent : class
+        {
+            try
+            {
+                var response = await httpClient.SendJsonRangeDownloadBlobAsStreamAsync(httpRequestMessage, contents, validator);
                 return new ResponseResult<Stream>(response, null);
             }
             catch (Exception ex)
@@ -533,7 +798,7 @@ namespace OneLine.Extensions
                 var requestJson = JsonSerializer.Serialize(content);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
-            var response = await httpClient.SendAsync(httpRequestMessage); 
+            var response = await httpClient.SendAsync(httpRequestMessage);
             return Convert.ToBase64String(await response.Content.ReadAsByteArrayAsync());
         }
         public static async Task<IResponseResult<string>> SendJsonDownloadBlobAsBase64StringResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
@@ -602,7 +867,7 @@ namespace OneLine.Extensions
         #endregion
 
         #region Ignore Response helper class
-        
+
         class IgnoreResponse { }
 
         #endregion

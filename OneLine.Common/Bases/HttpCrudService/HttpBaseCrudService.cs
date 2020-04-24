@@ -18,7 +18,7 @@ namespace OneLine.Bases
     /// <typeparam name="TBlobData"></typeparam>
     /// <typeparam name="TBlobValidator"></typeparam>
     /// <typeparam name="TUserBlobs"></typeparam>
-    public class HttpBaseCrudService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs> : HttpServiceBase,
+    public class HttpBaseCrudService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs> : HttpBaseService,
         IHttpCrudService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
         where T : new()
         where TIdentifier : IIdentifier<TId>
@@ -29,63 +29,36 @@ namespace OneLine.Bases
     {
         public virtual string ControllerName { get; set; }
         public virtual string AddMethod { get; set; } = "add";
+        public string AddRangeMethod { get; set; } = "addrange";
         public virtual string UpdateMethod { get; set; } = "update";
+        public string UpdateRangeMethod { get; set; } = "updaterange";
         public virtual string DeleteMethod { get; set; } = "delete";
+        public string DeleteRangeMethod { get; set; } = "deleterange";
         public virtual string GetOneMethod { get; set; } = "getone";
         public virtual string SearchMethod { get; set; } = "search";
         public virtual TBlobValidator BlobValidator { get; set; } = new TBlobValidator();
-        public HttpBaseCrudService()
+        public HttpBaseCrudService() : base()
         {
-            if (!string.IsNullOrWhiteSpace(BaseAddress))
-            {
-                HttpClient = new HttpClient
-                {
-                    BaseAddress = new Uri(BaseAddress)
-                };
-            }
-            else
-            {
-                HttpClient = new HttpClient();
-            }
         }
         public HttpBaseCrudService(HttpClient httpClient) : base(httpClient)
         {
-            HttpClient = httpClient;
         }
         public HttpBaseCrudService(Uri baseAddress) : base(baseAddress)
         {
-            HttpClient = new HttpClient
-            {
-                BaseAddress = baseAddress
-            };
         }
         public HttpBaseCrudService(string AuthorizationToken, bool AddBearerScheme = true) : base(AuthorizationToken, AddBearerScheme)
         {
-            HttpClient = new HttpClient
-            {
-                BaseAddress = new Uri(BaseAddress)
-            };
-            if (!string.IsNullOrWhiteSpace(AuthorizationToken))
-            {
-                HttpClient.DefaultRequestHeaders.Remove("Authorization");
-                HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
-            }
         }
         public HttpBaseCrudService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
-            HttpClient = new HttpClient
-            {
-                BaseAddress = baseAddress
-            };
-            if (!string.IsNullOrWhiteSpace(AuthorizationToken))
-            {
-                HttpClient.DefaultRequestHeaders.Remove("Authorization");
-                HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
-            }
         }
         public virtual async Task<IResponseResult<IApiResponse<TResponse>>> Add<TResponse>(T record, IValidator validator)
         {
             return await HttpClient.SendJsonResponseResultAsync<TResponse, T>(HttpMethod.Post, $"/{ControllerName}/{AddMethod}", record, validator);
+        }
+        public virtual async Task<IResponseResult<IApiResponse<TResponse>>> AddRange<TResponse>(IEnumerable<T> records, IValidator validator)
+        {
+            return await HttpClient.SendJsonRangeResponseResultAsync<TResponse, T>(HttpMethod.Post, $"/{ControllerName}/{AddRangeMethod}", records, validator);
         }
         public virtual async Task<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> Add(T record, IValidator validator, IEnumerable<TBlobData> blobDatas)
         {
@@ -95,6 +68,10 @@ namespace OneLine.Bases
         {
             return await HttpClient.SendJsonResponseResultAsync<TResponse, T>(HttpMethod.Put, $"/{ControllerName}/{UpdateMethod}", record, validator);
         }
+        public virtual async Task<IResponseResult<IApiResponse<TResponse>>> UpdateRange<TResponse>(IEnumerable<T> records, IValidator validator)
+        {
+            return await HttpClient.SendJsonRangeResponseResultAsync<TResponse, T>(HttpMethod.Put, $"/{ControllerName}/{UpdateRangeMethod}", records, validator);
+        }
         public virtual async Task<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> Update(T record, IValidator validator, IEnumerable<TBlobData> blobDatas)
         {
             return await HttpClient.SendJsonWithFormDataResponseResultAsync<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>, T, TBlobData>(HttpMethod.Post, $"/{ControllerName}/{UpdateMethod}", record, validator, blobDatas, new BlobDataValidator());
@@ -102,6 +79,10 @@ namespace OneLine.Bases
         public virtual async Task<IResponseResult<IApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier, IValidator validator)
         {
             return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Delete, $"/{ControllerName}/{DeleteMethod}", identifier, validator);
+        }
+        public async Task<IResponseResult<IApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator)
+        {
+            return await HttpClient.SendJsonRangeResponseResultAsync<IEnumerable<TResponse>, TIdentifier>(HttpMethod.Delete, $"/{ControllerName}/{DeleteMethod}", identifiers, validator);
         }
         public virtual async Task<IResponseResult<IApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier, IValidator validator)
         {

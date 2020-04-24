@@ -21,54 +21,20 @@ namespace OneLine.Bases
         public virtual string ListMethod { get; set; } = "list";
         public virtual string DownloadCsvExcelMethod { get; set; } = "downloadcsvexcel";
         public virtual string SaveReplaceListMethod { get; set; } = "savereplacelist";
-        public HttpBaseCrudExtendedService()
+        public HttpBaseCrudExtendedService() : base()
         {
-            if (!string.IsNullOrWhiteSpace(BaseAddress))
-            {
-                HttpClient = new HttpClient
-                {
-                    BaseAddress = new Uri(BaseAddress)
-                };
-            }
-            else
-            {
-                HttpClient = new HttpClient();
-            }
         }
         public HttpBaseCrudExtendedService(HttpClient httpClient) : base(httpClient)
         {
-            HttpClient = httpClient;
         }
         public HttpBaseCrudExtendedService(Uri baseAddress) : base(baseAddress)
         {
-            HttpClient = new HttpClient
-            {
-                BaseAddress = baseAddress
-            };
         }
         public HttpBaseCrudExtendedService(string AuthorizationToken, bool AddBearerScheme = true) : base(AuthorizationToken, AddBearerScheme)
         {
-            HttpClient = new HttpClient
-            {
-                BaseAddress = new Uri(BaseAddress)
-            };
-            if (!string.IsNullOrWhiteSpace(AuthorizationToken))
-            {
-                HttpClient.DefaultRequestHeaders.Remove("Authorization");
-                HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
-            }
         }
         public HttpBaseCrudExtendedService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
-            HttpClient = new HttpClient
-            {
-                BaseAddress = baseAddress
-            };
-            if (!string.IsNullOrWhiteSpace(AuthorizationToken))
-            {
-                HttpClient.DefaultRequestHeaders.Remove("Authorization");
-                HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
-            }
         }
         public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<TResponse>>>>> List<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
         {

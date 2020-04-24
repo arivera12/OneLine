@@ -15,8 +15,8 @@ namespace OneLine.Bases
         bool MaximumRecordSelectionsReached { get; set; }
         Action<T> OnSelectedRecord { get; set; }
         Action<IEnumerable<T>, bool, bool> OnSelectedRecords { get; set; }
-        Action OnMinimunRecordSelectionsReached { get; set; }
-        Action OnMaximumRecordSelectionsReached { get; set; }
+        Action<bool> OnMinimunRecordSelectionsReached { get; set; }
+        Action<bool> OnMaximumRecordSelectionsReached { get; set; }
         Task SelectRecord(T selectedRecord);
     }
 }

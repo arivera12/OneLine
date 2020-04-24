@@ -12,8 +12,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added new httpClient Extension to deal with validation and blobs on his own. Simplified HttpServiceBase implementation. Simplified base http client with a simple base and added a derived base http client for crud operations.</PackageReleaseNotes>
-    <Version>2.0.8</Version>
+    <PackageReleaseNotes>Fixed bases, Fixed bases naming convetion, Added users and userblobs http base services.</PackageReleaseNotes>
+    <Version>2.0.9</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

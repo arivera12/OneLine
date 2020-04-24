@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.8</Version>
+    <Version>2.0.9</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine is a project that can be used on a server backend. This package already includes OneLine.Common.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added new httpClient Extension to deal with validation and blobs on his own. Simplified HttpServiceBase implementation. Simplified base http client with a simple base and added a derived base http client for crud operations.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed bases, Fixed bases naming convetion, Added users and userblobs http base services. Fixed user blobs repository.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

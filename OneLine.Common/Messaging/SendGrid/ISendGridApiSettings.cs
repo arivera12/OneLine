@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OneLine.Messaging
+﻿namespace OneLine.Messaging
 {
     public interface ISendGridApiSettings
     {

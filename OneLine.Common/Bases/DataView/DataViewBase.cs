@@ -39,8 +39,8 @@ namespace OneLine.Bases
         public virtual bool MaximumRecordSelectionsReached { get; set; }
         public virtual Action<T> OnSelectedRecord { get; set; }
         public virtual Action<IEnumerable<T>, bool, bool> OnSelectedRecords { get; set; }
-        public virtual Action OnMinimunRecordSelectionsReached { get; set; }
-        public virtual Action OnMaximumRecordSelectionsReached { get; set; }
+        public virtual Action<bool> OnMinimunRecordSelectionsReached { get; set; }
+        public virtual Action<bool> OnMaximumRecordSelectionsReached { get; set; }
         public virtual async Task Search()
         {
             ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
@@ -81,15 +81,9 @@ namespace OneLine.Bases
                     SelectedRecords.Add(selectedRecord);
                 }
                 MinimunRecordSelectionsReached = SelectedRecords.Count >= MinimunRecordSelections;
-                if (MinimunRecordSelectionsReached)
-                {
-                    OnMinimunRecordSelectionsReached?.Invoke();
-                }
+                OnMinimunRecordSelectionsReached?.Invoke(MinimunRecordSelectionsReached);
                 MaximumRecordSelectionsReached = SelectedRecords.Count >= MaximumRecordSelections;
-                if (MaximumRecordSelectionsReached)
-                {
-                    OnMaximumRecordSelectionsReached?.Invoke();
-                }
+                OnMaximumRecordSelectionsReached?.Invoke(MaximumRecordSelectionsReached);
                 OnSelectedRecords?.Invoke(SelectedRecords, MinimunRecordSelectionsReached, MaximumRecordSelectionsReached);
             }
             return Task.CompletedTask;

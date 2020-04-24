@@ -6,11 +6,11 @@ namespace OneLine.Bases
     /// <summary>
     /// This is a base class to be used as an HttpClient Service
     /// </summary>
-    public class HttpServiceBase : IHttpService
+    public class HttpBaseService : IHttpService
     {
         public virtual string BaseAddress { get; set; }
         public virtual HttpClient HttpClient { get; set; }
-        public HttpServiceBase()
+        public HttpBaseService()
         {
             if (!string.IsNullOrWhiteSpace(BaseAddress))
             {
@@ -24,18 +24,18 @@ namespace OneLine.Bases
                 HttpClient = new HttpClient();
             }
         }
-        public HttpServiceBase(HttpClient httpClient)
+        public HttpBaseService(HttpClient httpClient)
         {
             HttpClient = httpClient;
         }
-        public HttpServiceBase(Uri baseAddress)
+        public HttpBaseService(Uri baseAddress)
         {
             HttpClient = new HttpClient
             {
                 BaseAddress = baseAddress
             };
         }
-        public HttpServiceBase(string AuthorizationToken, bool AddBearerScheme = true)
+        public HttpBaseService(string AuthorizationToken, bool AddBearerScheme = true)
         {
             HttpClient = new HttpClient
             {
@@ -47,7 +47,7 @@ namespace OneLine.Bases
                 HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
             }
         }
-        public HttpServiceBase(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true)
+        public HttpBaseService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true)
         {
             HttpClient = new HttpClient
             {

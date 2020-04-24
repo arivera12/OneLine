@@ -14,7 +14,7 @@
         public string ConfirmPassword { get; set; }
         public string Code { get; set; }
     }
-    public class ResetPasswordViewModelInternal : IResetPasswordInternal
+    public class ResetPasswordInternalViewModel : IResetPasswordInternal
     {
         public string CurrentPassword { get; set; }
         public string Password { get; set; }

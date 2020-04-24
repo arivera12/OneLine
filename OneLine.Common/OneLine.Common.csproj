@@ -12,8 +12,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added view models to maintain client side structure compatibility. Removed max from various columns tables of asp net identity to prevent generating userblobs reference fields.</PackageReleaseNotes>
-    <Version>2.0.10</Version>
+    <PackageReleaseNotes>Fixed typo on class name</PackageReleaseNotes>
+    <Version>2.0.11</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

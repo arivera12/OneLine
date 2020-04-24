@@ -5,8 +5,8 @@ SET QUOTED_IDENTIFIER ON
 CREATE TABLE [dbo].[AspNetRoleClaims](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[RoleId] [nvarchar](450) NOT NULL,
-	[ClaimType] [nvarchar](max) NULL,
-	[ClaimValue] [nvarchar](max) NULL,
+	[ClaimType] [nvarchar](4000) NULL,
+	[ClaimValue] [nvarchar](4000) NULL,
     CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -21,7 +21,7 @@ CREATE TABLE [dbo].[AspNetRoles](
 	[Id] [nvarchar](450) NOT NULL,
 	[Name] [nvarchar](256) NULL,
 	[NormalizedName] [nvarchar](256) NULL,
-	[ConcurrencyStamp] [nvarchar](max) NULL,
+	[ConcurrencyStamp] [nvarchar](4000) NULL,
     CONSTRAINT [PK_AspNetRoles] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -35,8 +35,8 @@ SET QUOTED_IDENTIFIER ON
 CREATE TABLE [dbo].[AspNetUserClaims](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[UserId] [nvarchar](450) NOT NULL,
-	[ClaimType] [nvarchar](max) NULL,
-	[ClaimValue] [nvarchar](max) NULL,
+	[ClaimType] [nvarchar](4000) NULL,
+	[ClaimValue] [nvarchar](4000) NULL,
     CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -50,7 +50,7 @@ SET QUOTED_IDENTIFIER ON
 CREATE TABLE [dbo].[AspNetUserLogins](
 	[LoginProvider] [nvarchar](128) NOT NULL,
 	[ProviderKey] [nvarchar](128) NOT NULL,
-	[ProviderDisplayName] [nvarchar](max) NULL,
+	[ProviderDisplayName] [nvarchar](4000) NULL,
 	[UserId] [nvarchar](450) NOT NULL,
     CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY CLUSTERED 
 (
@@ -84,10 +84,10 @@ CREATE TABLE [dbo].[AspNetUsers](
 	[Email] [nvarchar](256) NULL,
 	[NormalizedEmail] [nvarchar](256) NULL,
 	[EmailConfirmed] [bit] NOT NULL,
-	[PasswordHash] [nvarchar](max) NULL,
-	[SecurityStamp] [nvarchar](max) NULL,
-	[ConcurrencyStamp] [nvarchar](max) NULL,
-	[PhoneNumber] [nvarchar](max) NULL,
+	[PasswordHash] [nvarchar](4000) NULL,
+	[SecurityStamp] [nvarchar](4000) NULL,
+	[ConcurrencyStamp] [nvarchar](4000) NULL,
+	[PhoneNumber] [nvarchar](4000) NULL,
 	[PhoneNumberConfirmed] [bit] NOT NULL,
 	[TwoFactorEnabled] [bit] NOT NULL,
 	[LockoutEnd] [datetimeoffset](7) NULL,
@@ -109,7 +109,7 @@ CREATE TABLE [dbo].[AspNetUserTokens](
 	[UserId] [nvarchar](450) NOT NULL,
 	[LoginProvider] [nvarchar](128) NOT NULL,
 	[Name] [nvarchar](128) NOT NULL,
-	[Value] [nvarchar](max) NULL,
+	[Value] [nvarchar](4000) NULL,
     CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY CLUSTERED 
 (
 	[UserId] ASC,

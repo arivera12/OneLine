@@ -19,11 +19,11 @@ namespace OneLine.Extensions
                 new ApiResponse<TEntity> { Status = ApiResponseStatus.Succeeded, Data = Data }.ToJson() :
                 new ApiResponse<TEntity> { Status = ApiResponseStatus.Failed, Data = Data }.ToJson();
         }
-        public static IActionResult OutputTransactionResult<TEntity>(this bool value, IList<TEntity> Data)
+        public static IActionResult OutputTransactionResult<TEntity>(this bool value, IEnumerable<TEntity> Data)
         {
             return value ?
-                new ApiResponse<IList<TEntity>> { Status = ApiResponseStatus.Succeeded, Data = Data }.ToJson() :
-                new ApiResponse<IList<TEntity>> { Status = ApiResponseStatus.Failed, Data = Data }.ToJson();
+                new ApiResponse<IEnumerable<TEntity>> { Status = ApiResponseStatus.Succeeded, Data = Data }.ToJson() :
+                new ApiResponse<IEnumerable<TEntity>> { Status = ApiResponseStatus.Failed, Data = Data }.ToJson();
         }
     }
 }

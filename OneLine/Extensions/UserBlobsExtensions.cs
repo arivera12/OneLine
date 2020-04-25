@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NetBox.Terminal.Widgets;
 using Newtonsoft.Json;
 using OneLine.Bases;
 using OneLine.Constants;
@@ -378,21 +377,21 @@ namespace OneLine.Extensions
         public static async Task<ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntityAsync<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, TEntity entity, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where TEntity : class
         {
-            if (entity== null)
+            if (entity == null)
             {
-                return new ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>> () { Status = ApiResponseStatus.Failed, Data = Tuple.Create <TEntity, IEnumerable <UserBlobs>> (entity, null), Message = "ErrorDeletingRecord" };  
+                return new ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>() { Status = ApiResponseStatus.Failed, Data = Tuple.Create<TEntity, IEnumerable<UserBlobs>>(entity, null), Message = "ErrorDeletingRecord" };
             }
             //Helper method that deletes all files in a object
             var DeleteBlobsApiResponse = await dbContext.DeleteUserBlobsFromObjectAsync(entity, blobsStorage, userId, controllerName, actionName, remoteIpAddress);
             var deletedUserBlobs = DeleteBlobsApiResponse.Data.SelectMany(s => s.Data.Select(x => x));
             if (DeleteBlobsApiResponse.Status == ApiResponseStatus.Failed)
             {
-                return new ApiResponse<Tuple<TEntity, IEnumerable <UserBlobs>>> () { Status = ApiResponseStatus.Failed, Data = Tuple.Create(entity, deletedUserBlobs), Message = DeleteBlobsApiResponse.Message };
+                return new ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>() { Status = ApiResponseStatus.Failed, Data = Tuple.Create(entity, deletedUserBlobs), Message = DeleteBlobsApiResponse.Message };
             }
             await dbContext.RemoveAuditedAsync(entity, userId, controllerName, actionName, remoteIpAddress);
             var result = await dbContext.SaveChangesAsync();
             var message = result.IsSuccesSave() ? "RecordSavedSuccessfully" : "ErrorSavingRecord";
-            return new ApiResponse<Tuple<TEntity, IEnumerable <UserBlobs>>> () { Status = ApiResponseStatus.Succeeded, Data = Tuple.Create(entity, deletedUserBlobs), Message = message };
+            return new ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>() { Status = ApiResponseStatus.Succeeded, Data = Tuple.Create(entity, deletedUserBlobs), Message = message };
         }
         /// <summary>
         ///  This is a helper method which simplifies the delete process of file/s.
@@ -525,7 +524,7 @@ namespace OneLine.Extensions
         /// <param name="Descending"></param>
         /// <param name="Count"></param>
         /// <returns></returns>
-        public static IApiResponse<IPaged<IEnumerable<TEntity>>> SearchPaged<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string SearchTerm, IList<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
+        public static IApiResponse<IPaged<IEnumerable<TEntity>>> SearchPaged<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string SearchTerm, IEnumerable<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
             where TEntity : UserBlobs
         {
             var query = dbContext.Set<TEntity>().AsQueryable();
@@ -570,12 +569,12 @@ namespace OneLine.Extensions
         /// <param name="Descending"></param>
         /// <param name="Count"></param>
         /// <returns></returns>
-        public static IApiResponse<IPaged<IEnumerable<TEntity>>> SearchOwnsPaged<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string userId, string SearchTerm, IList<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
+        public static IApiResponse<IPaged<IEnumerable<TEntity>>> SearchOwnsPaged<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string userId, string SearchTerm, IEnumerable<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
             where TEntity : UserBlobs
         {
             var query = dbContext.Set<TEntity>().AsQueryable();
             query = query.Where(w => UserBlobId.Any() ?
-                            UserBlobId.Contains(w.UserBlobId) && 
+                            UserBlobId.Contains(w.UserBlobId) &&
                             w.CreatedBy == userId :
                             !string.IsNullOrWhiteSpace(SearchTerm) ?
                             w.ContentDisposition.Contains(SearchTerm) ||
@@ -616,7 +615,7 @@ namespace OneLine.Extensions
         /// <param name="Descending"></param>
         /// <param name="Count"></param>
         /// <returns></returns>
-        public static IApiResponse<IPaged<IEnumerable<TEntity>>> ListPaged<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string SearchTerm, IList<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
+        public static IApiResponse<IPaged<IEnumerable<TEntity>>> ListPaged<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string SearchTerm, IEnumerable<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
             where TEntity : UserBlobs
         {
             var query = dbContext.Set<TEntity>().AsQueryable();
@@ -661,12 +660,12 @@ namespace OneLine.Extensions
         /// <param name="Descending"></param>
         /// <param name="Count"></param>
         /// <returns></returns>
-        public static IApiResponse<IPaged<IEnumerable<TEntity>>> ListOwnsPaged<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string userId, string SearchTerm, IList<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
+        public static IApiResponse<IPaged<IEnumerable<TEntity>>> ListOwnsPaged<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string userId, string SearchTerm, IEnumerable<string> UserBlobId, string LangCode, int? Page, int? PageSize, string SortBy, bool? Descending, out int Count)
             where TEntity : UserBlobs
         {
             var query = dbContext.Set<TEntity>().AsQueryable();
             query = query.Where(w => UserBlobId.Any() ?
-                            UserBlobId.Contains(w.UserBlobId) && 
+                            UserBlobId.Contains(w.UserBlobId) &&
                             w.CreatedBy == userId :
                             !string.IsNullOrWhiteSpace(SearchTerm) ?
                             w.ContentDisposition.Contains(SearchTerm) ||
@@ -675,7 +674,7 @@ namespace OneLine.Extensions
                             w.FileName.Contains(SearchTerm) ||
                             w.FilePath.Contains(SearchTerm) ||
                             w.Name.Contains(SearchTerm) ||
-                            w.UserBlobId.Contains(SearchTerm) && 
+                            w.UserBlobId.Contains(SearchTerm) &&
                             w.CreatedBy == userId :
                             w.CreatedBy == userId);
             if (Descending.HasValue && !string.IsNullOrWhiteSpace(SortBy))

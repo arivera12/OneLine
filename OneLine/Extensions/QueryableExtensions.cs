@@ -15,18 +15,6 @@ namespace OneLine.Extensions
 {
     public static class QueryableExtensions
     {
-        private static readonly MethodInfo OrderByMethod =
-                                typeof(Queryable)
-                                    .GetMethods()
-                                    .Single(method => method.Name == "OrderBy" &&
-                                                        method.GetParameters().Length == 2);
-
-        private static readonly MethodInfo OrderByDescendingMethod =
-                                typeof(Queryable)
-                                .GetMethods()
-                                .Single(method => method.Name == "OrderByDescending" &&
-                                                    method.GetParameters().Length == 2);
-
         public static bool IsNullOrEmpty<T>(this IQueryable<T> source)
         {
             if (source.IsNull())
@@ -81,7 +69,7 @@ namespace OneLine.Extensions
             return new ContentResult()
                 .OutputJson
                 (
-                    new ApiResponse<IList<T>>()
+                    new ApiResponse<IEnumerable<T>>()
                     {
                         Data = source.Future().ToList(),
                         Message = message,
@@ -116,7 +104,7 @@ namespace OneLine.Extensions
             };
         }
 
-        public static ApiResponse<Paged<IEnumerable<T>>> ToApiResponsePaged<T>(this IQueryable<T> source,int? Page, int? PageSize, out int Count, IList<string> decryptFieldsOnRead, string encryptionKey, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
+        public static IApiResponse<IPaged<IEnumerable<T>>> ToApiResponsePaged<T>(this IQueryable<T> source,int? Page, int? PageSize, out int Count, IEnumerable<string> decryptFieldsOnRead, string encryptionKey, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
         {
             source = source.Paged(Page, PageSize, out Count);
             var data = Count > 0 ? source.ToList() : new List<T>();
@@ -132,7 +120,7 @@ namespace OneLine.Extensions
                 }
             }
 
-            return new ApiResponse<Paged<IEnumerable<T>>>()
+            return new ApiResponse<IPaged<IEnumerable<T>>>()
             {
                 Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, data),
                 Message = message,
@@ -257,6 +245,18 @@ namespace OneLine.Extensions
                 BindingFlags.Public | BindingFlags.Instance) != null;
         }
 
+        private static readonly MethodInfo OrderByMethod =
+                               typeof(Queryable)
+                                   .GetMethods()
+                                   .Single(method => method.Name == "OrderBy" &&
+                                                       method.GetParameters().Length == 2);
+
+        private static readonly MethodInfo OrderByDescendingMethod =
+                                typeof(Queryable)
+                                .GetMethods()
+                                .Single(method => method.Name == "OrderByDescending" &&
+                                                    method.GetParameters().Length == 2);
+
         public static IQueryable<T> OrderByProperty<T>(this IQueryable<T> source, string propertyName)
         {
             if (typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
@@ -267,8 +267,7 @@ namespace OneLine.Extensions
             ParameterExpression paramterExpression = Expression.Parameter(typeof(T));
             Expression orderByProperty = Expression.Property(paramterExpression, propertyName);
             LambdaExpression lambda = Expression.Lambda(orderByProperty, paramterExpression);
-            MethodInfo genericMethod =
-              OrderByMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
+            MethodInfo genericMethod = OrderByMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
             object ret = genericMethod.Invoke(null, new object[] { source, lambda });
             return (IQueryable<T>)ret;
         }
@@ -283,8 +282,7 @@ namespace OneLine.Extensions
             ParameterExpression paramterExpression = Expression.Parameter(typeof(T));
             Expression orderByProperty = Expression.Property(paramterExpression, propertyName);
             LambdaExpression lambda = Expression.Lambda(orderByProperty, paramterExpression);
-            MethodInfo genericMethod =
-              OrderByDescendingMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
+            MethodInfo genericMethod = OrderByDescendingMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
             object ret = genericMethod.Invoke(null, new object[] { source, lambda });
             return (IQueryable<T>)ret;
         }

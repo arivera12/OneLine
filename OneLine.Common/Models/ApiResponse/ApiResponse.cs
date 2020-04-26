@@ -5,6 +5,17 @@ namespace OneLine.Models
 {
     public class ApiResponse<T> : IApiResponse<T>
     {
+        public ApiResponse()
+        {
+
+        }
+        public ApiResponse(ApiResponseStatus status, T data, string message, IEnumerable<string> errorMessages)
+        {
+            Status = status;
+            Data = data;
+            Message = message;
+            ErrorMessages = errorMessages;
+        }
         /// <summary>
         /// The response status
         /// </summary>

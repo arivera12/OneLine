@@ -12,8 +12,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed some types.</PackageReleaseNotes>
-    <Version>2.0.12</Version>
+    <PackageReleaseNotes>Added new extension method CurrentUserRoles from claimsprincipal. Splited user blobs souce into multiple partial class. Added missing methods on userblobs.</PackageReleaseNotes>
+    <Version>2.0.15</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

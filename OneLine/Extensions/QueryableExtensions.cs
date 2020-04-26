@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using Z.EntityFramework.Plus;
 
 namespace OneLine.Extensions
@@ -54,6 +55,11 @@ namespace OneLine.Extensions
             return new ContentResult().OutputJson(source.Future().ToList());
         }
 
+        public static async Task<IActionResult> ToJsonAsync<T>(this IQueryable<T> source)
+        {
+            return new ContentResult().OutputJson(await source.Future().ToListAsync());
+        }
+
         public static IActionResult ToJsonPaged<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count)
         {
             source = source.Paged(Page, PageSize, out Count);
@@ -78,6 +84,19 @@ namespace OneLine.Extensions
                 );
         }
 
+        public static async Task<IActionResult> ToJsonApiResponseAsync<T>(this IQueryable<T> source, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
+        {
+            return new ContentResult()
+                .OutputJson
+                (
+                    new ApiResponse<IEnumerable<T>>()
+                    {
+                        Data = await source.Future().ToListAsync(),
+                        Message = message,
+                        Status = apiResponseStatus
+                    }
+                );
+        }
         public static IActionResult ToJsonPagedApiResponse<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
         {
             source = source.Paged(Page, PageSize, out Count);

@@ -1,6 +1,6 @@
 ﻿namespace OneLine.Constants
 {
-    public static class Routes
+    public static class DefaultRoutes
     {
         public static class Api
         {

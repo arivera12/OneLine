@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace OneLine.Bases
 {
+    /// <summary>
+    /// This interface is a definition of actions based on the state and response result of the api with blobs
+    /// </summary>
+    /// <typeparam name="T">The api response type</typeparam>
     public interface IApiResponseableWithBlobs<T, TUserBlobs>
     {
         IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> ResponseAddWithBlobs { get; set; }

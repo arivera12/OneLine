@@ -6,7 +6,7 @@ namespace OneLine.Bases
     /// <summary>
     /// This is a base class to be used as an HttpClient Service
     /// </summary>
-    public class HttpBaseService : IHttpService
+    public abstract class HttpBaseService : IHttpService
     {
         public virtual string BaseAddress { get; set; }
         public virtual HttpClient HttpClient { get; set; }

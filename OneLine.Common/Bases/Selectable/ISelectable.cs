@@ -1,6 +1,7 @@
 ﻿using OneLine.Enums;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
@@ -8,7 +9,7 @@ namespace OneLine.Bases
     public interface ISelectable<T>
     {
         RecordsSelectionMode RecordsSelectionMode { get; set; }
-        IList<T> SelectedRecords { get; set; }
+        ObservableRangeCollection<T> SelectedRecords { get; set; }
         long MinimunRecordSelections { get; set; }
         long MaximumRecordSelections { get; set; }
         bool MinimunRecordSelectionsReached { get; set; }

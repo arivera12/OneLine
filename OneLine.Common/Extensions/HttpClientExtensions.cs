@@ -32,7 +32,7 @@ namespace OneLine.Extensions
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri)
             => JsonSerializer.Deserialize<T>(await httpClient.GetStringAsync(requestUri));
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri, object queryStringParameters)
-            => JsonSerializer.Deserialize<T>(await httpClient.GetStringAsync($"{requestUri}?{queryStringParameters.ToQueryString()}"));
+            => JsonSerializer.Deserialize<T>(await httpClient.GetStringAsync($"{requestUri}?{queryStringParameters?.ToQueryString()}"));
         public static async Task<IResponseResult<T>> GetJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri)
         {
             try
@@ -49,7 +49,7 @@ namespace OneLine.Extensions
         {
             try
             {
-                var response = await httpClient.GetJsonAsync<T>($"{requestUri}?{queryStringParameters.ToQueryString()}");
+                var response = await httpClient.GetJsonAsync<T>($"{requestUri}?{queryStringParameters?.ToQueryString()}");
                 return new ResponseResult<T>(response, null);
             }
             catch (Exception ex)
@@ -162,7 +162,7 @@ namespace OneLine.Extensions
                     Response = new ApiResponse<TResponse>()
                     {
                         Status = ApiResponseStatus.Failed,
-                        Message = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                        Message = "ValidationFailed",
                         ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
                     }
                 };
@@ -178,7 +178,7 @@ namespace OneLine.Extensions
                     Response = new ApiResponse<TResponse>()
                     {
                         Status = ApiResponseStatus.Failed,
-                        Message = "FileIsNullOrEmpty"
+                        Message = "CollectionIsNullOrEmpty"
                     }
                 };
             }
@@ -192,7 +192,7 @@ namespace OneLine.Extensions
                         Response = new ApiResponse<TResponse>()
                         {
                             Status = ApiResponseStatus.Failed,
-                            Message = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                            Message = "ValidationFailed",
                             ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
                         }
                     };
@@ -212,7 +212,7 @@ namespace OneLine.Extensions
                     Response = new ApiResponse<TResponse>()
                     {
                         Status = ApiResponseStatus.Failed,
-                        Message = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                        Message = "ValidationFailed",
                         ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
                     }
                 };
@@ -229,7 +229,7 @@ namespace OneLine.Extensions
                     Response = new ApiResponse<TResponse>()
                     {
                         Status = ApiResponseStatus.Failed,
-                        Message = "FileIsNullOrEmpty"
+                        Message = "CollectionIsNullOrEmpty"
                     }
                 };
             }
@@ -244,7 +244,7 @@ namespace OneLine.Extensions
                         Response = new ApiResponse<TResponse>()
                         {
                             Status = ApiResponseStatus.Failed,
-                            Message = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                            Message = "ValidationFailed",
                             ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
                         }
                     };
@@ -290,7 +290,7 @@ namespace OneLine.Extensions
                         return new ApiResponse<TResponse>()
                         {
                             Status = ApiResponseStatus.Failed,
-                            Message = blobValidationResult.Errors.FirstOrDefault().ErrorMessage,
+                            Message = "ValidationFailed",
                             ErrorMessages = blobValidationResult.Errors.Select(x => x.ErrorMessage)
                         };
                     }
@@ -358,7 +358,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
             }
             //Send content in the MultipartFormData
             else
@@ -394,7 +394,7 @@ namespace OneLine.Extensions
                     Response = new ApiResponse<TResponse>()
                     {
                         Status = ApiResponseStatus.Failed,
-                        Message = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                        Message = "ValidationFailed",
                         ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
                     }
                 };
@@ -412,7 +412,7 @@ namespace OneLine.Extensions
                             Response = new ApiResponse<TResponse>()
                             {
                                 Status = ApiResponseStatus.Failed,
-                                Message = blobValidationResult.Errors.FirstOrDefault().ErrorMessage,
+                                Message = "ValidationFailed",
                                 ErrorMessages = blobValidationResult.Errors.Select(x => x.ErrorMessage)
                             }
                         };
@@ -422,6 +422,60 @@ namespace OneLine.Extensions
             }
             return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
         }
+        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
+           where TBlobData : IBlobData
+        {
+            if (contents == null || !contents.Any())
+            {
+                return new ResponseResult<IApiResponse<TResponse>>
+                {
+                    Response = new ApiResponse<TResponse>()
+                    {
+                        Status = ApiResponseStatus.Failed,
+                        Message = "CollectionIsNullOrEmpty"
+                    }
+                };
+            }
+            foreach (var content in contents)
+            {
+                var validationResult = await validator.ValidateAsync(content);
+                if (!validationResult.IsValid)
+                {
+                    return new ResponseResult<IApiResponse<TResponse>>
+                    {
+                        Response = new ApiResponse<TResponse>()
+                        {
+                            Status = ApiResponseStatus.Failed,
+                            Message = "ValidationFailed",
+                            ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
+                        }
+                    };
+                }
+            }
+            var multipartFormDataContent = new MultipartFormDataContent();
+            if (blobDatas != null && blobDatas.Any())
+            {
+                foreach (var blob in blobDatas)
+                {
+                    var blobValidationResult = await blobValidator.ValidateAsync(blob);
+                    if (!blobValidationResult.IsValid)
+                    {
+                        return new ResponseResult<IApiResponse<TResponse>>
+                        {
+                            Response = new ApiResponse<TResponse>()
+                            {
+                                Status = ApiResponseStatus.Failed,
+                                Message = "ValidationFailed",
+                                ErrorMessages = blobValidationResult.Errors.Select(x => x.ErrorMessage)
+                            }
+                        };
+                    }
+                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
+                }
+            }
+            return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
+        }
+
         public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData, TValidator, TBlobValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IEnumerable<TBlobData> blobDatas)
             where TBlobData : IBlobData
             where TValidator : IValidator, new()
@@ -455,7 +509,7 @@ namespace OneLine.Extensions
                             Response = new ApiResponse<TResponse>()
                             {
                                 Status = ApiResponseStatus.Failed,
-                                Message = blobValidationResult.Errors.FirstOrDefault().ErrorMessage,
+                                Message = "ValidationFailed",
                                 ErrorMessages = blobValidationResult.Errors.Select(x => x.ErrorMessage)
                             }
                         };
@@ -476,7 +530,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
             }
             //Send content in the MultipartFormData
             else
@@ -532,7 +586,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
             }
             //Send content
             else
@@ -566,7 +620,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
             }
             //Send content
             else
@@ -608,7 +662,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents?.ToQueryString()}");
             }
             //Send content
             else
@@ -659,7 +713,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
             }
             //Send content
             else
@@ -697,7 +751,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
             }
             //Send content
             else
@@ -739,7 +793,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents?.ToQueryString()}");
             }
             //Send content
             else
@@ -790,7 +844,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
             }
             //Send content
             else
@@ -840,7 +894,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
             }
             //Send content
             else

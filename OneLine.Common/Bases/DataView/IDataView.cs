@@ -5,10 +5,14 @@
         IHttpServiceable<THttpService>,
         ISearchExtraParams<object>,
         ISearchable,
+        ICollectionAppendReplaceModeable,
         ISelectable<T>,
         IPageable,
-        IApiResponsePaged<T>,
-        IConfigurable
+        IApiResponseable<T>,
+        IApiResponseablePageable<T>,
+        IApiResponseableCollectionable<T>,
+        IConfigurable,
+        ILoadable<T>
     {  
     }
 }

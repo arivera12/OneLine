@@ -9,6 +9,7 @@ namespace OneLine.Bases
         Task Save();
         Action<Action> OnBeforeSave { get; set; }
         Action OnAfterSave { get; set; }
+        Action OnFailedSave { get; set; }
     }
 
     public interface ISaveableWithValidator
@@ -16,5 +17,7 @@ namespace OneLine.Bases
         Task Save(IValidator validator);
         Action<Action> OnBeforeSave { get; set; }
         Action OnAfterSave { get; set; }
+        Action OnFailedSave { get; set; }
+        Action OnFailedValidation { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using OneLine.Models;
+﻿using OneLine.Enums;
+using OneLine.Models;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases

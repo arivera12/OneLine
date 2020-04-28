@@ -3,13 +3,16 @@ using Microsoft.Extensions.Configuration;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
+using OneLine.Validators;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public class DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public abstract class DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : new()
         where TIdentifier : IIdentifier<TId>, new()
@@ -19,20 +22,31 @@ namespace OneLine.Bases
         where TBlobValidator : IValidator, new()
         where TUserBlobs : IUserBlobs
     {
-        public virtual TIdentifier Identifier { get; set; } = new TIdentifier();
-        public virtual T Record { get; set; } = new T();
-        public virtual IEnumerable<T> Records { get; set; }
+        public virtual TIdentifier Identifier { get; set; }
+        public virtual IEnumerable<TIdentifier> Identifiers { get; set; }
+        public virtual T Record { get; set; }
+        public virtual ObservableRangeCollection<T> Records { get; set; }
         public virtual object SearchExtraParams { get; set; }
+        public virtual IResponseResult<IApiResponse<T>> Response { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseSucceeded { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseException { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseFailed { get; set; }
+        public virtual IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionSucceeded { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionException { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionFailed { get; set; }
         public virtual IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>> ResponsePaged { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePaged { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedSucceeded { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedException { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedFailed { get; set; }
-        public virtual THttpService HttpService { get; set; } = new THttpService(); 
+        public virtual THttpService HttpService { get; set; }
         public virtual IConfiguration Configuration { get; set; }
         public virtual ISearchPaging SearchPaging { get; set; }
         public virtual RecordsSelectionMode RecordsSelectionMode { get; set; }
-        public virtual IList<T> SelectedRecords { get; set; }
+        public virtual ObservableRangeCollection<T> SelectedRecords { get; set; }
         public virtual long MinimunRecordSelections { get; set; }
         public virtual long MaximumRecordSelections { get; set; }
         public virtual bool MinimunRecordSelectionsReached { get; set; }
@@ -41,12 +55,146 @@ namespace OneLine.Bases
         public virtual Action<IEnumerable<T>, bool, bool> OnSelectedRecords { get; set; }
         public virtual Action<bool> OnMinimunRecordSelectionsReached { get; set; }
         public virtual Action<bool> OnMaximumRecordSelectionsReached { get; set; }
+        public virtual Action<T> OnLoad { get; set; }
+        public virtual Action<T> OnLoadSucceeded { get; set; }
+        public virtual Action<T> OnLoadException { get; set; }
+        public virtual Action<T> OnLoadFailed { get; set; }
+        public virtual CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
+        public DataViewBase()
+        {
+            Identifier = new TIdentifier();
+            Identifiers = new List<TIdentifier>();
+            Record = new T();
+            Records = new ObservableRangeCollection<T>();
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+        }
+        public DataViewBase(object searchExtraParams)
+        {
+            Identifier = new TIdentifier();
+            Identifiers = new List<TIdentifier>();
+            Record = new T();
+            Records = new ObservableRangeCollection<T>();
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+            SearchExtraParams = searchExtraParams;
+        }
+        public DataViewBase(SearchPaging searchPaging)
+        {
+            Identifier = new TIdentifier();
+            Identifiers = new List<TIdentifier>();
+            Record = new T();
+            Records = new ObservableRangeCollection<T>();
+            HttpService = new THttpService();
+            SearchPaging = searchPaging;
+        }
+        public DataViewBase(SearchPaging searchPaging, object searchExtraParams)
+        {
+            Identifier = new TIdentifier();
+            Identifiers = new List<TIdentifier>();
+            Record = new T();
+            Records = new ObservableRangeCollection<T>();
+            HttpService = new THttpService();
+            SearchPaging = searchPaging;
+            SearchExtraParams = searchExtraParams;
+        }
+        public DataViewBase(TIdentifier identifier)
+        {
+            Identifier = identifier;
+            Identifiers = new List<TIdentifier>();
+            Record = new T();
+            Records = new ObservableRangeCollection<T>();
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+            _ = new Action(async () => await Load());
+        }
+        public DataViewBase(IEnumerable<TIdentifier> identifiers)
+        {
+            Identifier = new TIdentifier();
+            Identifiers = identifiers;
+            Record = new T();
+            Records = new ObservableRangeCollection<T>();
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+            _ = new Action(async () => await Load());
+        }
+        public DataViewBase(T record)
+        {
+            Identifier = new TIdentifier();
+            Identifiers = new List<TIdentifier>();
+            Record = record;
+            Records = new ObservableRangeCollection<T>();
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+        }
+        public DataViewBase(IEnumerable<T> records)
+        {
+            Identifier = new TIdentifier();
+            Identifiers = new List<TIdentifier>();
+            Record = new T();
+            Records.AddRange(records);
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+        }
+        public async Task Load()
+        {
+            if (Identifier != null && Identifier.Model != null)
+            {
+                Response = await HttpService.GetOne<T>(Identifier, new EmptyValidator());
+                if (Response.Succeed && Response.Response.Status.Succeeded())
+                {
+                    Record = Response.Response.Data;
+                    OnResponseSucceeded?.Invoke(Response);
+                }
+                else if (Response.HasException)
+                {
+                    OnResponseException?.Invoke(Response);
+                }
+                else
+                {
+                    OnResponseFailed?.Invoke(Response);
+                }
+                OnResponse?.Invoke(Response);
+            }
+            else if (Identifiers != null && Identifiers.Any())
+            {
+                ResponseCollection = await HttpService.GetRange<T>(Identifiers, new EmptyValidator());
+                if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
+                {
+                    if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
+                    {
+                        Records.ReplaceRange(ResponseCollection.Response.Data);
+                    }
+                    else if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
+                    {
+                        Records.AddRange(ResponseCollection.Response.Data);
+                    }
+                    OnResponseCollectionSucceeded?.Invoke(ResponseCollection);
+                }
+                else if (ResponseCollection.HasException)
+                {
+                    OnResponseCollectionException?.Invoke(ResponseCollection);
+                }
+                else
+                {
+                    OnResponseCollectionFailed?.Invoke(ResponseCollection);
+                }
+                OnResponseCollection?.Invoke(ResponseCollection);
+            }
+        }
         public virtual async Task Search()
         {
             ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
             if (ResponsePaged.Succeed && ResponsePaged.Response.Status.Succeeded())
             {
-                Records = ResponsePaged.Response.Data.Data;
+                if(CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
+                {
+                    Records.ReplaceRange(ResponsePaged.Response.Data.Data);
+                }
+                else if(CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
+                {
+                    Records.AddRange(ResponsePaged.Response.Data.Data);
+                }
                 OnResponsePagedSucceeded?.Invoke(ResponsePaged);
             }
             else if (ResponsePaged.HasException)

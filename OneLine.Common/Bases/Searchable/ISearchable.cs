@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using OneLine.Enums;
+using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {

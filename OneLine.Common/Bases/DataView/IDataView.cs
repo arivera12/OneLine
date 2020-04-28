@@ -1,11 +1,11 @@
 ﻿namespace OneLine.Bases
 {
     public interface IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        IModel<T, TIdentifier>,
+        IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
-        ISearchExtraParams<object>,
+        ISearchExtraParameterable<object>,
         ISearchable,
-        ICollectionAppendReplaceModeable,
+        ICollectionAppendableReplaceableModeable,
         ISelectable<T>,
         IPageable,
         IApiResponseable<T>,

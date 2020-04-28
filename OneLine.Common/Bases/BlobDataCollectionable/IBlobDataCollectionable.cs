@@ -6,7 +6,7 @@ namespace OneLine.Bases
     /// This interface is a definition of blob data representation
     /// </summary>
     /// <typeparam name="TBlobData">The blob data type</typeparam>
-    public interface IBlobData<TBlobData>
+    public interface IBlobDataCollectionable<TBlobData>
     {
         IList<TBlobData> BlobDatas { get; set; }
     }

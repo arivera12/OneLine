@@ -1,9 +1,9 @@
 ﻿namespace OneLine.Bases
 {
     public interface IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        IModel<T, TIdentifier>,
+        IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
-        IBlobData<TBlobData>,
+        IBlobDataCollectionable<TBlobData>,
         IApiResponseable<T>,
         IApiResponseableCollectionable<T>,
         IApiResponseableBlobable<T, TUserBlobs>,
@@ -11,7 +11,7 @@
         ISaveableWithValidator,
         IFormStateable,
         IFormModeable,
-        ICollectionAppendReplaceModeable,
+        ICollectionAppendableReplaceableModeable,
         ILoadableApiResponseable<T>,
         ILoadableApiResponseableCollectionable<T>,
         IDeletableWithValidation<T>,

@@ -2,7 +2,7 @@
 
 namespace OneLine.Bases
 {
-    public interface ISearchExtraParams<TSearchExtraParams>
+    public interface ISearchExtraParameterable<TSearchExtraParams>
     {
         TSearchExtraParams SearchExtraParams { get; set; }
     }

@@ -2,7 +2,7 @@
 
 namespace OneLine.Bases
 {
-    public interface ICollectionAppendReplaceModeable
+    public interface ICollectionAppendableReplaceableModeable
     {
         CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
     }

@@ -2,7 +2,7 @@
 
 namespace OneLine.Bases
 {
-    public interface IResponsePaged<T>
+    public interface ResponseablePaged<T>
     {
         T ResponsePaged { get; set; }
         Action<T> OnResponsePaged { get; set; }

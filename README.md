@@ -1,4 +1,4 @@
 # OneLine
-OneLine is a set of libraries and extension methods to be used as the core backend and infrastructure of any project.
+OneLine is an abstraction standard framework. 
 
-Documentantion will be available soon. I need to document the code then I will document here for public reference.
+This framework is still under heavy development and testing and will be completed with documentation to use soon.

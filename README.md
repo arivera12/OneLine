@@ -1,4 +1,6 @@
 # OneLine
-OneLine is an abstraction standard framework. 
+OneLine is an abstraction standarided framework. 
 
-This framework is still under heavy development and testing and will be completed with documentation to use soon.
+OneLine is still under heavy development and testing. 
+
+It will be completed with documentation to use very soon.

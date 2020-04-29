@@ -216,6 +216,7 @@ namespace OneLine.Bases
         {
             if (RecordsSelectionMode == RecordsSelectionMode.Single)
             {
+                Record = selectedRecord;
                 OnSelectedRecord?.Invoke(selectedRecord);
             }
             else if (RecordsSelectionMode == RecordsSelectionMode.Multiple)

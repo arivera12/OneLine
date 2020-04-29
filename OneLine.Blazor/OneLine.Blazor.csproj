@@ -1,13 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <LangVersion>8.0</LangVersion>
+    <Authors>Anthony G. Rivera Cosme</Authors>
+    <Description>OneLine blazor is a set of utilities to be used in the blazor context</Description>
+    <Copyright>Anthony G. Rivera Cosme</Copyright>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
+    <RepositoryType>c#</RepositoryType>
+    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+    <Version>2.0.16</Version>
   </PropertyGroup>
 
 
   <ItemGroup>
+    <PackageReference Include="Blazor.Extensions.Storage" Version="1.1.0-preview3" />
     <PackageReference Include="BlazorCurrentDevice" Version="1.0.5" />
     <PackageReference Include="BlazorDownloadFile" Version="1.0.4" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="2.6.6" />
@@ -18,6 +30,18 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt" Link="LICENSE.txt">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 

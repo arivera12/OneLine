@@ -103,7 +103,7 @@ namespace OneLine.Blazor.Bases
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
-        public async Task OnAfterRenderInitializeAsync()
+        public virtual async Task OnAfterRenderInitializeAsync()
         {
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();

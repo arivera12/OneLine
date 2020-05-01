@@ -17,7 +17,8 @@ namespace OneLine.Bases
         where T : class, new()
         where TIdentifier : class, IIdentifier<TId>, new()
         where TId : class
-        where THttpService : HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>, new()
+        where THttpService : HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>, 
+        IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : class, IBlobData
         where TBlobValidator : class, IValidator, new()
         where TUserBlobs : class, IUserBlobs

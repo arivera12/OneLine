@@ -11,12 +11,12 @@ namespace OneLine.Bases
     public class HttpBaseUsersService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs> :
         HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>,
         IHttpUsersService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
-        where T : new()
-        where TIdentifier : IIdentifier<TId>
+        where T : class, new()
+        where TIdentifier : class, IIdentifier<TId>
         where TId : class
-        where TBlobData : IBlobData
-        where TBlobValidator : IValidator, new()
-        where TUserBlobs : IUserBlobs
+        where TBlobData : class, IBlobData
+        where TBlobValidator : class, IValidator, new()
+        where TUserBlobs : class, IUserBlobs
     {
         public virtual string LockUnlockMethod { get; set; } = "lockunlock";
         public virtual string ConfirmEmailMethod { get; set; } = "confirmemail";

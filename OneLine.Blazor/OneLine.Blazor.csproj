@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Added virtual keyword on derived properties on base classes. Added web aseembly host etension methods AddBaseAddressHttpClient, AddEnvironmentConfiguration. Added utilities EnviromentChooser and InMemoryFileProvider to be used to manage configuration files in memory.</PackageReleaseNotes>
-    <Version>2.0.19</Version>
+    <PackageReleaseNotes>Fixed type params constraints. Renamed OnAfterRenderInitializeAsync to OnAfterFirstRenderAsync.</PackageReleaseNotes>
+    <Version>2.0.20</Version>
   </PropertyGroup>
 
 

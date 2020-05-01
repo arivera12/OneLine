@@ -13,8 +13,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added virtual keyword on derived properties on base classes. Added web aseembly host etension methods AddBaseAddressHttpClient, AddEnvironmentConfiguration. Added utilities EnviromentChooser and InMemoryFileProvider to be used to manage configuration files in memory.</PackageReleaseNotes>
-    <Version>2.0.19</Version>
+    <PackageReleaseNotes>Fixed type params constraints. Renamed OnAfterRenderInitializeAsync to OnAfterFirstRenderAsync.</PackageReleaseNotes>
+    <Version>2.0.20</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

@@ -16,7 +16,7 @@ namespace OneLine.Bases
         where TIdentifier : class, IIdentifier<TId>
         where TId : class
         where TBlobData : class, IBlobData
-        where TBlobValidator : IValidator, new()
+        where TBlobValidator : class, IValidator, new()
     {
         public string ControllerName { get; set; } = "userblobs";
         public string AddMethod { get; set; } = "add";

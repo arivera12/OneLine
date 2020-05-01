@@ -20,12 +20,12 @@ namespace OneLine.Bases
     /// <typeparam name="TUserBlobs"></typeparam>
     public class HttpBaseCrudService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs> : HttpBaseService,
         IHttpCrudService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
-        where T : new()
-        where TIdentifier : IIdentifier<TId>
+        where T : class, new()
+        where TIdentifier : class, IIdentifier<TId>
         where TId : class
-        where TBlobData : IBlobData
-        where TBlobValidator : IValidator, new()
-        where TUserBlobs : IUserBlobs
+        where TBlobData : class, IBlobData
+        where TBlobValidator : class, IValidator, new()
+        where TUserBlobs : class, IUserBlobs
     {
         public virtual string ControllerName { get; set; }
         public virtual string AddMethod { get; set; } = "add";

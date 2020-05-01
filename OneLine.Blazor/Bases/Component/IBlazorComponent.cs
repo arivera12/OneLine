@@ -17,6 +17,6 @@ namespace OneLine.Blazor.Bases
         bool IsDesktop { get; set; }
         bool IsTablet { get; set; }
         bool IsMobile { get; set; }
-        Task OnAfterRenderInitializeAsync();
+        Task OnAfterFirstRenderAsync();
     }
 }

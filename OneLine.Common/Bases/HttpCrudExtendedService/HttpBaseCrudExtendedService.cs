@@ -11,12 +11,12 @@ namespace OneLine.Bases
     public class HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs> :
         HttpBaseCrudService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>,
         IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
-        where T : new()
-        where TIdentifier : IIdentifier<TId>
+        where T : class, new()
+        where TIdentifier : class, IIdentifier<TId>
         where TId : class
-        where TBlobData : IBlobData
-        where TBlobValidator : IValidator, new()
-        where TUserBlobs : IUserBlobs
+        where TBlobData : class, IBlobData
+        where TBlobValidator : class, IValidator, new()
+        where TUserBlobs : class, IUserBlobs
     {
         public virtual string ListMethod { get; set; } = "list";
         public virtual string DownloadCsvExcelMethod { get; set; } = "downloadcsvexcel";

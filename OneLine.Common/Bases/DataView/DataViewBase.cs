@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
@@ -18,7 +17,8 @@ namespace OneLine.Bases
         where T : class, new()
         where TIdentifier : class, IIdentifier<TId>, new()
         where TId : class
-        where THttpService : HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>, new()
+        where THttpService : HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>,
+        IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : class, IBlobData
         where TBlobValidator : class, IValidator, new()
         where TUserBlobs : class, IUserBlobs
@@ -204,12 +204,12 @@ namespace OneLine.Bases
             ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
             if (ResponsePaged.Succeed && ResponsePaged.Response.Status.Succeeded())
             {
-                if(CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
+                if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                 {
                     Records.ReplaceRange(ResponsePaged.Response.Data.Data);
                     RecordsFilteredSorted.ReplaceRange(Records);
                 }
-                else if(CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
+                else if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
                 {
                     Records.AddRange(ResponsePaged.Response.Data.Data);
                     RecordsFilteredSorted.AddRange(Records);

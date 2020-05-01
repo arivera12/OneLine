@@ -28,11 +28,11 @@ namespace OneLine.Blazor.Bases
         where TUserBlobs : class, IUserBlobs
     {
         [Inject] public override IConfiguration Configuration { get; set; }
-        [Inject] public IJSRuntime JSRuntime { get; set; }
-        [Inject] public NavigationManager NavigationManager { get; set; }
-        [Inject] public BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
-        [Inject] public BlazorDownloadFileService BlazorDownloadFileService { get; set; }
-        [Inject] public SweetAlertService SweetAlertService { get; set; }
+        [Inject] public virtual IJSRuntime JSRuntime { get; set; }
+        [Inject] public virtual NavigationManager NavigationManager { get; set; }
+        [Inject] public virtual BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
+        [Inject] public virtual BlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
         [Parameter] public override TIdentifier Identifier { get; set; } = new TIdentifier();
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; } = new List<TIdentifier>();
         [Parameter] public override T Record { get; set; } = new T();
@@ -64,9 +64,9 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<T> OnLoadException { get; set; }
         [Parameter] public override Action<T> OnLoadFailed { get; set; }
         [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
-        public bool IsDesktop { get; set; }
-        public bool IsTablet { get; set; }
-        public bool IsMobile { get; set; }
+        public virtual bool IsDesktop { get; set; }
+        public virtual bool IsTablet { get; set; }
+        public virtual bool IsMobile { get; set; }
         public virtual async Task OnAfterRenderInitializeAsync()
         {
             IsMobile = await BlazorCurrentDeviceService.Mobile();

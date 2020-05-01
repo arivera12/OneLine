@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <LangVersion>8.0</LangVersion>
     <Authors>Anthony G. Rivera Cosme</Authors>
@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Performance tune ups removing ToList methods and using z.framework extension methods to improve database performance when using join and on database round trips. Renamed ToQueryString method to  ToUrlQueryString. Added new interface and implementation ICollectionFilterableSortable with options to create filter predicate, sort by property name descending and ascending options on base data view. This new option will allow data views on client side to apply filtering and sorting on the current collection in memory instead of hitting the web server or requesting remote data.</PackageReleaseNotes>
-    <Version>2.0.18</Version>
+    <PackageReleaseNotes>Added virtual keyword on derived properties on base classes. Added web aseembly host etension methods AddBaseAddressHttpClient, AddEnvironmentConfiguration. Added utilities EnviromentChooser and InMemoryFileProvider to be used to manage configuration files in memory.</PackageReleaseNotes>
+    <Version>2.0.19</Version>
   </PropertyGroup>
 
 
@@ -25,6 +25,8 @@
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="2.6.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview3.20168.3" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.3" />
   </ItemGroup>
 
 

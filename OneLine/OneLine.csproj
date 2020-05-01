@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.18</Version>
+    <Version>2.0.19</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine is a project that can be used on a server backend. This package already includes OneLine.Common.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Performance tune ups removing ToList methods and using z.framework extension methods to improve database performance when using join and on database round trips. Renamed ToQueryString method to  ToUrlQueryString. Added new interface and implementation ICollectionFilterableSortable with options to create filter predicate, sort by property name descending and ascending options on base data view. This new option will allow data views on client side to apply filtering and sorting on the current collection in memory instead of hitting the web server or requesting remote data.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added virtual keyword on derived properties on base classes. Added web aseembly host etension methods AddBaseAddressHttpClient, AddEnvironmentConfiguration. Added utilities EnviromentChooser and InMemoryFileProvider to be used to manage configuration files in memory.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

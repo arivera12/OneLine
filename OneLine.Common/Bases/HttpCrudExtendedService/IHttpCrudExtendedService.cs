@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
+    public interface IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs> : IHttpCrudService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
     {
         string ListMethod { get; set; }
         string DownloadCsvExcelMethod { get; set; }

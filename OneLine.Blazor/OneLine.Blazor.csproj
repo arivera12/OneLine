@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Fixed type params constraints. Renamed OnAfterRenderInitializeAsync to OnAfterFirstRenderAsync.</PackageReleaseNotes>
-    <Version>2.0.20</Version>
+    <PackageReleaseNotes>Fixed bases type params removing explicit implementation and using interface reference instead.</PackageReleaseNotes>
+    <Version>2.0.21</Version>
   </PropertyGroup>
 
 

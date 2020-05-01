@@ -13,8 +13,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed type params constraints. Renamed OnAfterRenderInitializeAsync to OnAfterFirstRenderAsync.</PackageReleaseNotes>
-    <Version>2.0.20</Version>
+    <PackageReleaseNotes>Fixed bases type params removing explicit implementation and using interface reference instead.</PackageReleaseNotes>
+    <Version>2.0.21</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

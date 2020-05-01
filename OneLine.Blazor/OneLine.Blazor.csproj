@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
-    <Version>2.0.16</Version>
+    <PackageReleaseNotes>Performance tune ups removing ToList methods and using z.framework extension methods to improve database performance when using join and on database round trips. Renamed ToQueryString method to  ToUrlQueryString. Added new interface and implementation ICollectionFilterableSortable with options to create filter predicate, sort by property name descending and ascending options on base data view. This new option will allow data views on client side to apply filtering and sorting on the current collection in memory instead of hitting the web server or requesting remote data.</PackageReleaseNotes>
+    <Version>2.0.18</Version>
   </PropertyGroup>
 
 

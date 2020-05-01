@@ -29,13 +29,13 @@ namespace OneLine.Blazor.Bases
     public abstract partial class BlazorFormComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
         IBlazorFormComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
-        where T : new()
-        where TIdentifier : IIdentifier<TId>, new()
+        where T : class, new()
+        where TIdentifier : class, IIdentifier<TId>, new()
         where TId : class
         where THttpService : HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : IBlobData
-        where TBlobValidator : IValidator, new()
-        where TUserBlobs : IUserBlobs
+        where TBlobData : class, IBlobData
+        where TBlobValidator : class, IValidator, new()
+        where TUserBlobs : class, IUserBlobs
     {
         [Inject] public override IConfiguration Configuration { get; set; }
         [Inject] public IJSRuntime JSRuntime { get; set; }

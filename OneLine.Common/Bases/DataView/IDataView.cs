@@ -5,6 +5,7 @@
         IHttpServiceable<THttpService>,
         ISearchExtraParameterable<object>,
         ISearchable,
+        ICollectionFilterableSortable<T>,
         ICollectionAppendableReplaceableModeable,
         ISelectable<T>,
         IPageable,

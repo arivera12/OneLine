@@ -75,14 +75,14 @@ namespace OneLine.Extensions
             return new ApiResponse<T> { Status = ApiResponseStatus.Succeeded, Data = objType, Message = message };
         }
 
-        public static IEnumerable<ToTModel> AutoMap<FromTModel, ToTModel>(this IEnumerable<FromTModel> collection, bool trimStrings = true, bool autoCapitalizeStrings = false)
-            where FromTModel : class
-            where ToTModel : class
+        public static IEnumerable<ToT> AutoMap<FromT, ToT>(this IEnumerable<FromT> collection, bool trimStrings = true, bool autoCapitalizeStrings = false)
+            where FromT : class
+            where ToT : class
         {
-            IList<ToTModel> toTModels = Activator.CreateInstance<List<ToTModel>>();
+            IList<ToT> toTModels = Activator.CreateInstance<List<ToT>>();
             foreach (var item in collection)
             {
-                ToTModel toTModel = Activator.CreateInstance<ToTModel>();
+                ToT toTModel = Activator.CreateInstance<ToT>();
                 toTModels.Add(toTModel.AutoMap(item, trimStrings, autoCapitalizeStrings));
             }
             return toTModels.AsEnumerable();
@@ -306,7 +306,7 @@ namespace OneLine.Extensions
             }
             return objTypes;
         }
-        public static string ToQueryString<T>(this T obj, string separator = ",") where T : class
+        public static string ToUrlQueryString<T>(this T obj, string separator = ",") where T : class
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
@@ -366,7 +366,7 @@ namespace OneLine.Extensions
             }
             return objectType;
         }
-        public static string ToQueryString<T, TResult>(this IEnumerable<T> enumerable, Func<T, TResult> selector, string separator = ",")
+        public static string ToUrlQueryString<T, TResult>(this IEnumerable<T> enumerable, Func<T, TResult> selector, string separator = ",")
         {
             if (enumerable == null)
                 throw new ArgumentNullException("request");
@@ -374,7 +374,7 @@ namespace OneLine.Extensions
             if (selector == null)
                 throw new ArgumentNullException("selector");
 
-            return string.Join("&", enumerable.Select(selector).Select(s => (s as object).ToQueryString(separator)));
+            return string.Join("&", enumerable.Select(selector).Select(s => (s as object).ToUrlQueryString(separator)));
         }
         public static bool IsNotNull<T>(this T source)
         {

@@ -8,25 +8,30 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
     public abstract class DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
-        where T : new()
-        where TIdentifier : IIdentifier<TId>, new()
+        where T : class, new()
+        where TIdentifier : class, IIdentifier<TId>, new()
         where TId : class
         where THttpService : HttpBaseCrudExtendedService<T, TIdentifier, TId, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : IBlobData
-        where TBlobValidator : IValidator, new()
-        where TUserBlobs : IUserBlobs
+        where TBlobData : class, IBlobData
+        where TBlobValidator : class, IValidator, new()
+        where TUserBlobs : class, IUserBlobs
     {
         public virtual TIdentifier Identifier { get; set; }
         public virtual IEnumerable<TIdentifier> Identifiers { get; set; }
         public virtual T Record { get; set; }
         public virtual ObservableRangeCollection<T> Records { get; set; }
         public virtual object SearchExtraParams { get; set; }
+        public virtual Func<T, bool> FilterPredicate { get; set; }
+        public virtual string FilterSortBy { get; set; }
+        public virtual bool FilterDescending { get; set; }
+        public virtual ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
         public virtual IResponseResult<IApiResponse<T>> Response { get; set; }
         public virtual Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
         public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseSucceeded { get; set; }
@@ -66,6 +71,7 @@ namespace OneLine.Bases
             Identifiers = new List<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
         }
@@ -75,6 +81,7 @@ namespace OneLine.Bases
             Identifiers = new List<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             SearchExtraParams = searchExtraParams;
@@ -85,6 +92,7 @@ namespace OneLine.Bases
             Identifiers = new List<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = searchPaging;
         }
@@ -94,6 +102,7 @@ namespace OneLine.Bases
             Identifiers = new List<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = searchPaging;
             SearchExtraParams = searchExtraParams;
@@ -104,6 +113,7 @@ namespace OneLine.Bases
             Identifiers = new List<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             _ = new Action(async () => await Load());
@@ -114,6 +124,7 @@ namespace OneLine.Bases
             Identifiers = identifiers;
             Record = new T();
             Records = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             _ = new Action(async () => await Load());
@@ -124,6 +135,7 @@ namespace OneLine.Bases
             Identifiers = new List<TIdentifier>();
             Record = record;
             Records = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
         }
@@ -132,7 +144,10 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = new List<TIdentifier>();
             Record = new T();
+            Records = new ObservableRangeCollection<T>();
             Records.AddRange(records);
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted.AddRange(records);
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
         }
@@ -164,10 +179,12 @@ namespace OneLine.Bases
                     if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                     {
                         Records.ReplaceRange(ResponseCollection.Response.Data);
+                        RecordsFilteredSorted.ReplaceRange(Records);
                     }
                     else if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
                     {
                         Records.AddRange(ResponseCollection.Response.Data);
+                        RecordsFilteredSorted.AddRange(Records);
                     }
                     OnResponseCollectionSucceeded?.Invoke(ResponseCollection);
                 }
@@ -190,10 +207,12 @@ namespace OneLine.Bases
                 if(CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                 {
                     Records.ReplaceRange(ResponsePaged.Response.Data.Data);
+                    RecordsFilteredSorted.ReplaceRange(Records);
                 }
                 else if(CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
                 {
                     Records.AddRange(ResponsePaged.Response.Data.Data);
+                    RecordsFilteredSorted.AddRange(Records);
                 }
                 OnResponsePagedSucceeded?.Invoke(ResponsePaged);
             }
@@ -234,6 +253,48 @@ namespace OneLine.Bases
                 MaximumRecordSelectionsReached = SelectedRecords.Count >= MaximumRecordSelections;
                 OnMaximumRecordSelectionsReached?.Invoke(MaximumRecordSelectionsReached);
                 OnSelectedRecords?.Invoke(SelectedRecords, MinimunRecordSelectionsReached, MaximumRecordSelectionsReached);
+            }
+            return Task.CompletedTask;
+        }
+        public Task FilterAndSort(string sortBy, bool descending)
+        {
+            FilterSortBy = sortBy;
+            FilterDescending = descending;
+            return FilterAndSort();
+        }
+        public Task FilterAndSort(string sortBy, bool descending, Func<T, bool> filterPredicate)
+        {
+            FilterSortBy = sortBy;
+            FilterDescending = descending;
+            FilterPredicate = filterPredicate;
+            return FilterAndSort();
+        }
+        public Task FilterAndSort()
+        {
+            if (Records != null && Records.Any())
+            {
+                IEnumerable<T> recordsFilteredSorted;
+                if (FilterPredicate != null)
+                {
+                    recordsFilteredSorted = Records.Where(FilterPredicate);
+                }
+                else
+                {
+                    recordsFilteredSorted = Records;
+                }
+                if (FilterSortBy != null)
+                {
+                    if (FilterDescending)
+                    {
+                        recordsFilteredSorted = recordsFilteredSorted.OrderByPropertyDescending(FilterSortBy);
+                    }
+                    else
+                    {
+                        recordsFilteredSorted = recordsFilteredSorted.OrderByProperty(FilterSortBy);
+                    }
+                }
+                //Creates a deep copy prevent deleting the original collection.
+                RecordsFilteredSorted.ReplaceRange(recordsFilteredSorted.AutoMap<T, T>());
             }
             return Task.CompletedTask;
         }

@@ -52,12 +52,7 @@ namespace OneLine.Extensions
 
         public static IActionResult ToJson<T>(this IQueryable<T> source)
         {
-            return new ContentResult().OutputJson(source.Future().ToList());
-        }
-
-        public static async Task<IActionResult> ToJsonAsync<T>(this IQueryable<T> source)
-        {
-            return new ContentResult().OutputJson(await source.Future().ToListAsync());
+            return new ContentResult().OutputJson(source.Future());
         }
 
         public static IActionResult ToJsonPaged<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count)
@@ -66,7 +61,7 @@ namespace OneLine.Extensions
             return new ContentResult()
                 .OutputJson
                 (
-                    new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, (Count > 0 ? source.ToList() : Enumerable.Empty<T>()))
+                    new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, (Count > 0 ? source : Enumerable.Empty<T>()))
                 );
         }
 
@@ -77,21 +72,7 @@ namespace OneLine.Extensions
                 (
                     new ApiResponse<IEnumerable<T>>()
                     {
-                        Data = source.Future().ToList(),
-                        Message = message,
-                        Status = apiResponseStatus
-                    }
-                );
-        }
-
-        public static async Task<IActionResult> ToJsonApiResponseAsync<T>(this IQueryable<T> source, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
-        {
-            return new ContentResult()
-                .OutputJson
-                (
-                    new ApiResponse<IEnumerable<T>>()
-                    {
-                        Data = await source.Future().ToListAsync(),
+                        Data = source.Future(),
                         Message = message,
                         Status = apiResponseStatus
                     }
@@ -105,7 +86,7 @@ namespace OneLine.Extensions
                 (
                     new ApiResponse<IPaged<IEnumerable<T>>>()
                     {
-                        Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, (Count > 0 ? source.ToList() : Enumerable.Empty<T>())),
+                        Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, (Count > 0 ? source : Enumerable.Empty<T>())),
                         Message = message,
                         Status = apiResponseStatus
                     }
@@ -117,7 +98,7 @@ namespace OneLine.Extensions
             source = source.Paged(Page, PageSize, out Count);
             return new ApiResponse<IPaged<IEnumerable<T>>>()
             {
-                Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, (Count > 0 ? source.ToList() : Enumerable.Empty<T>())),
+                Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, (Count > 0 ? source : Enumerable.Empty<T>())),
                 Message = message,
                 Status = apiResponseStatus
             };
@@ -126,7 +107,7 @@ namespace OneLine.Extensions
         public static IApiResponse<IPaged<IEnumerable<T>>> ToApiResponsePaged<T>(this IQueryable<T> source,int? Page, int? PageSize, out int Count, IEnumerable<string> decryptFieldsOnRead, string encryptionKey, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
         {
             source = source.Paged(Page, PageSize, out Count);
-            var data = Count > 0 ? source.ToList() : new List<T>();
+            var data = Count > 0 ? source : Enumerable.Empty<T>();
             if (decryptFieldsOnRead.Any())
             {
                 foreach (var record in data)
@@ -138,7 +119,6 @@ namespace OneLine.Extensions
                     }
                 }
             }
-
             return new ApiResponse<IPaged<IEnumerable<T>>>()
             {
                 Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, data),

@@ -32,7 +32,7 @@ namespace OneLine.Extensions
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri)
             => JsonSerializer.Deserialize<T>(await httpClient.GetStringAsync(requestUri));
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri, object queryStringParameters)
-            => JsonSerializer.Deserialize<T>(await httpClient.GetStringAsync($"{requestUri}?{queryStringParameters?.ToQueryString()}"));
+            => JsonSerializer.Deserialize<T>(await httpClient.GetStringAsync($"{requestUri}?{queryStringParameters?.ToUrlQueryString()}"));
         public static async Task<IResponseResult<T>> GetJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri)
         {
             try
@@ -49,7 +49,7 @@ namespace OneLine.Extensions
         {
             try
             {
-                var response = await httpClient.GetJsonAsync<T>($"{requestUri}?{queryStringParameters?.ToQueryString()}");
+                var response = await httpClient.GetJsonAsync<T>($"{requestUri}?{queryStringParameters?.ToUrlQueryString()}");
                 return new ResponseResult<T>(response, null);
             }
             catch (Exception ex)
@@ -358,7 +358,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
             }
             //Send content in the MultipartFormData
             else
@@ -530,7 +530,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
             }
             //Send content in the MultipartFormData
             else
@@ -586,7 +586,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
             }
             //Send content
             else
@@ -620,7 +620,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
             }
             //Send content
             else
@@ -662,7 +662,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents?.ToUrlQueryString()}");
             }
             //Send content
             else
@@ -713,7 +713,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
             }
             //Send content
             else
@@ -751,7 +751,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
             }
             //Send content
             else
@@ -793,7 +793,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{contents?.ToUrlQueryString()}");
             }
             //Send content
             else
@@ -844,7 +844,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
             }
             //Send content
             else
@@ -894,7 +894,7 @@ namespace OneLine.Extensions
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToQueryString()}");
+                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
             }
             //Send content
             else

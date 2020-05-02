@@ -255,20 +255,20 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
-        public Task FilterAndSort(string sortBy, bool descending)
+        public virtual Task FilterAndSort(string sortBy, bool descending)
         {
             FilterSortBy = sortBy;
             FilterDescending = descending;
             return FilterAndSort();
         }
-        public Task FilterAndSort(string sortBy, bool descending, Func<T, bool> filterPredicate)
+        public virtual Task FilterAndSort(string sortBy, bool descending, Func<T, bool> filterPredicate)
         {
             FilterSortBy = sortBy;
             FilterDescending = descending;
             FilterPredicate = filterPredicate;
             return FilterAndSort();
         }
-        public Task FilterAndSort()
+        public virtual Task FilterAndSort()
         {
             if (Records != null && Records.Any())
             {

@@ -12,7 +12,6 @@ namespace OneLine.Blazor.Bases
         IBlazorDataViewComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : class, new()
         where TIdentifier : class, IIdentifier<TId>, new()
-        where TId : class
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : class, IBlobData
         where TBlobValidator : class, IValidator, new()

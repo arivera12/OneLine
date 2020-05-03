@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Fixed bases type params removing explicit implementation and using interface reference instead.</PackageReleaseNotes>
-    <Version>2.0.21</Version>
+    <PackageReleaseNotes>Removed TId type param class constraint to allow use of primitive datatypes as type of identifiers.</PackageReleaseNotes>
+    <Version>2.0.22</Version>
   </PropertyGroup>
 
 

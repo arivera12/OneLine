@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface IDeletable
+    public interface IDeletableValidatable
     {
         Action<Action> OnBeforeDelete { get; set; }
-        Task Delete();
+        Task Delete(IValidator validator);
         Action OnAfterDelete { get; set; }
     }
 }

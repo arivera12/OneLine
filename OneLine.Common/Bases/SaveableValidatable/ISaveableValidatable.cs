@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface ISaveable
+    public interface ISaveableValidatable
     {
-        Task Save();
+        Task Save(IValidator validator);
         Action<Action> OnBeforeSave { get; set; }
         Action OnAfterSave { get; set; }
         Action OnFailedSave { get; set; }
+        Action OnFailedValidation { get; set; }
     }
 }

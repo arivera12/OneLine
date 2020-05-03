@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.23</Version>
+    <Version>2.0.25</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine is a project that can be used on a server backend. This package already includes OneLine.Common.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added sweet alert service extensions. Added new property ValidationFailed on api response. Fixed condition on base class implementation to use ValidationFailed  bool check instead of string message check. Fixed wrong callback methods on form base. Added new overloaded constructors on api response. Fixed http client extension to use api response constructor instead of object construction on new instance declaration. Removed unnecesary response actions and cleaned up bases with a little refactor. Refactores user blobs api response to use constructors.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added and implemented new interface IPageableNavigable to support Paging navigation methods.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

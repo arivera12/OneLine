@@ -9,11 +9,12 @@
         ICollectionAppendableReplaceableModeable,
         ISelectable<T>,
         IPageable,
+        IPageableNavigable,
         IApiResponseable<T>,
         IApiResponseablePageable<T>,
         IApiResponseableCollectionable<T>,
         IConfigurable,
-        ILoadable<T>
+        ILoadable
     {  
     }
 }

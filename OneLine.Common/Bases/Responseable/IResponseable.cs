@@ -7,8 +7,5 @@ namespace OneLine.Bases
     {
         T Response { get; set; }
         Action<T> OnResponse { get; set; }
-        Action<T> OnResponseSucceeded { get; set; }
-        Action<T> OnResponseException { get; set; }
-        Action<T> OnResponseFailed { get; set; }
     }
 }

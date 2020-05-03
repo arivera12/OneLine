@@ -22,6 +22,11 @@
 
         int TotalPages { get; set; }
         /// <summary>
+        /// The last page is the same as the total of pages. This property is for reference purpose only.
+        /// </summary>
+
+        int LastPage { get; set; }
+        /// <summary>
         /// Determines wether you can go back to the previous page of records
         /// </summary>
 

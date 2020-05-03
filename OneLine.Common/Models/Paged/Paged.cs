@@ -1,4 +1,6 @@
-﻿namespace OneLine.Models
+﻿using System;
+
+namespace OneLine.Models
 {
     public class Paged<T> : IPaged<T>
     {
@@ -16,6 +18,11 @@
         /// </summary>
 
         public virtual int TotalCount { get; set; }
+        /// <summary>
+        /// The last page is the same as the total of pages. This property is for reference purpose only.
+        /// </summary>
+
+        public virtual int LastPage { get; set; }
         /// <summary>
         /// The total pages
         /// </summary>
@@ -42,9 +49,10 @@
             PageIndex = pageIndex;
             PageSize = pageSize;
             TotalCount = totalCount;
-            TotalPages = totalCount == 0 ? 0 : totalCount / pageSize;
-            HasPreviousPage = pageIndex > 1;
-            HasNextPage = totalCount == 0 ? false : totalCount > pageIndex * pageSize;
+            TotalPages = TotalCount == 0 ? 0 : Convert.ToInt32(Math.Ceiling(TotalCount / Convert.ToDouble(PageSize)));
+            LastPage = TotalPages;
+            HasPreviousPage = PageIndex > 1;
+            HasNextPage = TotalCount != 0 && TotalCount > PageIndex * PageSize;
             Data = data;
         }
 

@@ -50,8 +50,6 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override IList<TBlobData> BlobDatas { get; set; }
         [Parameter] public override FormState FormState { get; set; }
         [Parameter] public override FormMode FormMode { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnLoad { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollection { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<T>> Response { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
@@ -71,7 +69,7 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<Action> OnBeforeSave { get; set; }
         [Parameter] public override Action OnAfterSave { get; set; }
         [Parameter] public override Action<Action> OnBeforeDelete { get; set; }
-        [Parameter] public override Action<T> OnAfterDelete { get; set; }
+        [Parameter] public override Action OnAfterDelete { get; set; }
         [Parameter] public override Action OnFailedSave { get; set; }
         [Parameter] public override Action OnFailedValidation { get; set; }
         [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }

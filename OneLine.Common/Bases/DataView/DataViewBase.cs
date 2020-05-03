@@ -45,14 +45,12 @@ namespace OneLine.Bases
         public virtual long MaximumRecordSelections { get; set; }
         public virtual bool MinimunRecordSelectionsReached { get; set; }
         public virtual bool MaximumRecordSelectionsReached { get; set; }
+        public virtual Action<Action> OnBeforeSearch { get; set; }
+        public virtual Action OnAfterSearch { get; set; }
         public virtual Action<T> OnSelectedRecord { get; set; }
         public virtual Action<IEnumerable<T>, bool, bool> OnSelectedRecords { get; set; }
         public virtual Action<bool> OnMinimunRecordSelectionsReached { get; set; }
         public virtual Action<bool> OnMaximumRecordSelectionsReached { get; set; }
-        public virtual Action<T> OnLoad { get; set; }
-        public virtual Action<T> OnLoadSucceeded { get; set; }
-        public virtual Action<T> OnLoadException { get; set; }
-        public virtual Action<T> OnLoadFailed { get; set; }
         public virtual CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
         public DataViewBase()
         {
@@ -140,20 +138,21 @@ namespace OneLine.Bases
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
         }
-        public async Task Load()
+        public virtual async Task Load()
         {
             if (Identifier != null && Identifier.Model != null)
             {
                 Response = await HttpService.GetOne<T>(Identifier, new EmptyValidator());
+                OnResponse?.Invoke(Response);
                 if (Response.Succeed && Response.Response.Status.Succeeded())
                 {
                     Record = Response.Response.Data;
                 }
-                OnResponse?.Invoke(Response);
             }
             else if (Identifiers != null && Identifiers.Any())
             {
                 ResponseCollection = await HttpService.GetRange<T>(Identifiers, new EmptyValidator());
+                OnResponseCollection?.Invoke(ResponseCollection);
                 if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
                 {
                     if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
@@ -167,12 +166,23 @@ namespace OneLine.Bases
                         RecordsFilteredSorted.AddRange(Records);
                     }
                 }
-                OnResponseCollection?.Invoke(ResponseCollection);
             }
         }
         public virtual async Task Search()
         {
+            if(OnBeforeSearch == null)
+            {
+                await InternalSearch();
+            }
+            else
+            {
+                OnBeforeSearch?.Invoke(async () => await InternalSearch());
+            }
+        }
+        private async Task InternalSearch()
+        {
             ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
+            OnResponsePaged?.Invoke(ResponsePaged);
             if (ResponsePaged.Succeed && ResponsePaged.Response.Status.Succeeded())
             {
                 if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
@@ -186,7 +196,7 @@ namespace OneLine.Bases
                     RecordsFilteredSorted.AddRange(Records);
                 }
             }
-            OnResponsePaged?.Invoke(ResponsePaged);
+            OnAfterSearch?.Invoke();
         }
         public virtual async Task PagingFilterChange(IPaging paging)
         {
@@ -195,12 +205,12 @@ namespace OneLine.Bases
         }
         public virtual Task SelectRecord(T selectedRecord)
         {
-            if (RecordsSelectionMode == RecordsSelectionMode.Single)
+            if (RecordsSelectionMode.IsSingle())
             {
                 Record = selectedRecord;
                 OnSelectedRecord?.Invoke(selectedRecord);
             }
-            else if (RecordsSelectionMode == RecordsSelectionMode.Multiple)
+            else if (RecordsSelectionMode.IsMultiple())
             {
                 if (SelectedRecords.Contains(selectedRecord))
                 {
@@ -259,6 +269,106 @@ namespace OneLine.Bases
                 RecordsFilteredSorted.ReplaceRange(recordsFilteredSorted.AutoMap<T, T>());
             }
             return Task.CompletedTask;
+        }
+        public virtual async Task GoPreviousPage()
+        {
+            if(ResponsePaged != null  && ResponsePaged.Response.Data.HasPreviousPage)
+            {
+                SearchPaging.PageIndex--;
+                await Search();
+            }
+        }
+        public virtual async Task GoPreviousPage(int pageSize)
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.HasPreviousPage)
+            {
+                SearchPaging.PageIndex--;
+                SearchPaging.PageSize = pageSize;
+                await Search();
+            }
+        }
+        public virtual async Task GoPreviousPage(string sortBy)
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.HasPreviousPage)
+            {
+                SearchPaging.PageIndex--;
+                SearchPaging.SortBy = sortBy;
+                await Search();
+            }
+        }
+        public virtual async Task GoPreviousPage(int pageSize, string sortBy)
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.HasPreviousPage)
+            {
+                SearchPaging.PageIndex--;
+                SearchPaging.PageSize = pageSize;
+                SearchPaging.SortBy = sortBy;
+                await Search();
+            }
+        }
+        public virtual async Task GoNextPage()
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.HasNextPage)
+            {
+                SearchPaging.PageIndex++;
+                await Search();
+            }
+        }
+        public virtual async Task GoNextPage(int pageSize)
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.HasNextPage)
+            {
+                SearchPaging.PageIndex++;
+                SearchPaging.PageSize = pageSize;
+                await Search();
+            }
+        }
+        public virtual async Task GoNextPage(string sortBy)
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.HasNextPage)
+            {
+                SearchPaging.PageIndex++;
+                SearchPaging.SortBy = sortBy;
+                await Search();
+            }
+        }
+        public virtual async Task GoNextPage(int pageSize, string sortBy)
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.HasNextPage)
+            {
+                SearchPaging.PageIndex++;
+                SearchPaging.PageSize = pageSize;
+                SearchPaging.SortBy = sortBy;
+                await Search();
+            }
+        }
+        public virtual async Task GoToPage(int pageIndex, int pageSize)
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.LastPage <= pageIndex)
+            {
+                SearchPaging.PageIndex = pageIndex;
+                SearchPaging.PageSize = pageSize;
+                await Search();
+            }
+        }
+        public virtual async Task GoToPage(int pageIndex, string sortBy)
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.LastPage <= pageIndex)
+            {
+                SearchPaging.PageIndex = pageIndex;
+                SearchPaging.SortBy = sortBy;
+                await Search();
+            }
+        }
+        public virtual async Task GoToPage(int pageIndex, int pageSize, string sortBy)
+        {
+            if (ResponsePaged != null && ResponsePaged.Response.Data.LastPage <= pageIndex)
+            {
+                SearchPaging.PageIndex = pageIndex;
+                SearchPaging.PageSize = pageSize;
+                SearchPaging.SortBy = sortBy;
+                await Search();
+            }
         }
     }
 }

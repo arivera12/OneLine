@@ -30,8 +30,6 @@ namespace OneLine.Bases
         public virtual IConfiguration Configuration { get; set; }
         public virtual FormState FormState { get; set; }
         public virtual FormMode FormMode { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnLoad { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollection { get; set; }
         public virtual IResponseResult<IApiResponse<T>> Response { get; set; }
         public virtual Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
         public virtual IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
@@ -51,7 +49,7 @@ namespace OneLine.Bases
         public virtual Action<Action> OnBeforeSave { get; set; }
         public virtual Action OnAfterSave { get; set; }
         public virtual Action<Action> OnBeforeDelete { get; set; }
-        public virtual Action<T> OnAfterDelete { get; set; }
+        public virtual Action OnAfterDelete { get; set; }
         public virtual Action OnFailedSave { get; set; }
         public virtual Action OnFailedValidation { get; set; }
         public virtual CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
@@ -350,23 +348,24 @@ namespace OneLine.Bases
         }
         public virtual async Task Load()
         {
-            if (FormMode == FormMode.Single)
+            if (FormMode.IsSingle())
             {
                 if (Identifier != null && Identifier.Model != null)
                 {
                     Response = await HttpService.GetOne<T>(Identifier, new EmptyValidator());
+                    OnResponse?.Invoke(Response);
                     if (Response.Succeed && Response.Response.Status.Succeeded())
                     {
                         Record = Response.Response.Data;
                     }
                 }
-                OnLoad?.Invoke(Response);
             }
-            else if (FormMode == FormMode.Multiple)
+            else if (FormMode.IsMultiple())
             {
                 if (Identifiers != null && Identifiers.Any())
                 {
                     ResponseCollection = await HttpService.GetRange<T>(Identifiers, new EmptyValidator());
+                    OnResponseCollection?.Invoke(ResponseCollection);
                     if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
                     {
                         if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
@@ -379,16 +378,15 @@ namespace OneLine.Bases
                         }
                     }
                 }
-                OnLoadCollection?.Invoke(ResponseCollection);
             }
         }
         public virtual async Task Save(IValidator validator)
         {
-            if (FormState == FormState.Copy || FormState == FormState.Create || FormState == FormState.Edit)
+            if (FormState.IsCopy() || FormState.IsCreate() || FormState.IsEdit())
             {
-                if (FormState == FormState.Edit)
+                if (FormState.IsEdit())
                 {
-                    if (OnAfterSave == null)
+                    if (OnBeforeSave == null)
                     {
                         await InternalUpdate(validator);
                     }
@@ -399,7 +397,7 @@ namespace OneLine.Bases
                 }
                 else
                 {
-                    if (OnAfterSave == null)
+                    if (OnBeforeSave == null)
                     {
                         await InternalCreate(validator);
                     }
@@ -418,11 +416,11 @@ namespace OneLine.Bases
             }
             else
             {
-                if (FormMode == FormMode.Single)
+                if (FormMode.IsSingle())
                 {
                     Response = await HttpService.Add<T>(Record, validator);
                 }
-                else if (FormMode == FormMode.Multiple)
+                else if (FormMode.IsMultiple())
                 {
                     ResponseCollection = await HttpService.AddRange<IEnumerable<T>>(Records, validator);
                 }
@@ -431,7 +429,7 @@ namespace OneLine.Bases
         }
         private async Task InternalCreateWitBlobData(IValidator validator)
         {
-            if (FormMode == FormMode.Single)
+            if (FormMode.IsSingle())
             {
                 ResponseAddWithBlobs = await HttpService.Add(Record, validator, BlobDatas);
                 OnResponseAddWithBlobs?.Invoke(ResponseAddWithBlobs);
@@ -450,7 +448,7 @@ namespace OneLine.Bases
                     OnFailedSave?.Invoke();
                 }
             }
-            else if (FormMode == FormMode.Multiple)
+            else if (FormMode.IsMultiple())
             {
                 ResponseAddCollectionWithBlobs = await HttpService.AddRange(Records, validator, BlobDatas);
                 OnResponseAddCollectionWithBlobs?.Invoke(ResponseAddCollectionWithBlobs);
@@ -472,7 +470,7 @@ namespace OneLine.Bases
         }
         private async Task InternalUpdate(IValidator validator)
         {
-            if (FormMode == FormMode.Single)
+            if (FormMode.IsSingle())
             {
                 if (BlobDatas.Any())
                 {
@@ -480,11 +478,11 @@ namespace OneLine.Bases
                 }
                 else
                 {
-                    if (FormMode == FormMode.Single)
+                    if (FormMode.IsSingle())
                     {
                         Response = await HttpService.Update<T>(Record, validator);
                     }
-                    else if (FormMode == FormMode.Multiple)
+                    else if (FormMode.IsMultiple())
                     {
                         ResponseCollection = await HttpService.UpdateRange<IEnumerable<T>>(Records, validator);
                     }
@@ -494,7 +492,7 @@ namespace OneLine.Bases
         }
         private async Task InternalUpdateWitBlobData(IValidator validator)
         {
-            if (FormMode == FormMode.Single)
+            if (FormMode.IsSingle())
             {
                 ResponseUpdateWithBlobs = await HttpService.Update(Record, validator, BlobDatas);
                 OnResponseUpdateWithBlobs?.Invoke(ResponseUpdateWithBlobs);
@@ -513,7 +511,7 @@ namespace OneLine.Bases
                     OnFailedSave?.Invoke();
                 }
             }
-            else if (FormMode == FormMode.Multiple)
+            else if (FormMode.IsMultiple())
             {
                 ResponseUpdateCollectionWithBlobs = await HttpService.UpdateRange(Records, validator, BlobDatas);
                 OnResponseUpdateCollectionWithBlobs?.Invoke(ResponseUpdateCollectionWithBlobs);
@@ -533,16 +531,49 @@ namespace OneLine.Bases
                 }
             }
         }
+        public virtual async Task Delete(IValidator validator)
+        {
+            if (FormState.IsDelete())
+            {
+                if (OnBeforeDelete == null)
+                {
+                    await InternalDelete(validator);
+                }
+                else
+                {
+                    OnBeforeDelete?.Invoke(async () => await InternalDelete(validator));
+                }
+            }
+        }
+        private async Task InternalDelete(IValidator validator)
+        {
+            if (FormMode.IsSingle())
+            {
+                Response = await HttpService.Delete<T>(Identifier, validator);
+            }
+            else if (FormMode.IsMultiple())
+            {
+                ResponseCollection = await HttpService.DeleteRange<T>(Identifiers, validator);
+            }
+            InternalResponse(FormState.Deleted);
+        }
         private void InternalResponse(FormState formState)
         {
-            if (FormMode == FormMode.Single)
+            if (FormMode.IsSingle())
             {
                 OnResponse?.Invoke(Response);
                 if (Response.Succeed && Response.Response.Status.Succeeded())
                 {
                     Record = Response.Response.Data;
                     FormState = formState;
-                    OnAfterSave?.Invoke();
+                    if(FormState.IsDeleted())
+                    {
+                        OnAfterDelete?.Invoke();
+                    }
+                    else
+                    {
+                        OnAfterSave?.Invoke();
+                    }
                 }
                 else if (Response.Response.ValidationFailed)
                 {
@@ -553,14 +584,21 @@ namespace OneLine.Bases
                     OnFailedSave?.Invoke();
                 }
             }
-            else if (FormMode == FormMode.Multiple)
+            else if (FormMode.IsMultiple())
             {
                 OnResponseCollection?.Invoke(ResponseCollection);
                 if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
                 {
                     Records.ReplaceRange(ResponseCollection.Response.Data);
                     FormState = formState;
-                    OnAfterSave?.Invoke();
+                    if (FormState.IsDeleted())
+                    {
+                        OnAfterDelete?.Invoke();
+                    }
+                    else
+                    {
+                        OnAfterSave?.Invoke();
+                    }
                 }
                 else if (ResponseCollection.Response.ValidationFailed)
                 {
@@ -570,40 +608,6 @@ namespace OneLine.Bases
                 {
                     OnFailedSave?.Invoke();
                 }
-            }
-        }
-        public virtual async Task Delete(IValidator validator)
-        {
-            if (FormState == FormState.Delete)
-            {
-                if (OnBeforeDelete == null)
-                {
-                    if (FormMode == FormMode.Single)
-                    {
-                        Response = await HttpService.Delete<T>(Identifier, validator);
-                    }
-                    else if (FormMode == FormMode.Multiple)
-                    {
-                        ResponseCollection = await HttpService.DeleteRange<T>(Identifiers, validator);
-                    }
-                    InternalResponse(FormState.Deleted);
-                }
-                else
-                {
-                    OnBeforeDelete?.Invoke(async () =>
-                    {
-                        if (FormMode == FormMode.Single)
-                        {
-                            Response = await HttpService.Delete<T>(Identifier, validator);
-                        }
-                        else if (FormMode == FormMode.Multiple)
-                        {
-                            ResponseCollection = await HttpService.DeleteRange<T>(Identifiers, validator);
-                        }
-                        InternalResponse(FormState.Deleted);
-                    });
-                }
-                OnAfterDelete?.Invoke(Response.Response.Data);
             }
         }
         public virtual Task Reset()

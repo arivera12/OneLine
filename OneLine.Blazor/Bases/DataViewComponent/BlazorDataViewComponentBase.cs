@@ -49,10 +49,8 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<IEnumerable<T>, bool, bool> OnSelectedRecords { get; set; }
         [Parameter] public override Action<bool> OnMinimunRecordSelectionsReached { get; set; }
         [Parameter] public override Action<bool> OnMaximumRecordSelectionsReached { get; set; }
-        [Parameter] public override Action<T> OnLoad { get; set; }
-        [Parameter] public override Action<T> OnLoadSucceeded { get; set; }
-        [Parameter] public override Action<T> OnLoadException { get; set; }
-        [Parameter] public override Action<T> OnLoadFailed { get; set; }
+        [Parameter] public override Action<Action> OnBeforeSearch { get; set; }
+        [Parameter] public override Action OnAfterSearch { get; set; }
         [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
         public virtual bool IsDesktop { get; set; }
         public virtual bool IsTablet { get; set; }

@@ -13,8 +13,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added sweet alert service extensions. Added new property ValidationFailed on api response. Fixed condition on base class implementation to use ValidationFailed  bool check instead of string message check. Fixed wrong callback methods on form base. Added new overloaded constructors on api response. Fixed http client extension to use api response constructor instead of object construction on new instance declaration. Removed unnecesary response actions and cleaned up bases with a little refactor. Refactores user blobs api response to use constructors.</PackageReleaseNotes>
-    <Version>2.0.23</Version>
+    <PackageReleaseNotes>Added and implemented new interface IPageableNavigable to support Paging navigation methods.</PackageReleaseNotes>
+    <Version>2.0.25</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

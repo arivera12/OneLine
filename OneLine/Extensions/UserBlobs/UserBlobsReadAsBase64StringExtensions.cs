@@ -49,11 +49,11 @@ namespace OneLine.Extensions
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
             {
-                return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = isBlobOwnerAndFileExists.Message };
+                return new ApiResponse<string>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
             await dbContext.CreateAuditrailsAsync(userBlobs, "File was found and readed as api response base 64 string", userId, controllerName, actionName, remoteIpAddress);
             var base64 = Convert.ToBase64String(await blobStorage.ReadBytesAsync(userBlobs.FilePath));
-            return new ApiResponse<string>() { Data = base64, Status = ApiResponseStatus.Succeeded };
+            return new ApiResponse<string>(ApiResponseStatus.Succeeded, data:base64);
         }
         /// <summary>
         /// Read a blob as a base 64 string api response from the storage
@@ -91,7 +91,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<string>> ReadBlobRangeIntoZipFolderBase64ApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var streamApiResponse = await dbContext.ReadBlobRangeIntoZipFolderByteArrayApiResponseAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-            return new ApiResponse<string>() { Data = Convert.ToBase64String(streamApiResponse.Data), Message = streamApiResponse.Message, Status = streamApiResponse.Status };
+            return new ApiResponse<string>(streamApiResponse.Status, data: Convert.ToBase64String(streamApiResponse.Data), message: streamApiResponse.Message);
         }
     }
 }

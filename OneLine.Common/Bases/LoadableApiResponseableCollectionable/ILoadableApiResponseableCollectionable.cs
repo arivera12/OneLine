@@ -9,8 +9,5 @@ namespace OneLine.Bases
     {
         Task Load();
         Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollection { get; set; }
-        Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollectionSucceeded { get; set; }
-        Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollectionException { get; set; }
-        Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollectionFailed { get; set; }
     }
 }

@@ -159,12 +159,7 @@ namespace OneLine.Extensions
             {
                 return new ResponseResult<IApiResponse<TResponse>>
                 {
-                    Response = new ApiResponse<TResponse>()
-                    {
-                        Status = ApiResponseStatus.Failed,
-                        Message = "ValidationFailed",
-                        ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
-                    }
+                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                 };
             }
             return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, content);
@@ -175,11 +170,7 @@ namespace OneLine.Extensions
             {
                 return new ResponseResult<IApiResponse<TResponse>>
                 {
-                    Response = new ApiResponse<TResponse>()
-                    {
-                        Status = ApiResponseStatus.Failed,
-                        Message = "CollectionIsNullOrEmpty"
-                    }
+                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "CollectionIsNullOrEmpty", true)
                 };
             }
             foreach (var content in contents)
@@ -189,12 +180,7 @@ namespace OneLine.Extensions
                 {
                     return new ResponseResult<IApiResponse<TResponse>>
                     {
-                        Response = new ApiResponse<TResponse>()
-                        {
-                            Status = ApiResponseStatus.Failed,
-                            Message = "ValidationFailed",
-                            ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
-                        }
+                        Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                     };
                 }
             }
@@ -209,12 +195,7 @@ namespace OneLine.Extensions
             {
                 return new ResponseResult<IApiResponse<TResponse>>
                 {
-                    Response = new ApiResponse<TResponse>()
-                    {
-                        Status = ApiResponseStatus.Failed,
-                        Message = "ValidationFailed",
-                        ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
-                    }
+                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                 };
             }
             return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, content);
@@ -226,11 +207,7 @@ namespace OneLine.Extensions
             {
                 return new ResponseResult<IApiResponse<TResponse>>
                 {
-                    Response = new ApiResponse<TResponse>()
-                    {
-                        Status = ApiResponseStatus.Failed,
-                        Message = "CollectionIsNullOrEmpty"
-                    }
+                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "CollectionIsNullOrEmpty", true)
                 };
             }
             TValidator validator = new TValidator();
@@ -241,12 +218,7 @@ namespace OneLine.Extensions
                 {
                     return new ResponseResult<IApiResponse<TResponse>>
                     {
-                        Response = new ApiResponse<TResponse>()
-                        {
-                            Status = ApiResponseStatus.Failed,
-                            Message = "ValidationFailed",
-                            ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
-                        }
+                        Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                     };
                 }
             }
@@ -287,12 +259,7 @@ namespace OneLine.Extensions
                     var blobValidationResult = await blobValidator.ValidateAsync(blob);
                     if (!blobValidationResult.IsValid)
                     {
-                        return new ApiResponse<TResponse>()
-                        {
-                            Status = ApiResponseStatus.Failed,
-                            Message = "ValidationFailed",
-                            ErrorMessages = blobValidationResult.Errors.Select(x => x.ErrorMessage)
-                        };
+                        return new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage));
                     }
                     multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
                 }
@@ -300,11 +267,7 @@ namespace OneLine.Extensions
             httpRequestMessage.Content = multipartFormDataContent;
             var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
             var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return new ApiResponse<TResponse>()
-            {
-                Status = ApiResponseStatus.Succeeded,
-                Data = JsonSerializer.Deserialize<TResponse>(strResponse)
-            };
+            return new ApiResponse<TResponse>(ApiResponseStatus.Succeeded, JsonSerializer.Deserialize<TResponse>(strResponse));
         }
         public static async Task<IResponseResult<IApiResponse<TResponse>>> SendBlobDataResponseResultAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
             where TBlobData : IBlobData
@@ -391,12 +354,7 @@ namespace OneLine.Extensions
             {
                 return new ResponseResult<IApiResponse<TResponse>>
                 {
-                    Response = new ApiResponse<TResponse>()
-                    {
-                        Status = ApiResponseStatus.Failed,
-                        Message = "ValidationFailed",
-                        ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
-                    }
+                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                 };
             }
             var multipartFormDataContent = new MultipartFormDataContent();
@@ -409,12 +367,7 @@ namespace OneLine.Extensions
                     {
                         return new ResponseResult<IApiResponse<TResponse>>
                         {
-                            Response = new ApiResponse<TResponse>()
-                            {
-                                Status = ApiResponseStatus.Failed,
-                                Message = "ValidationFailed",
-                                ErrorMessages = blobValidationResult.Errors.Select(x => x.ErrorMessage)
-                            }
+                            Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                         };
                     }
                     multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
@@ -429,11 +382,7 @@ namespace OneLine.Extensions
             {
                 return new ResponseResult<IApiResponse<TResponse>>
                 {
-                    Response = new ApiResponse<TResponse>()
-                    {
-                        Status = ApiResponseStatus.Failed,
-                        Message = "CollectionIsNullOrEmpty"
-                    }
+                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "CollectionIsNullOrEmpty", true)
                 };
             }
             foreach (var content in contents)
@@ -443,12 +392,7 @@ namespace OneLine.Extensions
                 {
                     return new ResponseResult<IApiResponse<TResponse>>
                     {
-                        Response = new ApiResponse<TResponse>()
-                        {
-                            Status = ApiResponseStatus.Failed,
-                            Message = "ValidationFailed",
-                            ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
-                        }
+                        Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                     };
                 }
             }
@@ -462,12 +406,7 @@ namespace OneLine.Extensions
                     {
                         return new ResponseResult<IApiResponse<TResponse>>
                         {
-                            Response = new ApiResponse<TResponse>()
-                            {
-                                Status = ApiResponseStatus.Failed,
-                                Message = "ValidationFailed",
-                                ErrorMessages = blobValidationResult.Errors.Select(x => x.ErrorMessage)
-                            }
+                            Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage))
                         };
                     }
                     multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
@@ -487,12 +426,7 @@ namespace OneLine.Extensions
             {
                 return new ResponseResult<IApiResponse<TResponse>>
                 {
-                    Response = new ApiResponse<TResponse>()
-                    {
-                        Status = ApiResponseStatus.Failed,
-                        Message = validationResult.Errors.FirstOrDefault().ErrorMessage,
-                        ErrorMessages = validationResult.Errors.Select(x => x.ErrorMessage)
-                    }
+                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                 };
             }
             var multipartFormDataContent = new MultipartFormDataContent();
@@ -506,12 +440,7 @@ namespace OneLine.Extensions
                     {
                         return new ResponseResult<IApiResponse<TResponse>>
                         {
-                            Response = new ApiResponse<TResponse>()
-                            {
-                                Status = ApiResponseStatus.Failed,
-                                Message = "ValidationFailed",
-                                ErrorMessages = blobValidationResult.Errors.Select(x => x.ErrorMessage)
-                            }
+                            Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage))
                         };
                     }
                     multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);

@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Removed TId type param class constraint to allow use of primitive datatypes as type of identifiers.</PackageReleaseNotes>
-    <Version>2.0.22</Version>
+    <PackageReleaseNotes>Added sweet alert service extensions. Added new property ValidationFailed on api response. Fixed condition on base class implementation to use ValidationFailed  bool check instead of string message check. Fixed wrong callback methods on form base. Added new overloaded constructors on api response. Fixed http client extension to use api response constructor instead of object construction on new instance declaration. Removed unnecesary response actions and cleaned up bases with a little refactor. Refactores user blobs api response to use constructors.</PackageReleaseNotes>
+    <Version>2.0.23</Version>
   </PropertyGroup>
 
 

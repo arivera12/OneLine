@@ -32,19 +32,10 @@ namespace OneLine.Bases
         public virtual ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
         public virtual IResponseResult<IApiResponse<T>> Response { get; set; }
         public virtual Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseFailed { get; set; }
         public virtual IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionFailed { get; set; }
         public virtual IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>> ResponsePaged { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePaged { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedFailed { get; set; }
         public virtual THttpService HttpService { get; set; }
         public virtual IConfiguration Configuration { get; set; }
         public virtual ISearchPaging SearchPaging { get; set; }
@@ -157,15 +148,6 @@ namespace OneLine.Bases
                 if (Response.Succeed && Response.Response.Status.Succeeded())
                 {
                     Record = Response.Response.Data;
-                    OnResponseSucceeded?.Invoke(Response);
-                }
-                else if (Response.HasException)
-                {
-                    OnResponseException?.Invoke(Response);
-                }
-                else
-                {
-                    OnResponseFailed?.Invoke(Response);
                 }
                 OnResponse?.Invoke(Response);
             }
@@ -184,15 +166,6 @@ namespace OneLine.Bases
                         Records.AddRange(ResponseCollection.Response.Data);
                         RecordsFilteredSorted.AddRange(Records);
                     }
-                    OnResponseCollectionSucceeded?.Invoke(ResponseCollection);
-                }
-                else if (ResponseCollection.HasException)
-                {
-                    OnResponseCollectionException?.Invoke(ResponseCollection);
-                }
-                else
-                {
-                    OnResponseCollectionFailed?.Invoke(ResponseCollection);
                 }
                 OnResponseCollection?.Invoke(ResponseCollection);
             }
@@ -212,15 +185,6 @@ namespace OneLine.Bases
                     Records.AddRange(ResponsePaged.Response.Data.Data);
                     RecordsFilteredSorted.AddRange(Records);
                 }
-                OnResponsePagedSucceeded?.Invoke(ResponsePaged);
-            }
-            else if (ResponsePaged.HasException)
-            {
-                OnResponsePagedException?.Invoke(ResponsePaged);
-            }
-            else
-            {
-                OnResponsePagedFailed?.Invoke(ResponsePaged);
             }
             OnResponsePaged?.Invoke(ResponsePaged);
         }

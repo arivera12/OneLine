@@ -25,14 +25,14 @@ namespace OneLine.Extensions
             var addHttpBlobApiResponse = await dbContext.CreateUserBlobsAsync(files, predicate, formFileRules, blobStorage, userId, userBlobs.TableName, controllerName, actionName, remoteIpAddress);
             if (addHttpBlobApiResponse.Status == ApiResponseStatus.Failed)
             {
-                return new ApiResponse<Tuple<UserBlobs, UserBlobs>>() { Data = Tuple.Create(addHttpBlobApiResponse.Data, new UserBlobs()), Message = addHttpBlobApiResponse.Message, Status = ApiResponseStatus.Failed };
+                return new ApiResponse<Tuple<UserBlobs, UserBlobs>>(ApiResponseStatus.Failed, Tuple.Create(addHttpBlobApiResponse.Data, new UserBlobs()), addHttpBlobApiResponse.Message);
             }
             var deleteBlobApiResponse = await dbContext.DeleteUserBlobsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (addHttpBlobApiResponse.Status == ApiResponseStatus.Failed)
             {
-                return new ApiResponse<Tuple<UserBlobs, UserBlobs>>() { Data = Tuple.Create(addHttpBlobApiResponse.Data, deleteBlobApiResponse.Data), Message = deleteBlobApiResponse.Message, Status = ApiResponseStatus.Failed };
+                return new ApiResponse<Tuple<UserBlobs, UserBlobs>>(ApiResponseStatus.Failed, Tuple.Create(addHttpBlobApiResponse.Data, deleteBlobApiResponse.Data), deleteBlobApiResponse.Message);
             }
-            return new ApiResponse<Tuple<UserBlobs, UserBlobs>> { Data = Tuple.Create(addHttpBlobApiResponse.Data, deleteBlobApiResponse.Data), Status = ApiResponseStatus.Succeeded };
+            return new ApiResponse<Tuple<UserBlobs, UserBlobs>>(ApiResponseStatus.Succeeded, Tuple.Create(addHttpBlobApiResponse.Data, deleteBlobApiResponse.Data));
         }
         /// <summary>
         /// This is a helper method which tryies to upload a file and bind the userblob to the model property name
@@ -61,14 +61,14 @@ namespace OneLine.Extensions
             var addMultipleApiResponse = await dbContext.CreateRangeUserBlobsAsync(files, predicate, formFileRules, blobStorage, userId, tableName, controllerName, actionName, remoteIpAddress);
             if (addMultipleApiResponse.Status == ApiResponseStatus.Failed)
             {
-                return new ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>() { Data = Tuple.Create(addMultipleApiResponse.Data, new List<UserBlobs>().AsEnumerable()), Message = addMultipleApiResponse.Message, Status = ApiResponseStatus.Failed };
+                return new ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create(addMultipleApiResponse.Data, new List<UserBlobs>().AsEnumerable()), addMultipleApiResponse.Message);
             }
             var deleteMultipleApiResponse = await dbContext.DeleteRangeUserBlobsAsync(UserBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (deleteMultipleApiResponse.Status == ApiResponseStatus.Failed)
             {
-                return new ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>() { Data = Tuple.Create(addMultipleApiResponse.Data, deleteMultipleApiResponse.Data), Message = deleteMultipleApiResponse.Message, Status = ApiResponseStatus.Failed };
+                return new ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create(addMultipleApiResponse.Data, deleteMultipleApiResponse.Data), deleteMultipleApiResponse.Message);
             }
-            return new ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>() { Data = Tuple.Create(addMultipleApiResponse.Data, deleteMultipleApiResponse.Data), Status = ApiResponseStatus.Failed };
+            return new ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create(addMultipleApiResponse.Data, deleteMultipleApiResponse.Data));
         }
         /// <summary>
         /// This is a helper method which tryies to upload a file/s and bind the userblob to the model property name

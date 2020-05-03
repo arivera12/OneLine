@@ -51,43 +51,19 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override FormState FormState { get; set; }
         [Parameter] public override FormMode FormMode { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnLoad { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnLoadSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnLoadException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnLoadFailed { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollection { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollectionSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollectionException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollectionFailed { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<T>> Response { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponseSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponseException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponseFailed { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionFailed { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> ResponseAddWithBlobs { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobs { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobsSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobsException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobsFailed { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> ResponseAddCollectionWithBlobs { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobs { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobsSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobsException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobsFailed { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateWithBlobs { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobs { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobsSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobsException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobsFailed { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateCollectionWithBlobs { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobs { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobsSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobsException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobsFailed { get; set; }
         [Parameter] public override Action<Action> OnBeforeReset { get; set; }
         [Parameter] public override Action OnAfterReset { get; set; }
         [Parameter] public override Action<Action> OnBeforeCancel { get; set; }

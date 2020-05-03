@@ -12,8 +12,5 @@ namespace OneLine.Bases
     {
         IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
         Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
-        Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionSucceeded { get; set; }
-        Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionException { get; set; }
-        Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionFailed { get; set; }
     }
 }

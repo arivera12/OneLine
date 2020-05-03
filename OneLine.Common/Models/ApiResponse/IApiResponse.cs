@@ -18,6 +18,10 @@ namespace OneLine.Models
         /// </summary>
         string Message { get; set; }
         /// <summary>
+        /// The validation status
+        /// </summary>
+        bool ValidationFailed { get; set; }
+        /// <summary>
         /// The errors messages from response
         /// </summary>
         IEnumerable<string> ErrorMessages { get; set; }

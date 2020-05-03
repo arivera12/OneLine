@@ -38,17 +38,8 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
         [Parameter] public override object SearchExtraParams { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponseSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponseException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponseFailed { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionFailed { get; set; }
         [Parameter] public override Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePaged { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedSucceeded { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedException { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePagedFailed { get; set; }
         [Parameter] public override ISearchPaging SearchPaging { get; set; }
         [Parameter] public override RecordsSelectionMode RecordsSelectionMode { get; set; }
         [Parameter] public override ObservableRangeCollection<T> SelectedRecords { get; set; }

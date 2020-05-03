@@ -31,43 +31,19 @@ namespace OneLine.Bases
         public virtual FormState FormState { get; set; }
         public virtual FormMode FormMode { get; set; }
         public virtual Action<IResponseResult<IApiResponse<T>>> OnLoad { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnLoadSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnLoadException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnLoadFailed { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollection { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollectionSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollectionException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnLoadCollectionFailed { get; set; }
         public virtual IResponseResult<IApiResponse<T>> Response { get; set; }
         public virtual Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponseFailed { get; set; }
         public virtual IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
         public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollectionFailed { get; set; }
         public virtual IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> ResponseAddWithBlobs { get; set; }
         public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobs { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobsSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobsException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobsFailed { get; set; }
         public virtual IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> ResponseAddCollectionWithBlobs { get; set; }
         public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobs { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobsSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobsException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobsFailed { get; set; }
         public virtual IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateWithBlobs { get; set; }
         public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobs { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobsSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobsException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobsFailed { get; set; }
         public virtual IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateCollectionWithBlobs { get; set; }
         public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobs { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobsSucceeded { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobsException { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobsFailed { get; set; }
         public virtual Action<Action> OnBeforeReset { get; set; }
         public virtual Action OnAfterReset { get; set; }
         public virtual Action<Action> OnBeforeCancel { get; set; }
@@ -382,15 +358,6 @@ namespace OneLine.Bases
                     if (Response.Succeed && Response.Response.Status.Succeeded())
                     {
                         Record = Response.Response.Data;
-                        OnLoadSucceeded?.Invoke(Response);
-                    }
-                    else if (Response.HasException)
-                    {
-                        OnLoadException?.Invoke(Response);
-                    }
-                    else
-                    {
-                        OnLoadFailed?.Invoke(Response);
                     }
                 }
                 OnLoad?.Invoke(Response);
@@ -410,15 +377,6 @@ namespace OneLine.Bases
                         {
                             Records.AddRange(ResponseCollection.Response.Data);
                         }
-                        OnLoadCollectionSucceeded?.Invoke(ResponseCollection);
-                    }
-                    else if (Response.HasException)
-                    {
-                        OnLoadCollectionException?.Invoke(ResponseCollection);
-                    }
-                    else
-                    {
-                        OnLoadCollectionFailed?.Invoke(ResponseCollection);
                     }
                 }
                 OnLoadCollection?.Invoke(ResponseCollection);
@@ -481,23 +439,15 @@ namespace OneLine.Bases
                 {
                     Record = ResponseAddWithBlobs.Response.Data.Item1;
                     FormState = FormState.Edit;
-                    OnResponseAddWithBlobsSucceeded?.Invoke(ResponseAddWithBlobs);
                     OnAfterSave?.Invoke();
                 }
-                else if (ResponseAddWithBlobs.HasException)
+                else if (ResponseAddWithBlobs.Response.ValidationFailed)
                 {
-                    OnFailedSave?.Invoke();
-                    OnResponseAddWithBlobsException?.Invoke(ResponseAddWithBlobs);
-                }
-                else if (ResponseAddWithBlobs.Succeed && ResponseAddWithBlobs.Response.Status.Failed() && ResponseAddWithBlobs.Response.Message == "ValidationFailed")
-                {
-                    OnFailedSave?.Invoke();
-                    OnResponseAddWithBlobsFailed?.Invoke(ResponseAddWithBlobs);
+                    OnFailedValidation?.Invoke();
                 }
                 else
                 {
                     OnFailedSave?.Invoke();
-                    OnResponseAddWithBlobsFailed?.Invoke(ResponseAddWithBlobs);
                 }
             }
             else if (FormMode == FormMode.Multiple)
@@ -508,24 +458,15 @@ namespace OneLine.Bases
                 {
                     Records.ReplaceRange(ResponseAddCollectionWithBlobs.Response.Data.Item1);
                     FormState = FormState.Edit;
-                    OnResponseAddCollectionWithBlobsSucceeded?.Invoke(ResponseAddCollectionWithBlobs);
                     OnAfterSave?.Invoke();
                 }
-                else if (ResponseAddCollectionWithBlobs.HasException)
+                else if (ResponseAddCollectionWithBlobs.Response.ValidationFailed)
                 {
-                    OnFailedSave?.Invoke();
-                    OnResponseAddCollectionWithBlobsException?.Invoke(ResponseAddCollectionWithBlobs);
-                }
-                else if (ResponseAddCollectionWithBlobs.Succeed && ResponseAddCollectionWithBlobs.Response.Status.Failed() &&
-                    ResponseAddCollectionWithBlobs.Response.Message == "ValidationFailed")
-                {
-                    OnFailedSave?.Invoke();
-                    OnResponseAddCollectionWithBlobsFailed?.Invoke(ResponseAddCollectionWithBlobs);
+                    OnFailedValidation?.Invoke();
                 }
                 else
                 {
                     OnFailedSave?.Invoke();
-                    OnResponseAddCollectionWithBlobsFailed?.Invoke(ResponseAddCollectionWithBlobs);
                 }
             }
         }
@@ -561,24 +502,15 @@ namespace OneLine.Bases
                 {
                     Record = ResponseUpdateWithBlobs.Response.Data.Item1;
                     FormState = FormState.Edit;
-                    OnResponseUpdateWithBlobsSucceeded?.Invoke(ResponseUpdateWithBlobs);
                     OnAfterSave?.Invoke();
                 }
-                else if (ResponseUpdateWithBlobs.HasException)
+                else if (ResponseUpdateWithBlobs.Response.ValidationFailed)
                 {
-                    OnFailedSave?.Invoke();
-                    OnResponseUpdateWithBlobsException?.Invoke(ResponseUpdateWithBlobs);
-                }
-                else if (ResponseUpdateWithBlobs.Succeed && ResponseUpdateWithBlobs.Response.Status.Failed() &&
-                    ResponseUpdateWithBlobs.Response.Message == "ValidationFailed")
-                {
-                    OnFailedSave?.Invoke();
-                    OnResponseUpdateWithBlobsFailed?.Invoke(ResponseUpdateWithBlobs);
+                    OnFailedValidation?.Invoke();
                 }
                 else
                 {
                     OnFailedSave?.Invoke();
-                    OnResponseUpdateWithBlobsFailed?.Invoke(ResponseUpdateWithBlobs);
                 }
             }
             else if (FormMode == FormMode.Multiple)
@@ -589,24 +521,15 @@ namespace OneLine.Bases
                 {
                     Records.ReplaceRange(ResponseUpdateCollectionWithBlobs.Response.Data.Item1);
                     FormState = FormState.Edit;
-                    OnResponseUpdateCollectionWithBlobsSucceeded?.Invoke(ResponseUpdateCollectionWithBlobs);
                     OnAfterSave?.Invoke();
                 }
-                else if (ResponseUpdateCollectionWithBlobs.HasException)
+                else if (ResponseUpdateCollectionWithBlobs.Response.ValidationFailed)
                 {
-                    OnFailedSave?.Invoke();
-                    OnResponseUpdateCollectionWithBlobsException?.Invoke(ResponseUpdateCollectionWithBlobs);
-                }
-                else if (ResponseUpdateCollectionWithBlobs.Succeed && ResponseUpdateCollectionWithBlobs.Response.Status.Failed() &&
-                    ResponseUpdateCollectionWithBlobs.Response.Message == "ValidationFailed")
-                {
-                    OnFailedSave?.Invoke();
-                    OnResponseUpdateCollectionWithBlobsFailed?.Invoke(ResponseUpdateCollectionWithBlobs);
+                    OnFailedValidation?.Invoke();
                 }
                 else
                 {
                     OnFailedSave?.Invoke();
-                    OnResponseUpdateCollectionWithBlobsFailed?.Invoke(ResponseUpdateCollectionWithBlobs);
                 }
             }
         }
@@ -619,22 +542,15 @@ namespace OneLine.Bases
                 {
                     Record = Response.Response.Data;
                     FormState = formState;
-                    OnResponseSucceeded?.Invoke(Response);
                     OnAfterSave?.Invoke();
                 }
-                else if (Response.HasException)
-                {
-                    OnResponseException?.Invoke(Response);
-                }
-                else if (Response.Succeed && Response.Response.Status.Failed() && Response.Response.Message == "ValidationFailed")
+                else if (Response.Response.ValidationFailed)
                 {
                     OnFailedValidation?.Invoke();
-                    OnResponseFailed?.Invoke(Response);
                 }
                 else
                 {
                     OnFailedSave?.Invoke();
-                    OnResponseFailed?.Invoke(Response);
                 }
             }
             else if (FormMode == FormMode.Multiple)
@@ -644,24 +560,15 @@ namespace OneLine.Bases
                 {
                     Records.ReplaceRange(ResponseCollection.Response.Data);
                     FormState = formState;
-                    OnResponseCollectionSucceeded?.Invoke(ResponseCollection);
                     OnAfterSave?.Invoke();
                 }
-                else if (ResponseCollection.HasException)
-                {
-                    OnFailedSave?.Invoke();
-                    OnResponseCollectionException?.Invoke(ResponseCollection);
-                }
-                else if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Failed() &&
-                    ResponseCollection.Response.Message == "ValidationFailed")
+                else if (ResponseCollection.Response.ValidationFailed)
                 {
                     OnFailedValidation?.Invoke();
-                    OnResponseFailed?.Invoke(Response);
                 }
                 else
                 {
                     OnFailedSave?.Invoke();
-                    OnResponseCollectionFailed?.Invoke(ResponseCollection);
                 }
             }
         }

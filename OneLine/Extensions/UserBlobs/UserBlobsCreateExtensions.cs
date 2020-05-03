@@ -26,14 +26,14 @@ namespace OneLine.Extensions
             if (!any)
             {
                 await dbContext.CreateAuditrailsAsync(new UserBlobs(), "No file uploaded", userId, controllerName, actionName, remoteIpAddress);
-                return new ApiResponse<UserBlobs>() { Status = ApiResponseStatus.Failed, Message = "FileIsNullOrEmpty" };
+                return new ApiResponse<UserBlobs>(ApiResponseStatus.Failed, "FileIsNullOrEmpty");
             }
             if (any && formFileRules != null)
             {
                 var isValidFormFileApiResponse = files.IsValidFormFileApiResponse(predicate, formFileRules);
                 if (isValidFormFileApiResponse.Status == ApiResponseStatus.Failed)
                 {
-                    return new ApiResponse<UserBlobs>() { Status = ApiResponseStatus.Failed, Message = isValidFormFileApiResponse.Message };
+                    return new ApiResponse<UserBlobs>(ApiResponseStatus.Failed, isValidFormFileApiResponse.Message);
                 }
             }
             IFormFile file = predicate == null ? files.FirstOrDefault() : files.FirstOrDefault(predicate);
@@ -62,14 +62,14 @@ namespace OneLine.Extensions
             if (any)
             {
                 await dbContext.CreateAuditrailsAsync(new UserBlobs(), "No file/s uploaded", userId, controllerName, actionName, remoteIpAddress);
-                return new ApiResponse<IEnumerable<UserBlobs>>() { Status = ApiResponseStatus.Failed, Message = "FileIsNullOrEmpty" };
+                return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Failed, "FileIsNullOrEmpty");
             }
             if (any && formFileRules != null)
             {
                 var isValidFormFileApiResponse = files.IsValidFormFileApiResponse(predicate, formFileRules);
                 if (isValidFormFileApiResponse.Status == ApiResponseStatus.Failed)
                 {
-                    return new ApiResponse<IEnumerable<UserBlobs>>() { Status = ApiResponseStatus.Failed, Message = isValidFormFileApiResponse.Message };
+                    return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Failed, isValidFormFileApiResponse.Message);
                 }
             }
             var createdOn = DateTime.Now;
@@ -105,7 +105,7 @@ namespace OneLine.Extensions
             var isFormFileUploadedApiResponse = await dbContext.IsFormFileUploadedAsync(files, predicate, formFileRules, userId, controllerName, actionName, remoteIpAddress);
             if (isFormFileUploadedApiResponse.Status == ApiResponseStatus.Failed || !isFormFileUploadedApiResponse.Data)
             {
-                return new ApiResponse<UserBlobs>() { Status = isFormFileUploadedApiResponse.Status, Message = isFormFileUploadedApiResponse.Message };
+                return new ApiResponse<UserBlobs>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
             }
             var blob = await dbContext.CreateUserBlobsAsync(files, predicate, formFileRules, blobStorage, userId, tableName, controllerName, actionName, remoteIpAddress);
             if (blob.Status == ApiResponseStatus.Failed)
@@ -128,7 +128,7 @@ namespace OneLine.Extensions
             var isFormFileUploadedApiResponse = await dbContext.IsFormFileUploadedAsync(files, predicate, formFileRules, userId, controllerName, actionName, remoteIpAddress);
             if (isFormFileUploadedApiResponse.Status == ApiResponseStatus.Failed || !isFormFileUploadedApiResponse.Data)
             {
-                return new ApiResponse<IEnumerable<UserBlobs>>() { Status = isFormFileUploadedApiResponse.Status, Message = isFormFileUploadedApiResponse.Message };
+                return new ApiResponse<IEnumerable<UserBlobs>>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
             }
             var blobs = await dbContext.CreateRangeUserBlobsAsync(files, predicate, formFileRules, blobStorage, userId, tableName, controllerName, actionName, remoteIpAddress);
             if (blobs.Status == ApiResponseStatus.Failed)

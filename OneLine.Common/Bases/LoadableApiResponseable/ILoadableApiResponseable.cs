@@ -8,8 +8,5 @@ namespace OneLine.Bases
     {
         Task Load();
         Action<IResponseResult<IApiResponse<T>>> OnLoad { get; set; }
-        Action<IResponseResult<IApiResponse<T>>> OnLoadSucceeded { get; set; }
-        Action<IResponseResult<IApiResponse<T>>> OnLoadException { get; set; }
-        Action<IResponseResult<IApiResponse<T>>> OnLoadFailed { get; set; }
     }
 }

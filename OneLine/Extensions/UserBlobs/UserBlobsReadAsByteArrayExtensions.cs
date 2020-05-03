@@ -48,11 +48,11 @@ namespace OneLine.Extensions
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
             {
-                return new ApiResponse<byte[]>() { Status = ApiResponseStatus.Failed, Message = isBlobOwnerAndFileExists.Message };
+                return new ApiResponse<byte[]>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
             await dbContext.CreateAuditrailsAsync(userBlobs, "File was found and readed as api response byte array", userId, controllerName, actionName, remoteIpAddress);
             var bytes = await blobStorage.ReadBytesAsync(userBlobs.FilePath);
-            return new ApiResponse<byte[]>() { Data = bytes, Status = ApiResponseStatus.Succeeded };
+            return new ApiResponse<byte[]>(ApiResponseStatus.Succeeded, bytes);
         }
         /// <summary>
         /// Read a blob as a byte array api response from the storage
@@ -90,7 +90,7 @@ namespace OneLine.Extensions
         public static async Task<ApiResponse<byte[]>> ReadBlobRangeIntoZipFolderByteArrayApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var streamApiResponse = await dbContext.ReadBlobRangeIntoZipFolderStreamApiResponseAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-            return new ApiResponse<byte[]>() { Data = streamApiResponse.Data?.ToByteArray(), Message = streamApiResponse.Message, Status = streamApiResponse.Status };
+            return new ApiResponse<byte[]>(streamApiResponse.Status, streamApiResponse.Data?.ToByteArray(), streamApiResponse.Message);
         }
     }
 }

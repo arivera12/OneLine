@@ -42,33 +42,29 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IActionResult> ReadBlobRangeIntoZipFolderAsFileStreamResult(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, string zipFilename = null, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            using (MemoryStream zipStream = new MemoryStream())
+            using MemoryStream zipStream = new MemoryStream();
+            using (ZipArchive zip = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
             {
-                using (ZipArchive zip = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+                foreach (var userBlob in userBlobs)
                 {
-                    foreach (var userBlob in userBlobs)
+                    var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlob, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
+                    if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
                     {
-                        var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlob, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-                        if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
-                        {
-                            return isBlobOwnerAndFileExists.ToJson();
-                        }
-                        var stream = await blobStorage.OpenReadAsync(userBlob.FilePath);
-                        var entry = zip.CreateEntry(userBlob.FileName);
-                        using (var entryStream = entry.Open())
-                        {
-                            await stream.CopyToAsync(entryStream);
-                        }
+                        return isBlobOwnerAndFileExists.ToJson();
                     }
+                    var stream = await blobStorage.OpenReadAsync(userBlob.FilePath);
+                    var entry = zip.CreateEntry(userBlob.FileName);
+                    using var entryStream = entry.Open();
+                    await stream.CopyToAsync(entryStream);
                 }
-                zipStream.Position = 0;
-                await dbContext.CreateAuditrailsAsync(userBlobs, "A list of UserBlobs were readed as stream into a compressed zip folder and downloaded as a file stream result", userId, controllerName, actionName, remoteIpAddress);
-                zipFilename = string.IsNullOrWhiteSpace(zipFilename) ? $"{".zip".GenerateUniqueFileName()}" : zipFilename;
-                return new FileStreamResult(zipStream, MimeTypes.Application.Zip)
-                {
-                    FileDownloadName = zipFilename
-                };
             }
+            zipStream.Position = 0;
+            await dbContext.CreateAuditrailsAsync(userBlobs, "A list of UserBlobs were readed as stream into a compressed zip folder and downloaded as a file stream result", userId, controllerName, actionName, remoteIpAddress);
+            zipFilename = string.IsNullOrWhiteSpace(zipFilename) ? $"{".zip".GenerateUniqueFileName()}" : zipFilename;
+            return new FileStreamResult(zipStream, MimeTypes.Application.Zip)
+            {
+                FileDownloadName = zipFilename
+            };
         }
     }
 }

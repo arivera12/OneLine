@@ -56,11 +56,11 @@ namespace OneLine.Extensions
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
             {
-                return new ApiResponse<Stream>() { Status = ApiResponseStatus.Failed, Message = isBlobOwnerAndFileExists.Message };
+                return new ApiResponse<Stream>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
             await dbContext.CreateAuditrailsAsync(userBlobs, "UserBlob was readed as api response", userId, controllerName, actionName, remoteIpAddress);
             var stream = await blobStorage.OpenReadAsync(userBlobs.FilePath);
-            return new ApiResponse<Stream>() { Data = stream, Status = ApiResponseStatus.Succeeded };
+            return new ApiResponse<Stream>(ApiResponseStatus.Succeeded, stream);
         }
         /// <summary>
         /// Read a blob as a stream api response from the storage
@@ -89,29 +89,25 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<Stream> ReadBlobRangeIntoZipFolderStreamAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            using (MemoryStream zipStream = new MemoryStream())
+            using MemoryStream zipStream = new MemoryStream();
+            using (ZipArchive zip = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
             {
-                using (ZipArchive zip = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+                foreach (var userBlob in userBlobs)
                 {
-                    foreach (var userBlob in userBlobs)
+                    var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlob, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
+                    if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
                     {
-                        var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlob, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-                        if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
-                        {
-                            return null;
-                        }
-                        var stream = await blobStorage.OpenReadAsync(userBlob.FilePath);
-                        var entry = zip.CreateEntry(userBlob.FileName);
-                        using (var entryStream = entry.Open())
-                        {
-                            await stream.CopyToAsync(entryStream);
-                        }
+                        return null;
                     }
+                    var stream = await blobStorage.OpenReadAsync(userBlob.FilePath);
+                    var entry = zip.CreateEntry(userBlob.FileName);
+                    using var entryStream = entry.Open();
+                    await stream.CopyToAsync(entryStream);
                 }
-                zipStream.Position = 0;
-                await dbContext.CreateAuditrailsAsync(userBlobs, "A list of UserBlobs were readed into a compressed zip folder as stream result", userId, controllerName, actionName, remoteIpAddress);
-                return zipStream;
             }
+            zipStream.Position = 0;
+            await dbContext.CreateAuditrailsAsync(userBlobs, "A list of UserBlobs were readed into a compressed zip folder as stream result", userId, controllerName, actionName, remoteIpAddress);
+            return zipStream;
         }
         /// <summary>
         /// Read multiple blobs into a compressed zip folder as a file stream result from the storage
@@ -124,31 +120,27 @@ namespace OneLine.Extensions
             if (userBlobs == null || !userBlobs.Any())
             {
                 await dbContext.CreateAuditrailsAsync(userBlobs, "Userblobs is null or empty on method ReadBlobsIntoZipFolderStreamApiResponseAsync", userId, controllerName, actionName, remoteIpAddress);
-                return new ApiResponse<Stream>() { Message = "FileIsNullOrEmpty" };
+                return new ApiResponse<Stream>(ApiResponseStatus.Failed, "FileIsNullOrEmpty");
             }
-            using (MemoryStream zipStream = new MemoryStream())
+            using MemoryStream zipStream = new MemoryStream();
+            using (ZipArchive zip = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
             {
-                using (ZipArchive zip = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+                foreach (var userBlob in userBlobs)
                 {
-                    foreach (var userBlob in userBlobs)
+                    var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlob, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
+                    if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
                     {
-                        var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlob, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-                        if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
-                        {
-                            return new ApiResponse<Stream>() { Message = isBlobOwnerAndFileExists.Message, Status = ApiResponseStatus.Failed };
-                        }
-                        var stream = await blobStorage.OpenReadAsync(userBlob.FilePath);
-                        var entry = zip.CreateEntry(userBlob.FileName);
-                        using (var entryStream = entry.Open())
-                        {
-                            await stream.CopyToAsync(entryStream);
-                        }
+                        return new ApiResponse<Stream>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
                     }
+                    var stream = await blobStorage.OpenReadAsync(userBlob.FilePath);
+                    var entry = zip.CreateEntry(userBlob.FileName);
+                    using var entryStream = entry.Open();
+                    await stream.CopyToAsync(entryStream);
                 }
-                zipStream.Position = 0;
-                await dbContext.CreateAuditrailsAsync(userBlobs, "A list of UserBlobs were readed into a compressed zip folder as stream result", userId, controllerName, actionName, remoteIpAddress);
-                return new ApiResponse<Stream>() { Data = zipStream, Status = ApiResponseStatus.Succeeded };
             }
+            zipStream.Position = 0;
+            await dbContext.CreateAuditrailsAsync(userBlobs, "A list of UserBlobs were readed into a compressed zip folder as stream result", userId, controllerName, actionName, remoteIpAddress);
+            return new ApiResponse<Stream>(ApiResponseStatus.Succeeded, zipStream);
         }
     }
 }

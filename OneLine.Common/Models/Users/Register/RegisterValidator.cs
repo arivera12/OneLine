@@ -2,7 +2,7 @@
 
 namespace OneLine.Models.Users
 {
-    class RegisterValidator : AbstractValidator<IRegister>
+    public class RegisterValidator : AbstractValidator<IRegister>
     {
         public RegisterValidator()
         {

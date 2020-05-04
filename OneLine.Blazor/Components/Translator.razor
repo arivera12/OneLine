@@ -1,0 +1,18 @@
+﻿@namespace OneLine.Blazor
+@inherits TranslatorComponentModel
+<BSFormGroup>
+    <BSLabel For="translator">@Resourcer.GetString("PreferredLanguage")</BSLabel>
+    <BSBasicInput T="string" Id="translator" name="translator" InputType="InputType.Select" ValueChanged=@((v) => OnValueChanged(v)) Value="ApplicationLocale">
+        @foreach (var item in Resourcer.CurrentResourcers)
+        {
+            if (item.Key == ApplicationLocale)
+            {
+                <option value="@item.Key" selected>@item.Value.Item1</option>
+            }
+            else
+            {
+                <option value="@item.Key">@item.Value.Item1</option>
+            }
+        }
+    </BSBasicInput>
+</BSFormGroup>

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using OneLine.Models;
 
-namespace OneLine.Validators
+namespace OneLine.Validations
 {
     public class BlobDataValidator : AbstractValidator<IBlobData>
     {

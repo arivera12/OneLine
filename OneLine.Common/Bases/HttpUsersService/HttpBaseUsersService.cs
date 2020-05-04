@@ -13,7 +13,6 @@ namespace OneLine.Bases
         IHttpUsersService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
         where T : class, new()
         where TIdentifier : class, IIdentifier<TId>
-        where TId : class
         where TBlobData : class, IBlobData
         where TBlobValidator : class, IValidator, new()
         where TUserBlobs : class, IUserBlobs

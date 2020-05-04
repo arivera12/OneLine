@@ -13,8 +13,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added and implemented new interface IPageableNavigable to support Paging navigation methods.</PackageReleaseNotes>
-    <Version>2.0.25</Version>
+    <PackageReleaseNotes>Updated Blazor Download File version. Added translator component which integrates with the Resourcer component. Fixed some classes that were missing the public modifier. Renamed namespace validators to validations.</PackageReleaseNotes>
+    <Version>2.0.26</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

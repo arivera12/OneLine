@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace OneLine.Validators
+namespace OneLine.Validations
 {
     public class EmptyValidator : AbstractValidator<object>
     {

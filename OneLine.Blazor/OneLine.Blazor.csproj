@@ -13,15 +13,16 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Added and implemented new interface IPageableNavigable to support Paging navigation methods.</PackageReleaseNotes>
-    <Version>2.0.25</Version>
+    <PackageReleaseNotes>Updated Blazor Download File version. Added translator component which integrates with the Resourcer component. Fixed some classes that were missing the public modifier. Renamed namespace validators to validations.</PackageReleaseNotes>
+    <Version>2.0.26</Version>
   </PropertyGroup>
 
 
   <ItemGroup>
     <PackageReference Include="Blazor.Extensions.Storage" Version="1.1.0-preview3" />
     <PackageReference Include="BlazorCurrentDevice" Version="1.0.5" />
-    <PackageReference Include="BlazorDownloadFile" Version="1.0.4" />
+    <PackageReference Include="BlazorDownloadFile" Version="1.0.5" />
+    <PackageReference Include="BlazorStrap" Version="1.3.2-Preview1-04" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="2.6.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.3" />

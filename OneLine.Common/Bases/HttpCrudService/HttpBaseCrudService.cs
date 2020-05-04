@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using OneLine.Extensions;
 using OneLine.Models;
-using OneLine.Validators;
+using OneLine.Validations;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -22,7 +22,6 @@ namespace OneLine.Bases
         IHttpCrudService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
         where T : class, new()
         where TIdentifier : class, IIdentifier<TId>
-        where TId : class
         where TBlobData : class, IBlobData
         where TBlobValidator : class, IValidator, new()
         where TUserBlobs : class, IUserBlobs

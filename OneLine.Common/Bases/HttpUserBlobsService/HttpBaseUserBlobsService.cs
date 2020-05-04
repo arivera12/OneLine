@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using OneLine.Extensions;
 using OneLine.Models;
-using OneLine.Validators;
+using OneLine.Validations;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +14,6 @@ namespace OneLine.Bases
         IHttpUserBlobsService<TUserBlobs, TIdentifier, TBlobData, TBlobValidator>
         where TUserBlobs : class, IUserBlobs
         where TIdentifier : class, IIdentifier<TId>
-        where TId : class
         where TBlobData : class, IBlobData
         where TBlobValidator : class, IValidator, new()
     {

@@ -1,0 +1,30 @@
+﻿@using System.Net.Http
+@using Microsoft.JSInterop
+
+@if(!string.IsNullOrWhiteSpace(DocumentDefinition))
+{
+    <div class="@ContainerClass">
+        <iframe id="@IframeId" class="embed-responsive-item"></iframe>
+    </div>
+}
+@code{
+    [Parameter] public string DocumentDefinition { get; set; }
+    [Parameter] public string ContainerClass { get; set; } = "embed-responsive embed-responsive-16by9";
+    [Inject] public HttpClient Http { get; set; }
+    [Inject] public IJSRuntime JSRuntime { get; set; }
+    public string IframeId { get; set; } = "pdfmake" + Guid.NewGuid().ToString("N");
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadReport();
+        }
+    }
+    public async Task LoadReport()
+    {
+        if (!string.IsNullOrWhiteSpace(DocumentDefinition))
+        {
+            await JSRuntime.InvokeVoidAsync("eval", $@"pdfMake.createPdf({DocumentDefinition}).getDataUrl(function(dataUrl){{document.querySelector('#{IframeId}').src = dataUrl}});");
+        }
+    }
+}

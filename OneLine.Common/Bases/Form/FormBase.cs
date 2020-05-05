@@ -286,7 +286,7 @@ namespace OneLine.Bases
                 }
                 else
                 {
-                    if (FormState.IsDeleted())
+                    if (FormState.IsDelete())
                     { 
                         OnFailedDelete?.Invoke();
                     }
@@ -315,7 +315,7 @@ namespace OneLine.Bases
                 }
                 else
                 {
-                    if (FormState.IsDeleted())
+                    if (FormState.IsDelete())
                     {
                         OnFailedDelete?.Invoke();
                     }

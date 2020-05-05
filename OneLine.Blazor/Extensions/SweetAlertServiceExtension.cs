@@ -6,7 +6,7 @@ namespace OneLine.Blazor.Extensions
 {
     public static class SweetAlertServiceExtension
     {
-        public static async Task ShowFluentValidationsAlertMessageAsync(this SweetAlertService Swal, ValidationResult FluentValidationResult, string title = null)
+        public static async Task ShowFluentValidationsAlertMessageAsync(this SweetAlertService Swal, ValidationResult FluentValidationResult, string title = null, string style = "list-style:none;color:red")
         {
             if (FluentValidationResult != null && !FluentValidationResult.IsValid && FluentValidationResult.Errors.Count > 0)
             {
@@ -15,29 +15,28 @@ namespace OneLine.Blazor.Extensions
                 {
                     validations += $"<li>{Resourcer.GetString(item.ErrorMessage)}</li>";
                 }
-                string validationMessage =
-                    $@"<div class='alert alert-danger alert-dismissible fade show' role='alert'>
-                            <ul>
-                                {validations}
-                            </ul>
-                        </div>";
+                string validationMessage = $@"<ul style=""{style}"">{validations}</ul>";
                 await Swal.FireAsync(title, validationMessage, SweetAlertIcon.Error);
             }
         }
-        public static async Task<bool> ShowGenericConfirmAlertAsync(this SweetAlertService Swal)
+        public static async Task<bool> ShowConfirmAlertAsync(this SweetAlertService Swal, 
+            string title = "Confirm", 
+            string text = "AreYouSureYouWantToPerformTheCurrentAction",
+            string confirmButtonText = "Yes",
+            string cancelButtonText = "Cancel")
         {
             SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
-                Title = Resourcer.GetString("Confirm"),
-                Text = Resourcer.GetString("AreYouSureYouWantToPerformTheCurrentAction"),
+                Title = Resourcer.GetString(title),
+                Text = Resourcer.GetString(text),
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
-                ConfirmButtonText = Resourcer.GetString("Yes"),
-                CancelButtonText = Resourcer.GetString("Cancel")
+                ConfirmButtonText = Resourcer.GetString(confirmButtonText),
+                CancelButtonText = Resourcer.GetString(cancelButtonText),
             });
             return !string.IsNullOrWhiteSpace(result.Value);
         }
-        public static async Task ShowLoaderAsync(this SweetAlertService Swal, string title = null, string message = null)
+        public static async Task ShowLoaderAsync(this SweetAlertService Swal, string title = null, string text = null)
         {
             await Swal.FireAsync(new SweetAlertOptions()
             {
@@ -45,11 +44,11 @@ namespace OneLine.Blazor.Extensions
                 AllowEscapeKey = false,
                 AllowOutsideClick = false,
                 Title = title,
-                Text = message,
+                Text = text,
                 OnBeforeOpen = new SweetAlertCallback(async () => await Swal.ShowLoadingAsync())
             });
         }
-        public static async Task ShowLoaderAsync(this SweetAlertService Swal, SweetAlertCallback sweetAlertCallback, string title = null, string message = null)
+        public static async Task ShowLoaderAsync(this SweetAlertService Swal, SweetAlertCallback sweetAlertCallback, string title = null, string text = null)
         {
             await Swal.FireAsync(new SweetAlertOptions()
             {
@@ -57,7 +56,7 @@ namespace OneLine.Blazor.Extensions
                 AllowEscapeKey = false,
                 AllowOutsideClick = false,
                 Title = title,
-                Text = message,
+                Text = text,
                 OnBeforeOpen = new SweetAlertCallback(async () => await Swal.ShowLoadingAsync()),
                 OnOpen = sweetAlertCallback
             });

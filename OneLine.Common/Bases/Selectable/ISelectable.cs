@@ -9,15 +9,16 @@ namespace OneLine.Bases
     public interface ISelectable<T>
     {
         RecordsSelectionMode RecordsSelectionMode { get; set; }
+        T SelectedRecord { get; set; }
         ObservableRangeCollection<T> SelectedRecords { get; set; }
-        long MinimunRecordSelections { get; set; }
-        long MaximumRecordSelections { get; set; }
-        bool MinimunRecordSelectionsReached { get; set; }
-        bool MaximumRecordSelectionsReached { get; set; }
-        Action<T> OnSelectedRecord { get; set; }
-        Action<IEnumerable<T>, bool, bool> OnSelectedRecords { get; set; }
-        Action<bool> OnMinimunRecordSelectionsReached { get; set; }
-        Action<bool> OnMaximumRecordSelectionsReached { get; set; }
+        long MinimunRecordsSelections { get; set; }
+        long MaximumRecordsSelections { get; set; }
+        bool MinimunRecordsSelectionsReached { get; set; }
+        bool MaximumRecordsSelectionsReached { get; set; }
         Task SelectRecord(T selectedRecord);
+        Action<T> SelectedRecordChanged { get; set; }
+        Action<IEnumerable<T>, bool, bool> SelectedRecordsChanged { get; set; }
+        Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
+        Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
     }
 }

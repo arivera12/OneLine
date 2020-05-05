@@ -152,6 +152,10 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex);
             }
         }
+        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content)
+        {
+            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, content);
+        }
         public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IValidator validator)
         {
             var validationResult = await validator.ValidateAsync(content);
@@ -163,6 +167,10 @@ namespace OneLine.Extensions
                 };
             }
             return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, content);
+        }
+        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents)
+        {
+            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, contents);
         }
         public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator)
         {
@@ -346,6 +354,19 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex);
             }
         }
+        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IEnumerable<TBlobData> blobDatas)
+           where TBlobData : IBlobData
+        {
+            var multipartFormDataContent = new MultipartFormDataContent();
+            if (blobDatas != null && blobDatas.Any())
+            {
+                foreach (var blob in blobDatas)
+                {
+                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
+                }
+            }
+            return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
+        }
         public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IValidator validator, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
            where TBlobData : IBlobData
         {
@@ -374,6 +395,19 @@ namespace OneLine.Extensions
                 }
             }
             return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
+        }
+        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IEnumerable<TBlobData> blobDatas)
+          where TBlobData : IBlobData
+        {
+            var multipartFormDataContent = new MultipartFormDataContent();
+            if (blobDatas != null && blobDatas.Any())
+            {
+                foreach (var blob in blobDatas)
+                {
+                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
+                }
+            }
+            return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
         }
         public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
            where TBlobData : IBlobData

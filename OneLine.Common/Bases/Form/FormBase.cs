@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.Extensions.Configuration;
 using OneLine.Enums;
 using OneLine.Extensions;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public abstract class FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public abstract partial class FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : class, new()
         where TIdentifier : class, IIdentifier<TId>, new()
@@ -21,342 +22,18 @@ namespace OneLine.Bases
         where TBlobValidator : class, IValidator, new()
         where TUserBlobs : class, IUserBlobs
     {
-        public virtual T Record { get; set; }
-        public virtual ObservableRangeCollection<T> Records { get; set; }
-        public virtual TIdentifier Identifier { get; set; }
-        public virtual IEnumerable<TIdentifier> Identifiers { get; set; }
-        public virtual THttpService HttpService { get; set; }
-        public virtual IList<TBlobData> BlobDatas { get; set; }
-        public virtual IConfiguration Configuration { get; set; }
-        public virtual FormState FormState { get; set; }
-        public virtual FormMode FormMode { get; set; }
-        public virtual IResponseResult<IApiResponse<T>> Response { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
-        public virtual IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
-        public virtual IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> ResponseAddWithBlobs { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobs { get; set; }
-        public virtual IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> ResponseAddCollectionWithBlobs { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobs { get; set; }
-        public virtual IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateWithBlobs { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobs { get; set; }
-        public virtual IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateCollectionWithBlobs { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobs { get; set; }
-        public virtual Action<Action> OnBeforeReset { get; set; }
-        public virtual Action OnAfterReset { get; set; }
-        public virtual Action<Action> OnBeforeCancel { get; set; }
-        public virtual Action OnAfterCancel { get; set; }
-        public virtual Action<Action> OnBeforeSave { get; set; }
-        public virtual Action OnAfterSave { get; set; }
-        public virtual Action<Action> OnBeforeDelete { get; set; }
-        public virtual Action OnAfterDelete { get; set; }
-        public virtual Action OnFailedSave { get; set; }
-        public virtual Action OnFailedValidation { get; set; }
-        public virtual CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
-        public FormBase()
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-        }
-        public FormBase(FormState formState)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-        }
-        public FormBase(FormMode formMode)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>(); ;
-            FormMode = formMode;
-        }
-        public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(TIdentifier identifier)
-        {
-            Identifier = identifier;
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-        }
-        public FormBase(IEnumerable<TIdentifier> identifiers)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = identifiers;
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-        }
-        public FormBase(T record)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = record;
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-        }
-        public FormBase(IEnumerable<T> records)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            Records.AddRange(records);
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-        }
-        public FormBase(FormState formState, FormMode formMode)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-            FormMode = formMode;
-        }
-        public FormBase(FormState formState, CollectionAppendReplaceMode collectionAppendReplaceMode)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(FormState formState, TIdentifier identifier)
-        {
-            Identifier = identifier;
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-        }
-        public FormBase(FormState formState, IEnumerable<TIdentifier> identifiers)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = identifiers;
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-        }
-        public FormBase(FormState formState, T record)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = record;
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-        }
-        public FormBase(FormState formState, IEnumerable<T> records)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            Records.ReplaceRange(records);
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-        }
-        public FormBase(FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormMode = formMode;
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(FormMode formMode, TIdentifier identifier)
-        {
-            Identifier = identifier;
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormMode = formMode;
-        }
-        public FormBase(FormMode formMode, IEnumerable<TIdentifier> identifiers)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = identifiers;
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormMode = formMode;
-        }
-        public FormBase(FormMode formMode, T record)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = record;
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormMode = formMode;
-        }
-        public FormBase(FormMode formMode, IEnumerable<T> records)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            Records.ReplaceRange(records);
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormMode = formMode;
-        }
-        public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode, TIdentifier identifier)
-        {
-            Identifier = identifier;
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode, IEnumerable<TIdentifier> identifiers)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = identifiers;
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode, T record)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = record;
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode, IEnumerable<T> records)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            Records.ReplaceRange(records);
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-            FormMode = formMode;
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode, TIdentifier identifier)
-        {
-            Identifier = identifier;
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-            FormMode = formMode;
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode, IEnumerable<TIdentifier> identifiers)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = identifiers;
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-            FormMode = formMode;
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode, T record)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = record;
-            Records = new ObservableRangeCollection<T>();
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-            FormMode = formMode;
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
-        public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode, IEnumerable<T> records)
-        {
-            Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
-            Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            Records.ReplaceRange(records);
-            HttpService = new THttpService();
-            BlobDatas = new List<TBlobData>();
-            FormState = formState;
-            FormMode = formMode;
-            CollectionAppendReplaceMode = collectionAppendReplaceMode;
-        }
         public virtual async Task Load()
         {
             if (FormMode.IsSingle())
             {
                 if (Identifier != null && Identifier.Model != null)
                 {
-                    Response = await HttpService.GetOne<T>(Identifier, new EmptyValidator());
-                    OnResponse?.Invoke(Response);
+                    Response = await HttpService.GetOne<T>(Identifier);
+                    ResponseChanged?.Invoke(Response);
                     if (Response.Succeed && Response.Response.Status.Succeeded())
                     {
                         Record = Response.Response.Data;
+                        RecordChanged?.Invoke(Record);
                     }
                 }
             }
@@ -364,8 +41,8 @@ namespace OneLine.Bases
             {
                 if (Identifiers != null && Identifiers.Any())
                 {
-                    ResponseCollection = await HttpService.GetRange<T>(Identifiers, new EmptyValidator());
-                    OnResponseCollection?.Invoke(ResponseCollection);
+                    ResponseCollection = await HttpService.GetRange<T>(Identifiers);
+                    ResponseCollectionChanged?.Invoke(ResponseCollection);
                     if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
                     {
                         if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
@@ -376,11 +53,46 @@ namespace OneLine.Bases
                         {
                             Records.AddRange(ResponseCollection.Response.Data);
                         }
+                        RecordsChanged?.Invoke(Records);
                     }
                 }
             }
         }
-        public virtual async Task Save(IValidator validator)
+        public virtual async Task Validate()
+        {
+            ValidationResult = await Validator.ValidateAsync(Record);
+            ValidationResultChanged?.Invoke(ValidationResult);
+            IsValidModelState = ValidationResult.IsValid;
+            IsValidModelStateChanged?.Invoke(IsValidModelState);
+            if(IsValidModelState)
+            {
+                if (BlobDatas == null || BlobDatas.Any())
+                {
+                    OnValidationSucceeded?.Invoke();
+                }
+                else
+                {
+                    var BlobValidator = new BlobDataCollectionValidator();
+                    ValidationResult = await BlobValidator.ValidateAsync(BlobDatas);
+                    ValidationResultChanged?.Invoke(ValidationResult);
+                    IsValidModelState = ValidationResult.IsValid;
+                    IsValidModelStateChanged?.Invoke(IsValidModelState);
+                    if (IsValidModelState)
+                    {
+                        OnValidationSucceeded?.Invoke();
+                    }
+                    else
+                    {
+                        OnValidationFailed?.Invoke();
+                    }
+                }
+            }
+            else
+            {
+                OnValidationFailed?.Invoke();
+            }
+        }
+        public virtual async Task Save()
         {
             if (FormState.IsCopy() || FormState.IsCreate() || FormState.IsEdit())
             {
@@ -388,60 +100,60 @@ namespace OneLine.Bases
                 {
                     if (OnBeforeSave == null)
                     {
-                        await InternalUpdate(validator);
+                        await InternalUpdate();
                     }
                     else
                     {
-                        OnBeforeSave?.Invoke(async () => await InternalUpdate(validator));
+                        OnBeforeSave?.Invoke(async () => await InternalUpdate());
                     }
                 }
                 else
                 {
                     if (OnBeforeSave == null)
                     {
-                        await InternalCreate(validator);
+                        await InternalCreate();
                     }
                     else
                     {
-                        OnBeforeSave?.Invoke(async () => await InternalCreate(validator));
+                        OnBeforeSave?.Invoke(async () => await InternalCreate());
                     }
                 }
             }
         }
-        private async Task InternalCreate(IValidator validator)
+        private async Task InternalCreate()
         {
             if (BlobDatas.Any())
             {
-                await InternalCreateWitBlobData(validator);
+                await InternalCreateWitBlobData();
             }
             else
             {
                 if (FormMode.IsSingle())
                 {
-                    Response = await HttpService.Add<T>(Record, validator);
+                    Response = await HttpService.Add<T>(Record);
+                    ResponseChanged?.Invoke(Response);
                 }
                 else if (FormMode.IsMultiple())
                 {
-                    ResponseCollection = await HttpService.AddRange<IEnumerable<T>>(Records, validator);
+                    ResponseCollection = await HttpService.AddRange<IEnumerable<T>>(Records);
+                    ResponseCollectionChanged?.Invoke(ResponseCollection);
                 }
                 InternalResponse(FormState.Edit);
             }
         }
-        private async Task InternalCreateWitBlobData(IValidator validator)
+        private async Task InternalCreateWitBlobData()
         {
             if (FormMode.IsSingle())
             {
-                ResponseAddWithBlobs = await HttpService.Add(Record, validator, BlobDatas);
-                OnResponseAddWithBlobs?.Invoke(ResponseAddWithBlobs);
+                ResponseAddWithBlobs = await HttpService.Add(Record, BlobDatas);
+                ResponseAddWithBlobsChanged?.Invoke(ResponseAddWithBlobs);
                 if (ResponseAddWithBlobs.Succeed && ResponseAddWithBlobs.Response.Status.Succeeded())
                 {
                     Record = ResponseAddWithBlobs.Response.Data.Item1;
+                    RecordChanged?.Invoke(Record);
                     FormState = FormState.Edit;
+                    FormStateChanged?.Invoke(FormState);
                     OnAfterSave?.Invoke();
-                }
-                else if (ResponseAddWithBlobs.Response.ValidationFailed)
-                {
-                    OnFailedValidation?.Invoke();
                 }
                 else
                 {
@@ -450,17 +162,15 @@ namespace OneLine.Bases
             }
             else if (FormMode.IsMultiple())
             {
-                ResponseAddCollectionWithBlobs = await HttpService.AddRange(Records, validator, BlobDatas);
-                OnResponseAddCollectionWithBlobs?.Invoke(ResponseAddCollectionWithBlobs);
+                ResponseAddCollectionWithBlobs = await HttpService.AddRange(Records, BlobDatas);
+                ResponseAddCollectionWithBlobsChanged?.Invoke(ResponseAddCollectionWithBlobs);
                 if (ResponseAddCollectionWithBlobs.Succeed && ResponseAddCollectionWithBlobs.Response.Status.Succeeded())
                 {
                     Records.ReplaceRange(ResponseAddCollectionWithBlobs.Response.Data.Item1);
+                    RecordsChanged?.Invoke(Records);
                     FormState = FormState.Edit;
+                    FormStateChanged?.Invoke(FormState);
                     OnAfterSave?.Invoke();
-                }
-                else if (ResponseAddCollectionWithBlobs.Response.ValidationFailed)
-                {
-                    OnFailedValidation?.Invoke();
                 }
                 else
                 {
@@ -468,43 +178,41 @@ namespace OneLine.Bases
                 }
             }
         }
-        private async Task InternalUpdate(IValidator validator)
+        private async Task InternalUpdate()
         {
             if (FormMode.IsSingle())
             {
                 if (BlobDatas.Any())
                 {
-                    await InternalUpdateWitBlobData(validator);
+                    await InternalUpdateWitBlobData();
                 }
                 else
                 {
                     if (FormMode.IsSingle())
                     {
-                        Response = await HttpService.Update<T>(Record, validator);
+                        Response = await HttpService.Update<T>(Record);
                     }
                     else if (FormMode.IsMultiple())
                     {
-                        ResponseCollection = await HttpService.UpdateRange<IEnumerable<T>>(Records, validator);
+                        ResponseCollection = await HttpService.UpdateRange<IEnumerable<T>>(Records);
                     }
                     InternalResponse(FormState.Edit);
                 }
             }
         }
-        private async Task InternalUpdateWitBlobData(IValidator validator)
+        private async Task InternalUpdateWitBlobData()
         {
             if (FormMode.IsSingle())
             {
-                ResponseUpdateWithBlobs = await HttpService.Update(Record, validator, BlobDatas);
-                OnResponseUpdateWithBlobs?.Invoke(ResponseUpdateWithBlobs);
+                ResponseUpdateWithBlobs = await HttpService.Update(Record, BlobDatas);
+                ResponseUpdateWithBlobsChanged?.Invoke(ResponseUpdateWithBlobs);
                 if (ResponseUpdateWithBlobs.Succeed && Response.Response.Status.Succeeded())
                 {
                     Record = ResponseUpdateWithBlobs.Response.Data.Item1;
+                    RecordChanged?.Invoke(Record);
                     FormState = FormState.Edit;
+                    FormStateChanged?.Invoke(FormState);
                     OnAfterSave?.Invoke();
-                }
-                else if (ResponseUpdateWithBlobs.Response.ValidationFailed)
-                {
-                    OnFailedValidation?.Invoke();
                 }
                 else
                 {
@@ -513,17 +221,15 @@ namespace OneLine.Bases
             }
             else if (FormMode.IsMultiple())
             {
-                ResponseUpdateCollectionWithBlobs = await HttpService.UpdateRange(Records, validator, BlobDatas);
-                OnResponseUpdateCollectionWithBlobs?.Invoke(ResponseUpdateCollectionWithBlobs);
+                ResponseUpdateCollectionWithBlobs = await HttpService.UpdateRange(Records, BlobDatas);
+                ResponseUpdateCollectionWithBlobsChanged?.Invoke(ResponseUpdateCollectionWithBlobs);
                 if (ResponseUpdateCollectionWithBlobs.Succeed && Response.Response.Status.Succeeded())
                 {
                     Records.ReplaceRange(ResponseUpdateCollectionWithBlobs.Response.Data.Item1);
+                    RecordsChanged?.Invoke(Records);
                     FormState = FormState.Edit;
+                    FormStateChanged?.Invoke(FormState);
                     OnAfterSave?.Invoke();
-                }
-                else if (ResponseUpdateCollectionWithBlobs.Response.ValidationFailed)
-                {
-                    OnFailedValidation?.Invoke();
                 }
                 else
                 {
@@ -531,29 +237,31 @@ namespace OneLine.Bases
                 }
             }
         }
-        public virtual async Task Delete(IValidator validator)
+        public virtual async Task Delete()
         {
             if (FormState.IsDelete())
             {
                 if (OnBeforeDelete == null)
                 {
-                    await InternalDelete(validator);
+                    await InternalDelete();
                 }
                 else
                 {
-                    OnBeforeDelete?.Invoke(async () => await InternalDelete(validator));
+                    OnBeforeDelete?.Invoke(async () => await InternalDelete());
                 }
             }
         }
-        private async Task InternalDelete(IValidator validator)
+        private async Task InternalDelete()
         {
             if (FormMode.IsSingle())
             {
-                Response = await HttpService.Delete<T>(Identifier, validator);
+                Response = await HttpService.Delete<T>(Identifier);
+                ResponseChanged?.Invoke(Response);
             }
             else if (FormMode.IsMultiple())
             {
-                ResponseCollection = await HttpService.DeleteRange<T>(Identifiers, validator);
+                ResponseCollection = await HttpService.DeleteRange<T>(Identifiers);
+                ResponseCollectionChanged?.Invoke(ResponseCollection);
             }
             InternalResponse(FormState.Deleted);
         }
@@ -561,11 +269,12 @@ namespace OneLine.Bases
         {
             if (FormMode.IsSingle())
             {
-                OnResponse?.Invoke(Response);
                 if (Response.Succeed && Response.Response.Status.Succeeded())
                 {
                     Record = Response.Response.Data;
+                    RecordChanged?.Invoke(Record);
                     FormState = formState;
+                    FormStateChanged?.Invoke(FormState);
                     if(FormState.IsDeleted())
                     {
                         OnAfterDelete?.Invoke();
@@ -575,22 +284,26 @@ namespace OneLine.Bases
                         OnAfterSave?.Invoke();
                     }
                 }
-                else if (Response.Response.ValidationFailed)
-                {
-                    OnFailedValidation?.Invoke();
-                }
                 else
                 {
-                    OnFailedSave?.Invoke();
+                    if (FormState.IsDeleted())
+                    { 
+                        OnFailedDelete?.Invoke();
+                    }
+                    else
+                    {
+                        OnFailedSave?.Invoke();
+                    }   
                 }
             }
             else if (FormMode.IsMultiple())
             {
-                OnResponseCollection?.Invoke(ResponseCollection);
                 if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
                 {
                     Records.ReplaceRange(ResponseCollection.Response.Data);
+                    RecordsChanged?.Invoke(Records);
                     FormState = formState;
+                    FormStateChanged?.Invoke(FormState);
                     if (FormState.IsDeleted())
                     {
                         OnAfterDelete?.Invoke();
@@ -600,13 +313,16 @@ namespace OneLine.Bases
                         OnAfterSave?.Invoke();
                     }
                 }
-                else if (ResponseCollection.Response.ValidationFailed)
-                {
-                    OnFailedValidation?.Invoke();
-                }
                 else
                 {
-                    OnFailedSave?.Invoke();
+                    if (FormState.IsDeleted())
+                    {
+                        OnFailedDelete?.Invoke();
+                    }
+                    else
+                    {
+                        OnFailedSave?.Invoke();
+                    }
                 }
             }
         }
@@ -622,10 +338,15 @@ namespace OneLine.Bases
         private Task InternalReset()
         {
             Record = new T();
+            RecordChanged?.Invoke(Record);
             Records.Clear();
+            RecordsChanged?.Invoke(Records);
             Identifier = new TIdentifier();
+            IdentifierChanged?.Invoke(Identifier);
             Identifiers = new List<TIdentifier>();
+            IdentifiersChanged?.Invoke(Identifiers);
             BlobDatas.Clear();
+            BlobDatasChanged?.Invoke(BlobDatas);
             OnAfterReset?.Invoke();
             return Task.CompletedTask;
         }

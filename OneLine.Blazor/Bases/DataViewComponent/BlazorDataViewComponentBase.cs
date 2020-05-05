@@ -32,26 +32,49 @@ namespace OneLine.Blazor.Bases
         [Inject] public virtual BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
         [Inject] public virtual BlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
-        [Parameter] public override TIdentifier Identifier { get; set; } = new TIdentifier();
-        [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; } = new List<TIdentifier>();
-        [Parameter] public override T Record { get; set; } = new T();
+        [Parameter] public override TIdentifier Identifier { get; set; }
+        [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
+        [Parameter] public override T Record { get; set; }
         [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
         [Parameter] public override object SearchExtraParams { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> OnResponsePaged { get; set; }
+        [Parameter] public override Func<T, bool> FilterPredicate { get; set; }
+        [Parameter] public override string FilterSortBy { get; set; }
+        [Parameter] public override bool FilterDescending { get; set; }
+        [Parameter] public override ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
+        [Parameter] public override IResponseResult<IApiResponse<T>> Response { get; set; }
+        [Parameter] public override IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        [Parameter] public override IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>> ResponsePaged { get; set; }
         [Parameter] public override ISearchPaging SearchPaging { get; set; }
         [Parameter] public override RecordsSelectionMode RecordsSelectionMode { get; set; }
+        [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
+        [Parameter] public override T SelectedRecord { get; set; }
         [Parameter] public override ObservableRangeCollection<T> SelectedRecords { get; set; }
-        [Parameter] public override long MinimunRecordSelections { get; set; }
-        [Parameter] public override long MaximumRecordSelections { get; set; }
-        [Parameter] public override Action<T> OnSelectedRecord { get; set; }
-        [Parameter] public override Action<IEnumerable<T>, bool, bool> OnSelectedRecords { get; set; }
-        [Parameter] public override Action<bool> OnMinimunRecordSelectionsReached { get; set; }
-        [Parameter] public override Action<bool> OnMaximumRecordSelectionsReached { get; set; }
+        [Parameter] public override long MinimunRecordsSelections { get; set; }
+        [Parameter] public override long MaximumRecordsSelections { get; set; }
+        [Parameter] public override bool MinimunRecordsSelectionsReached { get; set; }
+        [Parameter] public override bool MaximumRecordsSelectionsReached { get; set; }
+        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> ResponseChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
         [Parameter] public override Action<Action> OnBeforeSearch { get; set; }
         [Parameter] public override Action OnAfterSearch { get; set; }
-        [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
+        [Parameter] public override Action<T> OnSelectedRecordChanged { get; set; }
+        [Parameter] public override Action<IEnumerable<T>, bool, bool> OnSelectedRecordsChanged { get; set; }
+        [Parameter] public override Action<bool> OnMinimunRecordsSelectionsReachedChanged { get; set; }
+        [Parameter] public override Action<bool> OnMaximumRecordsSelectionsReachedChanged { get; set; }
+        [Parameter] public override Action<TIdentifier> IdentifierChanged { get; set; }
+        [Parameter] public override Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
+        [Parameter] public override Action<T> RecordChanged { get; set; }
+        [Parameter] public override Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
+        [Parameter] public override Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
+        [Parameter] public override Action<T> SelectedRecordChanged { get; set; }
+        [Parameter] public override Action<IEnumerable<T>, bool, bool> SelectedRecordsChanged { get; set; }
+        [Parameter] public override Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
+        [Parameter] public override Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
+        [Parameter] public override Action<ISearchPaging> SearchPagingChanged { get; set; }
+        [Parameter] public override Action<Func<T, bool>> FilterPredicateChanged { get; set; }
+        [Parameter] public override Action<string> FilterSortByChanged { get; set; }
+        [Parameter] public override Action<bool> FilterDescendingChanged { get; set; }
         public virtual bool IsDesktop { get; set; }
         public virtual bool IsTablet { get; set; }
         public virtual bool IsMobile { get; set; }

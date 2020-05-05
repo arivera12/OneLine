@@ -10,6 +10,6 @@ namespace OneLine.Bases
     public interface IApiResponseable<T>
     {
         IResponseResult<IApiResponse<T>> Response { get; set; }
-        Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
+        Action<IResponseResult<IApiResponse<T>>> ResponseChanged { get; set; }
     }
 }

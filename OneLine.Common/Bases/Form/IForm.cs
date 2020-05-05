@@ -8,12 +8,13 @@
         IApiResponseableCollectionable<T>,
         IApiResponseableBlobable<T, TUserBlobs>,
         IConfigurable,
-        ISaveableValidatable,
+        ISaveable,
+        IValidatable,
         IFormStateable,
         IFormModeable,
         ICollectionAppendableReplaceableModeable,
         ILoadable,
-        IDeletableValidatable,
+        IDeletable,
         IResettable,
         ICancelable
     {

@@ -11,6 +11,6 @@ namespace OneLine.Bases
     public interface IApiResponseableCollectionable<T>
     {
         IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
+        Action<IResponseResult<IApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
     }
 }

@@ -1,0 +1,69 @@
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.Extensions.Configuration;
+using OneLine.Enums;
+using OneLine.Models;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace OneLine.Bases
+{
+    public abstract partial class FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+        IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+        where T : class, new()
+        where TIdentifier : class, IIdentifier<TId>, new()
+        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
+        where TBlobData : class, IBlobData
+        where TBlobValidator : class, IValidator, new()
+        where TUserBlobs : class, IUserBlobs
+    {
+        public virtual T Record { get; set; }
+        public virtual ObservableRangeCollection<T> Records { get; set; }
+        public virtual TIdentifier Identifier { get; set; }
+        public virtual IEnumerable<TIdentifier> Identifiers { get; set; }
+        public virtual CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
+        public virtual IValidator Validator { get; set; }
+        public virtual ValidationResult ValidationResult { get; set; }
+        public virtual bool IsValidModelState { get; set; }
+        public virtual THttpService HttpService { get; set; }
+        public virtual IList<TBlobData> BlobDatas { get; set; }
+        public virtual IConfiguration Configuration { get; set; }
+        public virtual FormState FormState { get; set; }
+        public virtual FormMode FormMode { get; set; }
+        public virtual IResponseResult<IApiResponse<T>> Response { get; set; }
+        public virtual IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        public virtual IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> ResponseAddWithBlobs { get; set; }
+        public virtual IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> ResponseAddCollectionWithBlobs { get; set; }
+        public virtual IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateWithBlobs { get; set; }
+        public virtual IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateCollectionWithBlobs { get; set; }
+        public virtual Action<TIdentifier> IdentifierChanged { get; set; }
+        public virtual Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
+        public virtual Action<T> RecordChanged { get; set; }
+        public virtual Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
+        public virtual Action<IList<TBlobData>> BlobDatasChanged { get; set; }
+        public virtual Action<ValidationResult> ValidationResultChanged { get; set; }
+        public virtual Action<bool> IsValidModelStateChanged { get; set; }
+        public virtual Action<FormState> FormStateChanged { get; set; }
+        public virtual Action<FormMode> FormModeChanged { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<T>>> ResponseChanged { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> ResponseAddWithBlobsChanged { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> ResponseAddCollectionWithBlobsChanged { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateWithBlobsChanged { get; set; }
+        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateCollectionWithBlobsChanged { get; set; }
+        public virtual Action<Action> OnBeforeReset { get; set; }
+        public virtual Action OnAfterReset { get; set; }
+        public virtual Action<Action> OnBeforeCancel { get; set; }
+        public virtual Action OnAfterCancel { get; set; }
+        public virtual Action<Action> OnBeforeSave { get; set; }
+        public virtual Action OnAfterSave { get; set; }
+        public virtual Action<Action> OnBeforeDelete { get; set; }
+        public virtual Action OnAfterDelete { get; set; }
+        public virtual Action OnFailedDelete { get; set; }
+
+        public virtual Action OnFailedSave { get; set; }
+        public virtual Action OnValidationFailed { get; set; }
+        public virtual Action OnValidationSucceeded { get; set; }
+    }
+}

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.26</Version>
+    <Version>2.0.27</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine is a project that can be used on a server backend. This package already includes OneLine.Common.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Updated Blazor Download File version. Added translator component which integrates with the Resourcer component. Fixed some classes that were missing the public modifier. Renamed namespace validators to validations.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed naming convention to standards. Removed internall call to remove any asumptions. Added new event listeners. Implemented 2 way data bind and callback for reactive properties and callabled event listeners. Splitted base class code into multiple partial class. Added blob validator and method to apply for file rules. Added method to send info without validation on http request for internal use inside the base form class. Implemented validation method of form data and blob data. Added new http client extensions. Added IsRequired property to the form file rule model. Added listener for OnValidationFailed and OnValidationSucceeded.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace OneLine.Bases
 {
@@ -9,5 +10,6 @@ namespace OneLine.Bases
     public interface IBlobDataCollectionable<TBlobData>
     {
         IList<TBlobData> BlobDatas { get; set; }
+        Action<IList<TBlobData>> BlobDatasChanged { get; set; }
     }
 }

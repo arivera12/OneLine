@@ -9,5 +9,6 @@ namespace OneLine.Bases
         Action<Action> OnBeforeDelete { get; set; }
         Task Delete();
         Action OnAfterDelete { get; set; }
+        Action OnFailedDelete { get; set; }
     }
 }

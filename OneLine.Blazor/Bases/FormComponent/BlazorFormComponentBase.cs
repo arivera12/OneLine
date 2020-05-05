@@ -2,6 +2,7 @@
 using BlazorDownloadFile;
 using CurrieTechnologies.Razor.SweetAlert2;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
@@ -16,16 +17,6 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    /// <summary>
-    /// Base component implementation with form default behaviors
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TIdentifier"></typeparam>
-    /// <typeparam name="TId"></typeparam>
-    /// <typeparam name="THttpService"></typeparam>
-    /// <typeparam name="TBlobData"></typeparam>
-    /// <typeparam name="TBlobValidator"></typeparam>
-    /// <typeparam name="TUserBlobs"></typeparam>
     public abstract partial class BlazorFormComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
         IBlazorFormComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
@@ -46,22 +37,35 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
         [Parameter] public override TIdentifier Identifier { get; set; }
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
+        [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
+        [Parameter] public override IValidator Validator { get; set; }
+        [Parameter] public override ValidationResult ValidationResult { get; set; }
+        [Parameter] public override bool IsValidModelState { get; set; }
         [Parameter] public override THttpService HttpService { get; set; }
         [Parameter] public override IList<TBlobData> BlobDatas { get; set; }
         [Parameter] public override FormState FormState { get; set; }
         [Parameter] public override FormMode FormMode { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<T>> Response { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> OnResponse { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> OnResponseCollection { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> ResponseAddWithBlobs { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> OnResponseAddWithBlobs { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> ResponseAddCollectionWithBlobs { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> OnResponseAddCollectionWithBlobs { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateWithBlobs { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateWithBlobs { get; set; }
         [Parameter] public override IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateCollectionWithBlobs { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> OnResponseUpdateCollectionWithBlobs { get; set; }
+        [Parameter] public override Action<TIdentifier> IdentifierChanged { get; set; }
+        [Parameter] public override Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
+        [Parameter] public override Action<T> RecordChanged { get; set; }
+        [Parameter] public override Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
+        [Parameter] public override Action<IList<TBlobData>> BlobDatasChanged { get; set; }
+        [Parameter] public override Action<ValidationResult> ValidationResultChanged { get; set; }
+        [Parameter] public override Action<bool> IsValidModelStateChanged { get; set; }
+        [Parameter] public override Action<FormState> FormStateChanged { get; set; }
+        [Parameter] public override Action<FormMode> FormModeChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> ResponseChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> ResponseAddWithBlobsChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> ResponseAddCollectionWithBlobsChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateWithBlobsChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateCollectionWithBlobsChanged { get; set; }
         [Parameter] public override Action<Action> OnBeforeReset { get; set; }
         [Parameter] public override Action OnAfterReset { get; set; }
         [Parameter] public override Action<Action> OnBeforeCancel { get; set; }
@@ -70,12 +74,13 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnAfterSave { get; set; }
         [Parameter] public override Action<Action> OnBeforeDelete { get; set; }
         [Parameter] public override Action OnAfterDelete { get; set; }
+        [Parameter] public override Action OnFailedDelete { get; set; }
         [Parameter] public override Action OnFailedSave { get; set; }
-        [Parameter] public override Action OnFailedValidation { get; set; }
-        [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
-        public virtual bool IsDesktop { get; set; }
-        public virtual bool IsTablet { get; set; }
-        public virtual bool IsMobile { get; set; }
+        [Parameter] public override Action OnValidationFailed { get; set; }
+        [Parameter] public override Action OnValidationSucceeded { get; set; }
+        public bool IsDesktop { get; set; }
+        public bool IsTablet { get; set; }
+        public bool IsMobile { get; set; }
         public virtual async Task OnAfterFirstRenderAsync()
         {
             IsMobile = await BlazorCurrentDeviceService.Mobile();

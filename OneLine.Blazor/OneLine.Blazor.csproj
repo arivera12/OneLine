@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Updated Blazor Download File version. Added translator component which integrates with the Resourcer component. Fixed some classes that were missing the public modifier. Renamed namespace validators to validations.</PackageReleaseNotes>
-    <Version>2.0.26</Version>
+    <PackageReleaseNotes>Fixed naming convention to standards. Removed internall call to remove any asumptions. Added new event listeners. Implemented 2 way data bind and callback for reactive properties and callabled event listeners. Splitted base class code into multiple partial class. Added blob validator and method to apply for file rules. Added method to send info without validation on http request for internal use inside the base form class. Implemented validation method of form data and blob data. Added new http client extensions. Added IsRequired property to the form file rule model. Added listener for OnValidationFailed and OnValidationSucceeded.</PackageReleaseNotes>
+    <Version>2.0.27</Version>
   </PropertyGroup>
 
 

@@ -8,7 +8,7 @@
         ICollectionFilterableSortable<T>,
         ICollectionAppendableReplaceableModeable,
         ISelectable<T>,
-        IPageable,
+        ISearchablePageable,
         IPageableNavigable,
         IApiResponseable<T>,
         IApiResponseablePageable<T>,

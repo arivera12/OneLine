@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace OneLine
 {
-    public static class RateLimitingExtentionForObject
+    public static class RateLimitingExtensionForObject
     {
         #region Private Properties
 

@@ -5,6 +5,10 @@ namespace OneLine.Models
     public interface IFormFileRules
     {
         /// <summary>
+        /// Validates if the file is required.
+        /// </summary>
+        bool IsRequired { get; set; }
+        /// <summary>
         /// The maximun allowed files. Default value: 1.
         /// </summary>
         short AllowedMaximunFiles { get; set; }

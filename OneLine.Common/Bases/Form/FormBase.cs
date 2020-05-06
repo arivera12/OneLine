@@ -157,7 +157,7 @@ namespace OneLine.Bases
                 }
                 else
                 {
-                    OnFailedSave?.Invoke();
+                    OnSaveFailed?.Invoke();
                 }
             }
             else if (FormMode.IsMultiple())
@@ -174,7 +174,7 @@ namespace OneLine.Bases
                 }
                 else
                 {
-                    OnFailedSave?.Invoke();
+                    OnSaveFailed?.Invoke();
                 }
             }
         }
@@ -216,7 +216,7 @@ namespace OneLine.Bases
                 }
                 else
                 {
-                    OnFailedSave?.Invoke();
+                    OnSaveFailed?.Invoke();
                 }
             }
             else if (FormMode.IsMultiple())
@@ -233,7 +233,7 @@ namespace OneLine.Bases
                 }
                 else
                 {
-                    OnFailedSave?.Invoke();
+                    OnSaveFailed?.Invoke();
                 }
             }
         }
@@ -287,12 +287,12 @@ namespace OneLine.Bases
                 else
                 {
                     if (FormState.IsDelete())
-                    { 
-                        OnFailedDelete?.Invoke();
+                    {
+                        OnDeleteFailed?.Invoke();
                     }
                     else
                     {
-                        OnFailedSave?.Invoke();
+                        OnSaveFailed?.Invoke();
                     }   
                 }
             }
@@ -317,11 +317,11 @@ namespace OneLine.Bases
                 {
                     if (FormState.IsDelete())
                     {
-                        OnFailedDelete?.Invoke();
+                        OnDeleteFailed?.Invoke();
                     }
                     else
                     {
-                        OnFailedSave?.Invoke();
+                        OnSaveFailed?.Invoke();
                     }
                 }
             }

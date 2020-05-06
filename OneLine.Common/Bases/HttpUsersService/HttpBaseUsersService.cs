@@ -73,7 +73,7 @@ namespace OneLine.Bases
         {
             return await HttpClient.SendJsonResponseResultAsync<IAspNetUsers, ILogin>(HttpMethod.Post, $"/{ControllerName}/{LoginMethod}", record, new LoginValidator());
         }
-        public async Task<IResponseResult<IApiResponse<TResponse>>> Register<TResponse, TModel>(TModel record, IValidator validator)
+        public virtual async Task<IResponseResult<IApiResponse<TResponse>>> Register<TResponse, TModel>(TModel record, IValidator validator)
         {
             return await HttpClient.SendJsonResponseResultAsync<TResponse, TModel>(HttpMethod.Post, $"/{ControllerName}/{RegisterMethod}", record, validator);
         }

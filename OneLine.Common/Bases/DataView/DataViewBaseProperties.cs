@@ -45,10 +45,6 @@ namespace OneLine.Bases
         public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
         public virtual Action<Action> OnBeforeSearch { get; set; }
         public virtual Action OnAfterSearch { get; set; }
-        public virtual Action<T> OnSelectedRecordChanged { get; set; }
-        public virtual Action<IEnumerable<T>, bool, bool> OnSelectedRecordsChanged { get; set; }
-        public virtual Action<bool> OnMinimunRecordsSelectionsReachedChanged { get; set; }
-        public virtual Action<bool> OnMaximumRecordsSelectionsReachedChanged { get; set; }
         public virtual Action<TIdentifier> IdentifierChanged { get; set; }
         public virtual Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
         public virtual Action<T> RecordChanged { get; set; }

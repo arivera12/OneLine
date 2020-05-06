@@ -60,9 +60,8 @@ namespace OneLine.Bases
         public virtual Action OnAfterSave { get; set; }
         public virtual Action<Action> OnBeforeDelete { get; set; }
         public virtual Action OnAfterDelete { get; set; }
-        public virtual Action OnFailedDelete { get; set; }
-
-        public virtual Action OnFailedSave { get; set; }
+        public virtual Action OnDeleteFailed { get; set; }
+        public virtual Action OnSaveFailed { get; set; }
         public virtual Action OnValidationFailed { get; set; }
         public virtual Action OnValidationSucceeded { get; set; }
     }

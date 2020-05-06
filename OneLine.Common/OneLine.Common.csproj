@@ -13,8 +13,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Renamed ShowGenericConfirmAlertAsync to ShowConfirmAlertAsync with default parameters values. ShowFluentValidationsAlertMessageAsync removed bootstrap red dialog and added parmeter with default cssstyle for the list of errors. Fixed call back condition deleted to delete cause deleted wont fire never unless delete operation is successful. Added new component PdfMakeViewer.</PackageReleaseNotes>
-    <Version>2.0.28</Version>
+    <PackageReleaseNotes>added missing virtual modifier to register method on users account service. Redefined and established nomenclature on interfaces with actions and fixed them on base clases. Removed unused interfaces.</PackageReleaseNotes>
+    <Version>2.0.29</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

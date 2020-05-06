@@ -4,7 +4,7 @@
         IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
         ISearchExtraParameterable<object>,
-        ISearchable,
+        ISearchableEventable,
         ICollectionFilterableSortable<T>,
         ICollectionAppendableReplaceableModeable,
         ISelectable<T>,

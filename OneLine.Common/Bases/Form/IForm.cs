@@ -8,15 +8,15 @@
         IApiResponseableCollectionable<T>,
         IApiResponseableBlobable<T, TUserBlobs>,
         IConfigurable,
-        ISaveable,
-        IValidatable,
+        ISaveableEventable,
+        IValidatableEventable,
         IFormStateable,
         IFormModeable,
         ICollectionAppendableReplaceableModeable,
         ILoadable,
-        IDeletable,
-        IResettable,
-        ICancelable
+        IDeletableEventable,
+        IResettableEventable,
+        ICancelableEventable
     {
     }
 }

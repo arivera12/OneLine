@@ -58,10 +58,6 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
         [Parameter] public override Action<Action> OnBeforeSearch { get; set; }
         [Parameter] public override Action OnAfterSearch { get; set; }
-        [Parameter] public override Action<T> OnSelectedRecordChanged { get; set; }
-        [Parameter] public override Action<IEnumerable<T>, bool, bool> OnSelectedRecordsChanged { get; set; }
-        [Parameter] public override Action<bool> OnMinimunRecordsSelectionsReachedChanged { get; set; }
-        [Parameter] public override Action<bool> OnMaximumRecordsSelectionsReachedChanged { get; set; }
         [Parameter] public override Action<TIdentifier> IdentifierChanged { get; set; }
         [Parameter] public override Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
         [Parameter] public override Action<T> RecordChanged { get; set; }

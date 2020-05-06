@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface IValidatable
+    public interface IValidatableEventable
     {
         IValidator Validator { get; set; }
         ValidationResult ValidationResult { get; set; }

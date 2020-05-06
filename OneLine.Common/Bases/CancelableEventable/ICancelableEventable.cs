@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface ICancelable
+    public interface ICancelableEventable
     {
         Task Cancel();
         Action<Action> OnBeforeCancel { get; set; }

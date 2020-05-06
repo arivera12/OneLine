@@ -74,8 +74,8 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnAfterSave { get; set; }
         [Parameter] public override Action<Action> OnBeforeDelete { get; set; }
         [Parameter] public override Action OnAfterDelete { get; set; }
-        [Parameter] public override Action OnFailedDelete { get; set; }
-        [Parameter] public override Action OnFailedSave { get; set; }
+        [Parameter] public override Action OnDeleteFailed { get; set; }
+        [Parameter] public override Action OnSaveFailed { get; set; }
         [Parameter] public override Action OnValidationFailed { get; set; }
         [Parameter] public override Action OnValidationSucceeded { get; set; }
         public bool IsDesktop { get; set; }

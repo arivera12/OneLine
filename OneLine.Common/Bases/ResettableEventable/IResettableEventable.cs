@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface IResettable
+    public interface IResettableEventable
     {
         Task Reset();
         Action<Action> OnBeforeReset { get; set; }

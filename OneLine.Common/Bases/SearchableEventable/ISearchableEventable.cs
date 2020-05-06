@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface ISearchable
+    public interface ISearchableEventable
     {
         Action<Action> OnBeforeSearch { get; set; }
         Task Search();

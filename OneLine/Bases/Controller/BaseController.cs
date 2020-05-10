@@ -12,7 +12,7 @@
 //{
 //    [Route(Routes.Api.Default)]
 //    [Authorize(AuthenticationSchemes = JwtAuthenticationSchemes.Bearer)]
-//    public class BaseController<T, TViewModel, TIdentifier, TId, TSearchPaging, TSearchExtraParams, TSaveReplaceList, TAuditTrails, TExceptionsLogs, TUserBlobs> :
+//    public class BaseController<T, TViewModel, TIdentifier, TId, TSearchPaging, TSearchExtraParams, TSaveReplaceList, TAuditTrails, TExceptionsLogs, TUserBlobs> : Controller,
 //        IController<T, TViewModel, TIdentifier, TSearchPaging, TSearchExtraParams, TSaveReplaceList, TAuditTrails, TExceptionsLogs, TUserBlobs>
 //        where T : class
 //        where TViewModel : class
@@ -68,27 +68,11 @@
 //        {
 //            throw new NotImplementedException();
 //        }
-//        [Route(Routes.BaseController.List)]
-//        [HttpGet]
-//        [ValidateModelState]
-//        [Authorize]
-//        public virtual IActionResult List([FromQuery] TSearchPaging SearchPaging, [FromQuery] TSearchExtraParams searchExtraParams)
-//        {
-//            throw new NotImplementedException();
-//        }
 //        [Route(Routes.BaseController.DownloadCsvExcel)]
 //        [HttpGet]
 //        [ValidateModelState]
 //        [Authorize]
 //        public virtual IActionResult DownloadCsvExcel([FromQuery] TSearchPaging SearchPaging, [FromQuery] TSearchExtraParams searchExtraParams)
-//        {
-//            throw new NotImplementedException();
-//        }
-//        [Route(Routes.BaseController.SaveReplaceList)]
-//        [HttpGet]
-//        [ValidateModelState]
-//        [Authorize]
-//        public virtual Task<IActionResult> SaveReplaceList([FromBody] TSaveReplaceList TSaveReplaceList)
 //        {
 //            throw new NotImplementedException();
 //        }

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.29</Version>
+    <Version>2.0.30</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine is a project that can be used on a server backend. This package already includes OneLine.Common.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>added missing virtual modifier to register method on users account service. Redefined and established nomenclature on interfaces with actions and fixed them on base clases. Removed unused interfaces.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added repository methods abstraction. Renamed some extension methods. Removed some unuseful methods and added new useful ones like upload and download of data using .csv files. Added collection validators and data management. Added new interface for form rules and uploadformfiles. This commit should stable OneLine for no more breaking changes.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

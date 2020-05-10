@@ -3,6 +3,7 @@ using OneLine.Extensions;
 using OneLine.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -17,9 +18,8 @@ namespace OneLine.Bases
         where TBlobValidator : class, IValidator, new()
         where TUserBlobs : class, IUserBlobs
     {
-        public virtual string ListMethod { get; set; } = "list";
-        public virtual string DownloadCsvExcelMethod { get; set; } = "downloadcsvexcel";
-        public virtual string SaveReplaceListMethod { get; set; } = "savereplacelist";
+        public virtual string DownloadCsvMethod { get; set; } = "downloadcsv";
+        public virtual string UploadCsvMethod { get; set; } = "uploadcsv";
         public HttpBaseCrudExtendedService() : base()
         {
         }
@@ -35,17 +35,17 @@ namespace OneLine.Bases
         public HttpBaseCrudExtendedService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
         }
-        public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<TResponse>>>>> List<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<IResponseResult<byte[]>> DownloadCsvAsByteArray(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.GetJsonResponseResultAsync<IApiResponse<IPaged<IEnumerable<TResponse>>>>($"/{ControllerName}/{ListMethod}", new { SearchPaging, searchExtraParams });
+            return await HttpClient.SendJsonDownloadBlobAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<byte[]>> DownloadCsvExcel(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<IResponseResult<Stream>> DownloadCsvAsStream(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.SendJsonDownloadBlobAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"/{ControllerName}/{DownloadCsvExcelMethod}"), new { SearchPaging, searchExtraParams });
+            return await HttpClient.SendJsonDownloadBlobAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<IApiResponse<IEnumerable<TResponse>>>> SaveReplaceList<TResponse>(ISaveReplaceList<IEnumerable<T>> SaveReplaceListModel)
+        public virtual async Task<IResponseResult<IApiResponse<IEnumerable<T>>>> UploadCsv(IEnumerable<IBlobData> blobDatas, IValidator validator, HttpMethod httpMethod)
         {
-            return await HttpClient.PostJsonResponseResultAsync<IApiResponse<IEnumerable<TResponse>>>($"/{ControllerName}/{SaveReplaceListMethod}", SaveReplaceListModel);
+            return await HttpClient.SendBlobDataResponseResultAsync<IEnumerable<T>, IBlobData>(new HttpRequestMessage(httpMethod, $"/{ControllerName}/{DownloadCsvMethod}"), blobDatas, validator);
         }
     }
 }

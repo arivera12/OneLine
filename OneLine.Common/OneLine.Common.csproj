@@ -13,8 +13,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>added missing virtual modifier to register method on users account service. Redefined and established nomenclature on interfaces with actions and fixed them on base clases. Removed unused interfaces.</PackageReleaseNotes>
-    <Version>2.0.29</Version>
+    <PackageReleaseNotes>Added repository methods abstraction. Renamed some extension methods. Removed some unuseful methods and added new useful ones like upload and download of data using .csv files. Added collection validators and data management. Added new interface for form rules and uploadformfiles. This commit should stable OneLine for no more breaking changes.</PackageReleaseNotes>
+    <Version>2.0.30</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>

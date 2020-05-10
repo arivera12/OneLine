@@ -20,7 +20,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<UserBlobs>> DeleteUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IBlobStorage blobStorage, string userId, bool IgnoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, IgnoreBlobOwner, controllerName, actionName, remoteIpAddress);
-            if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
+            if (isBlobOwnerAndFileExists.Status.Failed() || !isBlobOwnerAndFileExists.Data)
             {
                 return new ApiResponse<UserBlobs>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
@@ -48,7 +48,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IApiResponse<IEnumerable<UserBlobs>>> DeleteRangeUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            if (userBlobs == null || !userBlobs.Any())
+            if (userBlobs.IsNullOrEmpty())
             {
                 await dbContext.CreateAuditrailsAsync(userBlobs, "UserBlobs is null or empty on method DeleteRange", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Failed, "FileNotFound");
@@ -56,7 +56,7 @@ namespace OneLine.Extensions
             foreach (var userBlob in userBlobs)
             {
                 var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlob, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-                if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
+                if (isBlobOwnerAndFileExists.Status.Failed() || !isBlobOwnerAndFileExists.Data)
                 {
                     return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
                 }
@@ -73,7 +73,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IApiResponse<IEnumerable<UserBlobs>>> DeleteRangeForcedUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            if (userBlobs == null || !userBlobs.Any())
+            if (userBlobs.IsNullOrEmpty())
             {
                 await dbContext.CreateAuditrailsAsync(userBlobs, "UserBlobs is null or empty on method DeleteRange", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Failed, "FileNotFound");
@@ -119,7 +119,7 @@ namespace OneLine.Extensions
                     var deletedBlobs = await dbContext.DeleteForcedUserBlobsAsync(UserBlobs, blobStorage, userId, controllerName, actionName, remoteIpAddress);
                     if (!anyError)
                     {
-                        if (deletedBlobs.Status == ApiResponseStatus.Failed)
+                        if (deletedBlobs.Status.Failed())
                         {
                             anyError = true;
                         }
@@ -132,7 +132,7 @@ namespace OneLine.Extensions
                     var deletedBlobs = await dbContext.DeleteRangeForcedUserBlobsAsync(UserBlobs, blobStorage, userId, controllerName, actionName, remoteIpAddress);
                     if (!anyError)
                     {
-                        if (deletedBlobs.Status == ApiResponseStatus.Failed)
+                        if (deletedBlobs.Status.Failed())
                         {
                             anyError = true;
                         }
@@ -149,7 +149,7 @@ namespace OneLine.Extensions
         ///  This is a helper method which simplifies the delete process of file/s.
         /// It validates every file deleted to check if there was any error deleting any of them.
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="dbContext"></param>
         /// <param name="entity"></param>
         /// <param name="blobsStorage"></param>
@@ -159,30 +159,30 @@ namespace OneLine.Extensions
         /// <param name="actionName"></param>
         /// <param name="remoteIpAddress"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntityAsync<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, TEntity entity, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
-            where TEntity : class
+        public static async Task<ApiResponse<Tuple<T, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntityAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T entity, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class
         {
             if (entity == null)
             {
-                return new ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create<TEntity, IEnumerable<UserBlobs>>(entity, null), "ErrorDeletingRecord");
+                return new ApiResponse<Tuple<T, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create<T, IEnumerable<UserBlobs>>(entity, null), "ErrorDeletingRecord");
             }
             //Helper method that deletes all files in a object
             var DeleteBlobsApiResponse = await dbContext.DeleteUserBlobsFromObjectAsync(entity, blobsStorage, userId, controllerName, actionName, remoteIpAddress);
             var deletedUserBlobs = DeleteBlobsApiResponse.Data.SelectMany(s => s.Data.Select(x => x));
-            if (DeleteBlobsApiResponse.Status == ApiResponseStatus.Failed)
+            if (DeleteBlobsApiResponse.Status.Failed())
             {
-                return new ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create(entity, deletedUserBlobs), DeleteBlobsApiResponse.Message);
+                return new ApiResponse<Tuple<T, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create(entity, deletedUserBlobs), DeleteBlobsApiResponse.Message);
             }
             await dbContext.RemoveAuditedAsync(entity, userId, controllerName, actionName, remoteIpAddress);
             var result = await dbContext.SaveChangesAsync();
-            var message = result.IsSuccesSave() ? "RecordSavedSuccessfully" : "ErrorSavingRecord";
-            return new ApiResponse<Tuple<TEntity, IEnumerable<UserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create(entity, deletedUserBlobs), message);
+            var message = result.Succeeded() ? "RecordSavedSuccessfully" : "ErrorSavingRecord";
+            return new ApiResponse<Tuple<T, IEnumerable<UserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create(entity, deletedUserBlobs), message);
         }
         /// <summary>
         ///  This is a helper method which simplifies the delete process of file/s.
         /// It validates every file deleted to check if there was any error deleting any of them.
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="dbContext"></param>
         /// <param name="entity"></param>
         /// <param name="blobsStorage"></param>
@@ -192,12 +192,36 @@ namespace OneLine.Extensions
         /// <param name="actionName"></param>
         /// <param name="remoteIpAddress"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse<Tuple<IEnumerable<TEntity>, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntitiesAsync<TEntity>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<TEntity> entities, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
-            where TEntity : class
+        public static async Task<ApiResponse<Tuple<T, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntityAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class, new()
+        {
+            if (predicate == null)
+            {
+                return new ApiResponse<Tuple<T, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create<T, IEnumerable<UserBlobs>>(new T(), null), "ErrorDeletingRecord");
+            }
+            var record = dbContext.Set<T>().Where(predicate).FirstOrDefault();
+            return await dbContext.DeleteUserBlobsFromEntityAsync(record, blobsStorage, userId, controllerName, actionName, remoteIpAddress);
+        }
+        /// <summary>
+        ///  This is a helper method which simplifies the delete process of file/s.
+        /// It validates every file deleted to check if there was any error deleting any of them.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dbContext"></param>
+        /// <param name="entity"></param>
+        /// <param name="blobsStorage"></param>
+        /// <param name="userId"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <param name="controllerName"></param>
+        /// <param name="actionName"></param>
+        /// <param name="remoteIpAddress"></param>
+        /// <returns></returns>
+        public static async Task<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntitiesAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> entities, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class
         {
             if (entities == null || !entities.Any())
             {
-                return new ApiResponse<Tuple<IEnumerable<TEntity>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create<IEnumerable<TEntity>, IEnumerable<UserBlobs>>(entities, null), "ErrorDeletingRecord");
+                return new ApiResponse<Tuple<IEnumerable<T>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create<IEnumerable<T>, IEnumerable<UserBlobs>>(entities, null), "ErrorDeletingRecord");
             }
             var deletedUserBlobs = new List<UserBlobs>();
             foreach (var entity in entities)
@@ -205,15 +229,39 @@ namespace OneLine.Extensions
                 //Helper method that deletes all files in a object
                 var DeleteBlobsApiResponse = await dbContext.DeleteUserBlobsFromObjectAsync(entity, blobsStorage, userId, controllerName, actionName, remoteIpAddress);
                 deletedUserBlobs.AddRange(DeleteBlobsApiResponse.Data.SelectMany(s => s.Data.Select(x => x)));
-                if (DeleteBlobsApiResponse.Status == ApiResponseStatus.Failed)
+                if (DeleteBlobsApiResponse.Status.Failed())
                 {
-                    return new ApiResponse<Tuple<IEnumerable<TEntity>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create(entities, deletedUserBlobs.AsEnumerable()), DeleteBlobsApiResponse.Message);
+                    return new ApiResponse<Tuple<IEnumerable<T>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create(entities, deletedUserBlobs.AsEnumerable()), DeleteBlobsApiResponse.Message);
                 }
                 await dbContext.RemoveAuditedAsync(entity, userId, controllerName, actionName, remoteIpAddress);
             }
             var result = await dbContext.SaveChangesAsync();
-            var message = result.IsSuccesSave() ? "RecordSavedSuccessfully" : "ErrorSavingRecord";
-            return new ApiResponse<Tuple<IEnumerable<TEntity>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create(entities, deletedUserBlobs.AsEnumerable()), message);
+            var message = result.Succeeded() ? "RecordSavedSuccessfully" : "ErrorSavingRecord";
+            return new ApiResponse<Tuple<IEnumerable<T>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create(entities, deletedUserBlobs.AsEnumerable()), message);
+        }
+        /// <summary>
+        ///  This is a helper method which simplifies the delete process of file/s.
+        /// It validates every file deleted to check if there was any error deleting any of them.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dbContext"></param>
+        /// <param name="entity"></param>
+        /// <param name="blobsStorage"></param>
+        /// <param name="userId"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <param name="controllerName"></param>
+        /// <param name="actionName"></param>
+        /// <param name="remoteIpAddress"></param>
+        /// <returns></returns>
+        public static async Task<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntitiesAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class
+        {
+            if (predicate == null )
+            {
+                return new ApiResponse<Tuple<IEnumerable<T>, IEnumerable<UserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create<IEnumerable<T>, IEnumerable<UserBlobs>>(Enumerable.Empty<T>(), null), "ErrorDeletingRecord");
+            }
+            var records = dbContext.Set<T>().Where(predicate);
+            return await dbContext.DeleteUserBlobsFromEntitiesAsync(records, blobsStorage, userId, controllerName, actionName, remoteIpAddress);
         }
     }
 }

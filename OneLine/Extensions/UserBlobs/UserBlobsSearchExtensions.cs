@@ -52,7 +52,7 @@ namespace OneLine.Extensions
             {
                 query.OrderByDescending(o => o.CreatedBy);
             }
-            return query.ToApiResponsePaged(Page, PageSize, out Count);
+            return query.ToPagedApiResponse(Page, PageSize, out Count);
         }
         /// <summary>
         /// Search user blobs
@@ -97,7 +97,7 @@ namespace OneLine.Extensions
             {
                 query.OrderByDescending(o => o.CreatedBy);
             }
-            return query.ToApiResponsePaged(Page, PageSize, out Count);
+            return query.ToPagedApiResponse(Page, PageSize, out Count);
         }
         /// <summary>
         /// Gets a list of user blobs
@@ -141,7 +141,7 @@ namespace OneLine.Extensions
             {
                 query.OrderByDescending(o => o.CreatedBy);
             }
-            return query.ToApiResponsePaged(Page, PageSize, out Count);
+            return query.ToPagedApiResponse(Page, PageSize, out Count);
         }
         /// <summary>
         /// Gets a list of user blobs
@@ -187,7 +187,7 @@ namespace OneLine.Extensions
             {
                 query.OrderByDescending(o => o.CreatedBy);
             }
-            return query.ToApiResponsePaged(Page, PageSize, out Count);
+            return query.ToPagedApiResponse(Page, PageSize, out Count);
         }
         /// <summary>
         /// Gets a user blob

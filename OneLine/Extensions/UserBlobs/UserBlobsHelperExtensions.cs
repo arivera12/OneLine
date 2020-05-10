@@ -66,7 +66,7 @@ namespace OneLine.Extensions
         /// <param name="predicate"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<bool>> IsFormFileUploadedAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<bool>> IsFormFileUploadedAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var any = predicate == null ? files.Any() : files.Any(predicate);
             if (!any)

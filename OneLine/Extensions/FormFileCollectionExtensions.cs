@@ -13,19 +13,19 @@ namespace OneLine.Extensions
         {
             return formFiles != null && formFiles.Any(FormBlob);
         }
-        public static bool IsValidFormFile(this IFormFileCollection formFiles, FormFileRules formFileRules)
+        public static bool IsValidFormFile(this IFormFileCollection formFiles, IFormFileRules formFileRules)
         {
             return IsValidFormFile(formFiles, null, formFileRules);
         }
-        public static bool IsValidFormFile(this IFormFileCollection formFiles, Func<IFormFile, bool> FormBlob, FormFileRules formFileRules)
+        public static bool IsValidFormFile(this IFormFileCollection formFiles, Func<IFormFile, bool> FormBlob, IFormFileRules formFileRules)
         {
             return IsValidFormFileApiResponse(formFiles, FormBlob, formFileRules).Status == ApiResponseStatus.Succeeded;
         }
-        public static ApiResponse<string> IsValidFormFileApiResponse(this IFormFileCollection formFiles, FormFileRules formFileRules)
+        public static ApiResponse<string> IsValidFormFileApiResponse(this IFormFileCollection formFiles, IFormFileRules formFileRules)
         {
             return IsValidFormFileApiResponse(formFiles, null, formFileRules);
         }
-        public static ApiResponse<string> IsValidFormFileApiResponse(this IFormFileCollection formFiles, Func<IFormFile, bool> FormBlob, FormFileRules formFileRules)
+        public static ApiResponse<string> IsValidFormFileApiResponse(this IFormFileCollection formFiles, Func<IFormFile, bool> FormBlob, IFormFileRules formFileRules)
         {
             if (formFileRules.AllowedBlobMaxLength <= 0)
             {

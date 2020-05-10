@@ -20,7 +20,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">Set this param if you want to read a file from a specific form field name.</param>
         /// <param name="formFileRules">The rules to apply to the file uploaded.</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<UserBlobs>> CreateUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<UserBlobs>> CreateUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var any = predicate == null ? files.Any() : files.Any(predicate);
             if (!any)
@@ -56,7 +56,7 @@ namespace OneLine.Extensions
         /// <param name="predicate">Set this param if you want to read a file from a specific form field name.</param>
         /// <param name="formFileRules">The rules to apply to the file uploaded.</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateRangeUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateRangeUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var any = predicate == null ? files.Any() : files.Any(predicate);
             if (any)
@@ -95,47 +95,49 @@ namespace OneLine.Extensions
         /// <summary>
         /// This is a helper method which tryies to upload a file and bind the userblob to the model property name
         /// </summary>
-        /// <param name="model">The model to bind the result</param>
+        /// <param name="record">The model to bind the result</param>
         /// <param name="propertyName">The property name of the model to bind</param>
         /// <param name="predicate">The form file field name</param>
         /// <param name="formFileRules">The rules for the files</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<UserBlobs>> CreateAndBindUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, object model, string propertyName, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<UserBlobs>> CreateAndBindUserBlobsAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, string propertyName, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class
         {
             var isFormFileUploadedApiResponse = await dbContext.IsFormFileUploadedAsync(files, predicate, formFileRules, userId, controllerName, actionName, remoteIpAddress);
-            if (isFormFileUploadedApiResponse.Status == ApiResponseStatus.Failed || !isFormFileUploadedApiResponse.Data)
+            if (isFormFileUploadedApiResponse.Status.Failed() || !isFormFileUploadedApiResponse.Data)
             {
                 return new ApiResponse<UserBlobs>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
             }
             var blob = await dbContext.CreateUserBlobsAsync(files, predicate, formFileRules, blobStorage, userId, tableName, controllerName, actionName, remoteIpAddress);
-            if (blob.Status == ApiResponseStatus.Failed)
+            if (blob.Status.Failed())
             {
                 return blob;
             }
-            model.GetType().GetProperty(propertyName).SetValue(model, JsonConvert.SerializeObject(blob.Data));
+            record.GetType().GetProperty(propertyName).SetValue(record, JsonConvert.SerializeObject(blob.Data));
             return blob;
         }
         /// <summary>
         /// This is a helper method which tryies to upload a file/s and bind the userblob to the model property name
         /// </summary>
-        /// <param name="model">The model to bind the result</param>
+        /// <param name="record">The model to bind the result</param>
         /// <param name="propertyName">The property name of the model to bind</param>
         /// <param name="predicate">The form file field name</param>
         /// <param name="formFileRules">The rules for the files</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateRangeAndBindUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, object model, string propertyName, IFormFileCollection files, Func<IFormFile, bool> predicate, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateRangeAndBindUserBlobsAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, string propertyName, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class
         {
             var isFormFileUploadedApiResponse = await dbContext.IsFormFileUploadedAsync(files, predicate, formFileRules, userId, controllerName, actionName, remoteIpAddress);
-            if (isFormFileUploadedApiResponse.Status == ApiResponseStatus.Failed || !isFormFileUploadedApiResponse.Data)
+            if (isFormFileUploadedApiResponse.Status.Failed() || !isFormFileUploadedApiResponse.Data)
             {
                 return new ApiResponse<IEnumerable<UserBlobs>>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
             }
             var blobs = await dbContext.CreateRangeUserBlobsAsync(files, predicate, formFileRules, blobStorage, userId, tableName, controllerName, actionName, remoteIpAddress);
-            if (blobs.Status == ApiResponseStatus.Failed)
+            if (blobs.Status.Failed())
             {
                 return blobs;
             }
-            model.GetType().GetProperty(propertyName).SetValue(model, JsonConvert.SerializeObject(blobs.Data));
+            record.GetType().GetProperty(propertyName).SetValue(record, JsonConvert.SerializeObject(blobs.Data));
             return blobs;
         }
     }

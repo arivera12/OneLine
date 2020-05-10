@@ -9,7 +9,6 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 using Z.EntityFramework.Plus;
 
 namespace OneLine.Extensions
@@ -61,7 +60,7 @@ namespace OneLine.Extensions
             return new ContentResult()
                 .OutputJson
                 (
-                    new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, (Count > 0 ? source : Enumerable.Empty<T>()))
+                    new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, Count > 0 ? source : Enumerable.Empty<T>())
                 );
         }
 
@@ -86,25 +85,30 @@ namespace OneLine.Extensions
                 (
                     new ApiResponse<IPaged<IEnumerable<T>>>()
                     {
-                        Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, (Count > 0 ? source : Enumerable.Empty<T>())),
+                        Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, Count > 0 ? source : Enumerable.Empty<T>()),
                         Message = message,
                         Status = apiResponseStatus
                     }
                 );
         }
+        public static IPaged<IEnumerable<T>> ToPaged<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count)
+        {
+            source = source.Paged(Page, PageSize, out Count);
+            return new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, Count > 0 ? source : Enumerable.Empty<T>());
+        }
 
-        public static IApiResponse<IPaged<IEnumerable<T>>> ToApiResponsePaged<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
+        public static IApiResponse<IPaged<IEnumerable<T>>> ToPagedApiResponse<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
         {
             source = source.Paged(Page, PageSize, out Count);
             return new ApiResponse<IPaged<IEnumerable<T>>>()
             {
-                Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, (Count > 0 ? source : Enumerable.Empty<T>())),
+                Data = new Paged<IEnumerable<T>>(Page.Value, PageSize.Value, Count, Count > 0 ? source : Enumerable.Empty<T>()),
                 Message = message,
                 Status = apiResponseStatus
             };
         }
 
-        public static IApiResponse<IPaged<IEnumerable<T>>> ToApiResponsePaged<T>(this IQueryable<T> source,int? Page, int? PageSize, out int Count, IEnumerable<string> decryptFieldsOnRead, string encryptionKey, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
+        public static IApiResponse<IPaged<IEnumerable<T>>> ToPagedApiResponse<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count, IEnumerable<string> decryptFieldsOnRead, string encryptionKey, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
         {
             source = source.Paged(Page, PageSize, out Count);
             var data = Count > 0 ? source : Enumerable.Empty<T>();

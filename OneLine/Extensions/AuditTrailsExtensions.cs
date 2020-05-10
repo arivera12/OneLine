@@ -41,7 +41,7 @@ namespace OneLine.Extensions
                 CreatedOn = DateTime.Now
             };
         }
-        public static IEnumerable<AuditTrails> CreateAuditTrails<TEntity>(this IEnumerable<TEntity> entities, TransactionType transactionType, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static IEnumerable<AuditTrails> CreateRangeAuditTrails<TEntity>(this IEnumerable<TEntity> entities, TransactionType transactionType, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var AudiTrails = new List<AuditTrails>();
             foreach (var item in entities)
@@ -50,7 +50,7 @@ namespace OneLine.Extensions
             }
             return AudiTrails;
         }
-        public static IEnumerable<AuditTrails> CreateAuditTrails<TEntity>(this IEnumerable<TEntity> entities, string transactionMessage, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static IEnumerable<AuditTrails> CreateRangeAuditTrails<TEntity>(this IEnumerable<TEntity> entities, string transactionMessage, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var AudiTrails = new List<AuditTrails>();
             foreach (var item in entities)

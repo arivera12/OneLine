@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using OneLine.Models;
+using System.Collections.Generic;
 
 namespace OneLine.Validations
 {
@@ -16,6 +17,13 @@ namespace OneLine.Validations
             RuleFor(x => x.FilePath).NotEmpty().WithMessage("UserBlobsFilePathIsRequired").MaximumLength(512).WithMessage("UserBlobsFilePathCanNotBeGreaterThan");
             RuleFor(x => x.TableName).NotEmpty().WithMessage("UserBlobsTableNameIsRequired").MaximumLength(128).WithMessage("UserBlobsFilePathCanNotBeGreaterThan");
             RuleFor(x => x.IsDeleted).NotNull().WithMessage("UserBlobsIsDeletedIsRequired");
+        }
+    }
+    public class UserBlobsCollectionValidator : AbstractValidator<IEnumerable<IUserBlobs>>
+    {
+        public UserBlobsCollectionValidator()
+        {
+            RuleForEach(x => x).SetValidator(new UserBlobsValidator());
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace OneLine.Models
 {
@@ -33,5 +32,56 @@ namespace OneLine.Models
         /// The allowed content dispositions
         /// </summary>
         public virtual IEnumerable<string> AllowedContentDispositions { get; set; }
+        public FormFileRules()
+        { }
+        public FormFileRules(bool isRequired)
+        {
+            IsRequired = isRequired;
+        }
+        public FormFileRules(bool isRequired, long allowedBlobMaxLength)
+        {
+            IsRequired = isRequired;
+            AllowedBlobMaxLength = allowedBlobMaxLength;
+        }
+        public FormFileRules(bool isRequired, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions)
+        {
+            IsRequired = isRequired;
+            AllowedBlobMaxLength = allowedBlobMaxLength;
+            AllowedExtensions = allowedExtensions;
+        }
+        public FormFileRules(bool isRequired, short allowedMaximunFiles, short allowedMinimunFiles, long allowedBlobMaxLength)
+        {
+            IsRequired = isRequired;
+            AllowedMaximunFiles = allowedMaximunFiles;
+            AllowedMinimunFiles = allowedMinimunFiles;
+            AllowedBlobMaxLength = allowedBlobMaxLength;
+        }
+        public FormFileRules(bool isRequired, short allowedMaximunFiles, short allowedMinimunFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions)
+        {
+            IsRequired = isRequired;
+            AllowedMaximunFiles = allowedMaximunFiles;
+            AllowedMinimunFiles = allowedMinimunFiles;
+            AllowedBlobMaxLength = allowedBlobMaxLength;
+            AllowedExtensions = allowedExtensions;
+        }
+        public FormFileRules(bool isRequired, short allowedMaximunFiles, short allowedMinimunFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions, IEnumerable<string> allowedContentTypes)
+        {
+            IsRequired = isRequired;
+            AllowedMaximunFiles = allowedMaximunFiles;
+            AllowedMinimunFiles = allowedMinimunFiles;
+            AllowedBlobMaxLength = allowedBlobMaxLength;
+            AllowedExtensions = allowedExtensions;
+            AllowedContentTypes = allowedContentTypes;
+        }
+        public FormFileRules(bool isRequired, short allowedMaximunFiles, short allowedMinimunFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions, IEnumerable<string> allowedContentTypes, IEnumerable<string> allowedContentDispositions)
+        {
+            IsRequired = isRequired;
+            AllowedMaximunFiles = allowedMaximunFiles;
+            AllowedMinimunFiles = allowedMinimunFiles;
+            AllowedBlobMaxLength = allowedBlobMaxLength;
+            AllowedContentTypes = allowedContentTypes;
+            AllowedExtensions = allowedExtensions;
+            AllowedContentDispositions = allowedContentDispositions;
+        }
     }
 }

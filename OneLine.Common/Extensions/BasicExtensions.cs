@@ -1,3 +1,4 @@
+using FluentValidation;
 using OneLine.Attributes;
 using OneLine.Enums;
 using OneLine.Models;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace OneLine.Extensions
 {
@@ -402,17 +404,6 @@ namespace OneLine.Extensions
                 }
             }
         }
-        public static bool ModelStateIsValid<T>(this T source, out ICollection<ValidationResult> validationResults)
-        {
-            if (source == null)
-                throw new ArgumentNullException("The source is null");
-
-            ValidationContext validationContext = new ValidationContext(source);
-            ICollection<ValidationResult> results = new List<ValidationResult>();
-            var IsValid = Validator.TryValidateObject(source, validationContext, results, true);
-            validationResults = results;
-            return IsValid;
-        }
         public static bool IsSimpleType(this Type type)
         {
             return
@@ -427,6 +418,86 @@ namespace OneLine.Extensions
                 typeof(Guid)
                 }.Contains(type) ||
                 Convert.GetTypeCode(type) != TypeCode.Object;
+        }
+        public static async Task<IApiResponse<T>> ValidateAsync<T>(this T record, IValidator validator)
+            where T : class
+        {
+            if (record == null)
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "RecordIsNull");
+            }
+            if (validator == null)
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "ValidatorIsNull");
+            }
+            var validationResult = await validator.ValidateAsync(record);
+            if (!validationResult.IsValid)
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, record, validationResult.Errors.Select(x => x.ErrorMessage));
+            }
+            return new ApiResponse<T>(ApiResponseStatus.Succeeded, record);
+        }
+        public static async Task<IApiResponse<T>> ValidateAsync<T>(this T record, IValidator validator, string userId)
+            where T : class
+        {
+            if (record == null)
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "RecordIsNull");
+            }
+            if (validator == null)
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "ValidatorIsNull");
+            }
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "UserIdIsNullOrEmpty");
+            }
+            var validationResult = await validator.ValidateAsync(record);
+            if (!validationResult.IsValid)
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, record, validationResult.Errors.Select(x => x.ErrorMessage));
+            }
+            return new ApiResponse<T>(ApiResponseStatus.Succeeded, record);
+        }
+        public static async Task<IApiResponse<IEnumerable<T>>> ValidateRangeAsync<T>(this IEnumerable<T> records, IValidator validator)
+            where T : class
+        {
+            if (records == null || !records.Any())
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "RecordIsNull");
+            }
+            if (validator == null)
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "ValidatorIsNull");
+            }
+            var validationResult = await validator.ValidateAsync(records);
+            if (!validationResult.IsValid)
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, validationResult.Errors.Select(x => x.ErrorMessage));
+            }
+            return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Succeeded, records);
+        }
+        public static async Task<IApiResponse<IEnumerable<T>>> ValidateRangeAsync<T>(this IEnumerable<T> records, IValidator validator, string userId)
+            where T : class
+        {
+            if (records == null || !records.Any())
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "RecordIsNull");
+            }
+            if (validator == null)
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "ValidatorIsNull");
+            }
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "UserIdIsNullOrEmpty");
+            }
+            var validationResult = await validator.ValidateAsync(records);
+            if (!validationResult.IsValid)
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, validationResult.Errors.Select(x => x.ErrorMessage));
+            }
+            return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Succeeded, records);
         }
     }
 }

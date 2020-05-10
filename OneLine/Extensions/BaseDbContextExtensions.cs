@@ -261,29 +261,29 @@ namespace OneLine.Extensions
 
         #region Search and Convert to Csv
 
-        public static byte[] SearchAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicate = null)
+        public static IApiResponse<byte[]> SearchAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicate = null)
             where T : class
         {
             var result = dbContext.Search(predicate, beforePredicate, afterPredicate);
-            return result?.Data?.ToCsvByteArray();
+            return result?.Data?.ToCsvByteArray().ToApiResponse();
         }
-        public static async Task<byte[]> SearchAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<byte[]>> SearchAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class
         {
             var result = await dbContext.SearchAuditedAsync(predicate, userId, beforePredicate, afterPredicate, controllerName, actionName, remoteIpAddress);
-            return result.Data.ToCsvByteArray();
+            return result?.Data?.ToCsvByteArray().ToApiResponse();
         }
-        public static byte[] SearchPagedAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicateBeforeSorting = null, Action<IQueryable> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null)
+        public static IApiResponse<byte[]> SearchPagedAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicateBeforeSorting = null, Action<IQueryable> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null)
             where T : class
         {
             var result = dbContext.SearchPaged(predicate, pageIndex, pageSize, sortBy, descending, out count, beforePredicate, afterPredicateBeforeSorting, afterSortingBeforePaging, afterPaging);
-            return result?.Data?.Data?.ToCsvByteArray(); 
+            return result?.Data?.Data?.ToCsvByteArray().ToApiResponse(); 
         }
-        public static async Task<byte[]> SearchPagedAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicateBeforeSorting = null, Action<IQueryable> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<byte[]>> SearchPagedAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicateBeforeSorting = null, Action<IQueryable> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class
         {
             var result = await dbContext.SearchPagedAuditedAsync(predicate, pageIndex, pageSize, sortBy, descending, userId, beforePredicate, afterPredicateBeforeSorting, afterSortingBeforePaging, afterPaging, controllerName, actionName, remoteIpAddress);
-            return result?.Data?.Data?.ToCsvByteArray();
+            return result?.Data?.Data?.ToCsvByteArray().ToApiResponse();
         }
 
         #endregion
@@ -451,7 +451,7 @@ namespace OneLine.Extensions
             await dbContext.CreateAuditrailsAsync(records, "Records selected on select range operation", userId, controllerName, actionName, remoteIpAddress);
             return records.AsEnumerable().ToApiResponse();
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> GetRangeAsyn<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate)
+        public static async Task<IApiResponse<IEnumerable<T>>> GetRangeAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate)
             where T : class, new()
         {
             if (predicate == null)

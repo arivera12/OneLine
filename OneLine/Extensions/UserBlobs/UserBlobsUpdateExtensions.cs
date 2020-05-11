@@ -20,27 +20,6 @@ namespace OneLine.Extensions
         /// <param name="predicate">Set this param if you want to read a file from a specific form field name.</param>
         /// <param name="formFileRules">The rules to apply to the file uploaded.</param>
         /// <returns></returns>
-        public static async Task<IApiResponse<Tuple<UserBlobs, UserBlobs>>> UpdateUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, UserBlobs userBlobs, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
-        {
-            var addHttpBlobApiResponse = await dbContext.CreateUserBlobsAsync(files, predicate, formFileRules, blobStorage, userId, userBlobs.TableName, controllerName, actionName, remoteIpAddress);
-            if (addHttpBlobApiResponse.Status == ApiResponseStatus.Failed)
-            {
-                return new ApiResponse<Tuple<UserBlobs, UserBlobs>>(ApiResponseStatus.Failed, Tuple.Create(addHttpBlobApiResponse.Data, new UserBlobs()), addHttpBlobApiResponse.Message);
-            }
-            var deleteBlobApiResponse = await dbContext.DeleteUserBlobsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-            if (addHttpBlobApiResponse.Status == ApiResponseStatus.Failed)
-            {
-                return new ApiResponse<Tuple<UserBlobs, UserBlobs>>(ApiResponseStatus.Failed, Tuple.Create(addHttpBlobApiResponse.Data, deleteBlobApiResponse.Data), deleteBlobApiResponse.Message);
-            }
-            return new ApiResponse<Tuple<UserBlobs, UserBlobs>>(ApiResponseStatus.Succeeded, Tuple.Create(addHttpBlobApiResponse.Data, deleteBlobApiResponse.Data));
-        }
-        /// <summary>
-        /// Updates a blob from the storage. Delete the provide userBlob and upload the new file from the http request.
-        /// </summary>
-        /// <param name="UserBlobs">The user blob to delete</param>
-        /// <param name="predicate">Set this param if you want to read a file from a specific form field name.</param>
-        /// <param name="formFileRules">The rules to apply to the file uploaded.</param>
-        /// <returns></returns>
         public static async Task<IApiResponse<Tuple<UserBlobs, UserBlobs>>> UpdateUserBlobsAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, IFormFileCollection files, Func<IFormFile, bool> predicate, IUploadFormFile uploadFormFile, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class
         {

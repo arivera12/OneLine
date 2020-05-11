@@ -13,10 +13,11 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed types and fixed typos.</PackageReleaseNotes>
-    <Version>2.0.31</Version>
+    <PackageReleaseNotes>Added blazorstrap bases anonymous and authorized with some default implementations using blazorstrap and blazor sweet alert.</PackageReleaseNotes>
+    <Version>2.0.36</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <AssemblyVersion>2.0.36.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

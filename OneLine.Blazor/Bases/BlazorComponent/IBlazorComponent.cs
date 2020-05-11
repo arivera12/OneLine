@@ -3,6 +3,7 @@ using BlazorDownloadFile;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
@@ -14,6 +15,7 @@ namespace OneLine.Blazor.Bases
         BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
         BlazorDownloadFileService BlazorDownloadFileService { get; set; }
         SweetAlertService SweetAlertService { get; set; }
+        HttpClient HttpClient { get; set; }
         bool IsDesktop { get; set; }
         bool IsTablet { get; set; }
         bool IsMobile { get; set; }

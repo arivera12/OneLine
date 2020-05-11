@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract partial class BlazorDataViewComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        IBlazorDataViewComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract partial class BlazorDataViewComponentAuthorizedBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+        IBlazorDataViewComponentAuthorized<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : class, new()
-        where TIdentifier : class, IIdentifier<TId>, new()
+        where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : class, IBlobData
         where TBlobValidator : class, IValidator, new()
@@ -27,7 +27,7 @@ namespace OneLine.Blazor.Bases
         /// <summary>
         /// Constructs an instance of <see cref="BlazorFormComponentBase"/>.
         /// </summary>
-        public BlazorDataViewComponentBase() : base()
+        public BlazorDataViewComponentAuthorizedBase() : base()
         {
             _renderFragment = builder =>
             {

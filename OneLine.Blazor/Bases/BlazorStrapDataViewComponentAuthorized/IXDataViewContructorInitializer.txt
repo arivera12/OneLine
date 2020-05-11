@@ -1,0 +1,24 @@
+﻿public BlazorDataViewComponentBase() : base()
+        {
+        }
+        public BlazorDataViewComponentBase(object searchExtraParams) : base(searchExtraParams)
+        {
+        }
+        public BlazorDataViewComponentBase(SearchPaging searchPaging) : base(searchPaging)
+        {
+        }
+        public BlazorDataViewComponentBase(SearchPaging searchPaging, object searchExtraParams) : base(searchPaging, searchExtraParams)
+        {
+        }
+        public BlazorDataViewComponentBase(TIdentifier identifier) : base(identifier)
+        {
+        }
+        public BlazorDataViewComponentBase(IEnumerable<TIdentifier> identifiers) : base(identifiers)
+        {
+        }
+        public BlazorDataViewComponentBase(T record) : base(record)
+        {
+        }
+        public BlazorDataViewComponentBase(IEnumerable<T> records) : base(records)
+        {
+        }

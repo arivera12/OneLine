@@ -11,8 +11,8 @@ namespace OneLine.Bases
     public abstract partial class DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : class, new()
-        where TIdentifier : class, IIdentifier<TId>, new()
-        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
+        where TIdentifier : IIdentifier<TId>, new()
+        where THttpService : IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : class, IBlobData
         where TBlobValidator : class, IValidator, new()
         where TUserBlobs : class, IUserBlobs

@@ -8,23 +8,26 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 using OneLine.Bases;
 using OneLine.Enums;
+using OneLine.Extensions;
 using OneLine.Models;
+using OneLine.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract partial class BlazorFormComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public abstract partial class BlazorStrapIndexComponentAuthorized<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
-        IBlazorFormComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+        IBlazorStrapIndexComponentAuthorized<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : class, new()
-        where TIdentifier : class, IIdentifier<TId>, new()
+        where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
+        where TBlobValidator :class, IValidator, new()
         where TUserBlobs : class, IUserBlobs
     {
         [Inject] public override IConfiguration Configuration { get; set; }
@@ -33,6 +36,7 @@ namespace OneLine.Blazor.Bases
         [Inject] public virtual BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
         [Inject] public virtual BlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
+        [Inject] public virtual HttpClient HttpClient { get; set; }
         [Parameter] public override T Record { get; set; }
         [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
         [Parameter] public override TIdentifier Identifier { get; set; }
@@ -78,22 +82,49 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnSaveFailed { get; set; }
         [Parameter] public override Action OnValidationFailed { get; set; }
         [Parameter] public override Action OnValidationSucceeded { get; set; }
+        [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
+        public AspNetUsersViewModel User { get; set; }
+        public bool IsFormOpen { get; set; }
+        public bool ShowModal { get; set; }
         public virtual async Task OnAfterFirstRenderAsync()
         {
-            IsMobile = await BlazorCurrentDeviceService.Mobile();
-            IsTablet = await BlazorCurrentDeviceService.Tablet();
-            IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            if (Record == null && (Records == null || !Records.Any()))
+            HttpService.HttpClient = HttpClient;
+            User = await ApplicationState<AspNetUsersViewModel>.GetApplicationUserSecure();
+            if (!await ApplicationState<AspNetUsersViewModel>.IsLoggedInSecure() || User == null ||
+                (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => User.Roles.Contains(w))))
             {
-                if ((Identifier != null && Identifier.Model != null) ||
-                    (Identifiers != null && Identifiers.Any()))
+                await ApplicationState<AspNetUsersViewModel>.Logout();
+                NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");
+            }
+            else
+            {
+                IsMobile = await BlazorCurrentDeviceService.Mobile();
+                IsTablet = await BlazorCurrentDeviceService.Tablet();
+                IsDesktop = await BlazorCurrentDeviceService.Desktop();
+                if (Record == null && (Records == null || !Records.Any()))
                 {
-                    await Load();
+                    if ((Identifier != null && Identifier.Model != null) ||
+                        (Identifiers != null && Identifiers.Any()))
+                    {
+                        await Load();
+                    }
                 }
             }
+        }
+        public virtual void RecordSelected(T record)
+        {
+            Record = record;
+            ShowModal = true;
+        }
+        public virtual void OpenForm(FormState formState)
+        {
+            FormState = formState;
+            ShowModal = false;
+            IsFormOpen = true;
+            StateHasChanged();
         }
     }
 }

@@ -17,12 +17,22 @@ namespace OneLine.Extensions
             }
             return !source.Any();
         }
-
+        public static bool IsNotNullAndNotEmpty<T>(this IEnumerable<T> source)
+        {
+            if (source.IsNull())
+            {
+                return false;
+            }
+            return source.Any();
+        }
         public static bool IsEmpty<T>(this IEnumerable<T> source)
         {
             return !source.Any();
         }
-
+        public static bool IsNotEmpty<T>(this IEnumerable<T> source)
+        {
+            return source.Any();
+        }
         public static IEnumerable<T> Paged<T>(this IEnumerable<T> source, int? Page, int? RowsPerPage)
         {
             if (source == null)

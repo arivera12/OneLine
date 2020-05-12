@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Added blazorstrap bases anonymous and authorized with some default implementations using blazorstrap and blazor sweet alert.</PackageReleaseNotes>
-    <Version>2.0.36</Version>
+    <PackageReleaseNotes>Added missing base implementation PagingChange method for PagingControlToolBar.</PackageReleaseNotes>
+    <Version>2.0.37</Version>
   </PropertyGroup>
 
 

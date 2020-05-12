@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 using OneLine.Bases;
 using OneLine.Enums;
+using OneLine.Extensions;
 using OneLine.Models;
 using System;
 using System.Collections.Generic;
@@ -91,6 +92,11 @@ namespace OneLine.Blazor.Bases
                     await Load();
                 }
             }
+        }
+        public virtual async Task PagingChange(IPaging paging)
+        {
+            SearchPaging.AutoMap(paging);
+            await Search();
         }
     }
 }

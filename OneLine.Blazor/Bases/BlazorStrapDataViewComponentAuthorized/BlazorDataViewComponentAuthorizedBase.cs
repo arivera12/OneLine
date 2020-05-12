@@ -105,5 +105,10 @@ namespace OneLine.Blazor.Bases
                 }
             }
         }
+        public virtual async Task PagingChange(IPaging paging)
+        {
+            SearchPaging.AutoMap(paging);
+            await Search();
+        }
     }
 }

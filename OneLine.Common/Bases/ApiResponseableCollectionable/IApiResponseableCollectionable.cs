@@ -10,7 +10,7 @@ namespace OneLine.Bases
     /// <typeparam name="T">The type of the api response collection</typeparam>
     public interface IApiResponseableCollectionable<T>
     {
-        IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        Action<IResponseResult<IApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        ResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        Action<ResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
     }
 }

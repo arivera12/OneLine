@@ -9,7 +9,7 @@ namespace OneLine.Bases
 	/// <typeparam name="T">The api response type</typeparam>
     public interface IApiResponseable<T>
     {
-        IResponseResult<IApiResponse<T>> Response { get; set; }
-        Action<IResponseResult<IApiResponse<T>>> ResponseChanged { get; set; }
+        ResponseResult<ApiResponse<T>> Response { get; set; }
+        Action<ResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
     }
 }

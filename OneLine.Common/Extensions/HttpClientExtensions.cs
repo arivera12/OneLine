@@ -33,7 +33,7 @@ namespace OneLine.Extensions
             => JsonConvert.DeserializeObject<T>(await httpClient.GetStringAsync(requestUri));
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri, object queryStringParameters)
             => JsonConvert.DeserializeObject<T>(await httpClient.GetStringAsync($"{requestUri}?{queryStringParameters?.ToUrlQueryString()}"));
-        public static async Task<IResponseResult<T>> GetJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri)
+        public static async Task<ResponseResult<T>> GetJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex);
             }
         }
-        public static async Task<IResponseResult<T>> GetJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object queryStringParameters)
+        public static async Task<ResponseResult<T>> GetJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object queryStringParameters)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace OneLine.Extensions
             => httpClient.SendJsonAsync(HttpMethod.Post, requestUri, content);
         public static Task<T> PostJsonAsync<T>(this HttpClient httpClient, string requestUri, object content)
             => httpClient.SendJsonAsync<T>(HttpMethod.Post, requestUri, content);
-        public static async Task<IResponseResult<T>> PostJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content)
+        public static async Task<ResponseResult<T>> PostJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace OneLine.Extensions
             => httpClient.SendJsonAsync(HttpMethod.Put, requestUri, content);
         public static Task<T> PutJsonAsync<T>(this HttpClient httpClient, string requestUri, object content)
             => httpClient.SendJsonAsync<T>(HttpMethod.Put, requestUri, content);
-        public static async Task<IResponseResult<T>> PutJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content)
+        public static async Task<ResponseResult<T>> PutJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace OneLine.Extensions
             => httpClient.SendJsonAsync(HttpMethod.Delete, requestUri, content);
         public static Task<T> DeleteJsonAsync<T>(this HttpClient httpClient, string requestUri, object content)
             => httpClient.SendJsonAsync<T>(HttpMethod.Delete, requestUri, content);
-        public static async Task<IResponseResult<T>> DeleteJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content)
+        public static async Task<ResponseResult<T>> DeleteJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace OneLine.Extensions
                 }
             }
         }
-        public static async Task<IResponseResult<T>> SendJsonResponseResultAsync<T>(this HttpClient httpClient, HttpMethod method, string requestUri, object content)
+        public static async Task<ResponseResult<T>> SendJsonResponseResultAsync<T>(this HttpClient httpClient, HttpMethod method, string requestUri, object content)
         {
             try
             {
@@ -152,31 +152,31 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex);
             }
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content)
         {
-            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, content);
+            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, content);
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IValidator validator)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IValidator validator)
         {
             var validationResult = await validator.ValidateAsync(content);
             if (!validationResult.IsValid)
             {
-                return new ResponseResult<IApiResponse<TResponse>>
+                return new ResponseResult<ApiResponse<TResponse>>
                 {
                     Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                 };
             }
-            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, content);
+            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, content);
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents)
         {
-            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, contents);
+            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, contents);
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator)
         {
             if (contents == null || !contents.Any())
             {
-                return new ResponseResult<IApiResponse<TResponse>>
+                return new ResponseResult<ApiResponse<TResponse>>
                 {
                     Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "CollectionIsNullOrEmpty", true)
                 };
@@ -186,34 +186,34 @@ namespace OneLine.Extensions
                 var validationResult = await validator.ValidateAsync(content);
                 if (!validationResult.IsValid)
                 {
-                    return new ResponseResult<IApiResponse<TResponse>>
+                    return new ResponseResult<ApiResponse<TResponse>>
                     {
                         Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                     };
                 }
             }
-            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, contents);
+            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, contents);
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent, TValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent, TValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content)
             where TValidator : IValidator, new()
         {
             TValidator validator = new TValidator();
             var validationResult = await validator.ValidateAsync(content);
             if (!validationResult.IsValid)
             {
-                return new ResponseResult<IApiResponse<TResponse>>
+                return new ResponseResult<ApiResponse<TResponse>>
                 {
                     Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                 };
             }
-            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, content);
+            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, content);
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent, TValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent, TValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents)
             where TValidator : IValidator, new()
         {
             if (contents == null || !contents.Any())
             {
-                return new ResponseResult<IApiResponse<TResponse>>
+                return new ResponseResult<ApiResponse<TResponse>>
                 {
                     Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "CollectionIsNullOrEmpty", true)
                 };
@@ -224,13 +224,13 @@ namespace OneLine.Extensions
                 var validationResult = await validator.ValidateAsync(content);
                 if (!validationResult.IsValid)
                 {
-                    return new ResponseResult<IApiResponse<TResponse>>
+                    return new ResponseResult<ApiResponse<TResponse>>
                     {
                         Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                     };
                 }
             }
-            return await httpClient.SendJsonResponseResultAsync<IApiResponse<TResponse>>(method, requestUri, contents);
+            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, contents);
         }
 
         #endregion
@@ -256,7 +256,7 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex);
             }
         }
-        public static async Task<IApiResponse<TResponse>> SendBlobDataAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
+        public static async Task<ApiResponse<TResponse>> SendBlobDataAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
             where TBlobData : IBlobData
         {
             var multipartFormDataContent = new MultipartFormDataContent();
@@ -277,17 +277,17 @@ namespace OneLine.Extensions
             var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
             return new ApiResponse<TResponse>(ApiResponseStatus.Succeeded, JsonConvert.DeserializeObject<TResponse>(strResponse));
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendBlobDataResponseResultAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendBlobDataResponseResultAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
             where TBlobData : IBlobData
         {
             try
             {
                 var response = await httpClient.SendBlobDataAsync<TResponse, TBlobData>(httpRequestMessage, blobDatas, blobValidator);
-                return new ResponseResult<IApiResponse<TResponse>>(response, null);
+                return new ResponseResult<ApiResponse<TResponse>>(response, null);
             }
             catch (Exception ex)
             {
-                return new ResponseResult<IApiResponse<TResponse>>(default, ex);
+                return new ResponseResult<ApiResponse<TResponse>>(default, ex);
             }
         }
 
@@ -342,7 +342,7 @@ namespace OneLine.Extensions
             var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(strResponse);
         }
-        public static async Task<IResponseResult<T>> SendJsonWithFormDataResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, MultipartFormDataContent multipartFormDataContent)
+        public static async Task<ResponseResult<T>> SendJsonWithFormDataResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, MultipartFormDataContent multipartFormDataContent)
         {
             try
             {
@@ -354,7 +354,7 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex);
             }
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IEnumerable<TBlobData> blobDatas)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IEnumerable<TBlobData> blobDatas)
            where TBlobData : IBlobData
         {
             var multipartFormDataContent = new MultipartFormDataContent();
@@ -365,15 +365,15 @@ namespace OneLine.Extensions
                     multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
                 }
             }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
+            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IValidator validator, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IValidator validator, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
            where TBlobData : IBlobData
         {
             var validationResult = await validator.ValidateAsync(content);
             if (!validationResult.IsValid)
             {
-                return new ResponseResult<IApiResponse<TResponse>>
+                return new ResponseResult<ApiResponse<TResponse>>
                 {
                     Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                 };
@@ -386,7 +386,7 @@ namespace OneLine.Extensions
                     var blobValidationResult = await blobValidator.ValidateAsync(blob);
                     if (!blobValidationResult.IsValid)
                     {
-                        return new ResponseResult<IApiResponse<TResponse>>
+                        return new ResponseResult<ApiResponse<TResponse>>
                         {
                             Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                         };
@@ -394,9 +394,9 @@ namespace OneLine.Extensions
                     multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
                 }
             }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
+            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IEnumerable<TBlobData> blobDatas)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonRangeWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IEnumerable<TBlobData> blobDatas)
           where TBlobData : IBlobData
         {
             var multipartFormDataContent = new MultipartFormDataContent();
@@ -407,14 +407,14 @@ namespace OneLine.Extensions
                     multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
                 }
             }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
+            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
         }
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonRangeWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonRangeWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
            where TBlobData : IBlobData
         {
             if (contents == null || !contents.Any())
             {
-                return new ResponseResult<IApiResponse<TResponse>>
+                return new ResponseResult<ApiResponse<TResponse>>
                 {
                     Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "CollectionIsNullOrEmpty", true)
                 };
@@ -424,7 +424,7 @@ namespace OneLine.Extensions
                 var validationResult = await validator.ValidateAsync(content);
                 if (!validationResult.IsValid)
                 {
-                    return new ResponseResult<IApiResponse<TResponse>>
+                    return new ResponseResult<ApiResponse<TResponse>>
                     {
                         Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                     };
@@ -438,7 +438,7 @@ namespace OneLine.Extensions
                     var blobValidationResult = await blobValidator.ValidateAsync(blob);
                     if (!blobValidationResult.IsValid)
                     {
-                        return new ResponseResult<IApiResponse<TResponse>>
+                        return new ResponseResult<ApiResponse<TResponse>>
                         {
                             Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage))
                         };
@@ -446,10 +446,10 @@ namespace OneLine.Extensions
                     multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
                 }
             }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
+            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
         }
 
-        public static async Task<IResponseResult<IApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData, TValidator, TBlobValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IEnumerable<TBlobData> blobDatas)
+        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData, TValidator, TBlobValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IEnumerable<TBlobData> blobDatas)
             where TBlobData : IBlobData
             where TValidator : IValidator, new()
             where TBlobValidator : IValidator, new()
@@ -458,7 +458,7 @@ namespace OneLine.Extensions
             var validationResult = await validator.ValidateAsync(content);
             if (!validationResult.IsValid)
             {
-                return new ResponseResult<IApiResponse<TResponse>>
+                return new ResponseResult<ApiResponse<TResponse>>
                 {
                     Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                 };
@@ -472,7 +472,7 @@ namespace OneLine.Extensions
                     var blobValidationResult = await blobValidator.ValidateAsync(blob);
                     if (!blobValidationResult.IsValid)
                     {
-                        return new ResponseResult<IApiResponse<TResponse>>
+                        return new ResponseResult<ApiResponse<TResponse>>
                         {
                             Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage))
                         };
@@ -480,7 +480,7 @@ namespace OneLine.Extensions
                     multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
                 }
             }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<IApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
+            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
         }
 
         #endregion
@@ -510,7 +510,7 @@ namespace OneLine.Extensions
             var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(strResponse);
         }
-        public static async Task<IResponseResult<T>> SendJsonWithHttpContentsResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, IEnumerable<HttpContent> httpContents)
+        public static async Task<ResponseResult<T>> SendJsonWithHttpContentsResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, IEnumerable<HttpContent> httpContents)
         {
             try
             {
@@ -532,7 +532,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsByteArrayAsync();
         }
-        public static async Task<IResponseResult<byte[]>> DownloadBlobAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
+        public static async Task<ResponseResult<byte[]>> DownloadBlobAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
             try
             {
@@ -560,7 +560,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsByteArrayAsync();
         }
-        public static async Task<IResponseResult<byte[]>> SendJsonDownloadBlobAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<ResponseResult<byte[]>> SendJsonDownloadBlobAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
         {
             try
             {
@@ -594,7 +594,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsByteArrayAsync();
         }
-        public static async Task<IResponseResult<byte[]>> SendJsonDownloadBlobAsByteArrayResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
+        public static async Task<ResponseResult<byte[]>> SendJsonDownloadBlobAsByteArrayResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
             where TContent : class
         {
             try
@@ -636,7 +636,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsByteArrayAsync();
         }
-        public static async Task<IResponseResult<byte[]>> SendJsonRangeDownloadBlobAsByteArrayResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
+        public static async Task<ResponseResult<byte[]>> SendJsonRangeDownloadBlobAsByteArrayResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
             where TContent : class
         {
             try
@@ -659,7 +659,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
         }
-        public static async Task<IResponseResult<Stream>> DownloadBlobAsStreamResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
+        public static async Task<ResponseResult<Stream>> DownloadBlobAsStreamResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
             try
             {
@@ -687,7 +687,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
         }
-        public static async Task<IResponseResult<Stream>> SendJsonDownloadBlobAsStreamResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<ResponseResult<Stream>> SendJsonDownloadBlobAsStreamResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
         {
             try
             {
@@ -725,7 +725,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
         }
-        public static async Task<IResponseResult<Stream>> SendJsonDownloadBlobAsStreamResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
+        public static async Task<ResponseResult<Stream>> SendJsonDownloadBlobAsStreamResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
             where TContent : class
         {
             try
@@ -767,7 +767,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
         }
-        public static async Task<IResponseResult<Stream>> SendJsonRangeDownloadBlobAsStreamResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
+        public static async Task<ResponseResult<Stream>> SendJsonRangeDownloadBlobAsStreamResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
             where TContent : class
         {
             try
@@ -790,7 +790,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return Convert.ToBase64String(await response.Content.ReadAsByteArrayAsync());
         }
-        public static async Task<IResponseResult<string>> DownloadBlobAsBase64StringResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
+        public static async Task<ResponseResult<string>> DownloadBlobAsBase64StringResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
             try
             {
@@ -818,7 +818,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return Convert.ToBase64String(await response.Content.ReadAsByteArrayAsync());
         }
-        public static async Task<IResponseResult<string>> SendJsonDownloadBlobAsBase64StringResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<ResponseResult<string>> SendJsonDownloadBlobAsBase64StringResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
         {
             try
             {
@@ -840,7 +840,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return Convert.FromBase64String(await response.Content.ReadAsStringAsync());
         }
-        public static async Task<IResponseResult<byte[]>> DownloadBase64StringAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
+        public static async Task<ResponseResult<byte[]>> DownloadBase64StringAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
             try
             {
@@ -868,7 +868,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return Convert.FromBase64String(await response.Content.ReadAsStringAsync());
         }
-        public static async Task<IResponseResult<byte[]>> SendJsonDownloadBase64StringAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<ResponseResult<byte[]>> SendJsonDownloadBase64StringAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
         {
             try
             {

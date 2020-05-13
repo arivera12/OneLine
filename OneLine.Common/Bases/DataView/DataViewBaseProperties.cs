@@ -26,9 +26,9 @@ namespace OneLine.Bases
         public virtual string FilterSortBy { get; set; }
         public virtual bool FilterDescending { get; set; }
         public virtual ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
-        public virtual IResponseResult<IApiResponse<T>> Response { get; set; }
-        public virtual IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        public virtual IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>> ResponsePaged { get; set; }
+        public virtual ResponseResult<ApiResponse<T>> Response { get; set; }
+        public virtual ResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        public virtual ResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
         public virtual THttpService HttpService { get; set; }
         public virtual IConfiguration Configuration { get; set; }
         public virtual ISearchPaging SearchPaging { get; set; }
@@ -40,9 +40,9 @@ namespace OneLine.Bases
         public virtual long MaximumRecordsSelections { get; set; }
         public virtual bool MinimunRecordsSelectionsReached { get; set; }
         public virtual bool MaximumRecordsSelectionsReached { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> ResponseChanged { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
+        public virtual Action<ResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
+        public virtual Action<ResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        public virtual Action<ResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
         public virtual Action<Action> OnBeforeSearch { get; set; }
         public virtual Action OnAfterSearch { get; set; }
         public virtual Action<TIdentifier> IdentifierChanged { get; set; }

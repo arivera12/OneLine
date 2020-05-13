@@ -53,75 +53,75 @@ namespace OneLine.Bases
         public HttpBaseUserBlobsService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
         }
-        public virtual async Task<IResponseResult<IApiResponse<TUserBlobs>>> Add(IEnumerable<TBlobData> blobDatas)
+        public virtual async Task<ResponseResult<ApiResponse<TUserBlobs>>> Add(IEnumerable<TBlobData> blobDatas)
         {
             return await HttpClient.SendBlobDataResponseResultAsync<TUserBlobs, TBlobData>(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddMethod}"), blobDatas, new BlobDataValidator());
         }
-        public virtual async Task<IResponseResult<IApiResponse<IEnumerable<TUserBlobs>>>> AddRange(IEnumerable<TBlobData> blobDatas)
+        public virtual async Task<ResponseResult<ApiResponse<IEnumerable<TUserBlobs>>>> AddRange(IEnumerable<TBlobData> blobDatas)
         {
             return await HttpClient.SendBlobDataResponseResultAsync<IEnumerable<TUserBlobs>, TBlobData>(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddRangeMethod}"), blobDatas, new BlobDataValidator());
         }
-        public virtual async Task<IResponseResult<IApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier, IValidator validator)
+        public virtual async Task<ResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier, IValidator validator)
         {
             return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Delete, $"{GetApi()}/{ControllerName}/{DeleteMethod}", identifier, validator);
         }
-        public virtual async Task<IResponseResult<IApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator)
+        public virtual async Task<ResponseResult<ApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator)
         {
             return await HttpClient.SendJsonRangeResponseResultAsync<IEnumerable<TResponse>, TIdentifier>(HttpMethod.Delete, $"{GetApi()}/{ControllerName}/{DeleteRangeMethod}", identifiers, validator);
         }
-        public virtual async Task<IResponseResult<IApiResponse<Tuple<string, TUserBlobs>>>> DownloadBase64(TIdentifier identifier, IValidator validator)
+        public virtual async Task<ResponseResult<ApiResponse<Tuple<string, TUserBlobs>>>> DownloadBase64(TIdentifier identifier, IValidator validator)
         {
             return await HttpClient.SendJsonResponseResultAsync<Tuple<string, TUserBlobs>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadBase64Method}", identifier, validator);
         }
-        public virtual async Task<IResponseResult<Stream>> DownloadBinary(TIdentifier identifier, IValidator validator)
+        public virtual async Task<ResponseResult<Stream>> DownloadBinary(TIdentifier identifier, IValidator validator)
         {
             return await HttpClient.SendJsonDownloadBlobAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadBinaryMethod}"), identifier, validator);
         }
-        public virtual async Task<IResponseResult<Stream>> DownloadCsvExcel(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<ResponseResult<Stream>> DownloadCsvExcel(ISearchPaging SearchPaging, object searchExtraParams)
         {
             return await HttpClient.SendJsonDownloadBlobAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadCsvExcelMethod}"), new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<Stream>> DownloadCsvExcelOwns(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<ResponseResult<Stream>> DownloadCsvExcelOwns(ISearchPaging SearchPaging, object searchExtraParams)
         {
             return await HttpClient.SendJsonDownloadBlobAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadCsvExcelOwnsMethod}"), new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<IApiResponse<Tuple<IEnumerable<string>, IEnumerable<TUserBlobs>>>>> DownloadRangeBase64(IEnumerable<TIdentifier> identifiers, IValidator validator)
+        public virtual async Task<ResponseResult<ApiResponse<Tuple<IEnumerable<string>, IEnumerable<TUserBlobs>>>>> DownloadRangeBase64(IEnumerable<TIdentifier> identifiers, IValidator validator)
         {
             return await HttpClient.SendJsonRangeResponseResultAsync<Tuple<IEnumerable<string>, IEnumerable<TUserBlobs>>, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadRangeBase64Method}", identifiers, validator);
         }
-        public virtual async Task<IResponseResult<Stream>> DownloadRangeBinary(IEnumerable<TIdentifier>  identifiers, IValidator validator)
+        public virtual async Task<ResponseResult<Stream>> DownloadRangeBinary(IEnumerable<TIdentifier>  identifiers, IValidator validator)
         {
             return await HttpClient.SendJsonRangeDownloadBlobAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadRangeBase64Method}"), identifiers, validator);
         }
-        public virtual async Task<IResponseResult<IApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier, IValidator validator)
+        public virtual async Task<ResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier, IValidator validator)
         {
             return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{GetOneMethod}", identifier, validator);
         }
-        public virtual async Task<IResponseResult<IApiResponse<TResponse>>> GetOneOwns<TResponse>(TIdentifier identifier, IValidator validator)
+        public virtual async Task<ResponseResult<ApiResponse<TResponse>>> GetOneOwns<TResponse>(TIdentifier identifier, IValidator validator)
         {
             return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{GetOneOwnsMethod}", identifier, validator);
         }
-        public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<TResponse>>>>> List<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<ResponseResult<ApiResponse<IPaged<IEnumerable<TResponse>>>>> List<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.GetJsonResponseResultAsync<IApiResponse<IPaged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{ListMethod}", new { SearchPaging, searchExtraParams });
+            return await HttpClient.GetJsonResponseResultAsync<ApiResponse<IPaged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{ListMethod}", new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<TResponse>>>>> ListOwns<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<ResponseResult<ApiResponse<IPaged<IEnumerable<TResponse>>>>> ListOwns<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.GetJsonResponseResultAsync<IApiResponse<IPaged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{ListOwnsMethod}", new { SearchPaging, searchExtraParams });
+            return await HttpClient.GetJsonResponseResultAsync<ApiResponse<IPaged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{ListOwnsMethod}", new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<ResponseResult<ApiResponse<IPaged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.GetJsonResponseResultAsync<IApiResponse<IPaged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{SearchMethod}", new { SearchPaging, searchExtraParams });
+            return await HttpClient.GetJsonResponseResultAsync<ApiResponse<IPaged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{SearchMethod}", new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<IApiResponse<IPaged<IEnumerable<TResponse>>>>> SearchOwns<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<ResponseResult<ApiResponse<IPaged<IEnumerable<TResponse>>>>> SearchOwns<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.GetJsonResponseResultAsync<IApiResponse<IPaged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{SearchOwnsMethod}", new { SearchPaging, searchExtraParams });
+            return await HttpClient.GetJsonResponseResultAsync<ApiResponse<IPaged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{SearchOwnsMethod}", new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<IApiResponse<Tuple<TUserBlobs, TUserBlobs>>>> Update(TUserBlobs userBlobs, IEnumerable<TBlobData> blobDatas)
+        public virtual async Task<ResponseResult<ApiResponse<Tuple<TUserBlobs, TUserBlobs>>>> Update(TUserBlobs userBlobs, IEnumerable<TBlobData> blobDatas)
         {
             return await HttpClient.SendBlobDataResponseResultAsync<Tuple<TUserBlobs, TUserBlobs>, TBlobData>(new HttpRequestMessage(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}"), blobDatas, new BlobDataValidator());
         }
-        public virtual async Task<IResponseResult<IApiResponse<Tuple<IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> UpdateRange(IEnumerable<TUserBlobs> userBlobs, IEnumerable<TBlobData> blobDatas)
+        public virtual async Task<ResponseResult<ApiResponse<Tuple<IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> UpdateRange(IEnumerable<TUserBlobs> userBlobs, IEnumerable<TBlobData> blobDatas)
         {
             return await HttpClient.SendBlobDataResponseResultAsync<Tuple<IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>, TBlobData>(new HttpRequestMessage(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}"), blobDatas, new BlobDataValidator());
 

@@ -44,9 +44,9 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override string FilterSortBy { get; set; }
         [Parameter] public override bool FilterDescending { get; set; }
         [Parameter] public override ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
-        [Parameter] public override IResponseResult<IApiResponse<T>> Response { get; set; }
-        [Parameter] public override IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        [Parameter] public override IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>> ResponsePaged { get; set; }
+        [Parameter] public override ResponseResult<ApiResponse<T>> Response { get; set; }
+        [Parameter] public override ResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        [Parameter] public override ResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
         [Parameter] public override ISearchPaging SearchPaging { get; set; }
         [Parameter] public override RecordsSelectionMode RecordsSelectionMode { get; set; }
         [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
@@ -56,9 +56,9 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override long MaximumRecordsSelections { get; set; }
         [Parameter] public override bool MinimunRecordsSelectionsReached { get; set; }
         [Parameter] public override bool MaximumRecordsSelectionsReached { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<T>>> ResponseChanged { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
-        [Parameter] public override Action<IResponseResult<IApiResponse<IPaged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
+        [Parameter] public override Action<ResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
+        [Parameter] public override Action<ResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        [Parameter] public override Action<ResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
         [Parameter] public override Action<Action> OnBeforeSearch { get; set; }
         [Parameter] public override Action OnAfterSearch { get; set; }
         [Parameter] public override Action<TIdentifier> IdentifierChanged { get; set; }

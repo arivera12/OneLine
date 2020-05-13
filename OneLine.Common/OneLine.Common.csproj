@@ -13,11 +13,11 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed wrong type on login service.</PackageReleaseNotes>
-    <Version>2.0.41</Version>
+    <PackageReleaseNotes>Fix: http service doesn't desearilize interfaces.</PackageReleaseNotes>
+    <Version>2.0.42</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.41.0</AssemblyVersion>
+    <AssemblyVersion>2.0.42.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

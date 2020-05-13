@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Fixed wrong type on login service.</PackageReleaseNotes>
-    <Version>2.0.41</Version>
+    <PackageReleaseNotes>Fix: http service doesn't desearilize interfaces.</PackageReleaseNotes>
+    <Version>2.0.42</Version>
   </PropertyGroup>
 
 

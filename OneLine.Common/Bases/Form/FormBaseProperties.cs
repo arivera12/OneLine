@@ -31,12 +31,12 @@ namespace OneLine.Bases
         public virtual IConfiguration Configuration { get; set; }
         public virtual FormState FormState { get; set; }
         public virtual FormMode FormMode { get; set; }
-        public virtual IResponseResult<IApiResponse<T>> Response { get; set; }
-        public virtual IResponseResult<IApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        public virtual IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> ResponseAddWithBlobs { get; set; }
-        public virtual IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> ResponseAddCollectionWithBlobs { get; set; }
-        public virtual IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateWithBlobs { get; set; }
-        public virtual IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateCollectionWithBlobs { get; set; }
+        public virtual ResponseResult<ApiResponse<T>> Response { get; set; }
+        public virtual ResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        public virtual ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> ResponseAddWithBlobs { get; set; }
+        public virtual ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> ResponseAddCollectionWithBlobs { get; set; }
+        public virtual ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateWithBlobs { get; set; }
+        public virtual ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateCollectionWithBlobs { get; set; }
         public virtual Action<TIdentifier> IdentifierChanged { get; set; }
         public virtual Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
         public virtual Action<T> RecordChanged { get; set; }
@@ -46,12 +46,12 @@ namespace OneLine.Bases
         public virtual Action<bool> IsValidModelStateChanged { get; set; }
         public virtual Action<FormState> FormStateChanged { get; set; }
         public virtual Action<FormMode> FormModeChanged { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<T>>> ResponseChanged { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> ResponseAddWithBlobsChanged { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> ResponseAddCollectionWithBlobsChanged { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateWithBlobsChanged { get; set; }
-        public virtual Action<IResponseResult<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateCollectionWithBlobsChanged { get; set; }
+        public virtual Action<ResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
+        public virtual Action<ResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        public virtual Action<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> ResponseAddWithBlobsChanged { get; set; }
+        public virtual Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> ResponseAddCollectionWithBlobsChanged { get; set; }
+        public virtual Action<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateWithBlobsChanged { get; set; }
+        public virtual Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateCollectionWithBlobsChanged { get; set; }
         public virtual Action<Action> OnBeforeReset { get; set; }
         public virtual Action OnAfterReset { get; set; }
         public virtual Action<Action> OnBeforeCancel { get; set; }

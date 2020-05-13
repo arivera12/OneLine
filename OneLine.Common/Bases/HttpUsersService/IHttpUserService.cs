@@ -16,23 +16,23 @@ namespace OneLine.Bases
         string ResetPasswordMethod { get; set; }
         string ResetPasswordInternalMethod { get; set; }
         string SetupMethod { get; set; }
-        Task<IResponseResult<IApiResponse<TResponse>>> LockUnlock<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<IApiResponse<string>>> LockUnlock(ILockUnlock record);
-        Task<IResponseResult<IApiResponse<TResponse>>> ConfirmEmail<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<IApiResponse<string>>> ConfirmEmail(IConfirmEmail record);
-        Task<IResponseResult<IApiResponse<TResponse>>> ForgotPassword<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<IApiResponse<string>>> ForgotPassword(IForgotPassword record);
-        Task<IResponseResult<IApiResponse<TResponse>>> Login<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<IApiResponse<AspNetUsersViewModel>>> Login(ILogin record);
-        Task<IResponseResult<IApiResponse<TResponse>>> Register<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<IApiResponse<string>>> Register(IRegister record);
-        Task<IResponseResult<IApiResponse<TResponse>>> RegisterInternal<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<IApiResponse<string>>> RegisterInternal(IRegisterInternal record);
-        Task<IResponseResult<IApiResponse<TResponse>>> ResetPassword<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<IApiResponse<string>>> ResetPassword(IResetPassword record);
-        Task<IResponseResult<IApiResponse<TResponse>>> ResetPasswordInternal<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<IApiResponse<string>>> ResetPasswordInternal(IResetPasswordInternal record);
-        Task<IResponseResult<IApiResponse<string>>> Setup();
+        Task<ResponseResult<ApiResponse<TResponse>>> LockUnlock<TResponse, TModel>(TModel record, IValidator validator);
+        Task<ResponseResult<ApiResponse<string>>> LockUnlock(ILockUnlock record);
+        Task<ResponseResult<ApiResponse<TResponse>>> ConfirmEmail<TResponse, TModel>(TModel record, IValidator validator);
+        Task<ResponseResult<ApiResponse<string>>> ConfirmEmail(IConfirmEmail record);
+        Task<ResponseResult<ApiResponse<TResponse>>> ForgotPassword<TResponse, TModel>(TModel record, IValidator validator);
+        Task<ResponseResult<ApiResponse<string>>> ForgotPassword(IForgotPassword record);
+        Task<ResponseResult<ApiResponse<TResponse>>> Login<TResponse, TModel>(TModel record, IValidator validator);
+        Task<ResponseResult<ApiResponse<AspNetUsersViewModel>>> Login(ILogin record);
+        Task<ResponseResult<ApiResponse<TResponse>>> Register<TResponse, TModel>(TModel record, IValidator validator);
+        Task<ResponseResult<ApiResponse<string>>> Register(IRegister record);
+        Task<ResponseResult<ApiResponse<TResponse>>> RegisterInternal<TResponse, TModel>(TModel record, IValidator validator);
+        Task<ResponseResult<ApiResponse<string>>> RegisterInternal(IRegisterInternal record);
+        Task<ResponseResult<ApiResponse<TResponse>>> ResetPassword<TResponse, TModel>(TModel record, IValidator validator);
+        Task<ResponseResult<ApiResponse<string>>> ResetPassword(IResetPassword record);
+        Task<ResponseResult<ApiResponse<TResponse>>> ResetPasswordInternal<TResponse, TModel>(TModel record, IValidator validator);
+        Task<ResponseResult<ApiResponse<string>>> ResetPasswordInternal(IResetPasswordInternal record);
+        Task<ResponseResult<ApiResponse<string>>> Setup();
  
     }
 }

@@ -20,9 +20,9 @@ Just by starting off from general and specific applications behaviors.
 3. Use actions and/or events callbacks between a task.
 4. Use actions before and/or after any specific task execution inside a task.
 
-### What are this action and/or events?
+### What are this actions and/or events?
 
-This action and/or events are just callbacks that can be listened to perform derived actions or Tasks.
+This actions and/or events are just callbacks that can be listened to perform derived actions or Tasks.
  
 This is were we decide what actions and/or Tasks to perform Before, On, or After any Task.
 

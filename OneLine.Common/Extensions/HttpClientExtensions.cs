@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Newtonsoft.Json;
 using OneLine.Enums;
 using OneLine.Models;
 using System;
@@ -7,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace OneLine.Extensions
@@ -30,9 +30,9 @@ namespace OneLine.Extensions
         #region Send and Receive json data
 
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri)
-            => JsonSerializer.Deserialize<T>(await httpClient.GetStringAsync(requestUri));
+            => JsonConvert.DeserializeObject<T>(await httpClient.GetStringAsync(requestUri));
         public static async Task<T> GetJsonAsync<T>(this HttpClient httpClient, string requestUri, object queryStringParameters)
-            => JsonSerializer.Deserialize<T>(await httpClient.GetStringAsync($"{requestUri}?{queryStringParameters?.ToUrlQueryString()}"));
+            => JsonConvert.DeserializeObject<T>(await httpClient.GetStringAsync($"{requestUri}?{queryStringParameters?.ToUrlQueryString()}"));
         public static async Task<IResponseResult<T>> GetJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri)
         {
             try
@@ -124,7 +124,7 @@ namespace OneLine.Extensions
             //Anything else goes on the content as json
             else
             {
-                var requestJson = JsonSerializer.Serialize(content);
+                var requestJson = JsonConvert.SerializeObject(content);
                 var response = await httpClient.SendAsync(new HttpRequestMessage(method, requestUri)
                 {
                     Content = new StringContent(requestJson, Encoding.UTF8, "application/json")
@@ -136,7 +136,7 @@ namespace OneLine.Extensions
                 else
                 {
                     var responseJson = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<T>(responseJson);
+                    return JsonConvert.DeserializeObject<T>(responseJson);
                 }
             }
         }
@@ -242,7 +242,7 @@ namespace OneLine.Extensions
             httpRequestMessage.Content = multipartFormDataContent;
             var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
             var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(strResponse);
+            return JsonConvert.DeserializeObject<T>(strResponse);
         }
         public static async Task<ResponseResult<T>> SendFormDataResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, MultipartFormDataContent multipartFormDataContent)
         {
@@ -275,7 +275,7 @@ namespace OneLine.Extensions
             httpRequestMessage.Content = multipartFormDataContent;
             var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
             var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return new ApiResponse<TResponse>(ApiResponseStatus.Succeeded, JsonSerializer.Deserialize<TResponse>(strResponse));
+            return new ApiResponse<TResponse>(ApiResponseStatus.Succeeded, JsonConvert.DeserializeObject<TResponse>(strResponse));
         }
         public static async Task<IResponseResult<IApiResponse<TResponse>>> SendBlobDataResponseResultAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
             where TBlobData : IBlobData
@@ -305,7 +305,7 @@ namespace OneLine.Extensions
             httpRequestMessage.Content = multipartFormDataContent;
             var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
             var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(strResponse);
+            return JsonConvert.DeserializeObject<T>(strResponse);
         }
         public static async Task<ResponseResult<T>> SendHttpContentsResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<HttpContent> httpContents)
         {
@@ -334,13 +334,13 @@ namespace OneLine.Extensions
             //Send content in the MultipartFormData
             else
             {
-                var requestJson = JsonSerializer.Serialize(content);
+                var requestJson = JsonConvert.SerializeObject(content);
                 multipartFormDataContent.Add(new StringContent(requestJson, Encoding.UTF8, "application/json"));
             }
             httpRequestMessage.Content = multipartFormDataContent;
             var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
             var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(strResponse);
+            return JsonConvert.DeserializeObject<T>(strResponse);
         }
         public static async Task<IResponseResult<T>> SendJsonWithFormDataResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, MultipartFormDataContent multipartFormDataContent)
         {
@@ -498,7 +498,7 @@ namespace OneLine.Extensions
             //Send content in the MultipartFormData
             else
             {
-                var requestJson = JsonSerializer.Serialize(content);
+                var requestJson = JsonConvert.SerializeObject(content);
                 multipartFormDataContent.Add(new StringContent(requestJson, Encoding.UTF8, "application/json"));
             }
             foreach (var httpContent in httpContents)
@@ -508,7 +508,7 @@ namespace OneLine.Extensions
             httpRequestMessage.Content = multipartFormDataContent;
             var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
             var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(strResponse);
+            return JsonConvert.DeserializeObject<T>(strResponse);
         }
         public static async Task<IResponseResult<T>> SendJsonWithHttpContentsResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, IEnumerable<HttpContent> httpContents)
         {
@@ -554,7 +554,7 @@ namespace OneLine.Extensions
             //Send content
             else
             {
-                var requestJson = JsonSerializer.Serialize(content);
+                var requestJson = JsonConvert.SerializeObject(content);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
             var response = await httpClient.SendAsync(httpRequestMessage);
@@ -588,7 +588,7 @@ namespace OneLine.Extensions
             //Send content
             else
             {
-                var requestJson = JsonSerializer.Serialize(content);
+                var requestJson = JsonConvert.SerializeObject(content);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
             var response = await httpClient.SendAsync(httpRequestMessage);
@@ -630,7 +630,7 @@ namespace OneLine.Extensions
             //Send content
             else
             {
-                var requestJson = JsonSerializer.Serialize(contents);
+                var requestJson = JsonConvert.SerializeObject(contents);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
             var response = await httpClient.SendAsync(httpRequestMessage);
@@ -681,7 +681,7 @@ namespace OneLine.Extensions
             //Send content
             else
             {
-                var requestJson = JsonSerializer.Serialize(content);
+                var requestJson = JsonConvert.SerializeObject(content);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
             var response = await httpClient.SendAsync(httpRequestMessage);
@@ -719,7 +719,7 @@ namespace OneLine.Extensions
             //Send content
             else
             {
-                var requestJson = JsonSerializer.Serialize(content);
+                var requestJson = JsonConvert.SerializeObject(content);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
             var response = await httpClient.SendAsync(httpRequestMessage);
@@ -761,7 +761,7 @@ namespace OneLine.Extensions
             //Send content
             else
             {
-                var requestJson = JsonSerializer.Serialize(contents);
+                var requestJson = JsonConvert.SerializeObject(contents);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
             var response = await httpClient.SendAsync(httpRequestMessage);
@@ -812,7 +812,7 @@ namespace OneLine.Extensions
             //Send content
             else
             {
-                var requestJson = JsonSerializer.Serialize(content);
+                var requestJson = JsonConvert.SerializeObject(content);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
             var response = await httpClient.SendAsync(httpRequestMessage);
@@ -862,7 +862,7 @@ namespace OneLine.Extensions
             //Send content
             else
             {
-                var requestJson = JsonSerializer.Serialize(content);
+                var requestJson = JsonConvert.SerializeObject(content);
                 httpRequestMessage.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             }
             var response = await httpClient.SendAsync(httpRequestMessage);

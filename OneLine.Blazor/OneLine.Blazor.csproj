@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Dropped System.Text.Json and rolled back newtonsoft.json</PackageReleaseNotes>
-    <Version>2.0.40</Version>
+    <PackageReleaseNotes>Fixed wrong type on login service.</PackageReleaseNotes>
+    <Version>2.0.41</Version>
   </PropertyGroup>
 
 

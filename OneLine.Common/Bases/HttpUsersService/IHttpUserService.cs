@@ -23,7 +23,7 @@ namespace OneLine.Bases
         Task<IResponseResult<IApiResponse<TResponse>>> ForgotPassword<TResponse, TModel>(TModel record, IValidator validator);
         Task<IResponseResult<IApiResponse<string>>> ForgotPassword(IForgotPassword record);
         Task<IResponseResult<IApiResponse<TResponse>>> Login<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<IApiResponse<IAspNetUsers>>> Login(ILogin record);
+        Task<IResponseResult<IApiResponse<AspNetUsersViewModel>>> Login(ILogin record);
         Task<IResponseResult<IApiResponse<TResponse>>> Register<TResponse, TModel>(TModel record, IValidator validator);
         Task<IResponseResult<IApiResponse<string>>> Register(IRegister record);
         Task<IResponseResult<IApiResponse<TResponse>>> RegisterInternal<TResponse, TModel>(TModel record, IValidator validator);

@@ -37,15 +37,15 @@ namespace OneLine.Bases
         }
         public virtual async Task<IResponseResult<byte[]>> DownloadCsvAsByteArray(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.SendJsonDownloadBlobAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
+            return await HttpClient.SendJsonDownloadBlobAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }
         public virtual async Task<IResponseResult<Stream>> DownloadCsvAsStream(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.SendJsonDownloadBlobAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
+            return await HttpClient.SendJsonDownloadBlobAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }
         public virtual async Task<IResponseResult<IApiResponse<IEnumerable<T>>>> UploadCsv(IEnumerable<IBlobData> blobDatas, IValidator validator, HttpMethod httpMethod)
         {
-            return await HttpClient.SendBlobDataResponseResultAsync<IEnumerable<T>, IBlobData>(new HttpRequestMessage(httpMethod, $"/{ControllerName}/{DownloadCsvMethod}"), blobDatas, validator);
+            return await HttpClient.SendBlobDataResponseResultAsync<IEnumerable<T>, IBlobData>(new HttpRequestMessage(httpMethod, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), blobDatas, validator);
         }
     }
 }

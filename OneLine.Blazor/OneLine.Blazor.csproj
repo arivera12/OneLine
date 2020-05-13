@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Fix: Added missing ControllerName override with default value on users service. Addec virtual modifiers to user blobs properties and methods.</PackageReleaseNotes>
-    <Version>2.0.38</Version>
+    <PackageReleaseNotes>Fix: Removed /api path from end solution and integrated it on the http base classes instead cause for some reason http client removes end traling paths after domain.</PackageReleaseNotes>
+    <Version>2.0.39</Version>
   </PropertyGroup>
 
 

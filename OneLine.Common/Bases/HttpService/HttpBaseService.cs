@@ -9,6 +9,7 @@ namespace OneLine.Bases
     public abstract class HttpBaseService : IHttpService
     {
         public virtual string BaseAddress { get; set; }
+        public virtual string Api { get; set; } = "api";
         public virtual HttpClient HttpClient { get; set; }
         public HttpBaseService()
         {
@@ -58,6 +59,10 @@ namespace OneLine.Bases
                 HttpClient.DefaultRequestHeaders.Remove("Authorization");
                 HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
             }
+        }
+        public virtual string GetApi()
+        {
+            return string.IsNullOrWhiteSpace(Api) ? "" : $"/{Api}";
         }
     }
 }

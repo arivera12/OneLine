@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Added missing base implementation PagingChange method for PagingControlToolBar.</PackageReleaseNotes>
-    <Version>2.0.37</Version>
+    <PackageReleaseNotes>Fix: Added missing ControllerName override with default value on users service. Addec virtual modifiers to user blobs properties and methods.</PackageReleaseNotes>
+    <Version>2.0.38</Version>
   </PropertyGroup>
 
 

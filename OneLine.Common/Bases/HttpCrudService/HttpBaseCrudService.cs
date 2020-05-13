@@ -28,13 +28,13 @@ namespace OneLine.Bases
     {
         public virtual string ControllerName { get; set; }
         public virtual string AddMethod { get; set; } = "add";
-        public string AddRangeMethod { get; set; } = "addrange";
+        public virtual string AddRangeMethod { get; set; } = "addrange";
         public virtual string UpdateMethod { get; set; } = "update";
-        public string UpdateRangeMethod { get; set; } = "updaterange";
+        public virtual string UpdateRangeMethod { get; set; } = "updaterange";
         public virtual string DeleteMethod { get; set; } = "delete";
-        public string DeleteRangeMethod { get; set; } = "deleterange";
+        public virtual string DeleteRangeMethod { get; set; } = "deleterange";
         public virtual string GetOneMethod { get; set; } = "getone";
-        public string GetRangeMethod { get; set; } = "getrange";
+        public virtual string GetRangeMethod { get; set; } = "getrange";
         public virtual string SearchMethod { get; set; } = "search";
         public virtual TBlobValidator BlobValidator { get; set; } = new TBlobValidator();
         public HttpBaseCrudService() : base()

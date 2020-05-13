@@ -17,6 +17,7 @@ namespace OneLine.Bases
         where TBlobValidator : class, IValidator, new()
         where TUserBlobs : class, IUserBlobs
     {
+        public override string ControllerName { get; set; } = "usersaccount";
         public virtual string LockUnlockMethod { get; set; } = "lockunlock";
         public virtual string ConfirmEmailMethod { get; set; } = "confirmemail";
         public virtual string ForgotPasswordMethod { get; set; } = "forgotpassword";

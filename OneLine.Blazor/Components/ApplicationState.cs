@@ -62,11 +62,11 @@ namespace OneLine.Blazor
             var applicationSession = await GetApplicationSession();
             if (applicationSession == ApplicationSession.LocalStorage)
             {
-                await _LocalStorage.SetItem<TUser>("User", user);
+                await _LocalStorage.SetItem("User", user);
             }
             else
             {
-                await _SessionStorage.SetItem<TUser>("User", user);
+                await _SessionStorage.SetItem("User", user);
             }
         }
 
@@ -74,37 +74,12 @@ namespace OneLine.Blazor
         {
             if (applicationSession == ApplicationSession.LocalStorage)
             {
-                await _LocalStorage.SetItem<TUser>("User", user);
+                await _LocalStorage.SetItem("User", user);
             }
             else
             {
-                await _SessionStorage.SetItem<TUser>("User", user);
+                await _SessionStorage.SetItem("User", user);
             }
-        }
-
-        public static async ValueTask<bool> IsLoggedIn()
-        {
-            try
-            {
-                var applicationSession = await GetApplicationSession();
-                if (applicationSession == ApplicationSession.LocalStorage)
-                {
-                    return (await _LocalStorage.GetItem<TUser>("User")) != null;
-                }
-                else
-                {
-                    return (await _SessionStorage.GetItem<TUser>("User")) != null;
-                }
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-        public static async ValueTask IfNotLoggedInRedirectToRootPage(string url = "/")
-        {
-            if (!await IsLoggedIn()) RedirectToRootPage(url);
         }
 
         #endregion
@@ -144,13 +119,13 @@ namespace OneLine.Blazor
             var jsonUser = JsonConvert.SerializeObject(user);
             if (applicationSession == ApplicationSession.LocalStorage)
             {
-                await _LocalStorage.SetItem<string>("DUEK", key);
-                await _LocalStorage.SetItem<string>("SUser", jsonUser.EncryptData(key));
+                await _LocalStorage.SetItem("DUEK", key);
+                await _LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
             }
             else
             {
-                await _SessionStorage.SetItem<string>("DUEK", key);
-                await _SessionStorage.SetItem<string>("SUser", jsonUser.EncryptData(key));
+                await _SessionStorage.SetItem("DUEK", key);
+                await _SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
             }
         }
 
@@ -161,44 +136,14 @@ namespace OneLine.Blazor
             var jsonUser = JsonConvert.SerializeObject(user);
             if (applicationSession == ApplicationSession.LocalStorage)
             {
-                await _LocalStorage.SetItem<string>("DUEK", key);
-                await _LocalStorage.SetItem<string>("SUser", jsonUser.EncryptData(key));
+                await _LocalStorage.SetItem("DUEK", key);
+                await _LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
             }
             else
             {
-                await _SessionStorage.SetItem<string>("DUEK", key);
-                await _SessionStorage.SetItem<string>("SUser", jsonUser.EncryptData(key));
+                await _SessionStorage.SetItem("DUEK", key);
+                await _SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
             }
-        }
-
-        public static async ValueTask<bool> IsLoggedInSecure()
-        {
-            try
-            {
-                var applicationSession = await GetApplicationSession();
-                string SUser, key;
-                if (applicationSession == ApplicationSession.LocalStorage)
-                {
-                    SUser = await _LocalStorage.GetItem<string>("SUser");
-                    key = await _LocalStorage.GetItem<string>("DUEK");
-                }
-                else
-                {
-                    SUser = await _SessionStorage.GetItem<string>("SUser");
-                    key = await _SessionStorage.GetItem<string>("DUEK");
-                }
-                var User = JsonConvert.DeserializeObject<TUser>(SUser.DecryptData(key));
-                return User != null;
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-        public static async ValueTask IfNotLoggedInRedirectToRootPageSecure(string url = "/")
-        {
-            if (!await IsLoggedInSecure()) RedirectToRootPage(url);
         }
 
         #endregion
@@ -240,7 +185,7 @@ namespace OneLine.Blazor
 
         public static async ValueTask SetApplicationSession(ApplicationSession applicationSession)
         {
-            await _LocalStorage.SetItem<ApplicationSession>("ApplicationSession", applicationSession);
+            await _LocalStorage.SetItem("ApplicationSession", applicationSession);
         }
 
         public static async ValueTask<string> GetApplicationLocale()
@@ -257,7 +202,7 @@ namespace OneLine.Blazor
 
         public static async ValueTask SetApplicationLocale(string locale)
         {
-            await _LocalStorage.SetItem<string>("ApplicationLocale", locale);
+            await _LocalStorage.SetItem("ApplicationLocale", locale);
         }
 
         #endregion

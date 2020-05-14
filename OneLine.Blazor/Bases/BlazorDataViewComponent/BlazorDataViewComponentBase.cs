@@ -83,15 +83,27 @@ namespace OneLine.Blazor.Bases
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            if (Record == null && (Records == null || !Records.Any()))
+            if (RecordsSelectionMode.IsSingle())
             {
-                
-                if ((Identifier != null && Identifier.Model != null) ||
-                    (Identifiers != null && Identifiers.Any()))
+                if (Record.IsNull())
                 {
-                    await Load();
+                    if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
+                    {
+                        await Load();
+                    }
                 }
             }
+            else if (RecordsSelectionMode.IsMultiple())
+            {
+                if (Records.IsNullOrEmpty())
+                {
+                    if (Identifiers.IsNotNullAndNotEmpty())
+                    {
+                        await Load();
+                    }
+                }
+            }
+            StateHasChanged();
         }
         public virtual async Task PagingChange(IPaging paging)
         {

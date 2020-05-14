@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 using OneLine.Bases;
 using OneLine.Enums;
+using OneLine.Extensions;
 using OneLine.Models;
 using System;
 using System.Collections.Generic;
@@ -91,14 +92,27 @@ namespace OneLine.Blazor.Bases
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            if (Record == null && (Records == null || !Records.Any()))
+            if (FormMode.IsSingle())
             {
-                if ((Identifier != null && Identifier.Model != null) ||
-                    (Identifiers != null && Identifiers.Any()))
+                if (Record.IsNull())
                 {
-                    await Load();
+                    if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
+                    {
+                        await Load();
+                    }
                 }
             }
+            else if (FormMode.IsMultiple())
+            {
+                if (Records.IsNullOrEmpty())
+                {
+                    if (Identifiers.IsNotNullAndNotEmpty())
+                    {
+                        await Load();
+                    }
+                }
+            }
+            StateHasChanged();
         }
         public virtual void RecordSelected(T record)
         {

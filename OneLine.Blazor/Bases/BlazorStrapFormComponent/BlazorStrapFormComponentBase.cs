@@ -95,21 +95,37 @@ namespace OneLine.Blazor.Bases
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            if (Record == null && (Records == null || !Records.Any()))
+            if (FormMode.IsSingle())
             {
-                if ((Identifier != null && Identifier.Model != null) ||
-                    (Identifiers != null && Identifiers.Any()))
+                if (Record.IsNull())
                 {
-                    await Load();
+                    if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
+                    {
+                        await Load();
+                    }
+                }
+            }
+            else if (FormMode.IsMultiple())
+            {
+                if (Records.IsNullOrEmpty())
+                {
+                    if (Identifiers.IsNotNullAndNotEmpty())
+                    {
+                        await Load();
+                    }
                 }
             }
             //This null check allows to prevent override the listeners from parent if it's listening to any of this events
-            OnBeforeSave = OnBeforeSave ?? new Action<Action>(async (callback) => await BeforeSave(callback));
-            OnAfterSave = OnAfterSave ?? new Action(async () => await AfterSave());
-            OnSaveFailed = OnSaveFailed ?? new Action(async () => await SaveFailed());
-            OnValidationFailed = OnValidationFailed ?? new Action(async () => await ValidationFailed());
-            OnBeforeDelete = OnBeforeDelete ?? new Action<Action>(async (callback) => await BeforeDelete(callback));
-            OnAfterDelete = OnAfterDelete ?? new Action(async () => await AfterDelete());
+            OnBeforeSave ??= new Action<Action>(async (callback) => await BeforeSave(callback));
+            OnAfterSave ??= new Action(async () => await AfterSave());
+            OnSaveFailed ??= new Action(async () => await SaveFailed());
+            OnValidationFailed ??= new Action(async () => await ValidationFailed());
+            OnBeforeDelete ??= new Action<Action>(async (callback) => await BeforeDelete(callback));
+            OnAfterDelete ??= new Action(async () => await AfterDelete());
+            OnBeforeCancel ??= new Action<Action>(async (callback) => await BeforeCancel(callback));
+            OnAfterCancel ??= new Action(async () => await AfterCancel());
+            OnBeforeReset ??= new Action<Action>(async (callback) => await BeforeReset(callback));
+            StateHasChanged();
         }
         public virtual string FormStateTitle()
         {
@@ -162,13 +178,9 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeDelete(Action Callback)
         {
-            if (await SweetAlertService.ShowConfirmAlertAsync())
+            if (Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync())
             {
                 await SweetAlertService.ShowLoaderAsync(Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
-                //This should and is always overrided cause there is no way to determine the Identifier field in a reference type.
-                //Technically its possible is we use an data annotation attribute 
-                //Or the same nomenclature for database table like TableNameId for main identifier.
-                Identifier.Model = (TId)Convert.ChangeType(Record.GetType().GetProperty($"{nameof(T)}Id").GetValue(Record), typeof(TId));
                 Callback();
             }
         }
@@ -176,6 +188,24 @@ namespace OneLine.Blazor.Bases
         {
             await SweetAlertService.HideLoaderAsync();
             await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
+        }
+        public virtual async Task BeforeCancel(Action Callback)
+        {
+            if (await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToCancel"))
+            {
+                Callback();
+            }
+        }
+        public virtual async Task AfterCancel()
+        {
+            await JSRuntime.InvokeVoidAsync("eval", "window.back()");
+        }
+        public virtual async Task BeforeReset(Action Callback)
+        {
+            if (await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToReset"))
+            {
+                Callback();
+            }
         }
     }
 }

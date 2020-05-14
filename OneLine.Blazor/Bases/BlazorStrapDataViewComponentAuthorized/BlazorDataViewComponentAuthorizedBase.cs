@@ -84,8 +84,7 @@ namespace OneLine.Blazor.Bases
         {
             HttpService.HttpClient = HttpClient;
             User = await ApplicationState<AspNetUsersViewModel>.GetApplicationUserSecure();
-            if (!await ApplicationState<AspNetUsersViewModel>.IsLoggedInSecure() || User == null ||
-                (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => User.Roles.Contains(w))))
+            if (User == null || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => User.Roles.Contains(w))))
             {
                 await ApplicationState<AspNetUsersViewModel>.Logout();
                 NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");
@@ -95,15 +94,28 @@ namespace OneLine.Blazor.Bases
                 IsMobile = await BlazorCurrentDeviceService.Mobile();
                 IsTablet = await BlazorCurrentDeviceService.Tablet();
                 IsDesktop = await BlazorCurrentDeviceService.Desktop();
-                if (Record == null && (Records == null || !Records.Any()))
+                if (RecordsSelectionMode.IsSingle())
                 {
-                    if ((Identifier != null && Identifier.Model != null) ||
-                        (Identifiers != null && Identifiers.Any()))
+                    if (Record.IsNull())
                     {
-                        await Load();
+                        if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
+                        {
+                            await Load();
+                        }
+                    }
+                }
+                else if (RecordsSelectionMode.IsMultiple())
+                {
+                    if (Records.IsNullOrEmpty())
+                    {
+                        if (Identifiers.IsNotNullAndNotEmpty())
+                        {
+                            await Load();
+                        }
                     }
                 }
             }
+            StateHasChanged();
         }
         public virtual async Task PagingChange(IPaging paging)
         {

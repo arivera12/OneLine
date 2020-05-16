@@ -1,13 +1,18 @@
 # OneLine
+
 OneLine is an abstraction standardized redefined framework.
 
 ## OneLine is still under heavy development and testing. 
 
 It will be completed with documentation to use very soon.
 
-## What is OneLine goal and how this framework differs from the others frameworks?
+## What is OneLine goal?
 
-OneLine tries to abstract development efforts breaking common development patterns in a redefined way.
+OneLine starts development from a pre-implemented and pre-applied environment.
+
+## How OneLine framework differs from the others frameworks?
+
+OneLine tries to abstract development efforts breaking common development patterns in a redefined way. 
 
 ### But how? 
 

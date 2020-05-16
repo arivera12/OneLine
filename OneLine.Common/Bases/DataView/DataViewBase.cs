@@ -84,7 +84,18 @@ namespace OneLine.Bases
             }
             OnAfterSearch?.Invoke();
         }
-        public virtual Task SelectRecord(T selectedRecord)
+        public async virtual Task SelectRecord(T selectedRecord)
+        {
+            if (BeforeSelectedRecord.IsNull())
+            {
+                await InternalSelectRecord(selectedRecord);
+            }
+            else
+            {
+                BeforeSelectedRecord?.Invoke(async (T selectedRecord) => await SelectRecord(selectedRecord));
+            }
+        }
+        private Task InternalSelectRecord(T selectedRecord)
         {
             if (RecordsSelectionMode.IsSingle())
             {
@@ -107,6 +118,7 @@ namespace OneLine.Bases
                 MaximumRecordsSelectionsReachedChanged?.Invoke(MaximumRecordsSelectionsReached);
                 SelectedRecordsChanged?.Invoke(SelectedRecords, MinimunRecordsSelectionsReached, MaximumRecordsSelectionsReached);
             }
+            AfterSelectedRecord?.Invoke();
             return Task.CompletedTask;
         }
         public virtual Task FilterAndSort(string sortBy, bool descending)
@@ -266,6 +278,64 @@ namespace OneLine.Bases
                 SearchPaging.SortBy = sortBy;
                 SearchPagingChanged?.Invoke(SearchPaging);
             }
+            return Task.CompletedTask;
+        }
+        public virtual Task Sort()
+        {
+            SearchPaging.Descending = !SearchPaging.Descending;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task Sort(bool descending)
+        {
+            SearchPaging.Descending = descending;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortAscending()
+        {
+            SearchPaging.Descending = false;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortDescending()
+        {
+            SearchPaging.Descending = true;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortBy(string sortBy)
+        {
+            if(SearchPaging.SortBy.Equals(sortBy))
+            {
+                SearchPaging.Descending = !SearchPaging.Descending;
+            }
+            else
+            {
+                SearchPaging.SortBy = sortBy;
+            }
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortBy(string sortBy, bool descending)
+        {
+            SearchPaging.SortBy = sortBy;
+            SearchPaging.Descending = descending;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortByAscending(string sortBy)
+        {
+            SearchPaging.SortBy = sortBy;
+            SearchPaging.Descending = false;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortByDescending(string sortBy)
+        {
+            SearchPaging.SortBy = sortBy;
+            SearchPaging.Descending = true;
+            SearchPagingChanged?.Invoke(SearchPaging);
             return Task.CompletedTask;
         }
     }

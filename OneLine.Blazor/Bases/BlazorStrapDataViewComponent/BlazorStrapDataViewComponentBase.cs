@@ -1,5 +1,6 @@
 ﻿using BlazorCurrentDevice;
 using BlazorDownloadFile;
+using BlazorStrap;
 using CurrieTechnologies.Razor.SweetAlert2;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
@@ -9,7 +10,6 @@ using OneLine.Bases;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
-using OneLine.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,9 +19,9 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract partial class BlazorDataViewComponentAuthorizedBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public abstract partial class BlazorStrapDataViewComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
-        IBlazorDataViewComponentAuthorized<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+        IBlazorStrapDataViewComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
@@ -48,6 +48,7 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override ResponseResult<ApiResponse<T>> Response { get; set; }
         [Parameter] public override ResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
         [Parameter] public override ResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
+        [Parameter] public override IPaging Paging { get; set; }
         [Parameter] public override ISearchPaging SearchPaging { get; set; }
         [Parameter] public override RecordsSelectionMode RecordsSelectionMode { get; set; }
         [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
@@ -68,59 +69,68 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
         [Parameter] public override Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
         [Parameter] public override Action<T> SelectedRecordChanged { get; set; }
+        [Parameter] public override Action<Action<T>> BeforeSelectedRecord { get; set; }
+        [Parameter] public override Action AfterSelectedRecord { get; set; }
         [Parameter] public override Action<IEnumerable<T>, bool, bool> SelectedRecordsChanged { get; set; }
         [Parameter] public override Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
         [Parameter] public override Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
+        [Parameter] public override Action<IPaging> PagingChanged { get; set; }
         [Parameter] public override Action<ISearchPaging> SearchPagingChanged { get; set; }
         [Parameter] public override Action<Func<T, bool>> FilterPredicateChanged { get; set; }
         [Parameter] public override Action<string> FilterSortByChanged { get; set; }
         [Parameter] public override Action<bool> FilterDescendingChanged { get; set; }
-        [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
+        [Parameter] public virtual int DebounceInterval { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
-        public AspNetUsersViewModel User { get; set; }
         public virtual async Task OnAfterFirstRenderAsync()
         {
             HttpService.HttpClient = HttpClient;
-            User = await ApplicationState<AspNetUsersViewModel>.GetApplicationUserSecure();
-            if (User == null || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => User.Roles.Contains(w))))
+            IsMobile = await BlazorCurrentDeviceService.Mobile();
+            IsTablet = await BlazorCurrentDeviceService.Tablet();
+            IsDesktop = await BlazorCurrentDeviceService.Desktop();
+            if (RecordsSelectionMode.IsSingle())
             {
-                await ApplicationState<AspNetUsersViewModel>.Logout();
-                NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");
-            }
-            else
-            {
-                IsMobile = await BlazorCurrentDeviceService.Mobile();
-                IsTablet = await BlazorCurrentDeviceService.Tablet();
-                IsDesktop = await BlazorCurrentDeviceService.Desktop();
-                if (RecordsSelectionMode.IsSingle())
+                if (Record.IsNull())
                 {
-                    if (Record.IsNull())
+                    if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
                     {
-                        if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
-                        {
-                            await Load();
-                        }
+                        await Load();
                     }
                 }
-                else if (RecordsSelectionMode.IsMultiple())
+            }
+            else if (RecordsSelectionMode.IsMultiple())
+            {
+                if (Records.IsNullOrEmpty())
                 {
-                    if (Records.IsNullOrEmpty())
+                    if (Identifiers.IsNotNullAndNotEmpty())
                     {
-                        if (Identifiers.IsNotNullAndNotEmpty())
-                        {
-                            await Load();
-                        }
+                        await Load();
                     }
                 }
             }
             StateHasChanged();
         }
+        public virtual Size InputSize()
+        {
+            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
+        }
+        public virtual Size ButtonSize()
+        {
+            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
+        }
         public virtual async Task PagingChange(IPaging paging)
         {
             SearchPaging.AutoMap(paging);
             await Search();
+        }
+        public void SearchTermChanged(string searchTerm)
+        {
+            searchTerm.Debounce(DebounceInterval, async (searchTermDebounced) =>
+            {
+                SearchPaging.SearchTerm = searchTermDebounced.ToString();
+                await Search();
+            });
         }
     }
 }

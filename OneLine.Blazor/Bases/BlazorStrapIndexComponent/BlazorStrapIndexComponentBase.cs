@@ -1,5 +1,6 @@
 ﻿using BlazorCurrentDevice;
 using BlazorDownloadFile;
+using BlazorStrap;
 using CurrieTechnologies.Razor.SweetAlert2;
 using FluentValidation;
 using FluentValidation.Results;
@@ -81,11 +82,13 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnSaveFailed { get; set; }
         [Parameter] public override Action OnValidationFailed { get; set; }
         [Parameter] public override Action OnValidationSucceeded { get; set; }
+        [Parameter] public virtual int DebounceInterval { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
         public bool IsFormOpen { get; set; }
         public bool ShowModal { get; set; }
+
         public virtual async Task OnAfterFirstRenderAsync()
         {
             HttpService.HttpClient = HttpClient;
@@ -114,10 +117,19 @@ namespace OneLine.Blazor.Bases
             }
             StateHasChanged();
         }
+        public virtual Size InputSize()
+        {
+            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
+        }
+        public virtual Size ButtonSize()
+        {
+            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
+        }
         public virtual void RecordSelected(T record)
         {
             Record = record;
             ShowModal = true;
+            StateHasChanged();
         }
         public virtual void OpenForm(FormState formState)
         {

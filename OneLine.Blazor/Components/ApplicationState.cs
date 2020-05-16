@@ -14,15 +14,14 @@ namespace OneLine.Blazor
     {
         [Inject] public IJSRuntime JSRuntime { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
-        [Inject] public HttpClient Http { get; set; }
+        [Inject] public HttpClient HttpClient { get; set; }
         [Inject] public ISessionStorage SessionStorage { get; set; }
         [Inject] public ILocalStorage LocalStorage { get; set; }
-        [Parameter] public string AuthorizationToken { get; set; }
         public static IJSRuntime _JSRuntime { get; set; }
         public static NavigationManager _NavigationManager { get; set; }
+        public static HttpClient _HttpClient { get; set; }
         public static ISessionStorage _SessionStorage { get; set; }
         public static ILocalStorage _LocalStorage { get; set; }
-
         protected override void OnAfterRender(bool firstRender)
         {
             if (firstRender)
@@ -31,7 +30,6 @@ namespace OneLine.Blazor
                 _NavigationManager = NavigationManager;
                 _SessionStorage = SessionStorage;
                 _LocalStorage = LocalStorage;
-                Http.AddJwtAuthorizationBearerHeader(AuthorizationToken);
             }
         }
 
@@ -203,6 +201,11 @@ namespace OneLine.Blazor
         public static async ValueTask SetApplicationLocale(string locale)
         {
             await _LocalStorage.SetItem("ApplicationLocale", locale);
+        }
+
+        public static void SetHttpClientAuthorizationToken(string AuthorizationToken, bool AddBearerScheme = true)
+        {
+            _HttpClient.AddJwtAuthorizationBearerHeader(AuthorizationToken, AddBearerScheme);
         }
 
         #endregion

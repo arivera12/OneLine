@@ -31,6 +31,7 @@ namespace OneLine.Bases
         public virtual ResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
         public virtual THttpService HttpService { get; set; }
         public virtual IConfiguration Configuration { get; set; }
+        public virtual IPaging Paging { get; set; }
         public virtual ISearchPaging SearchPaging { get; set; }
         public virtual RecordsSelectionMode RecordsSelectionMode { get; set; }
         public virtual CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
@@ -51,9 +52,12 @@ namespace OneLine.Bases
         public virtual Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
         public virtual Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
         public virtual Action<T> SelectedRecordChanged { get; set; }
+        public virtual Action<Action<T>> BeforeSelectedRecord { get; set; }
+        public virtual Action AfterSelectedRecord { get; set; }
         public virtual Action<IEnumerable<T>, bool, bool> SelectedRecordsChanged { get; set; }
         public virtual Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
         public virtual Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
+        public virtual Action<IPaging> PagingChanged { get; set; }
         public virtual Action<ISearchPaging> SearchPagingChanged { get; set; }
         public virtual Action<Func<T, bool>> FilterPredicateChanged { get; set; }
         public virtual Action<string> FilterSortByChanged { get; set; }

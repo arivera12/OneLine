@@ -1,11 +1,11 @@
 using FluentValidation;
+using Newtonsoft.Json;
 using OneLine.Attributes;
 using OneLine.Enums;
 using OneLine.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -308,42 +308,19 @@ namespace OneLine.Extensions
             }
             return objTypes;
         }
-        public static string ToUrlQueryString<T>(this T obj, string separator = ",") where T : class
+        public static string ToUrlQueryString<T>(this T obj) where T : class
         {
-            if (obj == null)
-                throw new ArgumentNullException("obj");
-
-            // Get all properties on the object
-            var properties = obj.GetType().GetProperties()
-                .Where(x => x.CanRead)
-                .Where(x => x.GetValue(obj, null) != null)
-                .ToDictionary(x => x.Name, x => x.GetValue(obj, null));
-
-            // Get names for all IEnumerable properties (excl. string)
-            var propertyNames = properties
-                .Where(x => !(x.Value is string) && x.Value is IEnumerable)
-                .Select(x => x.Key)
-                .ToList();
-
-            // Concat all IEnumerable properties into a comma separated string
-            foreach (var key in propertyNames)
+            if(obj is IEnumerable || obj.GetType().IsAssignableFrom(typeof(IEnumerable)))
             {
-                var valueType = properties[key].GetType();
-                var valueElemType = valueType.IsGenericType
-                                        ? valueType.GetGenericArguments()[0]
-                                        : valueType.GetElementType();
-                if (valueElemType.IsPrimitive || valueElemType == typeof(string))
-                {
-                    var enumerable = properties[key] as IEnumerable;
-                    properties[key] = string.Join(separator, enumerable.Cast<object>());
-                }
+                return string.Join("&", (obj as IEnumerable<object>).Select(s => s == null ? "" : s.ToUrlQueryString()));
             }
-
-            // Concat all key/value pairs into a string separated by ampersand
-            return string.Join("&", properties
-                .Select(x => string.Concat(
-                    Uri.EscapeDataString(x.Key), "=",
-                    Uri.EscapeDataString(x.Value.ToString()))));
+            else
+            {
+                var serialize = JsonConvert.SerializeObject(obj);
+                var deserialize = JsonConvert.DeserializeObject<IDictionary<string, object>>(serialize);
+                var queryString = deserialize.Select(x => Uri.EscapeDataString(x.Key) + "=" + Uri.EscapeDataString(x.Value?.ToString()) ?? "");
+                return string.Join("&", queryString);
+            }
         }
         public static IDictionary<string, object> ToDictionary(this object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
         {
@@ -368,15 +345,9 @@ namespace OneLine.Extensions
             }
             return objectType;
         }
-        public static string ToUrlQueryString<T, TResult>(this IEnumerable<T> enumerable, Func<T, TResult> selector, string separator = ",")
+        public static IEnumerable<T> ToEnumerable<T>(this T input)
         {
-            if (enumerable == null)
-                throw new ArgumentNullException("request");
-
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return string.Join("&", enumerable.Select(selector).Select(s => (s as object).ToUrlQueryString(separator)));
+            yield return input;
         }
         public static bool IsNotNull<T>(this T source)
         {
@@ -418,6 +389,10 @@ namespace OneLine.Extensions
                 typeof(Guid)
                 }.Contains(type) ||
                 Convert.GetTypeCode(type) != TypeCode.Object;
+        }
+        public static bool IsComplextType(this Type type)
+        {
+            return !type.IsSimpleType();
         }
         public static async Task<IApiResponse<T>> ValidateAsync<T>(this T record, IValidator validator)
             where T : class

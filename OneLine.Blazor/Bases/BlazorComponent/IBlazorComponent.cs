@@ -19,6 +19,7 @@ namespace OneLine.Blazor.Bases
         bool IsDesktop { get; set; }
         bool IsTablet { get; set; }
         bool IsMobile { get; set; }
+        int DebounceInterval { get; set; }
         Task OnAfterFirstRenderAsync();
     }
 }

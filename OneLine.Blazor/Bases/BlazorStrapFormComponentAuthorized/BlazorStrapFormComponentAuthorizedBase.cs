@@ -85,24 +85,26 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnValidationFailed { get; set; }
         [Parameter] public override Action OnValidationSucceeded { get; set; }
         [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
+        [Parameter] public virtual int DebounceInterval { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
-        public AspNetUsersViewModel User { get; set; }
+        public virtual AspNetUsersViewModel User { get; set; }
         public bool IsFormOpen { get; set; }
         public BSModal Modal { get; set; }
-        
+
         public virtual async Task OnAfterFirstRenderAsync()
         {
-            HttpService.HttpClient = HttpClient;
             User = await ApplicationState<AspNetUsersViewModel>.GetApplicationUserSecure();
-            if (User == null || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => User.Roles.Contains(w))))
+            if (User.IsNull() || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => User.Roles.Contains(w))))
             {
                 await ApplicationState<AspNetUsersViewModel>.Logout();
                 NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");
             }
             else
             {
+                HttpClient.AddJwtAuthorizationBearerHeader(User.Token);
+                HttpService.HttpClient = HttpClient;
                 IsMobile = await BlazorCurrentDeviceService.Mobile();
                 IsTablet = await BlazorCurrentDeviceService.Tablet();
                 IsDesktop = await BlazorCurrentDeviceService.Desktop();
@@ -136,6 +138,7 @@ namespace OneLine.Blazor.Bases
                 OnBeforeCancel ??= new Action<Action>(async (callback) => await BeforeCancel(callback));
                 OnAfterCancel ??= new Action(async () => await AfterCancel());
                 OnBeforeReset ??= new Action<Action>(async (callback) => await BeforeReset(callback));
+                OnAfterReset ??= new Action(async () => await AfterReset());
             }
             StateHasChanged();
         }
@@ -158,23 +161,29 @@ namespace OneLine.Blazor.Bases
         {
             return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
         }
+        public virtual Size ButtonSize()
+        {
+            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
+        }
         public virtual async Task BeforeSave(Action Callback)
         {
-            await Validate();
-            if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync())
+            if (await SweetAlertService.ShowConfirmAlertAsync())
             {
                 await SweetAlertService.ShowLoaderAsync(Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
                 Callback();
             }
+            StateHasChanged();
         }
         public virtual async Task ValidationFailed()
         {
             await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
+            StateHasChanged();
         }
         public virtual async Task AfterSave()
         {
             await SweetAlertService.HideLoaderAsync();
             await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
+            StateHasChanged();
         }
         public virtual async Task SaveFailed()
         {
@@ -187,6 +196,7 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Error);
             }
+            StateHasChanged();
         }
         public virtual async Task BeforeDelete(Action Callback)
         {
@@ -195,11 +205,13 @@ namespace OneLine.Blazor.Bases
                 await SweetAlertService.ShowLoaderAsync(Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
                 Callback();
             }
+            StateHasChanged();
         }
         public virtual async Task AfterDelete()
         {
             await SweetAlertService.HideLoaderAsync();
             await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
+            StateHasChanged();
         }
         public virtual async Task BeforeCancel(Action Callback)
         {
@@ -207,10 +219,11 @@ namespace OneLine.Blazor.Bases
             {
                 Callback();
             }
+            StateHasChanged();
         }
         public virtual async Task AfterCancel()
         {
-            await JSRuntime.InvokeVoidAsync("eval", "window.back()");
+            await JSRuntime.InvokeVoidAsync("eval", "window.history.back()");
         }
         public virtual async Task BeforeReset(Action Callback)
         {
@@ -218,6 +231,12 @@ namespace OneLine.Blazor.Bases
             {
                 Callback();
             }
+            StateHasChanged();
+        }
+        public virtual Task AfterReset()
+        {
+            StateHasChanged();
+            return Task.CompletedTask;
         }
     }
 }

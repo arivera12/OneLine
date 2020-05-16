@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Improved base classes separating model and identifier initialization from single and multiple approaches. Implemented BeforeCancel, AfterCancel and BeforeReset action callbacks to perform default actions and confirm user action interaction.</PackageReleaseNotes>
-    <Version>2.0.44</Version>
+    <PackageReleaseNotes>Added before and After action callbacks on selectrecord task.</PackageReleaseNotes>
+    <Version>2.0.52</Version>
   </PropertyGroup>
 
 

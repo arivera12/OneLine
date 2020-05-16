@@ -13,11 +13,11 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Improved base classes separating model and identifier initialization from single and multiple approaches. Implemented BeforeCancel, AfterCancel and BeforeReset action callbacks to perform default actions and confirm user action interaction.</PackageReleaseNotes>
-    <Version>2.0.44</Version>
+    <PackageReleaseNotes>Added before and After action callbacks on selectrecord task.</PackageReleaseNotes>
+    <Version>2.0.52</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.44.0</AssemblyVersion>
+    <AssemblyVersion>2.0.52.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

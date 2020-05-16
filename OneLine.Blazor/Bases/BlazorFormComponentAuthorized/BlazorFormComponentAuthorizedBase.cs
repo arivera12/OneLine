@@ -10,6 +10,7 @@ using OneLine.Bases;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
+using OneLine.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,9 +20,9 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract partial class BlazorFormComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public abstract partial class BlazorFormComponentAuthorizedBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
-        IBlazorFormComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+        IBlazorFormComponentAuthorized<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
@@ -81,33 +82,46 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnSaveFailed { get; set; }
         [Parameter] public override Action OnValidationFailed { get; set; }
         [Parameter] public override Action OnValidationSucceeded { get; set; }
+        [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
         [Parameter] public virtual int DebounceInterval { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
+        public virtual AspNetUsersViewModel User { get; set; }
+
         public virtual async Task OnAfterFirstRenderAsync()
         {
-            HttpService.HttpClient = HttpClient;
-            IsMobile = await BlazorCurrentDeviceService.Mobile();
-            IsTablet = await BlazorCurrentDeviceService.Tablet();
-            IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            if (FormMode.IsSingle())
+            User = await ApplicationState<AspNetUsersViewModel>.GetApplicationUserSecure();
+            if (User.IsNull() || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => User.Roles.Contains(w))))
             {
-                if (Record.IsNull())
+                await ApplicationState<AspNetUsersViewModel>.Logout();
+                NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");
+            }
+            else
+            {
+                HttpClient.AddJwtAuthorizationBearerHeader(User.Token);
+                HttpService.HttpClient = HttpClient;
+                IsMobile = await BlazorCurrentDeviceService.Mobile();
+                IsTablet = await BlazorCurrentDeviceService.Tablet();
+                IsDesktop = await BlazorCurrentDeviceService.Desktop();
+                if (FormMode.IsSingle())
                 {
-                    if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
+                    if (Record.IsNull())
                     {
-                        await Load();
+                        if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
+                        {
+                            await Load();
+                        }
                     }
                 }
-            }
-            else if (FormMode.IsMultiple())
-            {
-                if (Records.IsNullOrEmpty())
+                else if (FormMode.IsMultiple())
                 {
-                    if (Identifiers.IsNotNullAndNotEmpty())
+                    if (Records.IsNullOrEmpty())
                     {
-                        await Load();
+                        if (Identifiers.IsNotNullAndNotEmpty())
+                        {
+                            await Load();
+                        }
                     }
                 }
             }

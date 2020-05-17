@@ -21,12 +21,12 @@ Just by starting off from general and specific applications behaviors.
 ### How this can be achieve? 
 
 1. Defining generic interfaces/headers.
-2. Definig and using actions before and after any task.
+2. Defining and using actions before and after any task.
 3. Applying the appropriate implementations.
 
-### What are this actions and/or events?
+### What are these actions?
 
-This is were we decide what actions and/or sub tasks to perform before or after any task.
+These actions are just methods were we decide what sub actions and/or sub tasks perform before or after any task.
 
 Take note that OneLine may use open source libraries to achieve resolving tasks more easier and faster.
 

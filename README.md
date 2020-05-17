@@ -21,23 +21,14 @@ Just by starting off from general and specific applications behaviors.
 ### How this can be achieve? 
 
 1. Defining generic interfaces/headers.
-2. Applying the appropriate implementations.
-3. Use actions and/or events callbacks between a task.
-4. Use actions before and/or after any specific task execution inside a task.
+2. Definig and using actions before and after any task.
+3. Applying the appropriate implementations.
 
 ### What are this actions and/or events?
 
-This actions and/or events are just callbacks that can be listened to perform derived actions or Tasks.
- 
-This is were we decide what actions and/or Tasks to perform Before, On, or After any Task.
-
-All actions and/or events should be classified as a general or particular case use.
+This is were we decide what actions and/or sub tasks to perform before or after any task.
 
 Take note that OneLine may use open source libraries to achieve resolving tasks more easier and faster.
-
-### What is the key?
-
-The key are callbacks and overridable methods/functions.
 
 ## Known Random Issues
 

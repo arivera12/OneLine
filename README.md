@@ -28,6 +28,8 @@ Just by starting off from general and specific applications behaviors.
 
 These actions are just methods were we decide what sub actions and/or sub tasks perform before or after any task.
 
+These actions and tasks should be chained between them.
+
 Take note that OneLine may use open source libraries to achieve resolving tasks more easier and faster.
 
 ## Known Random Issues

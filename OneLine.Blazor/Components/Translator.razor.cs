@@ -1,4 +1,4 @@
-﻿using Blazor.Extensions.Storage.Interfaces;
+﻿using BlazorBrowserStorage;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Linq;

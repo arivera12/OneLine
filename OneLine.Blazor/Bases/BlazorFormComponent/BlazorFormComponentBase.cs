@@ -69,18 +69,16 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> ResponseAddCollectionWithBlobsChanged { get; set; }
         [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateWithBlobsChanged { get; set; }
         [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateCollectionWithBlobsChanged { get; set; }
-        [Parameter] public override Action<Action> OnBeforeReset { get; set; }
+        [Parameter] public override Action OnBeforeReset { get; set; }
         [Parameter] public override Action OnAfterReset { get; set; }
-        [Parameter] public override Action<Action> OnBeforeCancel { get; set; }
+        [Parameter] public override Action OnBeforeCancel { get; set; }
         [Parameter] public override Action OnAfterCancel { get; set; }
-        [Parameter] public override Action<Action> OnBeforeSave { get; set; }
+        [Parameter] public override Action OnBeforeSave { get; set; }
         [Parameter] public override Action OnAfterSave { get; set; }
-        [Parameter] public override Action<Action> OnBeforeDelete { get; set; }
+        [Parameter] public override Action OnBeforeDelete { get; set; }
         [Parameter] public override Action OnAfterDelete { get; set; }
-        [Parameter] public override Action OnDeleteFailed { get; set; }
-        [Parameter] public override Action OnSaveFailed { get; set; }
-        [Parameter] public override Action OnValidationFailed { get; set; }
-        [Parameter] public override Action OnValidationSucceeded { get; set; }
+        [Parameter] public override Action OnBeforeValidate { get; set; }
+        [Parameter] public override Action OnAfterValidate { get; set; }
         [Parameter] public virtual int DebounceInterval { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }

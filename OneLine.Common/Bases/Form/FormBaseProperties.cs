@@ -52,17 +52,15 @@ namespace OneLine.Bases
         public virtual Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> ResponseAddCollectionWithBlobsChanged { get; set; }
         public virtual Action<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateWithBlobsChanged { get; set; }
         public virtual Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateCollectionWithBlobsChanged { get; set; }
-        public virtual Action<Action> OnBeforeReset { get; set; }
+        public virtual Action OnBeforeReset { get; set; }
         public virtual Action OnAfterReset { get; set; }
-        public virtual Action<Action> OnBeforeCancel { get; set; }
+        public virtual Action OnBeforeCancel { get; set; }
         public virtual Action OnAfterCancel { get; set; }
-        public virtual Action<Action> OnBeforeSave { get; set; }
+        public virtual Action OnBeforeSave { get; set; }
         public virtual Action OnAfterSave { get; set; }
-        public virtual Action<Action> OnBeforeDelete { get; set; }
+        public virtual Action OnBeforeDelete { get; set; }
         public virtual Action OnAfterDelete { get; set; }
-        public virtual Action OnDeleteFailed { get; set; }
-        public virtual Action OnSaveFailed { get; set; }
-        public virtual Action OnValidationFailed { get; set; }
-        public virtual Action OnValidationSucceeded { get; set; }
+        public virtual Action OnBeforeValidate { get; set; }
+        public virtual Action OnAfterValidate { get; set; }
     }
 }

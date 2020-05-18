@@ -1,4 +1,4 @@
-﻿using Blazor.Extensions.Storage.Interfaces;
+﻿using BlazorBrowserStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;

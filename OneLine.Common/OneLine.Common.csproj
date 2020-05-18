@@ -13,11 +13,11 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added before and After action callbacks on selectrecord task.</PackageReleaseNotes>
-    <Version>2.0.52</Version>
+    <PackageReleaseNotes>Replaced blazor.extensions.storage with my own implementation using now BlazorBrowserStorage.</PackageReleaseNotes>
+    <Version>2.0.54</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.52.0</AssemblyVersion>
+    <AssemblyVersion>2.0.54.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

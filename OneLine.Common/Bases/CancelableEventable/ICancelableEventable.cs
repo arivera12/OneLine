@@ -6,7 +6,7 @@ namespace OneLine.Bases
     public interface ICancelableEventable
     {
         Task Cancel();
-        Action<Action> OnBeforeCancel { get; set; }
+        Action OnBeforeCancel { get; set; }
         Action OnAfterCancel { get; set; }
     }
 }

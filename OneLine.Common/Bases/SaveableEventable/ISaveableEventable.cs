@@ -6,8 +6,7 @@ namespace OneLine.Bases
     public interface ISaveableEventable
     {
         Task Save();
-        Action<Action> OnBeforeSave { get; set; }
+        Action OnBeforeSave { get; set; }
         Action OnAfterSave { get; set; }
-        Action OnSaveFailed { get; set; }
     }
 }

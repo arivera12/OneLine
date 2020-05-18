@@ -13,13 +13,13 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Added before and After action callbacks on selectrecord task.</PackageReleaseNotes>
-    <Version>2.0.52</Version>
+    <PackageReleaseNotes>Replaced blazor.extensions.storage with my own implementation using now BlazorBrowserStorage.</PackageReleaseNotes>
+    <Version>2.0.54</Version>
   </PropertyGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="Blazor.Extensions.Storage" Version="1.1.0-preview3" />
+    <PackageReference Include="BlazorBrowserStorage" Version="1.0.0" />
     <PackageReference Include="BlazorCurrentDevice" Version="1.0.5" />
     <PackageReference Include="BlazorDownloadFile" Version="1.0.5" />
     <PackageReference Include="BlazorStrap" Version="1.3.2-Preview1-04" />

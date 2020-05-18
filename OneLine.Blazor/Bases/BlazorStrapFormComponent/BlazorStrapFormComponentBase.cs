@@ -72,18 +72,16 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> ResponseAddCollectionWithBlobsChanged { get; set; }
         [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateWithBlobsChanged { get; set; }
         [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateCollectionWithBlobsChanged { get; set; }
-        [Parameter] public override Action<Action> OnBeforeReset { get; set; }
+        [Parameter] public override Action OnBeforeReset { get; set; }
         [Parameter] public override Action OnAfterReset { get; set; }
-        [Parameter] public override Action<Action> OnBeforeCancel { get; set; }
+        [Parameter] public override Action OnBeforeCancel { get; set; }
         [Parameter] public override Action OnAfterCancel { get; set; }
-        [Parameter] public override Action<Action> OnBeforeSave { get; set; }
+        [Parameter] public override Action OnBeforeSave { get; set; }
         [Parameter] public override Action OnAfterSave { get; set; }
-        [Parameter] public override Action<Action> OnBeforeDelete { get; set; }
+        [Parameter] public override Action OnBeforeDelete { get; set; }
         [Parameter] public override Action OnAfterDelete { get; set; }
-        [Parameter] public override Action OnDeleteFailed { get; set; }
-        [Parameter] public override Action OnSaveFailed { get; set; }
-        [Parameter] public override Action OnValidationFailed { get; set; }
-        [Parameter] public override Action OnValidationSucceeded { get; set; }
+        [Parameter] public override Action OnBeforeValidate { get; set; }
+        [Parameter] public override Action OnAfterValidate { get; set; }
         [Parameter] public virtual int DebounceInterval { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
@@ -118,15 +116,13 @@ namespace OneLine.Blazor.Bases
                 }
             }
             //This null check allows to prevent override the listeners from parent if it's listening to any of this events
-            OnBeforeSave ??= new Action<Action>(async (callback) => await BeforeSave(callback));
+            OnBeforeSave ??= new Action(async () => await BeforeSave());
             OnAfterSave ??= new Action(async () => await AfterSave());
-            OnSaveFailed ??= new Action(async () => await SaveFailed());
-            OnValidationFailed ??= new Action(async () => await ValidationFailed());
-            OnBeforeDelete ??= new Action<Action>(async (callback) => await BeforeDelete(callback));
+            OnBeforeDelete ??= new Action(async () => await BeforeDelete());
             OnAfterDelete ??= new Action(async () => await AfterDelete());
-            OnBeforeCancel ??= new Action<Action>(async (callback) => await BeforeCancel(callback));
+            OnBeforeCancel ??= new Action(async () => await BeforeCancel());
             OnAfterCancel ??= new Action(async () => await AfterCancel());
-            OnBeforeReset ??= new Action<Action>(async (callback) => await BeforeReset(callback));
+            OnBeforeReset ??= new Action(async () => await BeforeReset());
             OnAfterReset ??= new Action(async () => await AfterReset());
             StateHasChanged();
         }
@@ -153,30 +149,34 @@ namespace OneLine.Blazor.Bases
         {
             return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
         }
-        public virtual async Task BeforeSave(Action Callback)
+        public virtual async Task BeforeSave()
         {
-            if (await SweetAlertService.ShowConfirmAlertAsync())
+            await Validate();
+            if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToSaveTheRecord"))
             {
                 await SweetAlertService.ShowLoaderAsync(Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
-                Callback();
+                await Save();
+            }
+            else if (!IsValidModelState)
+            {
+                await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
             }
             StateHasChanged();
         }
-        public virtual async Task ValidationFailed()
+        public virtual async Task InvalidSubmit()
         {
+            await Validate();
             await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
             StateHasChanged();
         }
         public virtual async Task AfterSave()
         {
             await SweetAlertService.HideLoaderAsync();
-            await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
-            StateHasChanged();
-        }
-        public virtual async Task SaveFailed()
-        {
-            await SweetAlertService.HideLoaderAsync();
-            if (Response.HasException)
+            if (Response.Succeed && Response.Response.Status.Succeeded())
+            {
+                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
+            }
+            else if (Response.HasException)
             {
                 await SweetAlertService.FireAsync(null, Response.Exception.Message, SweetAlertIcon.Error);
             }
@@ -186,12 +186,12 @@ namespace OneLine.Blazor.Bases
             }
             StateHasChanged();
         }
-        public virtual async Task BeforeDelete(Action Callback)
+        public virtual async Task BeforeDelete()
         {
-            if (Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync())
+            if (Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToDeleteTheRecord"))
             {
                 await SweetAlertService.ShowLoaderAsync(Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
-                Callback();
+                await Delete();
             }
             StateHasChanged();
         }
@@ -201,11 +201,11 @@ namespace OneLine.Blazor.Bases
             await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
             StateHasChanged();
         }
-        public virtual async Task BeforeCancel(Action Callback)
+        public virtual async Task BeforeCancel()
         {
             if (await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToCancel"))
             {
-                Callback();
+                await Cancel();
             }
             StateHasChanged();
         }
@@ -213,11 +213,11 @@ namespace OneLine.Blazor.Bases
         {
             await JSRuntime.InvokeVoidAsync("eval", "window.history.back()");
         }
-        public virtual async Task BeforeReset(Action Callback)
+        public virtual async Task BeforeReset()
         {
             if (await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToReset"))
             {
-                Callback();
+                await Reset();
             }
             StateHasChanged();
         }

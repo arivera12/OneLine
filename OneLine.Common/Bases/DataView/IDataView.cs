@@ -3,7 +3,7 @@
     public interface IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
-        ISearchExtraParameterable<object>,
+        ISearchExtraParameterable<object[]>,
         ISearchableEventable,
         ICollectionFilterableSortable<T>,
         ICollectionAppendableReplaceableModeable,

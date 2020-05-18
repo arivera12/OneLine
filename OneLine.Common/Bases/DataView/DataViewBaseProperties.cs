@@ -21,7 +21,7 @@ namespace OneLine.Bases
         public virtual IEnumerable<TIdentifier> Identifiers { get; set; }
         public virtual T Record { get; set; }
         public virtual ObservableRangeCollection<T> Records { get; set; }
-        public virtual object SearchExtraParams { get; set; }
+        public virtual object[] SearchExtraParams { get; set; }
         public virtual Func<T, bool> FilterPredicate { get; set; }
         public virtual string FilterSortBy { get; set; }
         public virtual bool FilterDescending { get; set; }
@@ -44,7 +44,7 @@ namespace OneLine.Bases
         public virtual Action<ResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
         public virtual Action<ResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         public virtual Action<ResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
-        public virtual Action<Action> OnBeforeSearch { get; set; }
+        public virtual Action OnBeforeSearch { get; set; }
         public virtual Action OnAfterSearch { get; set; }
         public virtual Action<TIdentifier> IdentifierChanged { get; set; }
         public virtual Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
@@ -52,7 +52,7 @@ namespace OneLine.Bases
         public virtual Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
         public virtual Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
         public virtual Action<T> SelectedRecordChanged { get; set; }
-        public virtual Action<Action<T>> BeforeSelectedRecord { get; set; }
+        public virtual Action BeforeSelectedRecord { get; set; }
         public virtual Action AfterSelectedRecord { get; set; }
         public virtual Action<IEnumerable<T>, bool, bool> SelectedRecordsChanged { get; set; }
         public virtual Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }

@@ -24,8 +24,9 @@ namespace OneLine.Bases
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
+            Paging = new Paging();
         }
-        public DataViewBase(object searchExtraParams)
+        public DataViewBase(object[] searchExtraParams)
         {
             Identifier = new TIdentifier();
             Identifiers = new List<TIdentifier>();
@@ -34,6 +35,7 @@ namespace OneLine.Bases
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
+            Paging = new Paging();
             SearchExtraParams = searchExtraParams;
         }
         public DataViewBase(SearchPaging searchPaging)
@@ -45,8 +47,20 @@ namespace OneLine.Bases
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = searchPaging;
+            Paging = new Paging();
         }
-        public DataViewBase(SearchPaging searchPaging, object searchExtraParams)
+        public DataViewBase(Paging paging)
+        {
+            Identifier = new TIdentifier();
+            Identifiers = new List<TIdentifier>();
+            Record = new T();
+            Records = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+            Paging = paging;
+        }
+        public DataViewBase(SearchPaging searchPaging, object[] searchExtraParams)
         {
             Identifier = new TIdentifier();
             Identifiers = new List<TIdentifier>();
@@ -57,7 +71,19 @@ namespace OneLine.Bases
             SearchPaging = searchPaging;
             SearchExtraParams = searchExtraParams;
         }
-        public DataViewBase(TIdentifier identifier)
+        public DataViewBase(Paging paging, object[] searchExtraParams)
+        {
+            Identifier = new TIdentifier();
+            Identifiers = new List<TIdentifier>();
+            Record = new T();
+            Records = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+            Paging = paging;
+            SearchExtraParams = searchExtraParams;
+        }
+        public DataViewBase(TIdentifier identifier, bool autoLoad = false)
         {
             Identifier = identifier;
             Identifiers = new List<TIdentifier>();
@@ -66,9 +92,13 @@ namespace OneLine.Bases
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
-            _ = new Action(async () => await Load());
+            Paging = new Paging();
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
-        public DataViewBase(IEnumerable<TIdentifier> identifiers)
+        public DataViewBase(IEnumerable<TIdentifier> identifiers, bool autoLoad = false)
         {
             Identifier = new TIdentifier();
             Identifiers = identifiers;
@@ -77,7 +107,11 @@ namespace OneLine.Bases
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
-            _ = new Action(async () => await Load());
+            Paging = new Paging();
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
         public DataViewBase(T record)
         {
@@ -88,6 +122,7 @@ namespace OneLine.Bases
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
+            Paging = new Paging();
         }
         public DataViewBase(IEnumerable<T> records)
         {
@@ -100,6 +135,7 @@ namespace OneLine.Bases
             RecordsFilteredSorted.AddRange(records);
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
+            Paging = new Paging();
         }
     }
 }

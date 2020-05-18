@@ -1,6 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
-using Microsoft.Extensions.Configuration;
 using OneLine.Enums;
 using OneLine.Models;
 using System;
@@ -57,7 +55,7 @@ namespace OneLine.Bases
             BlobDatas = new List<TBlobData>();
             CollectionAppendReplaceMode = collectionAppendReplaceMode;
         }
-        public FormBase(TIdentifier identifier)
+        public FormBase(TIdentifier identifier, bool autoLoad = false)
         {
             Identifier = identifier;
             Identifiers = new List<TIdentifier>();
@@ -65,8 +63,12 @@ namespace OneLine.Bases
             Records = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             BlobDatas = new List<TBlobData>();
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
-        public FormBase(IEnumerable<TIdentifier> identifiers)
+        public FormBase(IEnumerable<TIdentifier> identifiers, bool autoLoad = false)
         {
             Identifier = new TIdentifier();
             Identifiers = identifiers;
@@ -74,6 +76,10 @@ namespace OneLine.Bases
             Records = new ObservableRangeCollection<T>();
             HttpService = new THttpService();
             BlobDatas = new List<TBlobData>();
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
         public FormBase(T record)
         {
@@ -116,7 +122,7 @@ namespace OneLine.Bases
             FormState = formState;
             CollectionAppendReplaceMode = collectionAppendReplaceMode;
         }
-        public FormBase(FormState formState, TIdentifier identifier)
+        public FormBase(FormState formState, TIdentifier identifier, bool autoLoad = false)
         {
             Identifier = identifier;
             Identifiers = new List<TIdentifier>();
@@ -125,8 +131,12 @@ namespace OneLine.Bases
             HttpService = new THttpService();
             BlobDatas = new List<TBlobData>();
             FormState = formState;
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
-        public FormBase(FormState formState, IEnumerable<TIdentifier> identifiers)
+        public FormBase(FormState formState, IEnumerable<TIdentifier> identifiers, bool autoLoad = false)
         {
             Identifier = new TIdentifier();
             Identifiers = identifiers;
@@ -135,6 +145,10 @@ namespace OneLine.Bases
             HttpService = new THttpService();
             BlobDatas = new List<TBlobData>();
             FormState = formState;
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
         public FormBase(FormState formState, T record)
         {
@@ -168,7 +182,7 @@ namespace OneLine.Bases
             FormMode = formMode;
             CollectionAppendReplaceMode = collectionAppendReplaceMode;
         }
-        public FormBase(FormMode formMode, TIdentifier identifier)
+        public FormBase(FormMode formMode, TIdentifier identifier, bool autoLoad = false)
         {
             Identifier = identifier;
             Identifiers = new List<TIdentifier>();
@@ -177,8 +191,12 @@ namespace OneLine.Bases
             HttpService = new THttpService();
             BlobDatas = new List<TBlobData>();
             FormMode = formMode;
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
-        public FormBase(FormMode formMode, IEnumerable<TIdentifier> identifiers)
+        public FormBase(FormMode formMode, IEnumerable<TIdentifier> identifiers, bool autoLoad = false)
         {
             Identifier = new TIdentifier();
             Identifiers = identifiers;
@@ -187,6 +205,10 @@ namespace OneLine.Bases
             HttpService = new THttpService();
             BlobDatas = new List<TBlobData>();
             FormMode = formMode;
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
         public FormBase(FormMode formMode, T record)
         {
@@ -209,7 +231,7 @@ namespace OneLine.Bases
             BlobDatas = new List<TBlobData>();
             FormMode = formMode;
         }
-        public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode, TIdentifier identifier)
+        public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode, TIdentifier identifier, bool autoLoad = false)
         {
             Identifier = identifier;
             Identifiers = new List<TIdentifier>();
@@ -218,8 +240,12 @@ namespace OneLine.Bases
             HttpService = new THttpService();
             BlobDatas = new List<TBlobData>();
             CollectionAppendReplaceMode = collectionAppendReplaceMode;
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
-        public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode, IEnumerable<TIdentifier> identifiers)
+        public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode, IEnumerable<TIdentifier> identifiers, bool autoLoad = false)
         {
             Identifier = new TIdentifier();
             Identifiers = identifiers;
@@ -228,6 +254,10 @@ namespace OneLine.Bases
             HttpService = new THttpService();
             BlobDatas = new List<TBlobData>();
             CollectionAppendReplaceMode = collectionAppendReplaceMode;
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
         public FormBase(CollectionAppendReplaceMode collectionAppendReplaceMode, T record)
         {
@@ -262,7 +292,7 @@ namespace OneLine.Bases
             FormMode = formMode;
             CollectionAppendReplaceMode = collectionAppendReplaceMode;
         }
-        public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode, TIdentifier identifier)
+        public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode, TIdentifier identifier, bool autoLoad = false)
         {
             Identifier = identifier;
             Identifiers = new List<TIdentifier>();
@@ -273,8 +303,12 @@ namespace OneLine.Bases
             FormState = formState;
             FormMode = formMode;
             CollectionAppendReplaceMode = collectionAppendReplaceMode;
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
-        public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode, IEnumerable<TIdentifier> identifiers)
+        public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode, IEnumerable<TIdentifier> identifiers, bool autoLoad = false)
         {
             Identifier = new TIdentifier();
             Identifiers = identifiers;
@@ -285,6 +319,10 @@ namespace OneLine.Bases
             FormState = formState;
             FormMode = formMode;
             CollectionAppendReplaceMode = collectionAppendReplaceMode;
+            if (autoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
         }
         public FormBase(FormState formState, FormMode formMode, CollectionAppendReplaceMode collectionAppendReplaceMode, T record)
         {

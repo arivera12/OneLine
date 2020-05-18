@@ -54,17 +54,6 @@ namespace OneLine.Bases
         }
         public virtual async Task Search()
         {
-            if (OnBeforeSearch == null)
-            {
-                await InternalSearch();
-            }
-            else
-            {
-                OnBeforeSearch?.Invoke(async () => await InternalSearch());
-            }
-        }
-        private async Task InternalSearch()
-        {
             ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
             ResponsePagedChanged?.Invoke(ResponsePaged);
             if (ResponsePaged.Succeed && ResponsePaged.Response.Status.Succeeded())
@@ -84,18 +73,7 @@ namespace OneLine.Bases
             }
             OnAfterSearch?.Invoke();
         }
-        public async virtual Task SelectRecord(T selectedRecord)
-        {
-            if (BeforeSelectedRecord.IsNull())
-            {
-                await InternalSelectRecord(selectedRecord);
-            }
-            else
-            {
-                BeforeSelectedRecord?.Invoke(async (T selectedRecord) => await SelectRecord(selectedRecord));
-            }
-        }
-        private Task InternalSelectRecord(T selectedRecord)
+        public virtual Task SelectRecord(T selectedRecord)
         {
             if (RecordsSelectionMode.IsSingle())
             {

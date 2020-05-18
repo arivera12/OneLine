@@ -6,7 +6,7 @@ namespace OneLine.Bases
     public interface IResettableEventable
     {
         Task Reset();
-        Action<Action> OnBeforeReset { get; set; }
+        Action OnBeforeReset { get; set; }
         Action OnAfterReset { get; set; }
     }
 }

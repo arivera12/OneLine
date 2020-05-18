@@ -13,7 +13,6 @@ using OneLine.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -40,7 +39,7 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
         [Parameter] public override T Record { get; set; }
         [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
-        [Parameter] public override object SearchExtraParams { get; set; }
+        [Parameter] public override object[] SearchExtraParams { get; set; }
         [Parameter] public override Func<T, bool> FilterPredicate { get; set; }
         [Parameter] public override string FilterSortBy { get; set; }
         [Parameter] public override bool FilterDescending { get; set; }
@@ -61,7 +60,7 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<ResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
         [Parameter] public override Action<ResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         [Parameter] public override Action<ResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
-        [Parameter] public override Action<Action> OnBeforeSearch { get; set; }
+        [Parameter] public override Action OnBeforeSearch { get; set; }
         [Parameter] public override Action OnAfterSearch { get; set; }
         [Parameter] public override Action<TIdentifier> IdentifierChanged { get; set; }
         [Parameter] public override Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
@@ -69,7 +68,7 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
         [Parameter] public override Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
         [Parameter] public override Action<T> SelectedRecordChanged { get; set; }
-        [Parameter] public override Action<Action<T>> BeforeSelectedRecord { get; set; }
+        [Parameter] public override Action BeforeSelectedRecord { get; set; }
         [Parameter] public override Action AfterSelectedRecord { get; set; }
         [Parameter] public override Action<IEnumerable<T>, bool, bool> SelectedRecordsChanged { get; set; }
         [Parameter] public override Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }

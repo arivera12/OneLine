@@ -12,8 +12,8 @@ namespace OneLine.Bases
         Action<ValidationResult> ValidationResultChanged { get; set; }
         bool IsValidModelState { get; set; }
         Action<bool> IsValidModelStateChanged { get; set; }
+        Action OnBeforeValidate { get; set; }
         Task Validate();
-        Action OnValidationFailed { get; set; }
-        Action OnValidationSucceeded { get; set; }
+        Action OnAfterValidate { get; set; }
     }
 }

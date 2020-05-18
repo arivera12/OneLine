@@ -66,31 +66,16 @@ namespace OneLine.Bases
             IsValidModelStateChanged?.Invoke(IsValidModelState);
             if(IsValidModelState)
             {
-                if (BlobDatas == null || BlobDatas.Any())
-                {
-                    OnValidationSucceeded?.Invoke();
-                }
-                else
+                if (BlobDatas.IsNotNullAndNotEmpty() )
                 {
                     var BlobValidator = new BlobDataCollectionValidator();
                     ValidationResult = await BlobValidator.ValidateAsync(BlobDatas);
                     ValidationResultChanged?.Invoke(ValidationResult);
                     IsValidModelState = ValidationResult.IsValid;
                     IsValidModelStateChanged?.Invoke(IsValidModelState);
-                    if (IsValidModelState)
-                    {
-                        OnValidationSucceeded?.Invoke();
-                    }
-                    else
-                    {
-                        OnValidationFailed?.Invoke();
-                    }
                 }
             }
-            else
-            {
-                OnValidationFailed?.Invoke();
-            }
+            OnAfterValidate?.Invoke();
         }
         public virtual async Task Save()
         {
@@ -98,33 +83,19 @@ namespace OneLine.Bases
             {
                 if (FormState.IsEdit())
                 {
-                    if (OnBeforeSave == null)
-                    {
-                        await InternalUpdate();
-                    }
-                    else
-                    {
-                        OnBeforeSave?.Invoke(async () => await InternalUpdate());
-                    }
+                    await Update();
                 }
                 else
                 {
-                    if (OnBeforeSave == null)
-                    {
-                        await InternalCreate();
-                    }
-                    else
-                    {
-                        OnBeforeSave?.Invoke(async () => await InternalCreate());
-                    }
+                    await Create();
                 }
             }
         }
-        private async Task InternalCreate()
+        private async Task Create()
         {
-            if (BlobDatas.Any())
+            if (BlobDatas.IsNotNullAndNotEmpty())
             {
-                await InternalCreateWitBlobData();
+                await CreateWitBlobData();
             }
             else
             {
@@ -138,10 +109,10 @@ namespace OneLine.Bases
                     ResponseCollection = await HttpService.AddRange<IEnumerable<T>>(Records);
                     ResponseCollectionChanged?.Invoke(ResponseCollection);
                 }
-                InternalResponse(FormState.Edit);
+                OnResponse(FormState.Edit);
             }
         }
-        private async Task InternalCreateWitBlobData()
+        private async Task CreateWitBlobData()
         {
             if (FormMode.IsSingle())
             {
@@ -153,11 +124,6 @@ namespace OneLine.Bases
                     RecordChanged?.Invoke(Record);
                     FormState = FormState.Edit;
                     FormStateChanged?.Invoke(FormState);
-                    OnAfterSave?.Invoke();
-                }
-                else
-                {
-                    OnSaveFailed?.Invoke();
                 }
             }
             else if (FormMode.IsMultiple())
@@ -170,21 +136,17 @@ namespace OneLine.Bases
                     RecordsChanged?.Invoke(Records);
                     FormState = FormState.Edit;
                     FormStateChanged?.Invoke(FormState);
-                    OnAfterSave?.Invoke();
-                }
-                else
-                {
-                    OnSaveFailed?.Invoke();
                 }
             }
+            OnAfterSave?.Invoke();
         }
-        private async Task InternalUpdate()
+        private async Task Update()
         {
             if (FormMode.IsSingle())
             {
-                if (BlobDatas.Any())
+                if (BlobDatas.IsNotNullAndNotEmpty())
                 {
-                    await InternalUpdateWitBlobData();
+                    await UpdateWitBlobData();
                 }
                 else
                 {
@@ -196,11 +158,11 @@ namespace OneLine.Bases
                     {
                         ResponseCollection = await HttpService.UpdateRange<IEnumerable<T>>(Records);
                     }
-                    InternalResponse(FormState.Edit);
+                    OnResponse(FormState.Edit);
                 }
             }
         }
-        private async Task InternalUpdateWitBlobData()
+        private async Task UpdateWitBlobData()
         {
             if (FormMode.IsSingle())
             {
@@ -212,11 +174,6 @@ namespace OneLine.Bases
                     RecordChanged?.Invoke(Record);
                     FormState = FormState.Edit;
                     FormStateChanged?.Invoke(FormState);
-                    OnAfterSave?.Invoke();
-                }
-                else
-                {
-                    OnSaveFailed?.Invoke();
                 }
             }
             else if (FormMode.IsMultiple())
@@ -229,43 +186,28 @@ namespace OneLine.Bases
                     RecordsChanged?.Invoke(Records);
                     FormState = FormState.Edit;
                     FormStateChanged?.Invoke(FormState);
-                    OnAfterSave?.Invoke();
-                }
-                else
-                {
-                    OnSaveFailed?.Invoke();
                 }
             }
+            OnAfterSave?.Invoke();
         }
         public virtual async Task Delete()
         {
             if (FormState.IsDelete())
             {
-                if (OnBeforeDelete == null)
+                if (FormMode.IsSingle())
                 {
-                    await InternalDelete();
+                    Response = await HttpService.Delete<T>(Identifier);
+                    ResponseChanged?.Invoke(Response);
                 }
-                else
+                else if (FormMode.IsMultiple())
                 {
-                    OnBeforeDelete?.Invoke(async () => await InternalDelete());
+                    ResponseCollection = await HttpService.DeleteRange<T>(Identifiers);
+                    ResponseCollectionChanged?.Invoke(ResponseCollection);
                 }
+                OnResponse(FormState.Deleted);
             }
         }
-        private async Task InternalDelete()
-        {
-            if (FormMode.IsSingle())
-            {
-                Response = await HttpService.Delete<T>(Identifier);
-                ResponseChanged?.Invoke(Response);
-            }
-            else if (FormMode.IsMultiple())
-            {
-                ResponseCollection = await HttpService.DeleteRange<T>(Identifiers);
-                ResponseCollectionChanged?.Invoke(ResponseCollection);
-            }
-            InternalResponse(FormState.Deleted);
-        }
-        private void InternalResponse(FormState formState)
+        private void OnResponse(FormState formState)
         {
             if (FormMode.IsSingle())
             {
@@ -275,25 +217,6 @@ namespace OneLine.Bases
                     RecordChanged?.Invoke(Record);
                     FormState = formState;
                     FormStateChanged?.Invoke(FormState);
-                    if(FormState.IsDeleted())
-                    {
-                        OnAfterDelete?.Invoke();
-                    }
-                    else
-                    {
-                        OnAfterSave?.Invoke();
-                    }
-                }
-                else
-                {
-                    if (FormState.IsDelete())
-                    {
-                        OnDeleteFailed?.Invoke();
-                    }
-                    else
-                    {
-                        OnSaveFailed?.Invoke();
-                    }   
                 }
             }
             else if (FormMode.IsMultiple())
@@ -304,38 +227,18 @@ namespace OneLine.Bases
                     RecordsChanged?.Invoke(Records);
                     FormState = formState;
                     FormStateChanged?.Invoke(FormState);
-                    if (FormState.IsDeleted())
-                    {
-                        OnAfterDelete?.Invoke();
-                    }
-                    else
-                    {
-                        OnAfterSave?.Invoke();
-                    }
                 }
-                else
-                {
-                    if (FormState.IsDelete())
-                    {
-                        OnDeleteFailed?.Invoke();
-                    }
-                    else
-                    {
-                        OnSaveFailed?.Invoke();
-                    }
-                }
+            }
+            if (FormState.IsDelete() || FormState.IsDeleted())
+            {
+                OnAfterDelete?.Invoke();
+            }
+            else
+            {
+                OnAfterSave?.Invoke();
             }
         }
         public virtual Task Reset()
-        {
-            if (OnBeforeReset == null)
-            {
-                return InternalReset();
-            }
-            OnBeforeReset?.Invoke(() => InternalReset());
-            return Task.CompletedTask;
-        }
-        private Task InternalReset()
         {
             Record = new T();
             RecordChanged?.Invoke(Record);
@@ -345,21 +248,12 @@ namespace OneLine.Bases
             IdentifierChanged?.Invoke(Identifier);
             Identifiers = new List<TIdentifier>();
             IdentifiersChanged?.Invoke(Identifiers);
-            BlobDatas.Clear();
+            BlobDatas?.Clear();
             BlobDatasChanged?.Invoke(BlobDatas);
             OnAfterReset?.Invoke();
             return Task.CompletedTask;
         }
         public virtual Task Cancel()
-        {
-            if (OnBeforeCancel == null)
-            {
-                return InternalCancel();
-            }
-            OnBeforeCancel?.Invoke(() => InternalCancel());
-            return Task.CompletedTask;
-        }
-        private Task InternalCancel()
         {
             OnAfterCancel?.Invoke();
             return Task.CompletedTask;

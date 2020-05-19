@@ -1,6 +1,6 @@
 # OneLine
 
-OneLine is an abstraction standardized redefined framework.
+OneLine is an abstracted standardized redefined framework.
 
 ## OneLine is still under heavy development and testing. 
 

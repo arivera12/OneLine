@@ -6,16 +6,16 @@ namespace OneLine.Blazor.Extensions
 {
     public static class SweetAlertServiceExtension
     {
-        public static async Task ShowFluentValidationsAlertMessageAsync(this SweetAlertService Swal, ValidationResult FluentValidationResult, string title = null, string style = "list-style:none;color:red")
+        public static async Task ShowFluentValidationsAlertMessageAsync(this SweetAlertService Swal, ValidationResult FluentValidationResult, string title = null, string style = "color:red")
         {
             if (FluentValidationResult != null && !FluentValidationResult.IsValid && FluentValidationResult.Errors.Count > 0)
             {
                 string validations = "";
                 foreach (var item in FluentValidationResult.Errors)
                 {
-                    validations += $"<li>{Resourcer.GetString(item.ErrorMessage)}</li>";
+                    validations += $"<div>{Resourcer.GetString(item.ErrorMessage)}</div>";
                 }
-                string validationMessage = $@"<ul style=""{style}"">{validations}</ul>";
+                string validationMessage = $@"<div style=""{style}"">{validations}</div>";
                 await Swal.FireAsync(title, validationMessage, SweetAlertIcon.Error);
             }
         }

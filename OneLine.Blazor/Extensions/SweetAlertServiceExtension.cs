@@ -32,21 +32,9 @@ namespace OneLine.Blazor.Extensions
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
                 ConfirmButtonText = Resourcer.GetString(confirmButtonText),
-                CancelButtonText = Resourcer.GetString(cancelButtonText),
+                CancelButtonText = Resourcer.GetString(cancelButtonText)
             });
             return !string.IsNullOrWhiteSpace(result.Value);
-        }
-        public static async Task ShowLoaderAsync(this SweetAlertService Swal, string title = null, string text = null)
-        {
-            await Swal.FireAsync(new SweetAlertOptions()
-            {
-                AllowEnterKey = false,
-                AllowEscapeKey = false,
-                AllowOutsideClick = false,
-                Title = title,
-                Text = text,
-                OnBeforeOpen = new SweetAlertCallback(async () => await Swal.ShowLoadingAsync())
-            });
         }
         public static async Task ShowLoaderAsync(this SweetAlertService Swal, SweetAlertCallback sweetAlertCallback, string title = null, string text = null)
         {

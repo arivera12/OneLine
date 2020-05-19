@@ -79,16 +79,13 @@ namespace OneLine.Bases
         }
         public virtual async Task Save()
         {
-            if (FormState.IsCopy() || FormState.IsCreate() || FormState.IsEdit())
+            if (FormState.IsCopy() || FormState.IsCreate())
             {
-                if (FormState.IsEdit())
-                {
-                    await Update();
-                }
-                else
-                {
-                    await Create();
-                }
+                await Create();
+            }
+            else if (FormState.IsEdit())
+            {
+                await Update();
             }
         }
         private async Task Create()

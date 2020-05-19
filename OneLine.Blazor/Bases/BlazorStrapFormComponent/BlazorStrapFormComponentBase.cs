@@ -36,7 +36,7 @@ namespace OneLine.Blazor.Bases
         [Inject] public virtual IJSRuntime JSRuntime { get; set; }
         [Inject] public virtual NavigationManager NavigationManager { get; set; }
         [Inject] public virtual BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
-        [Inject] public virtual BlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
         [Inject] public virtual HttpClient HttpClient { get; set; }
         [Parameter] public override T Record { get; set; }
@@ -154,8 +154,7 @@ namespace OneLine.Blazor.Bases
             await Validate();
             if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToSaveTheRecord"))
             {
-                await SweetAlertService.ShowLoaderAsync(Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
-                await Save();
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
             }
             else if (!IsValidModelState)
             {
@@ -172,7 +171,12 @@ namespace OneLine.Blazor.Bases
         public virtual async Task AfterSave()
         {
             await SweetAlertService.HideLoaderAsync();
-            if (Response.Succeed && Response.Response.Status.Succeeded())
+            if (!Response.Succeed && !Response.HasException)
+            {
+                await SweetAlertService.FireAsync("SessionExpired", Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
+            }
+            else if (Response.Succeed && Response.Response.Status.Succeeded())
             {
                 await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
             }
@@ -190,7 +194,7 @@ namespace OneLine.Blazor.Bases
         {
             if (Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToDeleteTheRecord"))
             {
-                await SweetAlertService.ShowLoaderAsync(Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
                 await Delete();
             }
             StateHasChanged();

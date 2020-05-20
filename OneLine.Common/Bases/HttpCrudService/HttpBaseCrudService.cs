@@ -154,7 +154,7 @@ namespace OneLine.Bases
         /*Search method*/
         public virtual async Task<ResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.GetJsonResponseResultAsync<ApiResponse<Paged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{SearchMethod}", new[] { SearchPaging, searchExtraParams });
+            return await HttpClient.GetJsonResponseResultAsync<ApiResponse<Paged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{SearchMethod}", new[] { SearchPaging ?? new SearchPaging(), searchExtraParams ?? new { } });
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 
-namespace OneLine
+namespace OneLine.Extensions
 {
-    public static class RateLimitingExtensionForObject
+    public class RateLimitingExtensionForObject
     {
         #region Private Properties
 
@@ -27,7 +27,7 @@ namespace OneLine
         /// <param name="obj">Your object</param>
         /// <param name="interval">Milisecond interval</param>
         /// <param name="debounceAction">Called when last item call this method and after interval was finished</param>
-        public static void Debounce(this object obj, int interval, Action<object> debounceAction)
+        public static void Debounce(object obj, int interval, Action<object> debounceAction)
         {
             _lastObjectDebounce = obj;
             _debounceAction = debounceAction;
@@ -64,7 +64,7 @@ namespace OneLine
         /// <param name="obj">Your object</param>
         /// <param name="interval">Milisecond interval</param>
         /// <param name="throttleAction">Invoked last object when timer ticked invoked</param>
-        public static void Throttle(this object obj, int interval, Action<object> throttleAction)
+        public static void Throttle(object obj, int interval, Action<object> throttleAction)
         {
             _lastObjectThrottle = obj;
             _throttleAction = throttleAction;

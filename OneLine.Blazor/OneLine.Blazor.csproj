@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Replaced blazor.extensions.storage with my own implementation using now BlazorBrowserStorage.</PackageReleaseNotes>
-    <Version>2.0.54</Version>
+    <PackageReleaseNotes>Bug fixes on search method and code cleanup.</PackageReleaseNotes>
+    <Version>2.0.55</Version>
   </PropertyGroup>
 
 

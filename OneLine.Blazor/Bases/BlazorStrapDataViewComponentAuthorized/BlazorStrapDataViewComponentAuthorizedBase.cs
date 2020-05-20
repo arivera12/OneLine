@@ -34,7 +34,7 @@ namespace OneLine.Blazor.Bases
         [Inject] public virtual IJSRuntime JSRuntime { get; set; }
         [Inject] public virtual NavigationManager NavigationManager { get; set; }
         [Inject] public virtual BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
-        [Inject] public virtual BlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
         [Inject] public virtual HttpClient HttpClient { get; set; }
         [Parameter] public override TIdentifier Identifier { get; set; }
@@ -138,11 +138,11 @@ namespace OneLine.Blazor.Bases
             SearchPaging.AutoMap(paging);
             await Search();
         }
-        public void SearchTermChanged(string searchTerm)
+        public virtual void SearchTermChanged(string searchTerm)
         {
-            searchTerm.Debounce(DebounceInterval, async (searchTermDebounced) =>
+            SearchPaging.SearchTerm = searchTerm;
+            RateLimitingExtensionForObject.Debounce(SearchPaging, DebounceInterval, async (searchPagingDebounced) =>
             {
-                SearchPaging.SearchTerm = searchTermDebounced.ToString();
                 await Search();
             });
         }

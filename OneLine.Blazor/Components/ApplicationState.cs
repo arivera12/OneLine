@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using OneLine.Enums;
 using OneLine.Extensions;
+using OneLine.Models.Users;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -147,11 +148,6 @@ namespace OneLine.Blazor
         #endregion
 
         #region Common/Shared
-
-        public static void RedirectToRootPage(string url = "/")
-        {
-            _NavigationManager.NavigateTo(url);
-        }
 
         public static async ValueTask Logout()
         {

@@ -318,7 +318,7 @@ namespace OneLine.Extensions
             {
                 var serialize = JsonConvert.SerializeObject(obj);
                 var deserialize = JsonConvert.DeserializeObject<IDictionary<string, object>>(serialize);
-                var queryString = deserialize.Select(x => Uri.EscapeDataString(x.Key) + "=" + Uri.EscapeDataString(x.Value?.ToString()) ?? "");
+                var queryString = deserialize.Select(x => Uri.EscapeDataString(x.Key ?? "") + "=" + Uri.EscapeDataString(x.Value?.ToString() ?? "") ?? "");
                 return string.Join("&", queryString);
             }
         }

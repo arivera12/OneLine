@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Bug fixes on search method and code cleanup.</PackageReleaseNotes>
-    <Version>2.0.55</Version>
+    <PackageReleaseNotes>Fixed null reference exception on uri.escapedatastring.</PackageReleaseNotes>
+    <Version>2.0.56</Version>
   </PropertyGroup>
 
 

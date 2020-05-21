@@ -9,7 +9,6 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Reflection;
-using Z.EntityFramework.Plus;
 
 namespace OneLine.Extensions
 {
@@ -41,17 +40,17 @@ namespace OneLine.Extensions
             if (source.GetType().IsAnonymousType())
                 throw new InvalidOperationException("source can't be an anonymous type");
 
-            Count = source.DeferredCount().FutureValue().Value;
+            Count = source.Count();
 
             Page = (Page.HasValue && Page.Value > 0) ? Page.Value : 1;
             PageSize = (PageSize.HasValue && PageSize.Value > 0) ? PageSize.Value : Count;
 
-            return source.Skip((Page.Value - 1) * PageSize.Value).Take(PageSize.Value).Future().AsQueryable();
+            return source.Skip((Page.Value - 1) * PageSize.Value).Take(PageSize.Value).AsQueryable();
         }
 
         public static IActionResult ToJson<T>(this IQueryable<T> source)
         {
-            return new ContentResult().OutputJson(source.Future());
+            return new ContentResult().OutputJson(source);
         }
 
         public static IActionResult ToJsonPaged<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count)
@@ -71,7 +70,7 @@ namespace OneLine.Extensions
                 (
                     new ApiResponse<IEnumerable<T>>()
                     {
-                        Data = source.Future(),
+                        Data = source,
                         Message = message,
                         Status = apiResponseStatus
                     }

@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Fixed null reference exception on uri.escapedatastring.</PackageReleaseNotes>
-    <Version>2.0.56</Version>
+    <PackageReleaseNotes>Removed z.framework package and system.lins.dynamic.core reference and removed unused code. Fixed search bug.</PackageReleaseNotes>
+    <Version>2.0.57</Version>
   </PropertyGroup>
 
 

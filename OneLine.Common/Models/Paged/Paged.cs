@@ -49,10 +49,13 @@ namespace OneLine.Models
             PageIndex = pageIndex;
             PageSize = pageSize;
             TotalCount = totalCount;
-            TotalPages = TotalCount == 0 ? 0 : Convert.ToInt32(Math.Ceiling(TotalCount / Convert.ToDouble(PageSize)));
+            TotalPages = TotalCount == 0 ? 0 : 
+                Convert.ToInt32(Math.Ceiling(TotalCount / Convert.ToDouble(PageSize)));
             LastPage = TotalPages;
-            HasPreviousPage = PageIndex > 1;
-            HasNextPage = TotalCount != 0 && TotalCount > PageIndex * PageSize;
+            HasPreviousPage = PageIndex > 0;
+            HasNextPage = TotalCount != 0 && 
+                            PageIndex == 0 ? totalCount > PageSize : 
+                            TotalCount > PageIndex * PageSize;
             Data = data;
         }
 

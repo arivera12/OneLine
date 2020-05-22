@@ -237,6 +237,8 @@ namespace OneLine.Bases
         }
         public virtual Task Reset()
         {
+            FormState = FormState.Create;
+            FormStateChanged?.Invoke(FormState);
             Record = new T();
             RecordChanged?.Invoke(Record);
             Records.Clear();

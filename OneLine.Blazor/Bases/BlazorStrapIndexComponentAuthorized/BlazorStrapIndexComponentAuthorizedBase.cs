@@ -142,9 +142,16 @@ namespace OneLine.Blazor.Bases
             ShowModal = true;
             StateHasChanged();
         }
-        public virtual void OpenForm(FormState formState)
+        public virtual async Task OpenForm(FormState formState)
         {
-            FormState = formState;
+            if(formState.IsCreate())
+            {
+                await Reset();
+            }
+            else
+            {
+                FormState = formState;
+            }
             ShowModal = false;
             IsFormOpen = true;
             StateHasChanged();

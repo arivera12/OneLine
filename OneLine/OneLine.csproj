@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.57</Version>
+    <Version>2.0.58</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine is a project that can be used on a server backend. This package already includes OneLine.Common.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Removed z.framework package and system.lins.dynamic.core reference and removed unused code. Fixed search bug.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed duplicate and wrong calls. Fixed paginator. moved to 0 index based page. Fixed paged HasPreviousPage and HasNextPage properties validations. On Reset changed FormState to Create. Added some validation on afterDelete method. Added check and reset of index record before opening the form in create state.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

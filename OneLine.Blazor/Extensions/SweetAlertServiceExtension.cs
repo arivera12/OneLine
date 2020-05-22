@@ -32,7 +32,10 @@ namespace OneLine.Blazor.Extensions
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
                 ConfirmButtonText = Resourcer.GetString(confirmButtonText),
-                CancelButtonText = Resourcer.GetString(cancelButtonText)
+                CancelButtonText = Resourcer.GetString(cancelButtonText),
+                AllowEnterKey = true,
+                AllowEscapeKey = true,
+                AllowOutsideClick = false
             });
             return !string.IsNullOrWhiteSpace(result.Value);
         }

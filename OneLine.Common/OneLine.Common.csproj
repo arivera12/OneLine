@@ -13,11 +13,11 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Removed z.framework package and system.lins.dynamic.core reference and removed unused code. Fixed search bug.</PackageReleaseNotes>
-    <Version>2.0.57</Version>
+    <PackageReleaseNotes>Fixed duplicate and wrong calls. Fixed paginator. moved to 0 index based page. Fixed paged HasPreviousPage and HasNextPage properties validations. On Reset changed FormState to Create. Added some validation on afterDelete method. Added check and reset of index record before opening the form in create state.</PackageReleaseNotes>
+    <Version>2.0.58</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.57.0</AssemblyVersion>
+    <AssemblyVersion>2.0.58.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

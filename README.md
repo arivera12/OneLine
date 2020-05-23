@@ -2,35 +2,46 @@
 
 OneLine is an abstracted standardized redefined framework.
 
-## OneLine is still under heavy development and testing. 
+## General Technical Features 
 
-It will be completed with documentation to use very soon.
+- [x] Highly Abstracted
+- [x] Generic
+- [x] Standardized
+- [x] Eventable
+- [x] Chainable
+- [x] Recyclable
+- [x] Scaffolding Tooling
+- [x] Pre-Implemented Enviroment
+- [x] Cross Platform Support for Blazor (client/server), Xamarin and Electron.Net.
 
-## What is OneLine goal?
+## Core Features
 
-OneLine starts development from a pre-implemented and pre-applied environment.
-
-## How OneLine framework differs from the others frameworks?
-
-OneLine tries to abstract development efforts breaking common development patterns in a redefined way. 
-
-### But how? 
-
-Just by starting off from general and specific applications behaviors.
-
-### How this can be achieve? 
-
-1. Defining generic interfaces/headers.
-2. Defining and using actions before and after any task.
-3. Applying the appropriate implementations.
-
-### What are these actions?
-
-These actions are just methods were we decide what sub actions and/or sub tasks perform before or after any task.
-
-These actions and tasks should be chained between them.
-
-Take note that OneLine may use open source libraries to achieve resolving tasks more easier and faster.
+- [x] Bindable
+- [x] Eventable
+- [x] Listenable
+- [x] Chainable
+- [x] Form Management 
+  - [x] Load
+  - [x] Validate
+  - [x] Save (create & update)
+  - [x] Reset
+  - [x] Cancel
+  - [x] Delete
+  - [x] Form State Management
+  - [x] Blob Management
+  - [x] Request and Response Management
+  - [x] Single and Multiple State Management  
+- [x] Data View Management
+  - [x] Load
+  - [x] Search
+  - [x] SelectRecord
+  - [x] Filtering
+  - [x] Sorting
+  - [x] Paged Data Management
+    - [x] Previous & next page
+    - [x] Page index and size
+    - [x] Page sort by
+  - [x] Single and Multiple State Management
 
 ## Known Random Issues
 

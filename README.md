@@ -105,7 +105,7 @@ OneLine is an abstracted standardized redefined framework.
   - [x] Blobs doesn't never need a child tables to support multiple file upload references
   - [x] Define and apply rules to the expected blob
 - [x] Server exceptions are pre-handled and recorded
-- [x] Every operation is Auto Audited with option of rolling back any operation at any time
+- [x] Every operation is auto audited with option of rolling back any operation at any time
 
 ## Client And Server Shared Features
 - [x] Pre-Implemented Models

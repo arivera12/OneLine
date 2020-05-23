@@ -85,7 +85,7 @@ OneLine is an abstracted standardized redefined framework.
     - [x] Blob Storage
     - [x] File Storage
     - [x] Data Lake Gen 1
-    - [x] Data Lke Gen 2
+    - [x] Data Lake Gen 2
     - [x] Storage Queue
     - [x] Event Hubs
     - [x] Service Bus

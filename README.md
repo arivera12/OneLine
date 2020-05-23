@@ -17,7 +17,7 @@ OneLine is an abstracted standardized redefined framework.
 - [ ] Multiple Database Providers Support
   - [x] SQL Server 2012 onwards
   - [ ] SQLite 3.7 onwards
-  - [ ] Azure Cosmos DB SQL API
+  - [ ] Azure Cosmos DB SQL API (Still planning for support)
   - [ ] PostgreSQL
   - [ ] MySQL
   - [ ] MariaDB
@@ -78,13 +78,41 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Search results are always paged by default
 - [x] Repository and Service patterns have been redefined and reimplemented as Database Context Extended as Repository Service
 - [x] CRUD methods are pre implemented supports single and multiple
-- [x] Blobs Management is centralized and doesn't never need a child tables to support multiple file upload references
+- [x] Import data uploading *.csv file for create or update operations.
+- [x] Exporting data in *.csv file.
+- [x] Multiple Blob Storage Provider Support (Thanks to [Storage.Net](https://github.com/aloneguid/storage)).
+  - [x] Microsoft Azure
+    - [x] Blob Storage
+    - [x] File Storage
+    - [x] Data Lake Gen 1
+    - [x] Data Lke Gen 2
+    - [x] Storage Queue
+    - [x] Event Hubs
+    - [x] Service Bus
+  - [x] Amazon Web Services
+    - [x] Simple Storage Service (S3)
+    - [x] Simple Queue Service (SQS)
+  - [x] Google Cloud Platform
+    - [x] Cloud Storage
+  - Misc
+    - [x] Azure Databricks DBFS
+    - [x] Service Fabric Reliable Collections
+    - [x] Azure Key Vault
+    - [x] Local Disk (Blobs, Messaging)
+    - [x] Zip Archive (Blobs)
+    - [x] In-Memory (Blobs, Messaging)
+    - [x] FTP (Blobs)
+- [x] Blobs Management is centralized
+  - [x] Blobs doesn't never need a child tables to support multiple file upload references
   - [x] Define and apply rules to the expected blob
 - [x] Server exceptions are pre-handled and recorded
 - [x] Every operation is Auto Audited with option of rolling back any operation at any time
 
 ## Client And Server Shared Features
-TODO
+- [x] Pre-Implemented Models
+- [x] Pre-Implemented Basic Validations
+- [x] Pre-Implemented Basic Http CRUD Services
+- [x] Pre-Implemented Basic Language Translations (English and Spanish (Partially))
 
 ## Known Random Issues on Visual Studio
 

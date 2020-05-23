@@ -10,9 +10,18 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Eventable
 - [x] Chainable
 - [x] Recyclable
+- [x] Overridable
 - [x] Scaffolding Tooling
 - [x] Pre-Implemented Enviroment
 - [x] Cross Platform Support for Blazor (client/server), Xamarin, UWP, and Electron.Net.
+- [ ] Multiple Database Providers Support
+  - [x] SQL Server 2012 onwards
+  - [ ] SQLite 3.7 onwards
+  - [ ] Azure Cosmos DB SQL API
+  - [ ] PostgreSQL
+  - [ ] MySQL
+  - [ ] MariaDB
+  - [ ] Oracle DB 11.2 onwards
 
 ## Client Side Core Features
 
@@ -49,11 +58,15 @@ OneLine is an abstracted standardized redefined framework.
 ## Client Side Blazor Features
 
 - [x] Application State Management
+  - [x] User Info Storage Management (Encrypted by default)
+    - [x] Session
+    - [x] Persistent
+  - [ ] Session Token Lifetime Management
 - [x] Multi Language Support using Resource Files
 - [x] Translator Component
 - [x] Enviroment Chooser
 - [x] In-Memory Configuration File
-- [x] Anonymous and Authorized base classes
+- [x] Anonymous and Authorized Base Classes for Forms and Data Views
 
 ## Known Random Issues
 

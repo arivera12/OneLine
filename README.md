@@ -83,6 +83,9 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Server exceptions are pre-handled and recorded
 - [x] Every operation is Auto Audited with option of rolling back any operation at any time
 
+## Client And Server Shared Features
+TODO
+
 ## Known Random Issues on Visual Studio
 
 ### When web client and web api applications starts the first time crashes and closes unexpectedly without throwing any error.

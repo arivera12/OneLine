@@ -53,7 +53,6 @@ OneLine is an abstracted standardized redefined framework.
     - [x] Page sort by
   - [x] Collection Mode Management (append or replace)
   - [x] Request and Response Management
-  - [x] Single and Multiple State Management
   
 ## Client Side Blazor Features
 

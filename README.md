@@ -113,12 +113,12 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Pre-Implemented Basic Http CRUD Services
 - [x] Pre-Implemented Basic Language Translations (English and Spanish (Partially))
 
-## Known Random Issues on Visual Studio
+### Known Random Issues on Visual Studio
 
-### When web client and web api applications starts the first time crashes and closes unexpectedly without throwing any error.
+#### When web client and web api applications starts the first time crashes and closes unexpectedly without throwing any error.
 
 This error sometimes happens randomly the first time only, just run it again and it should start after that.
 
-### Swagger Api documentation not working and throws an error on the web page.
+#### Swagger Api documentation not working and throws an error on the web page.
 
 This error sometimes happens randomly, to fix it delete the `.vs` folder on the solution path and run again it should work after that.

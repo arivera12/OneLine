@@ -57,6 +57,7 @@ OneLine is an abstracted standardized redefined framework.
   
 ## Client Side Blazor Features
 
+- [x] Pre-Implemented Users Account Basic Management
 - [x] Application State Management
   - [x] User Info Storage Management (Encrypted by default)
     - [x] Session
@@ -68,7 +69,21 @@ OneLine is an abstracted standardized redefined framework.
 - [x] In-Memory Configuration File
 - [x] Anonymous and Authorized Base Classes for Forms and Data Views
 
-## Known Random Issues
+## Server Side API Features
+- [x] Pre-Implemented Users Account Basic Management
+- [x] Services are pre-registered
+- [x] Everything is secured and available for admins only by default
+- [x] Request data is pre validate before arriving the controller method
+- [x] Response has a base API Response Format
+- [x] Search results are always paged by default
+- [x] Repository and Service patterns have been redefined and reimplemented as Database Context Extended as Repository Service
+- [x] CRUD methods are pre implemented supports single and multiple
+- [x] Blobs Management is centralized and doesn't never need a child tables to support multiple file upload references
+  - [x] Define and apply rules to the expected blob
+- [x] Server exceptions are pre-handled and recorded
+- [x] Every operation is Auto Audited with option of rolling back any operation at any time
+
+## Known Random Issues on Visual Studio
 
 ### When web client and web api applications starts the first time crashes and closes unexpectedly without throwing any error.
 

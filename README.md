@@ -93,7 +93,7 @@ OneLine is an abstracted standardized redefined framework.
     - [x] Simple Queue Service (SQS)
   - [x] Google Cloud Platform
     - [x] Cloud Storage
-  - Misc
+  - [x] Misc
     - [x] Azure Databricks DBFS
     - [x] Service Fabric Reliable Collections
     - [x] Azure Key Vault

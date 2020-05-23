@@ -14,7 +14,7 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Pre-Implemented Enviroment
 - [x] Cross Platform Support for Blazor (client/server), Xamarin, UWP, and Electron.Net.
 
-## Client Side Features
+## Client Side Core Features
 
 - [x] Bindable
 - [x] Eventable
@@ -45,6 +45,15 @@ OneLine is an abstracted standardized redefined framework.
   - [x] Collection Mode Management (append or replace)
   - [x] Request and Response Management
   - [x] Single and Multiple State Management
+  
+  ## Client Side Blazor Features
+
+- [x] Application State Management
+- [x] Multi Language Support using Resource Files
+- [x] Translator Component
+- [x] Enviroment Chooser
+- [x] In-Memory Configuration File
+- [x] Anonymous and Authorized base classes
 
 ## Known Random Issues
 

@@ -12,9 +12,9 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Recyclable
 - [x] Scaffolding Tooling
 - [x] Pre-Implemented Enviroment
-- [x] Cross Platform Support for Blazor (client/server), Xamarin and Electron.Net.
+- [x] Cross Platform Support for Blazor (client/server), Xamarin, UWP, and Electron.Net.
 
-## Core Features
+## Client Side Features
 
 - [x] Bindable
 - [x] Eventable
@@ -34,13 +34,16 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Data View Management
   - [x] Load
   - [x] Search
-  - [x] SelectRecord
+  - [x] Select Record/s
+  - [x] Records Selection Mode (single or multiple)
   - [x] Filtering
   - [x] Sorting
   - [x] Paged Data Management
     - [x] Previous & next page
     - [x] Page index and size
     - [x] Page sort by
+  - [x] Collection Mode Management (append or replace)
+  - [x] Request and Response Management
   - [x] Single and Multiple State Management
 
 ## Known Random Issues

@@ -46,7 +46,7 @@ OneLine is an abstracted standardized redefined framework.
   - [x] Request and Response Management
   - [x] Single and Multiple State Management
   
-  ## Client Side Blazor Features
+## Client Side Blazor Features
 
 - [x] Application State Management
 - [x] Multi Language Support using Resource Files

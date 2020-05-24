@@ -48,9 +48,9 @@ OneLine is an abstracted standardized redefined framework.
   - [x] Filtering
   - [x] Sorting
   - [x] Paged Data Management
-    - [x] Previous & next page
-    - [x] Page index and size
-    - [x] Page sort by
+    - [x] Previous & Next Page
+    - [x] Page Index and Size
+    - [x] Page Sort By
   - [x] Collection Mode Management (append or replace)
   - [x] Request and Response Management
   

@@ -62,6 +62,10 @@ OneLine is an abstracted standardized redefined framework.
     - [x] Session
     - [x] Persistent
   - [ ] Session Token Lifetime Management
+    - [ ] Ask for More Session Time
+    - [ ] Auto Renew Session Token on User Confirm
+    - [ ] Redirect on Session Expired
+    - [x] Redirect when Session is Expired in a User Action after Server Response 
 - [x] Multi Language Support using Resource Files
 - [x] Translator Component
 - [x] Enviroment Chooser

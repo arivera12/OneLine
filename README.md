@@ -108,10 +108,10 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Every operation is auto audited with option of rolling back any operation at any time
 
 ## Client And Server Shared Features
-- [x] Pre-Implemented Models
-- [x] Pre-Implemented Basic Validations
-- [x] Pre-Implemented Basic Http CRUD Services
-- [x] Pre-Implemented Basic Language Translations (English and Spanish (Partially))
+- [x] Models
+- [x] Validations
+- [x] Http Services
+- [x] Language Translations (English and Spanish (Partially))
 
 ### Known Random Issues on Visual Studio
 

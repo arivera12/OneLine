@@ -57,6 +57,9 @@ OneLine is an abstracted standardized redefined framework.
   - [x] Desktop
   - [x] Tablet
   - [x] Mobile
+- [ ] Skin Mode
+  - [x] Light
+  - [ ] Dark
   
 ## Client Side Blazor Features
 

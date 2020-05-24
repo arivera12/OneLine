@@ -10,8 +10,8 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Eventable
 - [x] Listenable
 - [x] Chainable
-- [x] Recyclable
 - [x] Overridable
+- [x] Recyclable
 - [x] Scaffolding Tooling
 - [x] Pre-Implemented Enviroment
 - [x] Cross Platform Support for Blazor (client/server), Xamarin, UWP, and Electron.Net (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile)).

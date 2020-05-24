@@ -1,6 +1,4 @@
-﻿
-
-namespace OneLine.Models
+﻿namespace OneLine.Models
 {
     public class SearchPaging : ISearchPaging
     {
@@ -24,5 +22,24 @@ namespace OneLine.Models
         /// Sets whichs property of the data model wants to be used for sorting
         /// </summary>
         public virtual string SortBy { get; set; }
+        public SearchPaging()
+        {
+
+        }
+        public SearchPaging(int pageIndex, int pageSize, bool descending, string sortBy)
+        {
+            PageIndex = pageIndex;
+            PageSize = pageSize;
+            Descending = descending;
+            SortBy = sortBy;
+        }
+        public SearchPaging(int pageIndex, int pageSize, bool descending, string sortBy, string searchTerm)
+        {
+            PageIndex = pageIndex;
+            PageSize = pageSize;
+            Descending = descending;
+            SortBy = sortBy;
+            SearchTerm = searchTerm;
+        }
     }
 }

@@ -16,7 +16,6 @@ using OneLine.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -29,7 +28,7 @@ namespace OneLine.Blazor.Bases
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
         where TBlobData : class, IBlobData
-        where TBlobValidator :class, IValidator, new()
+        where TBlobValidator : class, IValidator, new()
         where TUserBlobs : class, IUserBlobs
     {
         [Inject] public override IConfiguration Configuration { get; set; }
@@ -230,7 +229,7 @@ namespace OneLine.Blazor.Bases
         public virtual async Task AfterCancel()
         {
             await Reset();
-            await JSRuntime.InvokeVoidAsync("eval", "window.history.back()");
+            await JSRuntime.InvokeVoidAsync("window.history.back");
         }
         public virtual async Task BeforeReset()
         {

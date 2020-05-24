@@ -6,5 +6,7 @@ namespace OneLine.Blazor.Bases
         IBlazorComponent,
         IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
     {
+        bool ShowActivityIndicator { get; set; }
+        public TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor);
     }
 }

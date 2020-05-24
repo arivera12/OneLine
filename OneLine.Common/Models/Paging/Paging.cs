@@ -1,6 +1,4 @@
-﻿
-
-namespace OneLine.Models
+﻿namespace OneLine.Models
 {
     public class Paging : IPaging
     {
@@ -20,5 +18,16 @@ namespace OneLine.Models
         /// Sets whichs property of the data model wants to be used for sorting
         /// </summary>
         public virtual string SortBy { get; set; }
+        public Paging()
+        {
+
+        }
+        public Paging(int pageIndex, int pageSize, bool descending, string sortBy)
+        {
+            PageIndex = pageIndex;
+            PageSize = pageSize;
+            Descending = descending;
+            SortBy = sortBy;
+        }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 using OneLine.Bases;
+using OneLine.Blazor.Extensions;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
@@ -82,6 +83,7 @@ namespace OneLine.Blazor.Bases
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
+        public bool ShowActivityIndicator { get; set; }
         public virtual async Task OnAfterFirstRenderAsync()
         {
             HttpService.HttpClient = HttpClient;
@@ -108,6 +110,35 @@ namespace OneLine.Blazor.Bases
                     }
                 }
             }
+            //This null check allows to prevent override the listeners from parent if it's listening to any of this events
+            OnBeforeSearch ??= new Action(async () => await BeforeSearch());
+            OnAfterSearch ??= new Action(async () => await AfterSearch());
+            StateHasChanged();
+        }
+        public virtual async Task BeforeSearch()
+        {
+            if(IsDesktop)
+            {
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Search()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
+                StateHasChanged();
+            }
+            else
+            {
+                ShowActivityIndicator = true;
+                StateHasChanged();
+                await Search();
+            }
+        }
+        public virtual async Task AfterSearch()
+        {
+            if (IsDesktop)
+            {
+                await SweetAlertService.HideLoaderAsync(); 
+            }
+            else
+            {
+                ShowActivityIndicator = false;
+            }
             StateHasChanged();
         }
         public virtual Size InputSize()
@@ -121,15 +152,46 @@ namespace OneLine.Blazor.Bases
         public virtual async Task PagingChange(IPaging paging)
         {
             SearchPaging.AutoMap(paging);
-            await Search();
+            await BeforeSearch();
         }
         public virtual void SearchTermChanged(string searchTerm)
         {
             SearchPaging.SearchTerm = searchTerm;
             RateLimitingExtensionForObject.Debounce(SearchPaging, DebounceInterval, async (searchPagingDebounced) =>
             {
-                await Search();
+                await BeforeSearch();
             });
+        }
+        public virtual async Task LoadMore()
+        {
+            await GoNextPage();
+            await BeforeSearch();
+        }
+        public virtual TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor)
+        {
+            if (RecordsSelectionMode.IsSingle())
+            {
+                if (SelectedRecord == record)
+                {
+                    return selectedColor;
+                }
+                else
+                {
+                    return unSelectedColor;
+                }
+            }
+            else if (RecordsSelectionMode.IsMultiple())
+            {
+                if (SelectedRecords.Contains(record))
+                {
+                    return selectedColor;
+                }
+                else
+                {
+                    return unSelectedColor;
+                }
+            }
+            return unSelectedColor;
         }
     }
 }

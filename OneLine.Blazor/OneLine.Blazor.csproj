@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Fixed duplicate and wrong calls. Fixed paginator. moved to 0 index based page. Fixed paged HasPreviousPage and HasNextPage properties validations. On Reset changed FormState to Create. Added some validation on afterDelete method. Added check and reset of index record before opening the form in create state.</PackageReleaseNotes>
-    <Version>2.0.58</Version>
+    <PackageReleaseNotes>Removed unnecesarry code and simplified blazor bases. Applied new properties and methods to blazor bases. Implemented beforeSearch and AfterSearch methods to show and hide activity indicator before and after search. Added constructor overloading to Paging and SearcnPaging.</PackageReleaseNotes>
+    <Version>2.0.62</Version>
   </PropertyGroup>
 
 

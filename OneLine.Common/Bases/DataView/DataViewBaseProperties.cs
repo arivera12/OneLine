@@ -62,6 +62,5 @@ namespace OneLine.Bases
         public virtual Action<Func<T, bool>> FilterPredicateChanged { get; set; }
         public virtual Action<string> FilterSortByChanged { get; set; }
         public virtual Action<bool> FilterDescendingChanged { get; set; }
-
     }
 }

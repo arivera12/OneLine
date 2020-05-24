@@ -33,16 +33,6 @@ namespace OneLine.Extensions
         {
             return source.Any();
         }
-        public static IEnumerable<T> Paged<T>(this IEnumerable<T> source, int? Page, int? RowsPerPage)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source is null");
-            if (source.GetType().IsAnonymousType())
-                throw new InvalidOperationException("source can't be an anonymous type");
-
-            return source.Skip((Page.Value - 1) * RowsPerPage.Value).Take(RowsPerPage.Value).ToList();
-        }
-
         public static IEnumerable<object> FlattenMapping<T>(this IEnumerable<T> source, bool RemoveAuditableFields, params Expression<Func<T, object>>[] PropertiesToFlatten)
         {
             string DynamicSelect = "new (";

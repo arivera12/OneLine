@@ -85,7 +85,6 @@ namespace OneLine.Blazor.Bases
         public bool IsMobile { get; set; }
         public bool IsFormOpen { get; set; }
         public bool ShowModal { get; set; }
-
         public virtual async Task OnAfterFirstRenderAsync()
         {
             HttpService.HttpClient = HttpClient;
@@ -140,6 +139,11 @@ namespace OneLine.Blazor.Bases
             }
             ShowModal = false;
             IsFormOpen = true;
+            StateHasChanged();
+        }
+        public virtual void AfterFormCancel()
+        {
+            IsFormOpen = false;
             StateHasChanged();
         }
     }

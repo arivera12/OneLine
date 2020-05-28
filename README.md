@@ -128,6 +128,19 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Http Services
 - [x] Language Translations (English and Spanish (Partially))
 
+## Roadmap
+
+- Push notifications and notifications history Management (Cross Platform)
+  - App/service broadcasting
+- In-App Blob Storage Manager (Like any web drive service like dropbox, google drive, one drive, etc)
+- In-Component user defined (persistent or by expiration date) notification alerts
+- Create a translator service inside the tool to translate resource files
+- Chat (Cross Platform)
+  - From clients to app/service representative
+  - Between users
+  - Groups
+- App/service representative chat with connected clients
+
 ### Known Random Issues on Visual Studio
 
 #### When web client and web api applications starts the first time crashes and closes unexpectedly without throwing any error.

@@ -26,7 +26,7 @@ OneLine is an abstracted standardized redefined framework.
 
 ## Client Side Core Features
 
-- [x] Single Page Arquitecture (SPA)
+- [x] Single Page Application Arquitecture (SPA)
 - [x] Componetized
 - [x] Base Classes for Forms and Data Views Management
   - [x] Form Management 

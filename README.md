@@ -53,13 +53,6 @@ OneLine is an abstracted standardized redefined framework.
       - [x] Page Sort By
     - [x] Collection Mode Management (append or replace)
     - [x] Request and Response Management
-- [x] Device Oriented UI/UX
-  - [x] Desktop
-  - [x] Tablet
-  - [x] Mobile
-- [ ] Skin Mode
-  - [x] Light
-  - [ ] Dark
   
 ## Client Side Blazor Features
 
@@ -81,6 +74,13 @@ OneLine is an abstracted standardized redefined framework.
   - [x] Anonymous
   - [x] Authorized
   - [x] Authorized by Roles
+- [x] Device Oriented UI/UX
+  - [x] Desktop
+  - [x] Tablet
+  - [x] Mobile
+- [ ] Skin Mode
+  - [x] Light
+  - [ ] Dark
 
 ## Server Side Core API Features
 - [x] Rest Arquitecture

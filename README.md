@@ -140,7 +140,44 @@ OneLine is an abstracted standardized redefined framework.
   - Between users
   - Groups
 - App/service representative chat with connected clients
-
+- Cross Platform Device API's Implementations for Browser, Electron.Net and Xamarin. 
+  - Accelerometer
+  - App Information
+  - App Theme
+  - Barometer
+  - Battery
+  - Clipboard
+  - Color Converters
+  - Compass
+  - Connectivity
+  - Detect Shake
+  - Device Display Information
+  - Device Information
+  - Email
+  - File System
+  - Flashlight
+  - Geocoding
+  - Geolocation
+  - Gyroscope
+  - Launcher
+  - Magnetometer
+  - MainThread
+  - Maps
+  - Open Browser
+  - Orientation Sensor
+  - Permissions
+  - Phone Dialer
+  - Platform Extensions
+  - Preferences
+  - Secure Storage
+  - Share
+  - SMS
+  - Text-to-Speech
+  - Unit Converters
+  - Version Tracking
+  - Vibrate
+  - Web Authenticator
+  
 ### Known Random Issues on Visual Studio
 
 #### When web client and web api applications starts the first time crashes and closes unexpectedly without throwing any error.

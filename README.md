@@ -8,9 +8,10 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Generic
 - [x] Standardized
 - [x] Eventable
+- [x] Listenable
 - [x] Chainable
-- [x] Recyclable
 - [x] Overridable
+- [x] Recyclable
 - [x] Scaffolding Tooling
 - [x] Pre-Implemented Enviroment
 - [x] Cross Platform Support for Blazor (client/server), Xamarin, UWP, and Electron.Net (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile)).
@@ -25,34 +26,33 @@ OneLine is an abstracted standardized redefined framework.
 
 ## Client Side Core Features
 
-- [x] Bindable
-- [x] Eventable
-- [x] Listenable
-- [x] Chainable
-- [x] Form Management 
-  - [x] Load
-  - [x] Validate
-  - [x] Save (create & update)
-  - [x] Reset
-  - [x] Cancel
-  - [x] Delete
-  - [x] Form State Management
-  - [x] Blob Management
-  - [x] Request and Response Management
-  - [x] Single and Multiple State Management  
-- [x] Data View Management
-  - [x] Load
-  - [x] Search
-  - [x] Select Record/s
-  - [x] Records Selection Mode (single or multiple)
-  - [x] Filtering
-  - [x] Sorting
-  - [x] Paged Data Management
-    - [x] Previous & next page
-    - [x] Page index and size
-    - [x] Page sort by
-  - [x] Collection Mode Management (append or replace)
-  - [x] Request and Response Management
+- [x] Single Page Application Arquitecture (SPA)
+- [x] Componetized
+- [x] Base Classes for Forms and Data Views Management
+  - [x] Form Management 
+    - [x] Load
+    - [x] Validate
+    - [x] Save (create & update)
+    - [x] Reset
+    - [x] Cancel
+    - [x] Delete
+    - [x] Form State Management
+    - [x] Blob Management
+    - [x] Request and Response Management
+    - [x] Single and Multiple State Management  
+  - [x] Data View Management
+    - [x] Load
+    - [x] Search
+    - [x] Select Record/s
+    - [x] Records Selection Mode (single or multiple)
+    - [x] Filtering
+    - [x] Sorting
+    - [x] Paged Data Management
+      - [x] Previous & Next Page
+      - [x] Page Index and Size
+      - [x] Page Sort By
+    - [x] Collection Mode Management (append or replace)
+    - [x] Request and Response Management
   
 ## Client Side Blazor Features
 
@@ -62,13 +62,28 @@ OneLine is an abstracted standardized redefined framework.
     - [x] Session
     - [x] Persistent
   - [ ] Session Token Lifetime Management
+    - [ ] Ask for More Session Time
+    - [ ] Auto Renew Session Token on User Confirm
+    - [ ] Redirect on Session Expired
+    - [x] Redirect when Session is Expired in a User Action after Server Response 
 - [x] Multi Language Support using Resource Files
 - [x] Translator Component
 - [x] Enviroment Chooser
 - [x] In-Memory Configuration File
-- [x] Anonymous and Authorized Base Classes for Forms and Data Views
+- [x] Pre-Implemented Core Base Classes for Forms and Data Views
+  - [x] Anonymous
+  - [x] Authorized
+  - [x] Authorized by Roles
+- [x] Device Oriented UI/UX
+  - [x] Desktop
+  - [x] Tablet
+  - [x] Mobile
+- [ ] Skin Mode
+  - [x] Light
+  - [ ] Dark
 
-## Server Side API Features
+## Server Side Core API Features
+- [x] Rest Arquitecture
 - [x] Pre-Implemented Users Account Basic Management
 - [x] Services are pre-registered
 - [x] Everything is secured and available for admins only by default
@@ -77,9 +92,9 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Search results are always paged by default
 - [x] Repository and Service patterns have been redefined and reimplemented as Database Context Extended as Repository Service
 - [x] CRUD methods are pre implemented supports single and multiple
-- [x] Import data uploading *.csv file for create or update operations.
-- [x] Exporting data in *.csv file.
-- [x] Multiple Blob Storage Provider Support (Thanks to [Storage.Net](https://github.com/aloneguid/storage)).
+- [x] Import data uploading *.csv file for create or update operations
+- [x] Exporting data in *.csv file
+- [x] Multiple Blob Storage Provider Support (Thanks to [Storage.Net](https://github.com/aloneguid/storage))
   - [x] Microsoft Azure
     - [x] Blob Storage
     - [x] File Storage
@@ -113,6 +128,56 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Http Services
 - [x] Language Translations (English and Spanish (Partially))
 
+## Roadmap
+
+- Push notifications and notifications history Management (Cross Platform)
+  - App/service broadcasting
+- In-App Blob Storage Manager (Like any web drive service like dropbox, google drive, one drive, etc)
+- In-Component user defined (persistent or by expiration date) notification alerts
+- Create a translator service inside the tool to translate resource files
+- Chat (Cross Platform)
+  - From clients to app/service representative
+  - Between users
+  - Groups
+- App/service representative chat with connected clients
+- Cross Platform Device API's Implementations for Browser, Electron.Net and Xamarin. 
+  - Accelerometer
+  - App Information
+  - App Theme
+  - Barometer
+  - Battery
+  - Clipboard
+  - Color Converters
+  - Compass
+  - Connectivity
+  - Detect Shake
+  - Device Display Information
+  - Device Information
+  - Email
+  - File System
+  - Flashlight
+  - Geocoding
+  - Geolocation
+  - Gyroscope
+  - Launcher
+  - Magnetometer
+  - MainThread
+  - Maps
+  - Open Browser
+  - Orientation Sensor
+  - Permissions
+  - Phone Dialer
+  - Platform Extensions
+  - Preferences
+  - Secure Storage
+  - Share
+  - SMS
+  - Text-to-Speech
+  - Unit Converters
+  - Version Tracking
+  - Vibrate
+  - Web Authenticator
+  
 ### Known Random Issues on Visual Studio
 
 #### When web client and web api applications starts the first time crashes and closes unexpectedly without throwing any error.

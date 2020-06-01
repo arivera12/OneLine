@@ -5,7 +5,7 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <LangVersion>8.0</LangVersion>
     <Authors>Anthony G. Rivera Cosme</Authors>
-    <Description>OneLine blazor is a set of utilities to be used in the blazor context</Description>
+    <Description>OneLine.Blazor is a set of components and utilities to be used in blazor context.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Removed unnecesarry code and simplified blazor bases. Applied new properties and methods to blazor bases. Implemented beforeSearch and AfterSearch methods to show and hide activity indicator before and after search. Added constructor overloading to Paging and SearcnPaging.</PackageReleaseNotes>
-    <Version>2.0.62</Version>
+    <PackageReleaseNotes>Added helpful extension method SaveOrReplaceRangeReferenceAsync which helps save or replace reference child table. Added T reference type to IQueyable interface.</PackageReleaseNotes>
+    <Version>2.0.63</Version>
   </PropertyGroup>
 
 
@@ -22,12 +22,14 @@
     <PackageReference Include="BlazorBrowserStorage" Version="1.0.0" />
     <PackageReference Include="BlazorCurrentDevice" Version="1.0.5" />
     <PackageReference Include="BlazorDownloadFile" Version="1.0.7" />
+    <PackageReference Include="BlazorInputFile" Version="0.2.0" />
     <PackageReference Include="BlazorStrap" Version="1.3.2-Preview1-04" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="2.6.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview3.20168.3" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.3" />
+    <PackageReference Include="Tewr.Blazor.FileReader" Version="1.5.0.20109" />
   </ItemGroup>
 
 

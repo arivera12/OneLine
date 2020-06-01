@@ -21,8 +21,7 @@ namespace OneLine.Extensions
         #region Debounce
 
         /// <summary>
-        /// Debounce reset timer and after last item recieved give you last item. 
-        /// <exception cref="http://demo.nimius.net/debounce_throttle/">See this example for understanding what is RateLimiting and Debounce</exception>
+        /// Debounce reset timer and after last item received give you last item. 
         /// </summary>
         /// <param name="obj">Your object</param>
         /// <param name="interval">Milisecond interval</param>
@@ -58,8 +57,7 @@ namespace OneLine.Extensions
         #region Throttle
 
         /// <summary>
-        /// Throttle give you last objcet when timer was ticked and invoke throttleAction callback.
-        /// <exception cref="http://demo.nimius.net/debounce_throttle/">See this example for understanding what is RateLimiting and Throttle</exception>
+        /// Throttle give you last object when timer was ticked and invoke throttleAction callback.
         /// </summary>
         /// <param name="obj">Your object</param>
         /// <param name="interval">Milisecond interval</param>

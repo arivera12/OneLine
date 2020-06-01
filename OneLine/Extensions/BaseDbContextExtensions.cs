@@ -34,7 +34,7 @@ namespace OneLine.Extensions
             {
                 afterSave?.Invoke();
             }
-            return result.TransactionResultApiResponse(record, "RecordSavedSuccessfully", "ErrorSavingRecord");
+            return result.TransactionResultApiResponse(record, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<T>> SaveValidatedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, IValidator validator, SaveOperation saveOperation, Action beforeSave = null, Action afterSave = null)
             where T : class, new()
@@ -63,7 +63,7 @@ namespace OneLine.Extensions
             {
                 afterSave?.Invoke();
             }
-            return result.TransactionResultApiResponse(record, "RecordSavedSuccessfully", "ErrorSavingRecord");
+            return result.TransactionResultApiResponse(record, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<T>> SaveValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, IValidator validator, SaveOperation saveOperation, string userId, Action beforeSave = null, Action afterSave = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
@@ -97,7 +97,7 @@ namespace OneLine.Extensions
             {
                 afterSaveRange?.Invoke();
             }
-            return result.TransactionResultApiResponse(records, "RecordSavedSuccessfully", "ErrorSavingRecord");
+            return result.TransactionResultApiResponse(records, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<IEnumerable<T>>> SaveRangeValidatedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, SaveOperation saveOperation, Action beforeSaveRange = null, Action afterSaveRange = null)
             where T : class, new()
@@ -126,7 +126,7 @@ namespace OneLine.Extensions
             {
                 afterSaveRange?.Invoke();
             }
-            return result.TransactionResultApiResponse(records, "RecordSavedSuccessfully", "ErrorSavingRecord");
+            return result.TransactionResultApiResponse(records, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<IEnumerable<T>>> SaveRangeValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, SaveOperation saveOperation, string userId, Action beforeSaveRange = null, Action afterSaveRange = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
@@ -139,6 +139,80 @@ namespace OneLine.Extensions
             return await dbContext.SaveRangeAuditedAsync(records, saveOperation, userId, beforeSaveRange, afterSaveRange, controllerName, actionName, remoteIpAddress);
         }
 
+        #endregion
+
+        #region Save Or Replace Reference List
+
+        public static async Task<IApiResponse<IEnumerable<T>>> SaveOrReplaceRangeReferenceAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, IEnumerable<T> records, Action<Action<Func<T, bool>>> onDeletePredicate, Action beforeDeleteRange = null, Action afterDeleteRange = null)
+            where T : class, new()
+        {
+            beforeDeleteRange?.Invoke();
+            if (identifier == null || string.IsNullOrWhiteSpace(identifier.Model))
+            {
+                return Enumerable.Empty<T>().ToApiResponseFailed("IdentifierIsNullOrEmpty");
+            }
+            Func<T, bool> deletePredicate = default;
+            onDeletePredicate.Invoke((predicate) => deletePredicate = predicate);
+            var toDeletedRecords = dbContext.Set<T>().Where(deletePredicate);
+            if (toDeletedRecords.IsNullOrEmpty())
+            {
+                return toDeletedRecords.AsEnumerable().ToApiResponseFailed("RecordNotFound");
+            }
+            dbContext.RemoveRange(toDeletedRecords);
+            await dbContext.AddRangeAsync(records);
+            var result = await dbContext.SaveChangesAsync();
+            if (afterDeleteRange.IsNotNull() && result.Succeeded())
+            {
+                afterDeleteRange?.Invoke();
+            }
+            return result.TransactionResultApiResponse(records, "TransactionCompletedSuccessfully", "TransactionFailed");
+        }
+        public static async Task<IApiResponse<IEnumerable<T>>> SaveOrReplaceRangeReferenceValidatedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, IEnumerable<T> records, IValidator validator, Action<Action<Func<T, bool>>> onDeletePredicate, Action beforeDeleteRange = null, Action afterDeleteRange = null)
+            where T : class, new()
+        {
+            var apiResponse = records.IsNullOrEmpty() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
+            if (apiResponse.Status.Failed())
+            {
+                return apiResponse;
+            }
+            return await dbContext.SaveOrReplaceRangeReferenceAsync(identifier, records, onDeletePredicate, beforeDeleteRange, afterDeleteRange);
+        }
+        public static async Task<IApiResponse<IEnumerable<T>>> SaveOrReplaceRangeReferenceAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, IEnumerable<T> records, Action<Action<Func<T, bool>>> onDeletePredicate, string userId, Action beforeDeleteRange = null, Action afterDeleteRange = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class, new()
+        {
+            beforeDeleteRange?.Invoke();
+            if (identifier == null || string.IsNullOrWhiteSpace(identifier.Model))
+            {
+                await dbContext.CreateAuditrailsAsync(identifier, "Record indentifier or model was null in validation operation", userId, controllerName, actionName, remoteIpAddress);
+                return Enumerable.Empty<T>().ToApiResponseFailed("IdentifierIsNullOrEmpty");
+            }
+            Func<T, bool> deletePredicate = default;
+            onDeletePredicate.Invoke((predicate) => deletePredicate = predicate);
+            var toDeletedRecords = dbContext.Set<T>().Where(deletePredicate);
+            if (toDeletedRecords.IsNullOrEmpty())
+            {
+                await dbContext.CreateAuditrailsAsync(toDeletedRecords, "Records collection to delete was null or empty in validation operation", userId, controllerName, actionName, remoteIpAddress);
+                return toDeletedRecords.AsEnumerable().ToApiResponseFailed("RecordNotFound");
+            }
+            await dbContext.RemoveRangeAuditedAsync(toDeletedRecords, userId, controllerName, actionName, remoteIpAddress);
+            await dbContext.AddRangeAuditedAsync(records, userId, controllerName, actionName, remoteIpAddress);
+            var result = await dbContext.SaveChangesAsync();
+            if (afterDeleteRange.IsNotNull() && result.Succeeded())
+            {
+                afterDeleteRange?.Invoke();
+            }
+            return result.TransactionResultApiResponse(records, "TransactionCompletedSuccessfully", "TransactionFailed");
+        }
+        public static async Task<IApiResponse<IEnumerable<T>>> SaveOrReplaceRangeReferenceValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, IEnumerable<T> records, IValidator validator, Action<Action<Func<T, bool>>> onDeletePredicate, string userId, Action beforeDeleteRange = null, Action afterDeleteRange = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class, new()
+        {
+            var apiResponse = records.IsNullOrEmpty() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
+            if (apiResponse.Status.Failed())
+            {
+                return apiResponse;
+            }
+            return await dbContext.SaveOrReplaceRangeReferenceAuditedAsync(identifier, records, onDeletePredicate, userId, beforeDeleteRange, afterDeleteRange, controllerName, actionName, remoteIpAddress);
+        }
 
         #endregion
 
@@ -184,12 +258,12 @@ namespace OneLine.Extensions
             }
             return await dbContext.SaveAsync(record, saveOperation, beforeSave, afterSave);
         }
-        
+
         #endregion
 
         #region Search
 
-        public static IApiResponse<IEnumerable<T>> Search<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicate = null)
+        public static IApiResponse<IEnumerable<T>> Search<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null)
             where T : class
         {
             var query = dbContext.Set<T>().AsQueryable<T>();
@@ -198,7 +272,7 @@ namespace OneLine.Extensions
             afterPredicate?.Invoke(query);
             return query.AsEnumerable().ToApiResponse();
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> SearchAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<T>>> SearchAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class
         {
             var query = dbContext.Set<T>().AsQueryable();
@@ -209,7 +283,7 @@ namespace OneLine.Extensions
             await dbContext.CreateAuditrailsAsync(results, "Records on search operation", userId, controllerName, actionName, remoteIpAddress);
             return results.ToApiResponse();
         }
-        public static IApiResponse<IPaged<IEnumerable<T>>> SearchPaged<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicateBeforeSorting = null, Action<IQueryable> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null)
+        public static IApiResponse<IPaged<IEnumerable<T>>> SearchPaged<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null)
             where T : class
         {
             var query = dbContext.Set<T>().AsQueryable();
@@ -232,7 +306,7 @@ namespace OneLine.Extensions
             afterPaging?.Invoke(pagedQuery);
             return pagedQuery.ToApiResponse();
         }
-        public static async Task<IApiResponse<IPaged<IEnumerable<T>>>> SearchPagedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicateBeforeSorting = null, Action<IQueryable> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IPaged<IEnumerable<T>>>> SearchPagedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class
         {
             var query = dbContext.Set<T>().AsQueryable();
@@ -241,7 +315,7 @@ namespace OneLine.Extensions
             afterPredicateBeforeSorting?.Invoke(query);
             if (descending.HasValue && !string.IsNullOrWhiteSpace(sortBy))
             {
-                if(descending.Value)
+                if (descending.Value)
                 {
                     query = query.OrderByPropertyDescending(sortBy);
                 }
@@ -261,25 +335,25 @@ namespace OneLine.Extensions
 
         #region Search and Convert to Csv
 
-        public static IApiResponse<byte[]> SearchAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicate = null)
+        public static IApiResponse<byte[]> SearchAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null)
             where T : class
         {
             var result = dbContext.Search(predicate, beforePredicate, afterPredicate);
             return result?.Data?.ToCsvByteArray().ToApiResponse();
         }
-        public static async Task<IApiResponse<byte[]>> SearchAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<byte[]>> SearchAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class
         {
             var result = await dbContext.SearchAuditedAsync(predicate, userId, beforePredicate, afterPredicate, controllerName, actionName, remoteIpAddress);
             return result?.Data?.ToCsvByteArray().ToApiResponse();
         }
-        public static IApiResponse<byte[]> SearchPagedAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicateBeforeSorting = null, Action<IQueryable> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null)
+        public static IApiResponse<byte[]> SearchPagedAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null)
             where T : class
         {
             var result = dbContext.SearchPaged(predicate, pageIndex, pageSize, sortBy, descending, out count, beforePredicate, afterPredicateBeforeSorting, afterSortingBeforePaging, afterPaging);
-            return result?.Data?.Data?.ToCsvByteArray().ToApiResponse(); 
+            return result?.Data?.Data?.ToCsvByteArray().ToApiResponse();
         }
-        public static async Task<IApiResponse<byte[]>> SearchPagedAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable> beforePredicate = null, Action<IQueryable> afterPredicateBeforeSorting = null, Action<IQueryable> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<byte[]>> SearchPagedAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class
         {
             var result = await dbContext.SearchPagedAuditedAsync(predicate, pageIndex, pageSize, sortBy, descending, userId, beforePredicate, afterPredicateBeforeSorting, afterSortingBeforePaging, afterPaging, controllerName, actionName, remoteIpAddress);
@@ -310,7 +384,7 @@ namespace OneLine.Extensions
             var records = file.OpenReadStream().ReadCsv<T>();
             return await dbContext.SaveRangeAsync(records, saveOperation, beforeSaveRange, afterSaveRange);
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> ImportCsvUploadAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, SaveOperation saveOperation, string userId, Action beforeSaveRange = null, Action afterSaveRange = null,  string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<T>>> ImportCsvUploadAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, SaveOperation saveOperation, string userId, Action beforeSaveRange = null, Action afterSaveRange = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
             var any = predicate == null ? files.Any() : files.Any(predicate);
@@ -497,7 +571,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(record, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(record, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<T>> DeleteValidatedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, IValidator validator, Action beforeDelete = null, Action afterDelete = null)
             where T : class, new()
@@ -519,7 +593,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(record, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(record, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<T>> DeleteValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, IValidator validator, string userId, Action beforeDelete = null, Action afterDelete = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
@@ -536,7 +610,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(record, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(record, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
 
         #endregion
@@ -553,7 +627,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(records, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(records, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<IEnumerable<T>>> DeleteRangeValidatedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, Action beforeDelete = null, Action afterDelete = null)
             where T : class, new()
@@ -575,7 +649,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(records, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(records, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<IEnumerable<T>>> DeleteRangeValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, string userId, Action beforeDelete = null, Action afterDelete = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
@@ -592,7 +666,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(records, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(records, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
 
         #endregion
@@ -614,7 +688,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(record, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(record, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<T>> DeleteAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, string userId, Action beforeDelete = null, Action afterDelete = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
@@ -632,7 +706,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(record, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(record, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
 
         #endregion
@@ -662,7 +736,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(records.AsEnumerable(), "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(records.AsEnumerable(), "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<IEnumerable<T>>> DeleteRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, string userId, Action<Action<IList<T>>> onGetRange, string controllerName = null, string actionName = null, string remoteIpAddress = null, Action beforeDelete = null, Action afterDelete = null)
             where T : class, new()
@@ -681,7 +755,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(records.AsEnumerable(), "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(records.AsEnumerable(), "TransactionCompletedSuccessfully", "TransactionFailed");
         }
 
         #endregion
@@ -703,7 +777,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(record, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(record, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<T>> DeleteAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action beforeDelete = null, Action afterDelete = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
@@ -721,7 +795,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(record, "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(record, "TransactionCompletedSuccessfully", "TransactionFailed");
         }
 
         #endregion
@@ -743,7 +817,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(records.AsEnumerable(), "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(records.AsEnumerable(), "TransactionCompletedSuccessfully", "TransactionFailed");
         }
         public static async Task<IApiResponse<IEnumerable<T>>> DeleteRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action beforeDelete = null, Action afterDelete = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
@@ -761,7 +835,7 @@ namespace OneLine.Extensions
             {
                 afterDelete?.Invoke();
             }
-            return result.TransactionResultApiResponse(records.AsEnumerable(), "RecordDeletedSuccessfully", "ErrorDeletingRecord");
+            return result.TransactionResultApiResponse(records.AsEnumerable(), "TransactionCompletedSuccessfully", "TransactionFailed");
         }
 
         #endregion

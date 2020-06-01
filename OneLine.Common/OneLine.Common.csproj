@@ -13,11 +13,11 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Removed unnecesarry code and simplified blazor bases. Applied new properties and methods to blazor bases. Implemented beforeSearch and AfterSearch methods to show and hide activity indicator before and after search. Added constructor overloading to Paging and SearcnPaging.</PackageReleaseNotes>
-    <Version>2.0.62</Version>
+    <PackageReleaseNotes>Added helpful extension method SaveOrReplaceRangeReferenceAsync which helps save or replace reference child table. Added T reference type to IQueyable interface.</PackageReleaseNotes>
+    <Version>2.0.63</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.62.0</AssemblyVersion>
+    <AssemblyVersion>2.0.63.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

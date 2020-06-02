@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Added helpful extension method SaveOrReplaceRangeReferenceAsync which helps save or replace reference child table. Added T reference type to IQueyable interface.</PackageReleaseNotes>
-    <Version>2.0.63</Version>
+    <PackageReleaseNotes>Refactored ShowConfirmAletAsync method. Added and implemented FileInput component.</PackageReleaseNotes>
+    <Version>2.0.64</Version>
   </PropertyGroup>
 
 

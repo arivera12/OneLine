@@ -89,6 +89,10 @@ namespace OneLine.Blazor.Components
         /// </summary>
         [Parameter] public bool HideDropZone { get; set; }
         /// <summary>
+        /// The dropzone label text. Default DropFilesHere
+        /// </summary>
+        [Parameter] public MarkupString DropZoneText { get; set; }
+        /// <summary>
         /// The dropzone inline style.
         /// Default:
         /// <style>
@@ -141,6 +145,10 @@ namespace OneLine.Blazor.Components
                 if (string.IsNullOrWhiteSpace(DropTargetClass))
                 {
                     DropTargetClass = "drop-zone-drop-target";
+                }
+                if (string.IsNullOrWhiteSpace(DropZoneText.Value))
+                {
+                    DropZoneText = (MarkupString)Resourcer.GetString("DropFilesHere");
                 }
                 if (string.IsNullOrWhiteSpace(ResetButtonText.Value))
                 {

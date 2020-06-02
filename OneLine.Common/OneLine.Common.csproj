@@ -13,11 +13,11 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added helpful extension method SaveOrReplaceRangeReferenceAsync which helps save or replace reference child table. Added T reference type to IQueyable interface.</PackageReleaseNotes>
-    <Version>2.0.63</Version>
+    <PackageReleaseNotes>Refactored ShowConfirmAletAsync method. Added and implemented FileInput component.</PackageReleaseNotes>
+    <Version>2.0.64</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.63.0</AssemblyVersion>
+    <AssemblyVersion>2.0.64.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

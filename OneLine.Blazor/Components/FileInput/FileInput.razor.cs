@@ -77,19 +77,15 @@ namespace OneLine.Blazor.Components
         /// </summary>
         [Parameter] public MarkupString ResetButtonText { get; set; }
         /// <summary>
-        /// Hide add button
+        /// Prevents adding files
         /// </summary>
-        [Parameter] public bool HideAddButton { get; set; }
+        [Parameter] public bool PreventAdding { get; set; }
         /// <summary>
         /// Add button text. Default Add
         /// </summary>
         [Parameter] public MarkupString AddButtonText { get; set; }
         /// <summary>
-        /// Hide the dropzone
-        /// </summary>
-        [Parameter] public bool HideDropZone { get; set; }
-        /// <summary>
-        /// The dropzone label text. Default DropFilesHere
+        /// The dropzone label text. Default DropFilesHere or DropFilesOrClickHere
         /// </summary>
         [Parameter] public MarkupString DropZoneText { get; set; }
         /// <summary>
@@ -148,7 +144,7 @@ namespace OneLine.Blazor.Components
                 }
                 if (string.IsNullOrWhiteSpace(DropZoneText.Value))
                 {
-                    DropZoneText = (MarkupString)Resourcer.GetString("DropFilesHere");
+                    DropZoneText = (MarkupString)Resourcer.GetString("DropFilesOrClickHere");
                 }
                 if (string.IsNullOrWhiteSpace(ResetButtonText.Value))
                 {
@@ -178,11 +174,8 @@ namespace OneLine.Blazor.Components
                 }
                 DropClass = DropTargetClass;
                 DropInputReference = FileReaderService.CreateReference(DropTargetInput);
-                if(!HideDropZone)
-                {
-                    DropReference = FileReaderService.CreateReference(DropTarget);
-                    await DropReference.RegisterDropEventsAsync(IsMultiple);
-                }
+                DropReference = FileReaderService.CreateReference(DropTarget);
+                await DropReference.RegisterDropEventsAsync(IsMultiple);
                 StateHasChanged();
             }
         }
@@ -197,7 +190,10 @@ namespace OneLine.Blazor.Components
         }
         public async Task OpenDeviceFileSystem()
         {
-            await JSRuntime.InvokeVoidAsync("eval", $"document.querySelector('[_bl_{DropTargetInput.Id}]').click()");
+            if (!PreventAdding)
+            {
+                await JSRuntime.InvokeVoidAsync("eval", $"document.querySelector('[_bl_{DropTargetInput.Id}]').click()");
+            }
         }
         public async Task Remove(BlobData blobData)
         {
@@ -264,7 +260,11 @@ namespace OneLine.Blazor.Components
         }
         public async Task OnDrop(EventArgs e)
         {
-            await ReadFiles();
+            if(!PreventAdding)
+            {
+                await ReadFiles();
+            }
+            
         }
         public void OnDragLeave(EventArgs e)
         {
@@ -282,16 +282,8 @@ namespace OneLine.Blazor.Components
             var blobDatas = new ObservableRangeCollection<BlobData>();
             if(IsMultiple)
             {
-                IEnumerable<IFileReference> fileReferences = null;
-                if (!HideDropZone)
-                {
-                    fileReferences = await DropReference.EnumerateFilesAsync();
-                    fileReferences = fileReferences.Concat(await DropInputReference.EnumerateFilesAsync());
-                }
-                else
-                {
-                    fileReferences = await DropInputReference.EnumerateFilesAsync();
-                }
+                var fileReferences = await DropReference.EnumerateFilesAsync();
+                fileReferences = fileReferences.Concat(await DropInputReference.EnumerateFilesAsync());
                 foreach (var fileReference in fileReferences)
                 {
                     var fileInfo = await fileReference.ReadFileInfoAsync();
@@ -310,11 +302,7 @@ namespace OneLine.Blazor.Components
             }
             else
             {
-                IEnumerable<IFileReference> fileReferences = null;
-                if (!HideDropZone)
-                {
-                    fileReferences = await DropReference.EnumerateFilesAsync();
-                }
+                var fileReferences = await DropReference.EnumerateFilesAsync();
                 if(fileReferences.IsNullOrEmpty())
                 {
                     fileReferences = await DropInputReference.EnumerateFilesAsync();
@@ -358,10 +346,7 @@ namespace OneLine.Blazor.Components
                 BlobDatas = blobDatas;
             }
             await BlobDatasChanged.InvokeAsync(BlobDatas);
-            if (!HideDropZone)
-            {
-                await DropReference.ClearValue();
-            }
+            await DropReference.ClearValue();
             await DropInputReference.ClearValue();
         }
     }

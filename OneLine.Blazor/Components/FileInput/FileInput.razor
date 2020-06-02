@@ -6,69 +6,35 @@
 {
     <CascadingValue Value="this">
         @DropZoneInlineStyle
-        @if (!HideDropZone)
-        {
-            <div class="@DropClass" @ref=DropTarget @ondragenter=OnDragEnter @ondrop=OnDrop @ondragleave=OnDragLeave>
-                @Resourcer.GetString("DropFilesHere")
-                @if (BlobDatas.IsNotNullAndNotEmpty())
-                {
-                    <br class="p-0" />
-                }
-                @foreach (var BlobData in BlobDatas ?? Enumerable.Empty<BlobData>())
-                {
-                    var localBlobData = BlobData;
-                    <BSButton Color="Color.Link">
-                        <span @onclick=@(async () => await Download(localBlobData)) title="@Resourcer.GetString("Download")">@localBlobData.Name</span>
-                        <span class="text-danger" @onclick=@(() => Remove(localBlobData)) style="cursor: pointer" title="@Resourcer.GetString("Delete")">&times;</span>
-                    </BSButton>
-                }
-                @foreach (var UserBlob in UserBlobs ?? Enumerable.Empty<UserBlobs>())
-                {
-                    var localUserBlob = UserBlob;
-                    <BSButton Color="Color.Link">
-                        <span @onclick=@(async () => await Download(localUserBlob)) title="@Resourcer.GetString("Download")">@localUserBlob.Name</span>
-                        @if (!HideDeleteButton)
-                        {
-                            <span class="text-danger" @onclick=@(() => Remove(localUserBlob)) style="cursor: pointer" title="@Resourcer.GetString("Delete")">&times;</span>
-                        }
-                    </BSButton>
-                }
-            </div>
-        }
-        else
-        {
+        <div class="@(PreventAdding ? "" : DropClass)" style="@(PreventAdding ? "" : "cursor: pointer")" @onclick=OpenDeviceFileSystem @ref=DropTarget @ondragenter=OnDragEnter @ondrop=OnDrop @ondragleave=OnDragLeave>
+            @DropZoneText
+            @if (BlobDatas.IsNotNullAndNotEmpty())
+            {
+                <br class="p-0" />
+            }
             @foreach (var BlobData in BlobDatas ?? Enumerable.Empty<BlobData>())
             {
                 var localBlobData = BlobData;
                 <BSButton Color="Color.Link">
-                    <span @onclick=@(async () => await Download(localBlobData)) title="@Resourcer.GetString("Download")">@localBlobData.Name</span> 
-                    <span class="text-danger" @onclick=@(() => Remove(localBlobData)) style="cursor: pointer" title="@Resourcer.GetString("Delete")">&times;</span>
+                    <span @onclick:stopPropagation @onclick=@(async () => await Download(localBlobData)) title="@Resourcer.GetString("Download")">@localBlobData.Name</span>
+                    <span class="text-danger" @onclick:stopPropagation @onclick=@(() => Remove(localBlobData)) style="cursor: pointer" title="@Resourcer.GetString("Delete")">&times;</span>
                 </BSButton>
             }
             @foreach (var UserBlob in UserBlobs ?? Enumerable.Empty<UserBlobs>())
             {
                 var localUserBlob = UserBlob;
                 <BSButton Color="Color.Link">
-                    <span @onclick=@(async () => await Download(localUserBlob)) title="@Resourcer.GetString("Download")">@localUserBlob.Name</span>
+                    <span @onclick:stopPropagation @onclick=@(async () => await Download(localUserBlob)) title="@Resourcer.GetString("Download")">@localUserBlob.Name</span>
                     @if (!HideDeleteButton)
                     {
-                        <span class="text-danger" @onclick=@(() => Remove(localUserBlob)) style="cursor: pointer" title="@Resourcer.GetString("Delete")">&times;</span>
+                        <span class="text-danger" @onclick:stopPropagation @onclick=@(() => Remove(localUserBlob)) style="cursor: pointer" title="@Resourcer.GetString("Delete")">&times;</span>
                     }
                 </BSButton>
             }
-        }
-        @if (HideDropZone)
-        {
-            <br class="p-0" />
-            <br class="p-0" />
-        }
+        </div>
         @if (!HideResetButton)
         {
             <BSButton OnClick=Clear Color=Color.Secondary>@ResetButtonText</BSButton>
-        }
-        @if (!HideAddButton)
-        {
-            <BSButton OnClick=OpenDeviceFileSystem Color=Color.Primary>@AddButtonText</BSButton>
         }
         @if (IsMultiple)
         {

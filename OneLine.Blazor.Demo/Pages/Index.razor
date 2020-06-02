@@ -10,7 +10,7 @@ Welcome to your new app.
 <BSFormGroup>
     <BSLabel>Evidences</BSLabel>
     <br class="p-0" />
-    <OneLine.Blazor.Components.FileInput InputName="TestInputName" @bind-BlobDatas=@BlobDatas></OneLine.Blazor.Components.FileInput>
+    <OneLine.Blazor.Components.FileInput InputName="TestInputName" @bind-BlobDatas=@BlobDatas IsMultiple=true/>
 </BSFormGroup>
 <br />
 <button class="btn btn-primary" @onclick=test>Read File</button>

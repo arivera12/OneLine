@@ -127,6 +127,7 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Validations
 - [x] Http Services
 - [x] Language Translations (English and Spanish (Partially))
+- [x] SDK for .net
 
 ## Roadmap
 

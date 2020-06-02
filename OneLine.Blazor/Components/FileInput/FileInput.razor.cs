@@ -9,10 +9,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorDownloadFile;
+using System.Net.Http;
+using CurrieTechnologies.Razor.SweetAlert2;
+using OneLine.Blazor.Extensions;
+using OneLine.Bases;
+using OneLine.Validations;
+using OneLine.Models.Users;
 
 namespace OneLine.Blazor.Components
 {
-    public class FileInputReaderBase : ComponentBase, IComponent
+    public class FileInputBase : ComponentBase, IComponent
     {
         /// <summary>
         /// Input File extra attributes
@@ -38,6 +44,14 @@ namespace OneLine.Blazor.Components
         /// Callback to return the readed files from the device file system.
         /// </summary>
         [Parameter] public EventCallback<IEnumerable<BlobData>> BlobDatasChanged { get; set; }
+        /// <summary>
+        /// Userblobs attached to the current property
+        /// </summary>
+        [Parameter] public IEnumerable<UserBlobs> UserBlobs { get; set; }
+        /// <summary>
+        /// Callback to return the userblobs
+        /// </summary>
+        [Parameter] public EventCallback<IEnumerable<UserBlobs>> UserBlobsChanged { get; set; }
         /// <summary>
         /// The buffer size to read the files.
         /// </summary>
@@ -93,9 +107,20 @@ namespace OneLine.Blazor.Components
         ///</style>
         /// </summary>
         [Parameter] public MarkupString DropZoneInlineStyle { get; set; }
+        /// <summary>
+        /// Prevents download link to download the current clicked file
+        /// </summary>
+        [Parameter] public bool PreventDownload { get; set; }
+        /// <summary>
+        /// Hides the delete button
+        /// </summary>
+        [Parameter] public bool HideDeleteButton { get; set; }
         [Inject] public IFileReaderService FileReaderService { get; set; }
         [Inject] public IJSRuntime JSRuntime { get; set; }
         [Inject] public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        [Inject] public SweetAlertService SweetAlertService { get; set; }
+        [Inject] public HttpClient HttpClient { get; set; }
+        public HttpBaseUserBlobsService<UserBlobs, Identifier<string>, string, BlobData, BlobDataValidator> HttpBaseUserBlobsService { get; set; }
         public ElementReference DropTarget { get; set; }
         public ElementReference DropTargetInput { get; set; }
         public IFileReaderRef DropReference { get; set; }
@@ -105,6 +130,10 @@ namespace OneLine.Blazor.Components
         {
             if (firstRender)
             {
+                HttpBaseUserBlobsService = new HttpBaseUserBlobsService<UserBlobs, Identifier<string>, string, BlobData, BlobDataValidator>()
+                {
+                    HttpClient = HttpClient
+                };
                 if (string.IsNullOrWhiteSpace(DropTargetDragClass))
                 {
                     DropTargetDragClass = "drop-zone-drop-target-drag";
@@ -121,25 +150,25 @@ namespace OneLine.Blazor.Components
                 {
                     AddButtonText = (MarkupString)Resourcer.GetString("Add");
                 }
+                BorderColor = string.IsNullOrWhiteSpace(BorderColor) ? "orangered" : BorderColor;
                 if (string.IsNullOrWhiteSpace(DropZoneInlineStyle.Value))
                 {
-                    DropZoneInlineStyle = (MarkupString)@"<style>
-    div.drop-zone-drop-target {
+                    DropZoneInlineStyle = (MarkupString)$@"<style>
+    div.drop-zone-drop-target {{
         display: block;
         padding: 20px;
         margin-bottom: 10px;
         border: 1px dashed black;
         border-radius: 5px;
         position: relative;
-    }
-    div.drop-zone-drop-target-drag {
-        border-color: @BorderColor;
+    }}
+    div.drop-zone-drop-target-drag {{
+        border-color: {BorderColor};
         font-weight: bold;
-    }
+    }}
 </style>";
                 }
                 DropClass = DropTargetClass;
-                BorderColor = string.IsNullOrWhiteSpace(BorderColor) ? "orangered" : BorderColor;
                 DropInputReference = FileReaderService.CreateReference(DropTargetInput);
                 if(!HideDropZone)
                 {
@@ -164,15 +193,61 @@ namespace OneLine.Blazor.Components
         }
         public async Task Remove(BlobData blobData)
         {
-            var blobDatas = new List<BlobData>(BlobDatas);
-            blobDatas.Remove(blobData);
-            BlobDatas = blobDatas;
-            await BlobDatasChanged.InvokeAsync(BlobDatas);
+            if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheFile"),
+                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            {
+                var blobDatas = new List<BlobData>(BlobDatas);
+                blobDatas.Remove(blobData);
+                BlobDatas = blobDatas;
+                await BlobDatasChanged.InvokeAsync(BlobDatas);
+            }
             StateHasChanged();
         }
         public async Task Download(BlobData blobData)
         {
-            await BlazorDownloadFileService.DownloadFile(blobData.Name, blobData.Data);
+            if(!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDownloadTheFile"),
+                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            {
+                await BlazorDownloadFileService.DownloadFile(blobData.Name, blobData.Data);
+            }
+        }
+        public async Task Remove(UserBlobs userBlob)
+        {
+            if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheFile"),
+                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            {
+                var userBlobs = new List<UserBlobs>(UserBlobs);
+                userBlobs.Remove(userBlob);
+                UserBlobs = userBlobs;
+                await BlobDatasChanged.InvokeAsync(BlobDatas);
+            }
+            StateHasChanged();
+        }
+        public async Task Download(UserBlobs userBlobs)
+        {
+            if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDownloadTheFile"),
+                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            {
+                var responseResult = await HttpBaseUserBlobsService.DownloadBinary(new Identifier<string>(userBlobs.UserBlobId), new BlobDataValidator());
+                if (!responseResult.Succeed && !responseResult.HasException)
+                {
+                    await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                    await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
+                }
+                else if (responseResult.Succeed)
+                {
+                    await BlazorDownloadFileService.DownloadFile(userBlobs.FileName, responseResult.Response);
+                }
+                else if (responseResult.HasException)
+                {
+                    await SweetAlertService.FireAsync(null, responseResult.Exception.Message, SweetAlertIcon.Error);
+                }
+                else
+                {
+                    await SweetAlertService.FireAsync(null, Resourcer.GetString(responseResult.Response.ToString()), SweetAlertIcon.Error);
+                }
+                StateHasChanged();
+            }
         }
         public void OnDragEnter(EventArgs e)
         {
@@ -232,7 +307,7 @@ namespace OneLine.Blazor.Components
                 {
                     fileReferences = await DropReference.EnumerateFilesAsync();
                 }
-                if(!fileReferences.IsNullOrEmpty())
+                if(fileReferences.IsNullOrEmpty())
                 {
                     fileReferences = await DropInputReference.EnumerateFilesAsync();
                 }

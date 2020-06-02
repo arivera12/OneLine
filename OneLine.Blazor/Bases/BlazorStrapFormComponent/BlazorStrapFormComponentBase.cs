@@ -150,7 +150,8 @@ namespace OneLine.Blazor.Bases
         public virtual async Task BeforeSave()
         {
             await Validate();
-            if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToSaveTheRecord"))
+            if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToSaveTheRecord"),
+                                                                                    confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
             }
@@ -171,7 +172,7 @@ namespace OneLine.Blazor.Bases
             await SweetAlertService.HideLoaderAsync();
             if (!Response.Succeed && !Response.HasException)
             {
-                await SweetAlertService.FireAsync("SessionExpired", Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
                 await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
             }
             else if (Response.Succeed && Response.Response.Status.Succeeded())
@@ -190,7 +191,8 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeDelete()
         {
-            if (Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToDeleteTheRecord"))
+            if (Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheRecord"),
+                                                                                    confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Delete()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
             }
@@ -201,7 +203,7 @@ namespace OneLine.Blazor.Bases
             await SweetAlertService.HideLoaderAsync();
             if (!Response.Succeed && !Response.HasException)
             {
-                await SweetAlertService.FireAsync("SessionExpired", Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
                 await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
             }
             else if (Response.Succeed && Response.Response.Status.Succeeded())
@@ -220,7 +222,8 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeCancel()
         {
-            if (await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToCancel"))
+            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToCancel"),
+                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
                 await Cancel();
             }
@@ -233,7 +236,8 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeReset()
         {
-            if (await SweetAlertService.ShowConfirmAlertAsync(text: "AreYouSureYouWantToReset"))
+            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToReset"),
+                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
                 await Reset();
             }

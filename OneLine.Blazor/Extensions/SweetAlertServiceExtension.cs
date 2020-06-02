@@ -20,19 +20,19 @@ namespace OneLine.Blazor.Extensions
             }
         }
         public static async Task<bool> ShowConfirmAlertAsync(this SweetAlertService Swal, 
-            string title = "Confirm", 
-            string text = "AreYouSureYouWantToPerformTheCurrentAction",
-            string confirmButtonText = "Yes",
-            string cancelButtonText = "Cancel")
+            string title, 
+            string text,
+            string confirmButtonText,
+            string cancelButtonText)
         {
             SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
-                Title = Resourcer.GetString(title),
-                Text = Resourcer.GetString(text),
+                Title = title,
+                Text = text,
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
-                ConfirmButtonText = Resourcer.GetString(confirmButtonText),
-                CancelButtonText = Resourcer.GetString(cancelButtonText),
+                ConfirmButtonText = confirmButtonText,
+                CancelButtonText = cancelButtonText,
                 AllowEnterKey = true,
                 AllowEscapeKey = true,
                 AllowOutsideClick = false

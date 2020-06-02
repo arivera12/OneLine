@@ -26,8 +26,6 @@ OneLine is an abstracted standardized redefined framework.
 
 ## Client Side Core Features
 
-- [x] Single Page Application Arquitecture (SPA)
-- [x] Componetized
 - [x] Base Classes for Forms and Data Views Management
   - [x] Form Management 
     - [x] Load
@@ -56,6 +54,8 @@ OneLine is an abstracted standardized redefined framework.
   
 ## Client Side Blazor Features
 
+- [x] Single Page Application Arquitecture (SPA)
+- [x] Componetized
 - [x] Pre-Implemented Users Account Basic Management
 - [x] Application State Management
   - [x] User Info Storage Management (Encrypted by default)
@@ -127,6 +127,7 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Validations
 - [x] Http Services
 - [x] Language Translations (English and Spanish (Partially))
+- [x] SDK for .net
 
 ## Roadmap
 
@@ -140,6 +141,9 @@ OneLine is an abstracted standardized redefined framework.
   - Between users
   - Groups
 - App/service representative chat with connected clients
+- Admin creates user/admin and manage access permissions
+- User invites other users to manage profile including access permissions management 
+- Confirm action by password
 - Cross Platform Device API's Implementations for Browser, Electron.Net and Xamarin. 
   - Accelerometer
   - App Information

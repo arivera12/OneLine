@@ -140,6 +140,9 @@ OneLine is an abstracted standardized redefined framework.
   - Between users
   - Groups
 - App/service representative chat with connected clients
+- Admin creates user/admin and manage access permissions
+- User invites other users to manage profile including access permissions management 
+- Confirm action by password
 - Cross Platform Device API's Implementations for Browser, Electron.Net and Xamarin. 
   - Accelerometer
   - App Information

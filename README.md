@@ -118,7 +118,6 @@ OneLine is an abstracted standardized redefined framework.
     - [x] FTP (Blobs)
 - [x] Blobs Management is centralized
   - [x] Blobs doesn't never need a child tables to support multiple file upload references
-  - [x] Define and apply rules to the expected blob
 - [x] Server exceptions are pre-handled and recorded
 - [x] Every operation is auto audited with option of rolling back any operation at any time
 
@@ -126,6 +125,7 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Models
 - [x] Validations
 - [x] Http Services
+- [x] Form File Validations Rules
 - [x] Language Translations (English and Spanish (Partially))
 - [x] SDK for .net
 

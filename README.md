@@ -12,7 +12,7 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Chainable
 - [x] Overridable
 - [x] Recyclable
-- [x] Scaffolding Tooling
+- [ ] Scaffolding Tooling (Commercially available soon)
 - [x] Pre-Implemented Enviroment
 - [x] Cross Platform Support for Blazor (client/server), Xamarin, UWP, and Electron.Net (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile)).
 - [ ] Multiple Database Providers Support
@@ -52,10 +52,14 @@ OneLine is an abstracted standardized redefined framework.
     - [x] Collection Mode Management (append or replace)
     - [x] Request and Response Management
   
-## Client Side Blazor Features
+## Client Side Blazor Extended Features
 
 - [x] Single Page Application Arquitecture (SPA)
 - [x] Componetized
+- [ ] Chained components behavior (behavior like stepper)
+  - [ ] Forms (Back or Save/Next)
+  - [ ] CRUD (Create, Read, Update, Delete operations) (back and/or next) 
+  - [ ] Data Views (Select single or multiple, back and/or next)
 - [x] Pre-Implemented Users Account Basic Management
 - [x] Application State Management
   - [x] User Info Storage Management (Encrypted by default)
@@ -118,7 +122,6 @@ OneLine is an abstracted standardized redefined framework.
     - [x] FTP (Blobs)
 - [x] Blobs Management is centralized
   - [x] Blobs doesn't never need a child tables to support multiple file upload references
-  - [x] Define and apply rules to the expected blob
 - [x] Server exceptions are pre-handled and recorded
 - [x] Every operation is auto audited with option of rolling back any operation at any time
 
@@ -126,6 +129,7 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Models
 - [x] Validations
 - [x] Http Services
+- [x] Form File Validations Rules
 - [x] Language Translations (English and Spanish (Partially))
 - [x] SDK for .net
 

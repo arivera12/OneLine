@@ -19,15 +19,15 @@ OneLine is an abstracted standardized redefined framework.
   - [x] Multi Platform Deployment Support (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile))
     - [x] Blazor WASM and Server
     - [x] Xamarin
-      - [x] Android
-      - [x] iOS
-      - [x] UWP (Universal Windows Platform)
+      - [x] Android 4.4 onwards
+      - [x] iOS 12.0 onwards
+      - [x] UWP Build 16299 onwards (Universal Windows Platform)
     - [x] Windows 7 onwards using UWP or Electron.Net
     - [x] MacOS 10.10 (Yosemite) onwards using Electron.Net
     - [x] Linux using Electron.Net
-      - [x] Ubuntu 12.04 and newer
-      - [x] Fedora 21
-      - [x] Debian 8
+      - [x] Ubuntu 12.04 onwards
+      - [x] Fedora 21 onwards
+      - [x] Debian 8 onwards
 - [ ] Multiple Database Providers Support
   - [x] SQL Server 2012 onwards
   - [ ] SQLite 3.7 onwards

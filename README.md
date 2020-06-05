@@ -16,7 +16,7 @@ OneLine is an abstracted standardized redefined framework.
   - [x] Pre-Implemented Enviroment
   - [x] RAD (Rapid Application Development) and Prototyping
   - [x] WORE (Write once, run everywhere)
-  - [x] Multi Platform Deployment Support (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile)) using a single base code
+  - [x] Multi Platform Deployment Support (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile))
     - [x] Blazor WASM and Server
     - [x] Xamarin
       - [x] Android

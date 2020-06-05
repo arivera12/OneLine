@@ -57,6 +57,9 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Single Page Application Arquitecture (SPA)
 - [x] Componetized
 - [ ] Chained components behavior (behavior like stepper)
+  - [ ] Forms
+  - [ ] CRUDS
+  - [ ] Data Views
 - [x] Pre-Implemented Users Account Basic Management
 - [x] Application State Management
   - [x] User Info Storage Management (Encrypted by default)

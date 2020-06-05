@@ -6,9 +6,12 @@
 {
     <CascadingValue Value="this">
         @DropZoneInlineStyle
-        <div class="@(PreventAdding ? "" : DropClass)" style="@(PreventAdding ? "" : "cursor: pointer")" @onclick=OpenDeviceFileSystem @ref=DropTarget @ondragenter=OnDragEnter @ondrop=OnDrop @ondragleave=OnDragLeave>
-            @DropZoneText
-            @if (BlobDatas.IsNotNullAndNotEmpty())
+        <div class="@(PreventAdding || !CanAddMoreFiles() ? "m-0" : $"{DropClass} m-0")" style="@(PreventAdding || !CanAddMoreFiles() ? "" : "cursor: pointer")" @onclick=OpenDeviceFileSystem @ref=DropTarget @ondragenter=OnDragEnter @ondrop=OnDrop @ondragleave=OnDragLeave>
+            @if (CanAddMoreFiles())
+            {
+                @DropZoneText
+            }
+            @if ((BlobDatas.IsNotNullAndNotEmpty() || UserBlobs.IsNotNullAndNotEmpty()) && CanAddMoreFiles())
             {
                 <br class="p-0" />
             }
@@ -32,17 +35,24 @@
                 </BSButton>
             }
         </div>
+        @if (!HideInformativeLabelText)
+        {
+            @InformativeLabelText()
+        }
         @if (!HideResetButton)
         {
-            <BSButton OnClick=Clear Color=Color.Secondary>@ResetButtonText</BSButton>
+            <BSButton OnClick=Clear Color=Color.Primary>@ResetButtonText</BSButton>
         }
-        @if (IsMultiple)
+        @if (CanAddMoreFiles())
         {
-            <input type="file" class="d-none" @ref=DropTargetInput @attributes=UnknownParameters @onchange=OnInputChange multiple />
-        }
-        else
-        {
-            <input type="file" class="d-none" @ref=DropTargetInput @attributes=UnknownParameters @onchange=OnInputChange />
+            @if (AllowMultiple)
+            {
+                <input type="file" class="d-none" @ref=DropTargetInput @attributes=UnknownParameters @onchange=OnInputChange multiple />
+            }
+            else
+            {
+                <input type="file" class="d-none" @ref=DropTargetInput @attributes=UnknownParameters @onchange=OnInputChange />
+            }
         }
     </CascadingValue>
 }

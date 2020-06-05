@@ -31,7 +31,7 @@ namespace OneLine.Blazor.Bases
         [Inject] public override IConfiguration Configuration { get; set; }
         [Inject] public virtual IJSRuntime JSRuntime { get; set; }
         [Inject] public virtual NavigationManager NavigationManager { get; set; }
-        [Inject] public virtual BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
+        [Inject] public virtual IBlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
         [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
         [Inject] public virtual HttpClient HttpClient { get; set; }

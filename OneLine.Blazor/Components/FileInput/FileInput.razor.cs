@@ -27,7 +27,7 @@ namespace OneLine.Blazor.Components
         /// <summary>
         /// Allows to attach and upload multiple file uploads.
         /// </summary>
-        [Parameter] public bool IsMultiple { get; set; }
+        [Parameter] public bool AllowMultiple { get; set; }
         /// <summary>
         /// Class to apply on drag enter. Default: Default drop-zone-drop-target-drag.
         /// </summary>
@@ -115,6 +115,42 @@ namespace OneLine.Blazor.Components
         /// Hides the delete button
         /// </summary>
         [Parameter] public bool HideDeleteButton { get; set; }
+        /// <summary>
+        /// The minimum allowed file to attach to the file input
+        /// </summary>
+        [Parameter] public int MinimumAllowedFiles { get; set; }
+        /// <summary>
+        /// The maximun allowed file to attach to the file input
+        /// </summary>
+        [Parameter] public int MaximumAllowedFiles { get; set; }
+        /// <summary>
+        /// The max file size measured in bytes
+        /// </summary>
+        [Parameter] public long MaxFileSize { get; set; }
+        /// <summary>
+        /// The max file size measured text. This property must be used in conjuction with MaxFileSize to display in preference measured like b, kb, mb, gb, etc.
+        /// </summary>
+        [Parameter] public string MaxFileSizeMeasuredText { get; set; }
+        /// <summary>
+        /// Property to be used to let know if the minimum allowed files is reached
+        /// </summary>
+        [Parameter] public bool MinimumAllowedFilesReached { get; set; }
+        /// <summary>
+        /// Property to be used to let know if the maximum allowed files is reached
+        /// </summary>
+        [Parameter] public bool MaximumAllowedFilesReached { get; set; }
+        /// <summary>
+        /// Event callback to be used to let know if the minimum allowed files is reached
+        /// </summary>
+        [Parameter] public EventCallback<bool> MinimumAllowedFilesReachedChanged { get; set; }
+        /// <summary>
+        /// Event callback to be used to let know if the maximum allowed files is reached
+        /// </summary>
+        [Parameter] public EventCallback<bool> MaximumAllowedFilesReachedChanged { get; set; }
+        /// <summary>
+        /// Hides the text below the dropzone containing the info about maximum size per file, mimimum and maximum allowed files and minimum or maximum files reached.
+        /// </summary>
+        [Parameter] public bool HideInformativeLabelText { get; set; }
         [Inject] public IFileReaderService FileReaderService { get; set; }
         [Inject] public IJSRuntime JSRuntime { get; set; }
         [Inject] public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
@@ -175,11 +211,11 @@ namespace OneLine.Blazor.Components
                 DropClass = DropTargetClass;
                 DropInputReference = FileReaderService.CreateReference(DropTargetInput);
                 DropReference = FileReaderService.CreateReference(DropTarget);
-                await DropReference.RegisterDropEventsAsync(IsMultiple);
+                await DropReference.RegisterDropEventsAsync(AllowMultiple);
                 StateHasChanged();
             }
         }
-        public async Task Clear()
+        public virtual async Task Clear()
         {
             await DropReference.ClearValue();
             await DropInputReference.ClearValue();
@@ -188,14 +224,14 @@ namespace OneLine.Blazor.Components
             await BlobDatasChanged.InvokeAsync(blobDatas);
             StateHasChanged();
         }
-        public async Task OpenDeviceFileSystem()
+        public virtual async Task OpenDeviceFileSystem()
         {
-            if (!PreventAdding)
+            if (!PreventAdding && CanAddMoreFiles())
             {
                 await JSRuntime.InvokeVoidAsync("eval", $"document.querySelector('[_bl_{DropTargetInput.Id}]').click()");
             }
         }
-        public async Task Remove(BlobData blobData)
+        public virtual async Task Remove(BlobData blobData)
         {
             if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheFile"),
                                                                 confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
@@ -205,17 +241,18 @@ namespace OneLine.Blazor.Components
                 BlobDatas = blobDatas;
                 await BlobDatasChanged.InvokeAsync(BlobDatas);
             }
+            await UpdateMaximunMinimunReachedFiles();
             StateHasChanged();
         }
-        public async Task Download(BlobData blobData)
+        public virtual async Task Download(BlobData blobData)
         {
-            if(!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDownloadTheFile"),
+            if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDownloadTheFile"),
                                                                 confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
                 await BlazorDownloadFileService.DownloadFile(blobData.Name, blobData.Data);
             }
         }
-        public async Task Remove(UserBlobs userBlob)
+        public virtual async Task Remove(UserBlobs userBlob)
         {
             if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheFile"),
                                                                 confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
@@ -225,9 +262,10 @@ namespace OneLine.Blazor.Components
                 UserBlobs = userBlobs;
                 await BlobDatasChanged.InvokeAsync(BlobDatas);
             }
+            await UpdateMaximunMinimunReachedFiles();
             StateHasChanged();
         }
-        public async Task Download(UserBlobs userBlobs)
+        public virtual async Task Download(UserBlobs userBlobs)
         {
             if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDownloadTheFile"),
                                                                 confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
@@ -253,78 +291,157 @@ namespace OneLine.Blazor.Components
                 StateHasChanged();
             }
         }
-        public void OnDragEnter(EventArgs e)
+        public virtual void OnDragEnter(EventArgs e)
         {
             DropClass = $"{DropTargetClass} {DropTargetDragClass}";
             StateHasChanged();
         }
-        public async Task OnDrop(EventArgs e)
+        public virtual async Task OnDrop(EventArgs e)
         {
-            if(!PreventAdding)
+            if (!PreventAdding && CanAddMoreFiles())
             {
                 await ReadFiles();
             }
-            
         }
-        public void OnDragLeave(EventArgs e)
+        public virtual void OnDragLeave(EventArgs e)
         {
             DropClass = DropTargetClass;
             StateHasChanged();
         }
-        public async Task OnInputChange(EventArgs e)
+        public virtual bool CanAddMoreFiles()
         {
-            await ReadFiles();
+            if (MaximumAllowedFiles <= 0)
+            {
+                return true;
+            }
+            return MaximumAllowedFiles > FilesCount();
         }
-        public async Task ReadFiles()
+        public virtual MarkupString AllowsUpToFilesText()
+        {
+            return (MarkupString)(MaximumAllowedFiles <= 0 ? "" : $@"{Resourcer.GetString("AllowsUpTo")} {MaximumAllowedFiles} {(MaximumAllowedFiles == 1 ? Resourcer.GetString("File") : Resourcer.GetString("Files"))}");
+        }
+        public virtual MarkupString InformativeLabelText()
+        {
+            if (!MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
+            {
+                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}</small></div>";
+            }
+            else if (MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
+            {
+                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}, {Resourcer.GetString("MinimumReached")}</small></div>";
+            }
+            else if (MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
+            {
+                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}, {Resourcer.GetString("MaximunReached")}</small></div>";
+            }
+            else if (MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize <= 0)
+            {
+                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MinimumReached")}</small></div>";
+            }
+            else if (MaximumAllowedFilesReached && MaxFileSize <= 0)
+            {
+                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MaximunReached")}</small></div>";
+            }
+            else
+            {
+                return (MarkupString)"";
+            }
+        }
+        public virtual int FilesCount()
+        {
+            var currentBlobsCount = 0;
+            currentBlobsCount += BlobDatas.IsNullOrEmpty() ? 0 : BlobDatas.Count();
+            currentBlobsCount += UserBlobs.IsNullOrEmpty() ? 0 : UserBlobs.Count();
+            return currentBlobsCount;
+        }
+        public virtual async Task UpdateMaximunMinimunReachedFiles()
+        {
+            var filesCount = FilesCount();
+            MinimumAllowedFilesReached = filesCount >= MinimumAllowedFiles;
+            await MinimumAllowedFilesReachedChanged.InvokeAsync(MinimumAllowedFilesReached);
+            MaximumAllowedFilesReached = filesCount >= MaximumAllowedFiles;
+            await MaximumAllowedFilesReachedChanged.InvokeAsync(MaximumAllowedFilesReached);
+            DropInputReference = FileReaderService.CreateReference(DropTargetInput);
+        }
+        public virtual async Task OnInputChange(EventArgs e)
+        {
+            if (!PreventAdding && CanAddMoreFiles())
+            {
+                await ReadFiles();
+            }
+        }
+        public virtual async Task ReadFiles()
         {
             DropClass = DropTargetClass;
             StateHasChanged();
             var blobDatas = new ObservableRangeCollection<BlobData>();
-            if(IsMultiple)
+            if (AllowMultiple)
             {
                 var fileReferences = await DropReference.EnumerateFilesAsync();
                 fileReferences = fileReferences.Concat(await DropInputReference.EnumerateFilesAsync());
+                var filesCount = FilesCount();
+                if (MaximumAllowedFiles > 0 && (fileReferences.Count() + filesCount) > MaximumAllowedFiles)
+                {
+                    await DropReference.ClearValue();
+                    await DropInputReference.ClearValue();
+                    await SweetAlertService.FireAsync(Resourcer.GetString("MaximumAllowedFilesExceeded"), Resourcer.GetString("TheSumOfSelectedFilesExceedsTheMaximumAllowedFiles"), SweetAlertIcon.Warning);
+                    return;
+                }
                 foreach (var fileReference in fileReferences)
                 {
                     var fileInfo = await fileReference.ReadFileInfoAsync();
-                    var blobData = new BlobData
+                    if(fileInfo.Size > MaxFileSize)
                     {
-                        Name = fileInfo.Name,
-                        Size = fileInfo.Size,
-                        Type = fileInfo.Type,
-                        InputName = InputName,
-                        LastModified = fileInfo.LastModifiedDate ?? default
-                    };
-                    var stream = BufferSize <= 0 ? await fileReference.CreateMemoryStreamAsync() : await fileReference.CreateMemoryStreamAsync(BufferSize);
-                    blobData.Data = stream;
-                    blobDatas.Add(blobData);
+                        await SweetAlertService.FireAsync(Resourcer.GetString("MaxFileSizeExceeded"), fileInfo.Name, SweetAlertIcon.Warning);
+                    }
+                    else
+                    {
+                        var blobData = new BlobData
+                        {
+                            Name = fileInfo.Name,
+                            Size = fileInfo.Size,
+                            Type = fileInfo.Type,
+                            InputName = InputName,
+                            LastModified = fileInfo.LastModifiedDate ?? default
+                        };
+                        var stream = BufferSize <= 0 ? await fileReference.CreateMemoryStreamAsync() : await fileReference.CreateMemoryStreamAsync(BufferSize);
+                        blobData.Data = stream;
+                        blobDatas.Add(blobData);
+                    }
                 }
             }
             else
             {
                 var fileReferences = await DropReference.EnumerateFilesAsync();
-                if(fileReferences.IsNullOrEmpty())
+                if (fileReferences.IsNullOrEmpty())
                 {
                     fileReferences = await DropInputReference.EnumerateFilesAsync();
                 }
                 foreach (var fileReference in fileReferences)
                 {
                     var fileInfo = await fileReference.ReadFileInfoAsync();
-                    var blobData = new BlobData
+                    if (fileInfo.Size > MaxFileSize)
                     {
-                        Name = fileInfo.Name,
-                        Size = fileInfo.Size,
-                        Type = fileInfo.Type,
-                        InputName = InputName,
-                        LastModified = fileInfo.LastModifiedDate ?? default
-                    };
-                    var stream = BufferSize <= 0 ? await fileReference.CreateMemoryStreamAsync() : await fileReference.CreateMemoryStreamAsync(BufferSize);
-                    blobData.Data = stream;
-                    blobDatas.Add(blobData);
+                        await SweetAlertService.FireAsync(Resourcer.GetString("MaxFileSizeExceeded"), fileInfo.Name, SweetAlertIcon.Warning);
+                    }
+                    else
+                    {
+                        var blobData = new BlobData
+                        {
+                            Name = fileInfo.Name,
+                            Size = fileInfo.Size,
+                            Type = fileInfo.Type,
+                            InputName = InputName,
+                            LastModified = fileInfo.LastModifiedDate ?? default
+                        };
+                        var stream = BufferSize <= 0 ? await fileReference.CreateMemoryStreamAsync() : await fileReference.CreateMemoryStreamAsync(BufferSize);
+                        blobData.Data = stream;
+                        blobDatas.Add(blobData);
+                    }
                     break;
                 }
             }
-            if (BlobDatas.IsNullOrEmpty() || !IsMultiple)
+            if (BlobDatas.IsNullOrEmpty() || !AllowMultiple)
             {
                 BlobDatas = blobDatas;
             }
@@ -332,8 +449,8 @@ namespace OneLine.Blazor.Components
             {
                 foreach (var blobData in BlobDatas.ToList())
                 {
-                    if (blobDatas.Any(w =>  w.Name == blobData.Name && 
-                                            w.Size == blobData.Size && 
+                    if (blobDatas.Any(w => w.Name == blobData.Name &&
+                                            w.Size == blobData.Size &&
                                             w.Type == blobData.Type))
                     {
                         blobDatas.Remove(blobData);
@@ -348,6 +465,8 @@ namespace OneLine.Blazor.Components
             await BlobDatasChanged.InvokeAsync(BlobDatas);
             await DropReference.ClearValue();
             await DropInputReference.ClearValue();
+            await UpdateMaximunMinimunReachedFiles();
+            StateHasChanged();
         }
     }
 }

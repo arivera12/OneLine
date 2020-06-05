@@ -27,7 +27,7 @@ namespace OneLine.Blazor.Demo
 
             builder.Services.AddFileReaderService(options => options.UseWasmSharedBuffer = true);
 
-            builder.Services.AddSweetAlert2();
+            builder.Services.AddSweetAlert2(sa => sa.Theme = SweetAlertTheme.Bootstrap4);
 
             await builder.Build().RunAsync();
         }

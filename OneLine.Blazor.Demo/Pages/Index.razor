@@ -10,7 +10,13 @@ Welcome to your new app.
 <BSFormGroup>
     <BSLabel>Evidences</BSLabel>
     <br class="p-0" />
-    <OneLine.Blazor.Components.FileInput InputName="TestInputName" @bind-BlobDatas=@BlobDatas IsMultiple=true/>
+    <OneLine.Blazor.Components.FileInput InputName="TestInputName" 
+                                         @bind-BlobDatas=@BlobDatas 
+                                         MaxFileSize=8388608 
+                                         MaxFileSizeMeasuredText="8 MB"
+                                         AllowMultiple=true
+                                         MinimumAllowedFiles=3
+                                         MaximumAllowedFiles=5/>
 </BSFormGroup>
 <br />
 <button class="btn btn-primary" @onclick=test>Read File</button>

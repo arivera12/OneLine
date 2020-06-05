@@ -9,15 +9,15 @@ namespace OneLine.Models
         /// </summary>
         bool IsRequired { get; set; }
         /// <summary>
-        /// The maximun allowed files. Default value: 1.
+        /// The maximun allowed files.
         /// </summary>
         short AllowedMaximunFiles { get; set; }
         /// <summary>
-        /// The minimun allowed files. Default value: 1.
+        /// The minimun allowed files.
         /// </summary>
         short AllowedMinimunFiles { get; set; }
         /// <summary>
-        /// The allowed max length in bytes. Default value: int.MaxValue = 2048 MegaBytes = 2 Gigabytes.
+        /// The allowed max length in bytes.
         /// </summary>
         long AllowedBlobMaxLength { get; set; }
         /// <summary>

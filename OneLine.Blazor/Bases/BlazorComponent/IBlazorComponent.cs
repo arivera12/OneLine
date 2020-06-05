@@ -12,7 +12,7 @@ namespace OneLine.Blazor.Bases
     {
         IJSRuntime JSRuntime { get; set; }
         NavigationManager NavigationManager { get; set; }
-        BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
+        IBlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
         IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         SweetAlertService SweetAlertService { get; set; }
         HttpClient HttpClient { get; set; }

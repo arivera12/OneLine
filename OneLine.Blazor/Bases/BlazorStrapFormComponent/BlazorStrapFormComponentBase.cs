@@ -34,7 +34,7 @@ namespace OneLine.Blazor.Bases
         [Inject] public override IConfiguration Configuration { get; set; }
         [Inject] public virtual IJSRuntime JSRuntime { get; set; }
         [Inject] public virtual NavigationManager NavigationManager { get; set; }
-        [Inject] public virtual BlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
+        [Inject] public virtual IBlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
         [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
         [Inject] public virtual HttpClient HttpClient { get; set; }
@@ -81,7 +81,14 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnAfterDelete { get; set; }
         [Parameter] public override Action OnBeforeValidate { get; set; }
         [Parameter] public override Action OnAfterValidate { get; set; }
+        [Parameter] public virtual bool HideCancelOrBackButton { get; set; }
+        [Parameter] public virtual bool HideResetButton { get; set; }
+        [Parameter] public virtual bool HideSaveButton { get; set; }
+        [Parameter] public virtual bool HideDeleteButton { get; set; }
         [Parameter] public virtual int DebounceInterval { get; set; }
+        [Parameter] public virtual string RecordId { get; set; }
+        [Parameter] public virtual string RedirectUrl { get; set; }
+        public bool IsChained { get { return !string.IsNullOrWhiteSpace(RedirectUrl);  } }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
@@ -99,6 +106,14 @@ namespace OneLine.Blazor.Bases
                 {
                     if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
                     {
+                        await Load();
+                    }
+                    else if(!string.IsNullOrWhiteSpace(RecordId))
+                    {
+                        Identifier = new TIdentifier
+                        {
+                            Model = (TId)Convert.ChangeType(RecordId, typeof(TId))
+                        };
                         await Load();
                     }
                 }
@@ -149,15 +164,23 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeSave()
         {
-            await Validate();
-            if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToSaveTheRecord"),
-                                                                                    confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
-            {
-                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
-            }
-            else if (!IsValidModelState)
+            await ValidateBlobDatas();
+            if (!IsValidModelState)
             {
                 await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
+            }
+            else
+            {
+                await Validate();
+                if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToSaveTheRecord"),
+                                                                                        confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+                {
+                    await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => { await AddBlobDatas(); await Save(); }), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
+                }
+                else if (!IsValidModelState)
+                {
+                    await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
+                }
             }
             StateHasChanged();
         }
@@ -177,7 +200,15 @@ namespace OneLine.Blazor.Bases
             }
             else if (Response.Succeed && Response.Response.Status.Succeeded())
             {
-                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
+                await ClearBlobDatas();
+                if (IsChained)
+                {
+                    NavigationManager.NavigateTo(RedirectUrl);
+                }
+                else
+                {
+                    await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
+                }
             }
             else if (Response.HasException)
             {
@@ -191,7 +222,7 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeDelete()
         {
-            if (Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheRecord"),
+            if (Identifier.IsNotNull() && Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheRecord"),
                                                                                     confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Delete()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
@@ -222,8 +253,9 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeCancel()
         {
-            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToCancel"),
-                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            var text = IsChained ? "AreYouSureYouWantToGoBack" : "AreYouSureYouWantToCancel";
+            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: text, confirmButtonText: Resourcer.GetString("Yes"), 
+                                                                cancelButtonText: Resourcer.GetString("Cancel")))
             {
                 await Cancel();
             }

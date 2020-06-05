@@ -13,11 +13,11 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Refactored ShowConfirmAletAsync method. Added and implemented FileInput component.</PackageReleaseNotes>
-    <Version>2.0.64</Version>
+    <PackageReleaseNotes>Supported routing parameters and integration with models. Added parameter Id and Integrate with Load() method. Added parameter to allow stepper behavior (RedirectUrl). Forms buttons are now hide-able and chainable. Added mutable class model structure.</PackageReleaseNotes>
+    <Version>2.0.68</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.64.0</AssemblyVersion>
+    <AssemblyVersion>2.0.68.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

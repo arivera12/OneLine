@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using OneLine.Extensions;
 using OneLine.Models;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,8 @@ namespace OneLine.Validations
         /// <param name="blobData"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public async Task<ValidationResult> ValidateFormFileRulesAsync(IBlobData blobData, FormFileRules formFileRules)
+        public async Task<ValidationResult> ValidateFormFileRulesAsync(IBlobData blobData, IFormFileRules formFileRules)
         {
-            if (blobData == null)
-            {
-                throw new ArgumentNullException("The argument blobData is null.");
-            }
             if (formFileRules == null)
             {
                 throw new ArgumentNullException("The argument formFileRules is null.");
@@ -46,12 +43,11 @@ namespace OneLine.Validations
             if (formFileRules.AllowedMaximunFiles <= 0)
             {
                 throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
-            }
+            }            
             var validationFailures = new List<ValidationFailure>();
-            if (!formFileRules.IsRequired && blobData == null || blobData.Size <= 0)
+            if (!formFileRules.IsRequired && (blobData == null || blobData.Size <= 0))
             {
-                validationFailures.Add(new ValidationFailure(nameof(blobData.Name), "FileIsNullOrEmptyButNotRequired", blobData.Name));
-                return new ValidationResult(validationFailures);
+                return new ValidationResult(Enumerable.Empty<ValidationFailure>());
             }
             if (blobData == null || blobData.Size <= 0)
             {
@@ -83,12 +79,8 @@ namespace OneLine.Validations
         /// <param name="blobDatas"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public async Task<ValidationResult> ValidateFormFileRulesAsync(IEnumerable<IBlobData> blobDatas, FormFileRules formFileRules)
+        public async Task<ValidationResult> ValidateFormFileRulesAsync(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
         {
-            if (blobDatas == null || !blobDatas.Any())
-            {
-                throw new ArgumentNullException("The argument blobData is null.");
-            }
             if (formFileRules == null)
             {
                 throw new ArgumentNullException("The argument formFileRules is null.");
@@ -106,11 +98,20 @@ namespace OneLine.Validations
                 throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
             }
             var validationFailures = new List<ValidationFailure>();
+            if (!formFileRules.IsRequired && blobDatas.IsNullOrEmpty())
+            {
+                return new ValidationResult(Enumerable.Empty<ValidationFailure>());
+            }
+            if(formFileRules.IsRequired && blobDatas.IsNullOrEmpty())
+            {
+                validationFailures.Add(new ValidationFailure(nameof(blobDatas), "FileUploadRequired", blobDatas));
+                return new ValidationResult(validationFailures);
+            }
             foreach (var blobData in blobDatas)
             {
-                if (!formFileRules.IsRequired && blobData == null || blobData.Size <= 0)
+                if (!formFileRules.IsRequired && (blobData == null || blobData.Size <= 0))
                 {
-                    validationFailures.Add(new ValidationFailure(nameof(blobData.Name), "FileIsNullOrEmptyButNotRequired", blobData.Name));
+                    continue;
                 }
                 else
                 {

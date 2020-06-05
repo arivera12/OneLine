@@ -9,17 +9,17 @@ namespace OneLine.Models
         /// </summary>
         public virtual bool IsRequired { get; set; }
         /// <summary>
-        /// The maximun allowed files. Default value: 1.
+        /// The maximun allowed files.
         /// </summary>
-        public virtual short AllowedMaximunFiles { get; set; } = 1;
+        public virtual short AllowedMaximunFiles { get; set; }
         /// <summary>
-        /// The minimun allowed files. Default value: 1.
+        /// The minimun allowed files.
         /// </summary>
-        public virtual short AllowedMinimunFiles { get; set; } = 1;
+        public virtual short AllowedMinimunFiles { get; set; }
         /// <summary>
-        /// The allowed max length in bytes. Default value: int.MaxValue = 2048 MegaBytes = 2 Gigabytes.
+        /// The allowed max length in bytes
         /// </summary>
-        public virtual long AllowedBlobMaxLength { get; set; } = int.MaxValue;
+        public virtual long AllowedBlobMaxLength { get; set; }
         /// <summary>
         /// The allowed content types
         /// </summary>

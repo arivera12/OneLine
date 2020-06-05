@@ -235,6 +235,54 @@ namespace OneLine.Bases
                 OnAfterSave?.Invoke();
             }
         }
+        public virtual Task ValidateBlobDatas()
+        {
+            var task = Task.Run(async () =>
+            {
+                foreach (var blobDataProperty in GetType().GetProperties().Where(w => w.PropertyType == typeof(Tuple<IEnumerable<TBlobData>, FormFileRules>)))
+                {
+                    var blobDatas = (Tuple<IEnumerable<TBlobData>, FormFileRules>)blobDataProperty.GetValue(this);
+                    var validator = new BlobDataCollectionValidator();
+                    ValidationResult = await validator.ValidateFormFileRulesAsync(blobDatas.Item1, blobDatas.Item2);
+                    IsValidModelState = ValidationResult.IsValid;
+                    if (!IsValidModelState)
+                    {
+                        break; 
+                    }
+                }
+            });
+            task.Wait();
+            return task;
+        }
+        public virtual Task AddBlobDatas()
+        {
+            var task = Task.Run(() =>
+            {
+                BlobDatas.Clear();
+                foreach (var blobDataProperty in GetType().GetProperties().Where(w => w.PropertyType == typeof(Tuple<IEnumerable<TBlobData>, FormFileRules>)))
+                {
+                    var blobDatas = (Tuple<IEnumerable<TBlobData>, FormFileRules>)blobDataProperty.GetValue(this);
+                    if (blobDatas.Item1.IsNotNullAndNotEmpty())
+                    {
+                        BlobDatas = BlobDatas.Concat(blobDatas.Item1).ToList();
+                    }
+                }
+            });
+            task.Wait();
+            return task;
+        }
+        public virtual Task ClearBlobDatas()
+        {
+            return Task.Run(() =>
+            {
+                BlobDatas.Clear();
+                foreach (var blobDataProperty in GetType().GetProperties().Where(w => w.PropertyType == typeof(Tuple<IEnumerable<TBlobData>, FormFileRules>)))
+                {
+                    var blobDatas = (Tuple<IEnumerable<TBlobData>, FormFileRules>)blobDataProperty.GetValue(this);
+                    blobDataProperty.SetValue(this, Tuple.Create(Enumerable.Empty<TBlobData>(), blobDatas.Item2));
+                }
+            });
+        }
         public virtual Task Reset()
         {
             FormState = FormState.Create;

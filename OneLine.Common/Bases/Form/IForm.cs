@@ -3,7 +3,7 @@
     public interface IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
         IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
-        IBlobDataCollectionable<TBlobData>,
+        IBlobDataCollectionableValidatable<TBlobData>,
         IApiResponseable<T>,
         IApiResponseableCollectionable<T>,
         IApiResponseableBlobable<T, TUserBlobs>,

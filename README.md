@@ -12,9 +12,22 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Chainable
 - [x] Overridable
 - [x] Recyclable
-- [ ] Scaffolding Tooling (Commercially available soon)
-- [x] Pre-Implemented Enviroment
-- [x] Cross Platform Support for Blazor (client/server), Xamarin, UWP, and Electron.Net (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile)).
+- [x] Scaffolding Tooling (Commercially available soon)
+  - [x] Pre-Implemented Enviroment
+  - [x] RAD (Rapid Application Development) and Prototyping
+  - [x] WORE (Write once, run everywhere)
+  - [x] Multi Platform Deployment Support (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile)) using a single base code
+    - [x] Blazor WASM and Server
+    - [x] Xamarin
+      - [x] Android
+      - [x] iOS
+      - [x] UWP (Universal Windows Platform)
+    - [x] Windows 7 onwards using UWP or Electron.Net
+    - [x] MacOS 10.10 (Yosemite) onwards using Electron.Net
+    - [x] Linux using Electron.Net
+      - [x] Ubuntu 12.04 and newer
+      - [x] Fedora 21
+      - [x] Debian 8
 - [ ] Multiple Database Providers Support
   - [x] SQL Server 2012 onwards
   - [ ] SQLite 3.7 onwards

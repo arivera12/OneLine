@@ -36,14 +36,14 @@ OneLine is an abstracted standardized redefined framework.
       - [x] Ubuntu 12.04 onwards
       - [x] Fedora 21 onwards
       - [x] Debian 8 onwards
-- [ ] Multiple Database Providers Support
-  - [x] SQL Server 2012 onwards
-  - [ ] SQLite 3.7 onwards
-  - [ ] Azure Cosmos DB SQL API (Still planning for support)
-  - [ ] PostgreSQL
-  - [ ] MySQL
-  - [ ] MariaDB
-  - [ ] Oracle DB 11.2 onwards
+    - [ ] Multiple Database Providers Support
+      - [x] SQL Server 2012 onwards
+      - [ ] SQLite 3.7 onwards
+      - [ ] Azure Cosmos DB SQL API (Still planning for support)
+      - [ ] PostgreSQL
+      - [ ] MySQL
+      - [ ] MariaDB
+      - [ ] Oracle DB 11.2 onwards
 
 ## Client Side Core Features
 

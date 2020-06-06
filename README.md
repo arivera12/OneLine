@@ -1,4 +1,12 @@
 # OneLine
+<p>
+    	<a href="https://www.nuget.org/packages/OneLine">
+         <img src="https://buildstats.info/nuget/OneLine?v=2.0.70" />
+     </a>
+     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSE2NMEG3F7QU&source=url">
+         <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" />
+     </a>
+</p>
 
 OneLine is an abstracted standardized redefined framework.
 

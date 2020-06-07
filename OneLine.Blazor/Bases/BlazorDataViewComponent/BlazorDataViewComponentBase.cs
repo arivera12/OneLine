@@ -110,18 +110,5 @@ namespace OneLine.Blazor.Bases
             }
             StateHasChanged();
         }
-        public virtual async Task PagingChange(IPaging paging)
-        {
-            SearchPaging.AutoMap(paging);
-            await Search();
-        }
-        public virtual void SearchTermChanged(string searchTerm)
-        {
-            SearchPaging.SearchTerm = searchTerm;
-            RateLimitingExtensionForObject.Debounce(SearchPaging, DebounceInterval, async (searchPagingDebounced) =>
-            {
-                await Search();
-            });
-        }
     }
 }

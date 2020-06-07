@@ -254,8 +254,8 @@ namespace OneLine.Blazor.Bases
         public virtual async Task BeforeCancel()
         {
             var text = IsChained ? "AreYouSureYouWantToGoBack" : "AreYouSureYouWantToCancel";
-            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: text, confirmButtonText: Resourcer.GetString("Yes"), 
-                                                                cancelButtonText: Resourcer.GetString("Cancel")))
+            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString(text), 
+                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
                 await Cancel();
             }

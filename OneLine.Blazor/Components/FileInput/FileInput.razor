@@ -41,7 +41,7 @@
         }
         @if (!HideResetButton)
         {
-            <BSButton OnClick=Clear Color=Color.Primary>@ResetButtonText</BSButton>
+            <BSButton OnClick=Clear Color=Color.Primary>@ResetButtonText @(MaximumAllowedFiles == 1 ? Resourcer.GetString("File") : Resourcer.GetString("Files"))</BSButton>
         }
         @if (CanAddMoreFiles())
         {

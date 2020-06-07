@@ -335,7 +335,11 @@ namespace OneLine.Extensions
             else
             {
                 var requestJson = JsonConvert.SerializeObject(content);
-                multipartFormDataContent.Add(new StringContent(requestJson, Encoding.UTF8, "application/json"));
+                var jsonContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+                jsonContent.Headers.Remove("Content-Type");
+                jsonContent.Headers.Add("Content-Type", "application/json");
+                jsonContent.Headers.Add("Content-Disposition", "form-data; name=\"instance\"");
+                multipartFormDataContent.Add(jsonContent, "instance");
             }
             httpRequestMessage.Content = multipartFormDataContent;
             var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
@@ -362,7 +366,13 @@ namespace OneLine.Extensions
             {
                 foreach (var blob in blobDatas)
                 {
-                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
+                    var streamContent = new StreamContent(blob.Data);
+                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
+                    {
+                        FileName = blob.Name,
+                        Size = blob.Size
+                    };
+                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
                 }
             }
             return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
@@ -391,7 +401,13 @@ namespace OneLine.Extensions
                             Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
                         };
                     }
-                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
+                    var streamContent = new StreamContent(blob.Data);
+                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
+                    {
+                        FileName = blob.Name,
+                        Size = blob.Size
+                    };
+                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
                 }
             }
             return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
@@ -404,7 +420,13 @@ namespace OneLine.Extensions
             {
                 foreach (var blob in blobDatas)
                 {
-                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
+                    var streamContent = new StreamContent(blob.Data);
+                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
+                    {
+                        FileName = blob.Name,
+                        Size = blob.Size
+                    };
+                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
                 }
             }
             return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
@@ -443,12 +465,17 @@ namespace OneLine.Extensions
                             Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage))
                         };
                     }
-                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
+                    var streamContent = new StreamContent(blob.Data);
+                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
+                    {
+                        FileName = blob.Name,
+                        Size = blob.Size
+                    };
+                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
                 }
             }
             return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
         }
-
         public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData, TValidator, TBlobValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IEnumerable<TBlobData> blobDatas)
             where TBlobData : IBlobData
             where TValidator : IValidator, new()
@@ -477,7 +504,13 @@ namespace OneLine.Extensions
                             Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage))
                         };
                     }
-                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
+                    var streamContent = new StreamContent(blob.Data);
+                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
+                    {
+                        FileName = blob.Name,
+                        Size = blob.Size
+                    };
+                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
                 }
             }
             return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
@@ -499,7 +532,11 @@ namespace OneLine.Extensions
             else
             {
                 var requestJson = JsonConvert.SerializeObject(content);
-                multipartFormDataContent.Add(new StringContent(requestJson, Encoding.UTF8, "application/json"));
+                var jsonContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+                jsonContent.Headers.Remove("Content-Type");
+                jsonContent.Headers.Add("Content-Type", "application/json");
+                jsonContent.Headers.Add("Content-Disposition", "form-data; name=\"instance\"");
+                multipartFormDataContent.Add(jsonContent, "instance");
             }
             foreach (var httpContent in httpContents)
             {

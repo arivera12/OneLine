@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Supported routing parameters and integration with models. Added parameter Id and Integrate with Load() method. Added parameter to allow stepper behavior (RedirectUrl). Forms buttons are now hide-able and chainable. Added mutable class model structure.</PackageReleaseNotes>
-    <Version>2.0.68</Version>
+    <PackageReleaseNotes>Added better descriptive text on file input reset button with Reset File or Files. Dropped default blob storage class and interface, move it to output project. Fixed formdata what was sending the file but not the json data.</PackageReleaseNotes>
+    <Version>2.0.72</Version>
   </PropertyGroup>
 
 

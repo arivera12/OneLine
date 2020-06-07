@@ -92,6 +92,19 @@ namespace OneLine.Blazor.Bases
             await GoNextPage();
             await BeforeSearch();
         }
+        public virtual async Task PagingChange(IPaging paging)
+        {
+            SearchPaging.AutoMap(paging);
+            await BeforeSearch();
+        }
+        public virtual void SearchTermChanged(string searchTerm)
+        {
+            SearchPaging.SearchTerm = searchTerm;
+            RateLimitingExtensionForObject.Debounce(SearchPaging, DebounceInterval, async (searchPagingDebounced) =>
+            {
+                await BeforeSearch();
+            });
+        }
         public virtual TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor)
         {
             if (RecordsSelectionMode.IsSingle())

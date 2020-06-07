@@ -1,4 +1,12 @@
 # OneLine
+<p>
+    	<a href="https://www.nuget.org/packages/OneLine">
+         <img src="https://buildstats.info/nuget/OneLine?v=2.0.70" />
+     </a>
+     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSE2NMEG3F7QU&source=url">
+         <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" />
+     </a>
+</p>
 
 OneLine is an abstracted standardized redefined framework.
 
@@ -12,17 +20,30 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Chainable
 - [x] Overridable
 - [x] Recyclable
-- [ ] Scaffolding Tooling (Commercially available soon)
-- [x] Pre-Implemented Enviroment
-- [x] Cross Platform Support for Blazor (client/server), Xamarin, UWP, and Electron.Net (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile)).
-- [ ] Multiple Database Providers Support
-  - [x] SQL Server 2012 onwards
-  - [ ] SQLite 3.7 onwards
-  - [ ] Azure Cosmos DB SQL API (Still planning for support)
-  - [ ] PostgreSQL
-  - [ ] MySQL
-  - [ ] MariaDB
-  - [ ] Oracle DB 11.2 onwards
+- [x] Scaffolding Tooling (Commercially available soon)
+  - [x] Pre-Implemented Enviroment
+  - [x] RAD (Rapid Application Development) and Prototyping
+  - [x] WORE (Write once, run everywhere)
+  - [x] Multi Platform Deployment Support (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile))
+    - [x] Blazor WASM and Server
+    - [x] Xamarin
+      - [x] Android 4.4 onwards
+      - [x] iOS 12.0 onwards
+      - [x] UWP Build 16299 onwards (Universal Windows Platform)
+    - [x] Windows 7 onwards using UWP or Electron.Net
+    - [x] MacOS 10.10 (Yosemite) onwards using Electron.Net
+    - [x] Linux using Electron.Net
+      - [x] Ubuntu 12.04 onwards
+      - [x] Fedora 21 onwards
+      - [x] Debian 8 onwards
+  - [ ] Multiple Database Providers Support
+    - [x] SQL Server 2012 onwards
+    - [ ] SQLite 3.7 onwards
+    - [ ] Azure Cosmos DB SQL API (Still planning for support)
+    - [ ] PostgreSQL
+    - [ ] MySQL
+      - [ ] MariaDB
+      - [ ] Oracle DB 11.2 onwards
 
 ## Client Side Core Features
 
@@ -57,7 +78,7 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Single Page Application Arquitecture (SPA)
 - [x] Componetized
 - [ ] Chained components behavior (behavior like stepper)
-  - [ ] Forms (Back or Save/Next)
+  - [x] Forms (Back or Save/Next)
   - [ ] CRUD (Create, Read, Update, Delete operations) (back and/or next) 
   - [ ] Data Views (Select single or multiple, back and/or next)
 - [x] Pre-Implemented Users Account Basic Management

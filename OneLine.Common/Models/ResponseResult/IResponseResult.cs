@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 
 namespace OneLine.Models
 {
@@ -20,5 +21,9 @@ namespace OneLine.Models
         /// The exception when an error ocurred on the request
         /// </summary>
         Exception Exception { get; set; }
+        /// <summary>
+        /// The HTTP response message including the status code and data. 
+        /// </summary>
+        HttpResponseMessage HttpResponseMessage { get; set; }
     }
 }

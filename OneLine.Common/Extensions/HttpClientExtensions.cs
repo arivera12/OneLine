@@ -37,24 +37,54 @@ namespace OneLine.Extensions
         {
             try
             {
-                var response = await httpClient.GetJsonAsync<T>(requestUri);
-                return new ResponseResult<T>(response, null);
+                var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, requestUri));
+                if (response.IsNull())
+                {
+                    return new ResponseResult<T>(default, null, null);
+                }
+                else
+                {
+                    var stringData = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrWhiteSpace(stringData))
+                    {
+                        return new ResponseResult<T>(default, null, response);
+                    }
+                    else 
+                    {
+                        return new ResponseResult<T>(JsonConvert.DeserializeObject<T>(stringData), null, response);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                return new ResponseResult<T>(default, ex);
+                return new ResponseResult<T>(default, ex, null);
             }
         }
         public static async Task<ResponseResult<T>> GetJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object queryStringParameters)
         {
             try
             {
-                var response = await httpClient.GetJsonAsync<T>($"{requestUri}?{queryStringParameters?.ToUrlQueryString()}");
-                return new ResponseResult<T>(response, null);
+                var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, $"{requestUri}?{queryStringParameters?.ToUrlQueryString()}"));
+                if (response.IsNull())
+                {
+                    return new ResponseResult<T>(default, null, null);
+                }
+                else
+                {
+                    var stringData = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrWhiteSpace(stringData))
+                    {
+                        return new ResponseResult<T>(default, null, response);
+                    }
+                    else
+                    {
+                        return new ResponseResult<T>(JsonConvert.DeserializeObject<T>(stringData), null, response);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                return new ResponseResult<T>(default, ex);
+                return new ResponseResult<T>(default, ex, null);
             }
         }
         public static Task PostJsonAsync(this HttpClient httpClient, string requestUri, object content)
@@ -65,12 +95,29 @@ namespace OneLine.Extensions
         {
             try
             {
-                var response = await httpClient.PostJsonAsync<T>(requestUri, content);
-                return new ResponseResult<T>(response, null);
+                var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+                request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                var response = await httpClient.SendAsync(request);
+                if (response.IsNull())
+                {
+                    return new ResponseResult<T>(default, null, null);
+                }
+                else
+                {
+                    var stringData = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrWhiteSpace(stringData))
+                    {
+                        return new ResponseResult<T>(default, null, response);
+                    }
+                    else
+                    {
+                        return new ResponseResult<T>(JsonConvert.DeserializeObject<T>(stringData), null, response);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                return new ResponseResult<T>(default, ex);
+                return new ResponseResult<T>(default, ex, null);
             }
         }
         public static Task PutJsonAsync(this HttpClient httpClient, string requestUri, object content)
@@ -81,12 +128,29 @@ namespace OneLine.Extensions
         {
             try
             {
-                var response = await httpClient.PutJsonAsync<T>(requestUri, content);
-                return new ResponseResult<T>(response, null);
+                var request = new HttpRequestMessage(HttpMethod.Put, requestUri);
+                request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                var response = await httpClient.SendAsync(request);
+                if (response.IsNull())
+                {
+                    return new ResponseResult<T>(default, null, null);
+                }
+                else
+                {
+                    var stringData = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrWhiteSpace(stringData))
+                    {
+                        return new ResponseResult<T>(default, null, response);
+                    }
+                    else
+                    {
+                        return new ResponseResult<T>(JsonConvert.DeserializeObject<T>(stringData), null, response);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                return new ResponseResult<T>(default, ex);
+                return new ResponseResult<T>(default, ex, null);
             }
         }
         public static Task DeleteJsonAsync(this HttpClient httpClient, string requestUri, object content)
@@ -97,12 +161,29 @@ namespace OneLine.Extensions
         {
             try
             {
-                var response = await httpClient.DeleteJsonAsync<T>(requestUri, content);
-                return new ResponseResult<T>(response, null);
+                var request = new HttpRequestMessage(HttpMethod.Delete, requestUri);
+                request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                var response = await httpClient.SendAsync(request);
+                if (response.IsNull())
+                {
+                    return new ResponseResult<T>(default, null, null);
+                }
+                else
+                {
+                    var stringData = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrWhiteSpace(stringData))
+                    {
+                        return new ResponseResult<T>(default, null, response);
+                    }
+                    else
+                    {
+                        return new ResponseResult<T>(JsonConvert.DeserializeObject<T>(stringData), null, response);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                return new ResponseResult<T>(default, ex);
+                return new ResponseResult<T>(default, ex, null);
             }
         }
         public static Task SendJsonAsync(this HttpClient httpClient, HttpMethod method, string requestUri, object content)
@@ -144,12 +225,29 @@ namespace OneLine.Extensions
         {
             try
             {
-                var response = await httpClient.SendJsonAsync<T>(method, requestUri, content);
-                return new ResponseResult<T>(response, null);
+                var request = new HttpRequestMessage(method, requestUri);
+                request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                var response = await httpClient.SendAsync(request);
+                if (response.IsNull())
+                {
+                    return new ResponseResult<T>(default, null, null);
+                }
+                else
+                {
+                    var stringData = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrWhiteSpace(stringData))
+                    {
+                        return new ResponseResult<T>(default, null, response);
+                    }
+                    else
+                    {
+                        return new ResponseResult<T>(JsonConvert.DeserializeObject<T>(stringData), null, response);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                return new ResponseResult<T>(default, ex);
+                return new ResponseResult<T>(default, ex, null);
             }
         }
         public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content)
@@ -231,333 +329,6 @@ namespace OneLine.Extensions
                 }
             }
             return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, contents);
-        }
-
-        #endregion
-
-        #region Send Multipart Form Data
-
-        public static async Task<T> SendFormDataAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, MultipartFormDataContent multipartFormDataContent)
-        {
-            httpRequestMessage.Content = multipartFormDataContent;
-            var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
-            var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(strResponse);
-        }
-        public static async Task<ResponseResult<T>> SendFormDataResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, MultipartFormDataContent multipartFormDataContent)
-        {
-            try
-            {
-                var response = await httpClient.SendFormDataAsync<T>(httpRequestMessage, multipartFormDataContent);
-                return new ResponseResult<T>(response, null);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseResult<T>(default, ex);
-            }
-        }
-        public static async Task<ApiResponse<TResponse>> SendBlobDataAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
-            where TBlobData : IBlobData
-        {
-            var multipartFormDataContent = new MultipartFormDataContent();
-            if (blobDatas != null && blobDatas.Any())
-            {
-                foreach (var blob in blobDatas)
-                {
-                    var blobValidationResult = await blobValidator.ValidateAsync(blob);
-                    if (!blobValidationResult.IsValid)
-                    {
-                        return new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage));
-                    }
-                    multipartFormDataContent.Add(new StreamContent(blob.Data), blob.InputName, blob.Name);
-                }
-            }
-            httpRequestMessage.Content = multipartFormDataContent;
-            var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
-            var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return new ApiResponse<TResponse>(ApiResponseStatus.Succeeded, JsonConvert.DeserializeObject<TResponse>(strResponse));
-        }
-        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendBlobDataResponseResultAsync<TResponse, TBlobData>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
-            where TBlobData : IBlobData
-        {
-            try
-            {
-                var response = await httpClient.SendBlobDataAsync<TResponse, TBlobData>(httpRequestMessage, blobDatas, blobValidator);
-                return new ResponseResult<ApiResponse<TResponse>>(response, null);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseResult<ApiResponse<TResponse>>(default, ex);
-            }
-        }
-
-        #endregion
-
-        #region Send Multipart Form Data With Http Contents
-
-        public static async Task<T> SendHttpContentsAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<HttpContent> httpContents)
-        {
-            var multipartFormDataContent = new MultipartFormDataContent();
-            foreach (var httpContent in httpContents)
-            {
-                multipartFormDataContent.Add(httpContent);
-            }
-            httpRequestMessage.Content = multipartFormDataContent;
-            var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
-            var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(strResponse);
-        }
-        public static async Task<ResponseResult<T>> SendHttpContentsResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<HttpContent> httpContents)
-        {
-            try
-            {
-                var response = await httpClient.SendHttpContentsAsync<T>(httpRequestMessage, httpContents);
-                return new ResponseResult<T>(response, null);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseResult<T>(default, ex);
-            }
-        }
-
-        #endregion
-
-        #region Send Json Content With Multipart Form Data 
-
-        public static async Task<T> SendJsonWithFormDataAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, MultipartFormDataContent multipartFormDataContent)
-        {
-            //Send content over url
-            if (httpRequestMessage.Method == HttpMethod.Get)
-            {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
-            }
-            //Send content in the MultipartFormData
-            else
-            {
-                var requestJson = JsonConvert.SerializeObject(content);
-                var jsonContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
-                jsonContent.Headers.Remove("Content-Type");
-                jsonContent.Headers.Add("Content-Type", "application/json");
-                jsonContent.Headers.Add("Content-Disposition", "form-data; name=\"instance\"");
-                multipartFormDataContent.Add(jsonContent, "instance");
-            }
-            httpRequestMessage.Content = multipartFormDataContent;
-            var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
-            var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(strResponse);
-        }
-        public static async Task<ResponseResult<T>> SendJsonWithFormDataResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, MultipartFormDataContent multipartFormDataContent)
-        {
-            try
-            {
-                var response = await httpClient.SendJsonWithFormDataAsync<T>(httpRequestMessage, content, multipartFormDataContent);
-                return new ResponseResult<T>(response, null);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseResult<T>(default, ex);
-            }
-        }
-        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IEnumerable<TBlobData> blobDatas)
-           where TBlobData : IBlobData
-        {
-            var multipartFormDataContent = new MultipartFormDataContent();
-            if (blobDatas != null && blobDatas.Any())
-            {
-                foreach (var blob in blobDatas)
-                {
-                    var streamContent = new StreamContent(blob.Data);
-                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
-                    {
-                        FileName = blob.Name,
-                        Size = blob.Size
-                    };
-                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
-                }
-            }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
-        }
-        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IValidator validator, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
-           where TBlobData : IBlobData
-        {
-            var validationResult = await validator.ValidateAsync(content);
-            if (!validationResult.IsValid)
-            {
-                return new ResponseResult<ApiResponse<TResponse>>
-                {
-                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
-                };
-            }
-            var multipartFormDataContent = new MultipartFormDataContent();
-            if (blobDatas != null && blobDatas.Any())
-            {
-                foreach (var blob in blobDatas)
-                {
-                    var blobValidationResult = await blobValidator.ValidateAsync(blob);
-                    if (!blobValidationResult.IsValid)
-                    {
-                        return new ResponseResult<ApiResponse<TResponse>>
-                        {
-                            Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
-                        };
-                    }
-                    var streamContent = new StreamContent(blob.Data);
-                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
-                    {
-                        FileName = blob.Name,
-                        Size = blob.Size
-                    };
-                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
-                }
-            }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
-        }
-        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonRangeWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IEnumerable<TBlobData> blobDatas)
-          where TBlobData : IBlobData
-        {
-            var multipartFormDataContent = new MultipartFormDataContent();
-            if (blobDatas != null && blobDatas.Any())
-            {
-                foreach (var blob in blobDatas)
-                {
-                    var streamContent = new StreamContent(blob.Data);
-                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
-                    {
-                        FileName = blob.Name,
-                        Size = blob.Size
-                    };
-                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
-                }
-            }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
-        }
-        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonRangeWithFormDataResponseResultAsync<TResponse, TContent, TBlobData>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator, IEnumerable<TBlobData> blobDatas, IValidator blobValidator)
-           where TBlobData : IBlobData
-        {
-            if (contents == null || !contents.Any())
-            {
-                return new ResponseResult<ApiResponse<TResponse>>
-                {
-                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "CollectionIsNullOrEmpty", true)
-                };
-            }
-            foreach (var content in contents)
-            {
-                var validationResult = await validator.ValidateAsync(content);
-                if (!validationResult.IsValid)
-                {
-                    return new ResponseResult<ApiResponse<TResponse>>
-                    {
-                        Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
-                    };
-                }
-            }
-            var multipartFormDataContent = new MultipartFormDataContent();
-            if (blobDatas != null && blobDatas.Any())
-            {
-                foreach (var blob in blobDatas)
-                {
-                    var blobValidationResult = await blobValidator.ValidateAsync(blob);
-                    if (!blobValidationResult.IsValid)
-                    {
-                        return new ResponseResult<ApiResponse<TResponse>>
-                        {
-                            Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage))
-                        };
-                    }
-                    var streamContent = new StreamContent(blob.Data);
-                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
-                    {
-                        FileName = blob.Name,
-                        Size = blob.Size
-                    };
-                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
-                }
-            }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), contents, multipartFormDataContent);
-        }
-        public static async Task<ResponseResult<ApiResponse<TResponse>>> SendJsonWithFormDataResponseResultAsync<TResponse, TContent, TBlobData, TValidator, TBlobValidator>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IEnumerable<TBlobData> blobDatas)
-            where TBlobData : IBlobData
-            where TValidator : IValidator, new()
-            where TBlobValidator : IValidator, new()
-        {
-            var validator = new TValidator();
-            var validationResult = await validator.ValidateAsync(content);
-            if (!validationResult.IsValid)
-            {
-                return new ResponseResult<ApiResponse<TResponse>>
-                {
-                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
-                };
-            }
-            var multipartFormDataContent = new MultipartFormDataContent();
-            if (blobDatas != null && blobDatas.Any())
-            {
-                var blobValidator = new TBlobValidator();
-                foreach (var blob in blobDatas)
-                {
-                    var blobValidationResult = await blobValidator.ValidateAsync(blob);
-                    if (!blobValidationResult.IsValid)
-                    {
-                        return new ResponseResult<ApiResponse<TResponse>>
-                        {
-                            Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", blobValidationResult.Errors.Select(x => x.ErrorMessage))
-                        };
-                    }
-                    var streamContent = new StreamContent(blob.Data);
-                    streamContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue(System.Net.Mime.DispositionTypeNames.Attachment)
-                    {
-                        FileName = blob.Name,
-                        Size = blob.Size
-                    };
-                    multipartFormDataContent.Add(streamContent, blob.InputName, blob.Name);
-                }
-            }
-            return await httpClient.SendJsonWithFormDataResponseResultAsync<ApiResponse<TResponse>>(new HttpRequestMessage(method, requestUri), content, multipartFormDataContent);
-        }
-
-        #endregion
-
-        #region Send Json Content With Http Contents
-
-        public static async Task<T> SendJsonWithHttpContentsAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, IEnumerable<HttpContent> httpContents)
-        {
-            var multipartFormDataContent = new MultipartFormDataContent();
-            //Send content over url
-            if (httpRequestMessage.Method == HttpMethod.Get)
-            {
-                httpRequestMessage.RequestUri = new Uri($"{httpRequestMessage.RequestUri}?{content?.ToUrlQueryString()}");
-            }
-            //Send content in the MultipartFormData
-            else
-            {
-                var requestJson = JsonConvert.SerializeObject(content);
-                var jsonContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
-                jsonContent.Headers.Remove("Content-Type");
-                jsonContent.Headers.Add("Content-Type", "application/json");
-                jsonContent.Headers.Add("Content-Disposition", "form-data; name=\"instance\"");
-                multipartFormDataContent.Add(jsonContent, "instance");
-            }
-            foreach (var httpContent in httpContents)
-            {
-                multipartFormDataContent.Add(httpContent);
-            }
-            httpRequestMessage.Content = multipartFormDataContent;
-            var serverStrResponse = await httpClient.SendAsync(httpRequestMessage);
-            var strResponse = await serverStrResponse.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(strResponse);
-        }
-        public static async Task<ResponseResult<T>> SendJsonWithHttpContentsResponseResultAsync<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content, IEnumerable<HttpContent> httpContents)
-        {
-            try
-            {
-                var response = await httpClient.SendJsonWithHttpContentsAsync<T>(httpRequestMessage, content, httpContents);
-                return new ResponseResult<T>(response, null);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseResult<T>(default, ex);
-            }
         }
 
         #endregion

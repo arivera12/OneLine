@@ -175,7 +175,7 @@ namespace OneLine.Blazor.Bases
                 if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToSaveTheRecord"),
                                                                                         confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
                 {
-                    await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => { await AddBlobDatas(); await Save(); }), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
+                    await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
                 }
                 else if (!IsValidModelState)
                 {
@@ -193,14 +193,17 @@ namespace OneLine.Blazor.Bases
         public virtual async Task AfterSave()
         {
             await SweetAlertService.HideLoaderAsync();
-            if (!Response.Succeed && !Response.HasException)
+            if (Response.IsNull())
+            {
+                await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
+            }
+            else if(Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
                 await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
             }
             else if (Response.Succeed && Response.Response.Status.Succeeded())
             {
-                await ClearBlobDatas();
                 if (IsChained)
                 {
                     NavigationManager.NavigateTo(RedirectUrl);
@@ -232,7 +235,11 @@ namespace OneLine.Blazor.Bases
         public virtual async Task AfterDelete()
         {
             await SweetAlertService.HideLoaderAsync();
-            if (!Response.Succeed && !Response.HasException)
+            if (Response.IsNull())
+            {
+                await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
+            }
+            else if (Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
                 await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");

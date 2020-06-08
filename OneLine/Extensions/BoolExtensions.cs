@@ -10,20 +10,20 @@ namespace OneLine.Extensions
         public static IActionResult OutputTransactionResult(this bool value)
         {
             return value ? 
-                new ApiResponse<string> { Status = ApiResponseStatus.Succeeded }.ToJson() : 
-                new ApiResponse<string> { Status = ApiResponseStatus.Failed }.ToJson();
+                new ApiResponse<string> { Status = ApiResponseStatus.Succeeded }.ToJsonActionResult() : 
+                new ApiResponse<string> { Status = ApiResponseStatus.Failed }.ToJsonActionResult();
         }
         public static IActionResult OutputTransactionResult<TEntity>(this bool value, TEntity Data)
         {
             return value ?
-                new ApiResponse<TEntity> { Status = ApiResponseStatus.Succeeded, Data = Data }.ToJson() :
-                new ApiResponse<TEntity> { Status = ApiResponseStatus.Failed, Data = Data }.ToJson();
+                new ApiResponse<TEntity> { Status = ApiResponseStatus.Succeeded, Data = Data }.ToJsonActionResult() :
+                new ApiResponse<TEntity> { Status = ApiResponseStatus.Failed, Data = Data }.ToJsonActionResult();
         }
         public static IActionResult OutputTransactionResult<TEntity>(this bool value, IEnumerable<TEntity> Data)
         {
             return value ?
-                new ApiResponse<IEnumerable<TEntity>> { Status = ApiResponseStatus.Succeeded, Data = Data }.ToJson() :
-                new ApiResponse<IEnumerable<TEntity>> { Status = ApiResponseStatus.Failed, Data = Data }.ToJson();
+                new ApiResponse<IEnumerable<TEntity>> { Status = ApiResponseStatus.Succeeded, Data = Data }.ToJsonActionResult() :
+                new ApiResponse<IEnumerable<TEntity>> { Status = ApiResponseStatus.Failed, Data = Data }.ToJsonActionResult();
         }
     }
 }

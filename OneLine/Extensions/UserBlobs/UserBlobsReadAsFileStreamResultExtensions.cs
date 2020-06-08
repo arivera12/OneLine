@@ -23,7 +23,7 @@ namespace OneLine.Extensions
             var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlobs, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
             {
-                return isBlobOwnerAndFileExists.ToJson();
+                return isBlobOwnerAndFileExists.ToJsonActionResult();
             }
             var stream = await blobStorage.OpenReadAsync(userBlobs.FilePath);
             await dbContext.CreateAuditrailsAsync(userBlobs, "UserBlob was readed as file stream result", userId, controllerName, actionName, remoteIpAddress);
@@ -50,7 +50,7 @@ namespace OneLine.Extensions
                     var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlob, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
                     if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
                     {
-                        return isBlobOwnerAndFileExists.ToJson();
+                        return isBlobOwnerAndFileExists.ToJsonActionResult();
                     }
                     var stream = await blobStorage.OpenReadAsync(userBlob.FilePath);
                     var entry = zip.CreateEntry(userBlob.FileName);

@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Added better descriptive text on file input reset button with Reset File or Files. Dropped default blob storage class and interface, move it to output project. Fixed formdata what was sending the file but not the json data.</PackageReleaseNotes>
-    <Version>2.0.72</Version>
+    <PackageReleaseNotes>Added null check on response management. Refactored file management. Improved response management with a more realiable way to check wether session has expired.</PackageReleaseNotes>
+    <Version>2.0.73</Version>
   </PropertyGroup>
 
 

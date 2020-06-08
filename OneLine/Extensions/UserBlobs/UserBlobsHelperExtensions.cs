@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OneLine.Bases;
 using OneLine.Enums;
 using OneLine.Models;
 using Storage.Net.Blobs;
-using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OneLine.Extensions
@@ -66,17 +64,17 @@ namespace OneLine.Extensions
         /// <param name="predicate"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<bool>> IsFormFileUploadedAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<bool>> IsBlobDataUploadedAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            var any = predicate == null ? files.Any() : files.Any(predicate);
+            var any = blobDatas.IsNotNullAndNotEmpty();
             if (!any)
             {
                 await dbContext.CreateAuditrailsAsync(new UserBlobs(), "No file uploaded", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<bool>(ApiResponseStatus.Failed, "FileIsNullOrEmpty", false);
             }
-            if (any && formFileRules != null)
+            if (any && formFileRules.IsNotNull())
             {
-                var isValidFormFileApiResponse = files.IsValidFormFileApiResponse(predicate, formFileRules);
+                var isValidFormFileApiResponse = blobDatas.IsValidBlobDataApiResponse(formFileRules);
                 if (isValidFormFileApiResponse.Status == ApiResponseStatus.Failed)
                 {
                     return new ApiResponse<bool>(ApiResponseStatus.Failed, isValidFormFileApiResponse.Message, false);

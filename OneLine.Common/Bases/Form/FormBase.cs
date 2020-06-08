@@ -90,102 +90,29 @@ namespace OneLine.Bases
         }
         private async Task Create()
         {
-            if (BlobDatas.IsNotNullAndNotEmpty())
-            {
-                await CreateWitBlobData();
-            }
-            else
-            {
-                if (FormMode.IsSingle())
-                {
-                    Response = await HttpService.Add<T>(Record);
-                    ResponseChanged?.Invoke(Response);
-                }
-                else if (FormMode.IsMultiple())
-                {
-                    ResponseCollection = await HttpService.AddRange<IEnumerable<T>>(Records);
-                    ResponseCollectionChanged?.Invoke(ResponseCollection);
-                }
-                OnResponse(FormState.Edit);
-            }
-        }
-        private async Task CreateWitBlobData()
-        {
             if (FormMode.IsSingle())
             {
-                ResponseAddWithBlobs = await HttpService.Add(Record, BlobDatas);
-                ResponseAddWithBlobsChanged?.Invoke(ResponseAddWithBlobs);
-                if (ResponseAddWithBlobs.Succeed && ResponseAddWithBlobs.Response.Status.Succeeded())
-                {
-                    Record = ResponseAddWithBlobs.Response.Data.Item1;
-                    RecordChanged?.Invoke(Record);
-                    FormState = FormState.Edit;
-                    FormStateChanged?.Invoke(FormState);
-                }
+                Response = await HttpService.Add<T>(Record);
+                ResponseChanged?.Invoke(Response);
             }
             else if (FormMode.IsMultiple())
             {
-                ResponseAddCollectionWithBlobs = await HttpService.AddRange(Records, BlobDatas);
-                ResponseAddCollectionWithBlobsChanged?.Invoke(ResponseAddCollectionWithBlobs);
-                if (ResponseAddCollectionWithBlobs.Succeed && ResponseAddCollectionWithBlobs.Response.Status.Succeeded())
-                {
-                    Records.ReplaceRange(ResponseAddCollectionWithBlobs.Response.Data.Item1);
-                    RecordsChanged?.Invoke(Records);
-                    FormState = FormState.Edit;
-                    FormStateChanged?.Invoke(FormState);
-                }
+                ResponseCollection = await HttpService.AddRange<IEnumerable<T>>(Records);
+                ResponseCollectionChanged?.Invoke(ResponseCollection);
             }
-            OnAfterSave?.Invoke();
+            OnResponse(FormState.Edit);
         }
         private async Task Update()
         {
             if (FormMode.IsSingle())
             {
-                if (BlobDatas.IsNotNullAndNotEmpty())
-                {
-                    await UpdateWitBlobData();
-                }
-                else
-                {
-                    if (FormMode.IsSingle())
-                    {
-                        Response = await HttpService.Update<T>(Record);
-                    }
-                    else if (FormMode.IsMultiple())
-                    {
-                        ResponseCollection = await HttpService.UpdateRange<IEnumerable<T>>(Records);
-                    }
-                    OnResponse(FormState.Edit);
-                }
-            }
-        }
-        private async Task UpdateWitBlobData()
-        {
-            if (FormMode.IsSingle())
-            {
-                ResponseUpdateWithBlobs = await HttpService.Update(Record, BlobDatas);
-                ResponseUpdateWithBlobsChanged?.Invoke(ResponseUpdateWithBlobs);
-                if (ResponseUpdateWithBlobs.Succeed && Response.Response.Status.Succeeded())
-                {
-                    Record = ResponseUpdateWithBlobs.Response.Data.Item1;
-                    RecordChanged?.Invoke(Record);
-                    FormState = FormState.Edit;
-                    FormStateChanged?.Invoke(FormState);
-                }
+                Response = await HttpService.Update<T>(Record);
             }
             else if (FormMode.IsMultiple())
             {
-                ResponseUpdateCollectionWithBlobs = await HttpService.UpdateRange(Records, BlobDatas);
-                ResponseUpdateCollectionWithBlobsChanged?.Invoke(ResponseUpdateCollectionWithBlobs);
-                if (ResponseUpdateCollectionWithBlobs.Succeed && Response.Response.Status.Succeeded())
-                {
-                    Records.ReplaceRange(ResponseUpdateCollectionWithBlobs.Response.Data.Item1);
-                    RecordsChanged?.Invoke(Records);
-                    FormState = FormState.Edit;
-                    FormStateChanged?.Invoke(FormState);
-                }
+                ResponseCollection = await HttpService.UpdateRange<IEnumerable<T>>(Records);
             }
-            OnAfterSave?.Invoke();
+            OnResponse(FormState.Edit);
         }
         public virtual async Task Delete()
         {
@@ -249,31 +176,6 @@ namespace OneLine.Bases
                     break; 
                 }
             }
-        }
-        public virtual Task AddBlobDatas()
-        {
-            BlobDatas.Clear();
-            foreach (var blobDataProperty in GetType().GetProperties().Where(w => w.PropertyType == typeof(IMutable<IEnumerable<TBlobData>, FormFileRules>) ||
-                                                                                w.PropertyType == typeof(Mutable<IEnumerable<TBlobData>, FormFileRules>)))
-            {
-                var blobDatas = (IMutable<IEnumerable<TBlobData>, FormFileRules>)blobDataProperty.GetValue(this);
-                if (blobDatas.Item1.IsNotNullAndNotEmpty())
-                {
-                    BlobDatas = BlobDatas.Concat(blobDatas.Item1).ToList();
-                }
-            }
-            return Task.CompletedTask;
-        }
-        public virtual Task ClearBlobDatas()
-        {
-            BlobDatas.Clear();
-            foreach (var blobDataProperty in GetType().GetProperties().Where(w => w.PropertyType == typeof(IMutable<IEnumerable<TBlobData>, FormFileRules>) ||
-                                                                                w.PropertyType == typeof(Mutable<IEnumerable<TBlobData>, FormFileRules>)))
-            {
-                var blobDatas = (IMutable<IEnumerable<TBlobData>, FormFileRules>)blobDataProperty.GetValue(this);
-                blobDataProperty.SetValue(this, new Mutable<IEnumerable<TBlobData>, FormFileRules>(Enumerable.Empty<TBlobData>(), blobDatas.Item2));
-            }
-            return Task.CompletedTask;
         }
         public virtual Task Reset()
         {

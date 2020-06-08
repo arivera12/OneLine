@@ -45,7 +45,7 @@ namespace OneLine.Bases
         }
         public virtual async Task<ResponseResult<ApiResponse<IEnumerable<T>>>> UploadCsv(IEnumerable<IBlobData> blobDatas, IValidator validator, HttpMethod httpMethod)
         {
-            return await HttpClient.SendBlobDataResponseResultAsync<IEnumerable<T>, IBlobData>(new HttpRequestMessage(httpMethod, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), blobDatas, validator);
+            return await HttpClient.SendJsonResponseResultAsync<IEnumerable<T>, IEnumerable<IBlobData>>(httpMethod, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}", blobDatas, validator);
         }
     }
 }

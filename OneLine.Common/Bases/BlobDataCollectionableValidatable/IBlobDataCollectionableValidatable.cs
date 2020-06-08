@@ -13,7 +13,5 @@ namespace OneLine.Bases
         IList<TBlobData> BlobDatas { get; set; }
         Action<IList<TBlobData>> BlobDatasChanged { get; set; }
         public Task ValidateBlobDatas();
-        public Task AddBlobDatas();
-        public Task ClearBlobDatas();
     }
 }

@@ -18,6 +18,17 @@ namespace OneLine.Extensions
                 }
             }
         }
+        public static IEnumerable<T> ReadCsv<T>(this byte[] byteArray) where T : class
+        {
+            MemoryStream memoryStream = new MemoryStream(byteArray);
+            using (var reader = new StreamReader(memoryStream))
+            {
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    return csv.GetRecords<T>();
+                }
+            }
+        }
         public static IEnumerable<T> ReadCsv<T>(this IEnumerable<T> enumerable, string path) where T : class
         {
             if (enumerable.IsNullOrEmpty())
@@ -32,7 +43,6 @@ namespace OneLine.Extensions
                 }
             }
         }
-
         public static void WriteToCsv<T>(this IEnumerable<T> enumerable, string path) where T : class
         {
             if (enumerable.IsNullOrEmpty())
@@ -47,7 +57,6 @@ namespace OneLine.Extensions
                 }
             }
         }
-
         public static byte[] ToCsvByteArray<T>(this IEnumerable<T> enumerable) where T : class
         {
             using (var memoryStream = new MemoryStream())

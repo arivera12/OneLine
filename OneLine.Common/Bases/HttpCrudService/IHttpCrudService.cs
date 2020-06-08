@@ -23,18 +23,10 @@ namespace OneLine.Bases
         Task<ResponseResult<ApiResponse<TResponse>>> Add<TResponse>(T record, IValidator validator);
         Task<ResponseResult<ApiResponse<TResponse>>> AddRange<TResponse>(IEnumerable<T> records, IValidator validator);
         Task<ResponseResult<ApiResponse<TResponse>>> AddRange<TResponse>(IEnumerable<T> records);
-        Task<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> Add(T record, IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> Add(T record, IValidator validator, IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> AddRange(IEnumerable<T> records, IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> AddRange(IEnumerable<T> records, IValidator validator, IEnumerable<TBlobData> blobDatas);
         Task<ResponseResult<ApiResponse<TResponse>>> Update<TResponse>(T record);
         Task<ResponseResult<ApiResponse<TResponse>>> Update<TResponse>(T record, IValidator validator);
         Task<ResponseResult<ApiResponse<TResponse>>> UpdateRange<TResponse>(IEnumerable<T> records);
         Task<ResponseResult<ApiResponse<TResponse>>> UpdateRange<TResponse>(IEnumerable<T> records, IValidator validator);
-        Task<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> Update(T record, IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> Update(T record, IValidator validator, IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> UpdateRange(IEnumerable<T> records, IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> UpdateRange(IEnumerable<T> records, IValidator validator, IEnumerable<TBlobData> blobDatas);
         Task<ResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier);
         Task<ResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier, IValidator validator);
         Task<ResponseResult<ApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers);

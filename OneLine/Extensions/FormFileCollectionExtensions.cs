@@ -1,31 +1,31 @@
-﻿using Microsoft.AspNetCore.Http;
-using OneLine.Enums;
+﻿using OneLine.Enums;
 using OneLine.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace OneLine.Extensions
 {
-    public static class FormFileCollectionExtensions
+    public static class BlobDataCollectionExtensions
     {
-        public static bool FormFileExists(this IFormFileCollection formFiles, Func<IFormFile, bool> FormBlob)
+        public static bool BlobDataExists(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate)
         {
-            return formFiles != null && formFiles.Any(FormBlob);
+            return blobDatas.IsNotNullAndNotEmpty() && blobDatas.Any(predicate);
         }
-        public static bool IsValidFormFile(this IFormFileCollection formFiles, IFormFileRules formFileRules)
+        public static bool IsValidBlobData(this IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
         {
-            return IsValidFormFile(formFiles, null, formFileRules);
+            return IsValidBlobData(blobDatas, null, formFileRules);
         }
-        public static bool IsValidFormFile(this IFormFileCollection formFiles, Func<IFormFile, bool> FormBlob, IFormFileRules formFileRules)
+        public static bool IsValidBlobData(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate, IFormFileRules formFileRules)
         {
-            return IsValidFormFileApiResponse(formFiles, FormBlob, formFileRules).Status == ApiResponseStatus.Succeeded;
+            return IsValidBlobDataApiResponse(blobDatas, predicate, formFileRules).Status == ApiResponseStatus.Succeeded;
         }
-        public static ApiResponse<string> IsValidFormFileApiResponse(this IFormFileCollection formFiles, IFormFileRules formFileRules)
+        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
         {
-            return IsValidFormFileApiResponse(formFiles, null, formFileRules);
+            return IsValidBlobDataApiResponse(blobDatas, null, formFileRules);
         }
-        public static ApiResponse<string> IsValidFormFileApiResponse(this IFormFileCollection formFiles, Func<IFormFile, bool> FormBlob, IFormFileRules formFileRules)
+        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate, IFormFileRules formFileRules)
         {
             if (formFileRules.AllowedBlobMaxLength <= 0)
             {
@@ -39,12 +39,12 @@ namespace OneLine.Extensions
             {
                 throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
             }
-            var blobs = FormBlob == null ? formFiles : formFiles.Where(FormBlob);
-            if (!blobs.Any())
+            var blobs = predicate == null ? blobDatas : blobDatas.Where(predicate);
+            if (blobs.IsNullOrEmpty() && formFileRules.IsRequired)
             {
                 return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired" };
             }
-            else
+            else if (blobs.IsNotNullAndNotEmpty())
             {
                 if (blobs.Count() < formFileRules.AllowedMinimunFiles)
                 {
@@ -56,23 +56,23 @@ namespace OneLine.Extensions
                 }
                 foreach (var blob in blobs)
                 {
-                    if (blob == null || blob.Length == 0)
+                    if (blob.IsNull() || blob.Size == 0)
                     {
                         return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired", Data = blob.Name };
                     }
-                    else if (blob.Length > formFileRules.AllowedBlobMaxLength)
+                    else if (blob.Size > formFileRules.AllowedBlobMaxLength)
                     {
                         return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileHasExceededTheLargestSizeAllowed", Data = blob.Name };
                     }
-                    else if (formFileRules.AllowedContentTypes != null && formFileRules.AllowedContentTypes.Any() && !formFileRules.AllowedContentTypes.Contains(blob.ContentType))
+                    else if (formFileRules.AllowedContentTypes != null && formFileRules.AllowedContentTypes.Any() && !formFileRules.AllowedContentTypes.Contains(blob.Type))
                     {
                         return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileDoesNotHaveTheExpectedContentType", Data = blob.Name };
                     }
-                    else if (formFileRules.AllowedExtensions != null && formFileRules.AllowedExtensions.Any() && !formFileRules.AllowedExtensions.Contains(Path.GetExtension(blob.FileName)))
+                    else if (formFileRules.AllowedExtensions != null && formFileRules.AllowedExtensions.Any() && !formFileRules.AllowedExtensions.Contains(Path.GetExtension(blob.Name)))
                     {
                         return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileDoesNotHaveTheExpectedExtension", Data = blob.Name };
                     }
-                    else if (formFileRules.AllowedContentDispositions != null && formFileRules.AllowedContentDispositions.Any() && !formFileRules.AllowedContentDispositions.Contains(blob.ContentDisposition))
+                    else if (formFileRules.AllowedContentDispositions != null && formFileRules.AllowedContentDispositions.Any() && !formFileRules.AllowedContentDispositions.Contains(blob.Type))
                     {
                         return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileDoesNotHaveTheExpectedContentDisposition", Data = blob.Name };
                     }

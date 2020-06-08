@@ -18,8 +18,6 @@ namespace OneLine.Tester
             new Action(async () => 
             { 
                 await testForm.ValidateBlobDatas(); 
-                await testForm.AddBlobDatas();
-                await testForm.ClearBlobDatas();
                 //await testForm.Save(); 
             }).Invoke();
 

@@ -1,6 +1,8 @@
 ﻿
+using OneLine.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace OneLine.Models
 {
@@ -22,12 +24,17 @@ namespace OneLine.Models
         /// The exception when an error ocurred on the request
         /// </summary>
         public Exception Exception { get; set; }
-        public ResponseResult(T response = default, Exception exception = null)
+        /// <summary>
+        /// The HTTP response message including the status code and data. 
+        /// </summary>
+        public HttpResponseMessage HttpResponseMessage { get; set; }
+        public ResponseResult(T response = default, Exception exception = null, HttpResponseMessage httpResponseMessage = null)
         {
             Response = response;
             Exception = exception;
-            HasException = Exception != null;
-            Succeed = !EqualityComparer<T>.Default.Equals(Response, default) && !HasException;
+            HasException = Exception.IsNotNull();
+            Succeed = (httpResponseMessage.IsNotNull() && httpResponseMessage.IsSuccessStatusCode) && !HasException;
+            HttpResponseMessage = httpResponseMessage;
         }
     }
 }

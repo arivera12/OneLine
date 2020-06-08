@@ -310,7 +310,7 @@ namespace OneLine.Extensions
         }
         public static string ToUrlQueryString<T>(this T obj) where T : class
         {
-            if(obj is IEnumerable || obj.GetType().IsAssignableFrom(typeof(IEnumerable)))
+            if (obj is IEnumerable || obj.GetType().IsAssignableFrom(typeof(IEnumerable)))
             {
                 return string.Join("&", (obj as IEnumerable<object>).Select(s => s == null ? "" : s.ToUrlQueryString()));
             }

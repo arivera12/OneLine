@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.72</Version>
+    <Version>2.0.73</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine is a project that can be used on a server backend. This package already includes OneLine.Common.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added better descriptive text on file input reset button with Reset File or Files. Dropped default blob storage class and interface, move it to output project. Fixed formdata what was sending the file but not the json data.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added null check on response management. Refactored file management. Improved response management with a more realiable way to check wether session has expired.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

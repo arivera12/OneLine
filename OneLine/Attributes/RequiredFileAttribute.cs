@@ -63,39 +63,39 @@ namespace OneLine.Attributes
             var blobs = string.IsNullOrWhiteSpace(FormFieldName) ? formFiles : formFiles.Where(w => w.Name == FormFieldName);
             if (!blobs.Any())
             {
-                filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired" }.ToJson();
+                filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired" }.ToJsonActionResult();
             }
             else
             {
                 if (blobs.Count() < AllowedMinimunFiles)
                 {
-                    filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheCountOfFilesUploadedHasExceededTheMaximunAllowedFiles" }.ToJson();
+                    filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheCountOfFilesUploadedHasExceededTheMaximunAllowedFiles" }.ToJsonActionResult();
                 }
                 if (blobs.Count() > AllowedMaximunFiles)
                 {
-                    filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheCountOfFilesUploadedIsLessThanTheMinimunAllowedFiles" }.ToJson();
+                    filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheCountOfFilesUploadedIsLessThanTheMinimunAllowedFiles" }.ToJsonActionResult();
                 }
                 foreach (var blob in blobs)
                 {
                     if (blob == null || blob.Length == 0)
                     {
-                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired", Data = blob.Name }.ToJson();
+                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired", Data = blob.Name }.ToJsonActionResult();
                     }
                     else if (blob.Length > AllowedBlobMaxLength)
                     {
-                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileHasExceededTheLargestSizeAllowed", Data = blob.Name }.ToJson();
+                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileHasExceededTheLargestSizeAllowed", Data = blob.Name }.ToJsonActionResult();
                     }
                     else if (AllowedContentTypes != null && AllowedContentTypes.Any() && !AllowedContentTypes.Contains(blob.ContentType))
                     {
-                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileDoesNotHaveTheExpectedContentType", Data = blob.Name }.ToJson();
+                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileDoesNotHaveTheExpectedContentType", Data = blob.Name }.ToJsonActionResult();
                     }
                     else if (AllowedExtensions != null && AllowedExtensions.Any() && !AllowedExtensions.Contains(Path.GetExtension(blob.FileName)))
                     {
-                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileDoesNotHaveTheExpectedExtension", Data = blob.Name }.ToJson();
+                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileDoesNotHaveTheExpectedExtension", Data = blob.Name }.ToJsonActionResult();
                     }
                     else if (AllowedContentDispositions != null && AllowedContentDispositions.Any() && !AllowedContentDispositions.Contains(blob.ContentDisposition))
                     {
-                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileDoesNotHaveTheExpectedContentDisposition", Data = blob.Name }.ToJson();
+                        filterContext.Result = new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheFileDoesNotHaveTheExpectedContentDisposition", Data = blob.Name }.ToJsonActionResult();
                     }
                 }
             }

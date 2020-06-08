@@ -62,14 +62,6 @@ namespace OneLine.Bases
         {
             return await HttpClient.SendJsonRangeResponseResultAsync<TResponse, T>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddRangeMethod}", records);
         }
-        public virtual async Task<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> Add(T record, IEnumerable<TBlobData> blobDatas)
-        {
-            return await HttpClient.SendJsonWithFormDataResponseResultAsync<Tuple<T, IEnumerable<TUserBlobs>>, T, TBlobData>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddMethod}", record, blobDatas);
-        }
-        public virtual async Task<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> AddRange(IEnumerable<T> records, IEnumerable<TBlobData> blobDatas)
-        {
-            return await HttpClient.SendJsonRangeWithFormDataResponseResultAsync<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>, T, TBlobData>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddRangeMethod}", records, blobDatas);
-        }
         public virtual async Task<ResponseResult<ApiResponse<TResponse>>> Update<TResponse>(T record)
         {
             return await HttpClient.SendJsonResponseResultAsync<TResponse, T>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}", record);
@@ -77,14 +69,6 @@ namespace OneLine.Bases
         public virtual async Task<ResponseResult<ApiResponse<TResponse>>> UpdateRange<TResponse>(IEnumerable<T> records)
         {
             return await HttpClient.SendJsonRangeResponseResultAsync<TResponse, T>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateRangeMethod}", records);
-        }
-        public virtual async Task<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> Update(T record, IEnumerable<TBlobData> blobDatas)
-        {
-            return await HttpClient.SendJsonWithFormDataResponseResultAsync<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>, T, TBlobData>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}", record, blobDatas);
-        }
-        public virtual async Task<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> UpdateRange(IEnumerable<T> records, IEnumerable<TBlobData> blobDatas)
-        {
-            return await HttpClient.SendJsonRangeWithFormDataResponseResultAsync<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>, T, TBlobData>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateRangeMethod}", records, blobDatas);
         }
         public virtual async Task<ResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier)
         {
@@ -111,14 +95,6 @@ namespace OneLine.Bases
         {
             return await HttpClient.SendJsonRangeResponseResultAsync<TResponse, T>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddRangeMethod}", records, validator);
         }
-        public virtual async Task<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> Add(T record, IValidator validator, IEnumerable<TBlobData> blobDatas)
-        {
-            return await HttpClient.SendJsonWithFormDataResponseResultAsync<Tuple<T, IEnumerable<TUserBlobs>>, T, TBlobData>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddMethod}", record, validator, blobDatas, new BlobDataValidator());
-        }
-        public virtual async Task<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> AddRange(IEnumerable<T> records, IValidator validator, IEnumerable<TBlobData> blobDatas)
-        {
-            return await HttpClient.SendJsonRangeWithFormDataResponseResultAsync<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>, T, TBlobData>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddRangeMethod}", records, validator, blobDatas, new BlobDataValidator());
-        }
         public virtual async Task<ResponseResult<ApiResponse<TResponse>>> Update<TResponse>(T record, IValidator validator)
         {
             return await HttpClient.SendJsonResponseResultAsync<TResponse, T>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}", record, validator);
@@ -126,14 +102,6 @@ namespace OneLine.Bases
         public virtual async Task<ResponseResult<ApiResponse<TResponse>>> UpdateRange<TResponse>(IEnumerable<T> records, IValidator validator)
         {
             return await HttpClient.SendJsonRangeResponseResultAsync<TResponse, T>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateRangeMethod}", records, validator);
-        }
-        public virtual async Task<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> Update(T record, IValidator validator, IEnumerable<TBlobData> blobDatas)
-        {
-            return await HttpClient.SendJsonWithFormDataResponseResultAsync<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>, T, TBlobData>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}", record, validator, blobDatas, new BlobDataValidator());
-        }
-        public virtual async Task<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> UpdateRange(IEnumerable<T> records, IValidator validator, IEnumerable<TBlobData> blobDatas)
-        {
-            return await HttpClient.SendJsonRangeWithFormDataResponseResultAsync<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>, T, TBlobData>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateRangeMethod}", records, validator, blobDatas, new BlobDataValidator());
         }
         public virtual async Task<ResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier, IValidator validator)
         {

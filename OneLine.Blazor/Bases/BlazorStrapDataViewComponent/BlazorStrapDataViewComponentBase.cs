@@ -6,6 +6,7 @@ using OneLine.Blazor.Extensions;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
+using OneLine.Models.Users;
 using System;
 using System.Threading.Tasks;
 
@@ -69,6 +70,23 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task AfterSearch()
         {
+            if (Response.IsNull())
+            {
+                await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
+            }
+            else if (Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
+            }
+            else if (Response.HasException)
+            {
+                await SweetAlertService.FireAsync(null, Response.Exception.Message, SweetAlertIcon.Error);
+            }
+            else
+            {
+                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Error);
+            }
             if (IsDesktop)
             {
                 await SweetAlertService.HideLoaderAsync();

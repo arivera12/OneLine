@@ -56,7 +56,7 @@ namespace OneLine.Bases
         {
             ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
             ResponsePagedChanged?.Invoke(ResponsePaged);
-            if (ResponsePaged.Succeed && ResponsePaged.Response.Status.Succeeded())
+            if (Response.IsNotNull() && ResponsePaged.Succeed && ResponsePaged.Response.Status.Succeeded())
             {
                 if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                 {

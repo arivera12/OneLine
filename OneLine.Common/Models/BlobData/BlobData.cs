@@ -29,6 +29,6 @@ namespace OneLine.Models
         /// <summary>
         /// The file stream data
         /// </summary>
-        public virtual Stream Data { get; set; }
+        public virtual byte[] Data { get; set; }
     }
 }

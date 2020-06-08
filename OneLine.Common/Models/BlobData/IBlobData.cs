@@ -28,6 +28,6 @@ namespace OneLine.Models
         /// <summary>
         /// The file stream data
         /// </summary>
-        Stream Data { get; set; }
+        byte[] Data { get; set; }
     }
 }

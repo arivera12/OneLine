@@ -405,7 +405,7 @@ namespace OneLine.Blazor.Components
                             LastModified = fileInfo.LastModifiedDate ?? default
                         };
                         var stream = BufferSize <= 0 ? await fileReference.CreateMemoryStreamAsync() : await fileReference.CreateMemoryStreamAsync(BufferSize);
-                        blobData.Data = stream;
+                        blobData.Data = stream.ToArray();
                         blobDatas.Add(blobData);
                     }
                 }
@@ -435,7 +435,7 @@ namespace OneLine.Blazor.Components
                             LastModified = fileInfo.LastModifiedDate ?? default
                         };
                         var stream = BufferSize <= 0 ? await fileReference.CreateMemoryStreamAsync() : await fileReference.CreateMemoryStreamAsync(BufferSize);
-                        blobData.Data = stream;
+                        blobData.Data = stream.ToArray();
                         blobDatas.Add(blobData);
                     }
                     break;

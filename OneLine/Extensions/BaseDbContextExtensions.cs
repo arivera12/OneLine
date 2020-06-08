@@ -1,5 +1,4 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using OneLine.Bases;
 using OneLine.Enums;
@@ -9,6 +8,7 @@ using Storage.Net.Blobs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace OneLine.Extensions
@@ -218,43 +218,34 @@ namespace OneLine.Extensions
 
         #region Save Blobs
 
-        public static async Task<IApiResponse<T>> SaveValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, T originalRecord, IValidator validator, string userId, SaveOperation saveOperation, IEnumerable<IUploadFormFile> uploadFormFiles, IFormFileCollection files, IBlobStorage blobsStorageService, bool ignoreBlobOwner = false, Action beforeSave = null, Action afterSave = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<T>> SaveValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, T originalRecord, IValidator validator, string userId, SaveOperation saveOperation, IEnumerable<IUploadBlobData> uploadBlobDatas, IBlobStorage blobsStorageService, bool ignoreBlobOwner = false, Action beforeSave = null, Action afterSave = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
-            var validationApiResponse = await dbContext.ValidatedAuditedAsync(record, validator, userId, saveOperation, uploadFormFiles, files, controllerName, actionName, remoteIpAddress);
+            var validationApiResponse = await dbContext.ValidatedAuditedAsync(record, validator, userId, saveOperation, uploadBlobDatas, controllerName, actionName, remoteIpAddress);
             if (validationApiResponse.Status.Failed())
             {
                 return validationApiResponse;
             }
-            validationApiResponse = await dbContext.ValidatedAuditedAsync(originalRecord, validator, userId, saveOperation, uploadFormFiles, files, controllerName, actionName, remoteIpAddress);
+            validationApiResponse = await dbContext.ValidatedAuditedAsync(originalRecord, validator, userId, saveOperation, uploadBlobDatas, controllerName, actionName, remoteIpAddress);
             if (validationApiResponse.Status.Failed())
             {
                 return validationApiResponse;
             }
-            foreach (var uploadFormFile in uploadFormFiles)
+            foreach (var uploadBlobData in uploadBlobDatas)
             {
-                if (uploadFormFile.IsMultiple)
+                if (uploadBlobData.BlobDatas.IsNotNullAndNotEmpty())
                 {
+                    var fileInputName = uploadBlobData.BlobDatas.FirstOrDefault().InputName;
                     if (saveOperation.IsAdd())
                     {
-                        await dbContext.CreateRangeAndBindUserBlobsAsync(record, uploadFormFile.FileInputName, files, uploadFormFile.Predicate, uploadFormFile.FormFileRules, blobsStorageService, userId, typeof(T).Name, controllerName, actionName, remoteIpAddress);
+                        await dbContext.CreateRangeAndBindUserBlobsAsync(record, fileInputName, uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, blobsStorageService, userId, typeof(T).Name, controllerName, actionName, remoteIpAddress);
                     }
                     else if (saveOperation.IsUpdate())
                     {
-                        await dbContext.UpdateRangeAndBindUserBlobsAsync(record, originalRecord, uploadFormFile.FileInputName, files, uploadFormFile.Predicate, uploadFormFile.FormFileRules, blobsStorageService, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
+                        await dbContext.UpdateRangeAndBindUserBlobsAsync(record, originalRecord, fileInputName, uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, blobsStorageService, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
                     }
                 }
-                else
-                {
-                    if (saveOperation.IsAdd())
-                    {
-                        await dbContext.CreateAndBindUserBlobsAsync(record, uploadFormFile.FileInputName, files, uploadFormFile.Predicate, uploadFormFile.FormFileRules, blobsStorageService, userId, typeof(T).Name, controllerName, actionName, remoteIpAddress);
-                    }
-                    else if (saveOperation.IsUpdate())
-                    {
-                        await dbContext.UpdateAndBindUserBlobsAsync(record, uploadFormFile.FileInputName, files, uploadFormFile.Predicate, uploadFormFile, blobsStorageService, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-                    }
-                }
+
             }
             return await dbContext.SaveAsync(record, saveOperation, beforeSave, afterSave);
         }
@@ -364,45 +355,51 @@ namespace OneLine.Extensions
 
         #region Import Csv
 
-        public static async Task<IApiResponse<IEnumerable<T>>> ImportCsvUploadAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, SaveOperation saveOperation, Action beforeSaveRange = null, Action afterSaveRange = null)
+        public static async Task<IApiResponse<IEnumerable<T>>> ImportCsvUploadAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IUploadBlobData uploadBlobDatas, SaveOperation saveOperation, Action beforeSaveRange = null, Action afterSaveRange = null)
             where T : class, new()
         {
-            var any = predicate == null ? files.Any() : files.Any(predicate);
+            var any = uploadBlobDatas.IsNotNull() && uploadBlobDatas.BlobDatas.IsNotNullAndNotEmpty();
             if (!any)
             {
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, "FileIsNullOrEmpty");
             }
-            if (any && formFileRules != null)
+            if (any && uploadBlobDatas.FormFileRules.IsNotNull())
             {
-                var isValidFormFileApiResponse = files.IsValidFormFileApiResponse(predicate, formFileRules);
+                var isValidFormFileApiResponse = uploadBlobDatas.BlobDatas.IsValidBlobDataApiResponse(uploadBlobDatas.FormFileRules);
                 if (isValidFormFileApiResponse.Status.Failed())
                 {
                     return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, isValidFormFileApiResponse.Message);
                 }
             }
-            IFormFile file = predicate == null ? files.FirstOrDefault() : files.FirstOrDefault(predicate);
-            var records = file.OpenReadStream().ReadCsv<T>();
+            var records = new List<T>();
+            foreach (var blobData in uploadBlobDatas.BlobDatas)
+            {
+                records.AddRange(blobData.Data.ReadCsv<T>());
+            }
             return await dbContext.SaveRangeAsync(records, saveOperation, beforeSaveRange, afterSaveRange);
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> ImportCsvUploadAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IFormFileCollection files, Func<IFormFile, bool> predicate, IFormFileRules formFileRules, SaveOperation saveOperation, string userId, Action beforeSaveRange = null, Action afterSaveRange = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<T>>> ImportCsvUploadAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IUploadBlobData uploadBlobDatas, SaveOperation saveOperation, string userId, Action beforeSaveRange = null, Action afterSaveRange = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
-            var any = predicate == null ? files.Any() : files.Any(predicate);
+            var any = uploadBlobDatas.IsNotNull() && uploadBlobDatas.BlobDatas.IsNotNullAndNotEmpty();
             if (!any)
             {
                 await dbContext.CreateAuditrailsAsync(new UserBlobs(), "No file uploaded", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, "FileIsNullOrEmpty");
             }
-            if (any && formFileRules != null)
+            if (any && uploadBlobDatas.FormFileRules.IsNotNull())
             {
-                var isValidFormFileApiResponse = files.IsValidFormFileApiResponse(predicate, formFileRules);
+                var isValidFormFileApiResponse = uploadBlobDatas.BlobDatas.IsValidBlobDataApiResponse(uploadBlobDatas.FormFileRules);
                 if (isValidFormFileApiResponse.Status.Failed())
                 {
                     return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, isValidFormFileApiResponse.Message);
                 }
             }
-            IFormFile file = predicate == null ? files.FirstOrDefault() : files.FirstOrDefault(predicate);
-            var records = file.OpenReadStream().ReadCsv<T>();
+            var records = new List<T>();
+            foreach (var blobData in uploadBlobDatas.BlobDatas)
+            {
+                records.AddRange(blobData.Data.ReadCsv<T>());
+            }
             return await dbContext.SaveRangeAuditedAsync(records, saveOperation, userId, beforeSaveRange, afterSaveRange, controllerName, actionName, remoteIpAddress);
         }
 
@@ -1310,7 +1307,7 @@ namespace OneLine.Extensions
 
         #region UserBlobs Validation
 
-        public static async Task<IApiResponse<T>> ValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, IValidator validator, string userId, SaveOperation saveOperation, IEnumerable<IUploadFormFile> uploadFormFiles, IFormFileCollection files, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<T>> ValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T record, IValidator validator, string userId, SaveOperation saveOperation, IEnumerable<IUploadBlobData> uploadBlobDatas, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
             var apiResponse = await dbContext.ValidateAuditedAsync(record, validator, userId, controllerName, actionName, remoteIpAddress);
@@ -1319,76 +1316,56 @@ namespace OneLine.Extensions
                 return apiResponse;
             }
             //Lets check if our files uploaded comply with our rules first
-            foreach (var uploadFormFile in uploadFormFiles)
+            foreach (var uploadBlobData in uploadBlobDatas)
             {
-                var formFileUploadedApiResponse = await dbContext.IsFormFileUploadedAsync(files, uploadFormFile.Predicate, uploadFormFile.FormFileRules, userId, controllerName, actionName, remoteIpAddress);
+                var formFileUploadedApiResponse = await dbContext.IsBlobDataUploadedAsync(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, userId, controllerName, actionName, remoteIpAddress);
                 //Lets check if something went wrong
                 if (formFileUploadedApiResponse.Status.Failed() || !formFileUploadedApiResponse.Data)
                 {
                     //Does this file upload was required and we are creating it?
                     //Do we forced file upload on update operation?
-                    if ((uploadFormFile.FormFileRules.IsRequired && saveOperation.IsAdd()) ||
-                        (uploadFormFile.ForceUploadOnUpdate && saveOperation.IsUpdate()))
+                    if ((uploadBlobData.FormFileRules.IsRequired && saveOperation.IsAdd()) ||
+                        (uploadBlobData.ForceUploadOnUpdate && saveOperation.IsUpdate()))
                     {
-                        await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required on create and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
+                        await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} on a field was required on create and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
                         return record.ToApiResponseFailed("FileUploadIsRequired");
                     }
                     //Does the file is required but we are updating?
-                    else if (uploadFormFile.FormFileRules.IsRequired && saveOperation.IsUpdate())
+                    else if (uploadBlobData.FormFileRules.IsRequired && saveOperation.IsUpdate())
                     {
+                        var propertyName = uploadBlobData.BlobDatas.FirstOrDefault().InputName;
                         //Lets check that the required file was not deleted on update
-                        var propertyValue = record.GetType().GetProperty(uploadFormFile.FileInputName).GetValue(record)?.ToString();
-                        if (string.IsNullOrWhiteSpace(propertyValue))
+                        var propertyValue = record.GetType().GetProperty(propertyName).GetValue(record);
+                        if (propertyValue == null)
                         {
-                            await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required on update and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
+                            await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {propertyName} was required on update and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
                             return record.ToApiResponseFailed("FileUploadIsRequired");
                         }
                         //Lets validate that userblobs were not overrided with random values 
                         //and that the value parses to user blobs and is valid userblobs
-                        if (uploadFormFile.IsMultiple)
+                        try
                         {
-                            try
+                            var userBlobs = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(Encoding.UTF8.GetString((byte[])propertyValue));
+                            var userBlobsCollectionValidator = new UserBlobsCollectionValidator();
+                            var validationResult = await userBlobsCollectionValidator.ValidateAsync(userBlobs);
+                            if (!validationResult.IsValid)
                             {
-                                var userBlobs = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(propertyValue);
-                                var userBlobsCollectionValidator = new UserBlobsCollectionValidator();
-                                var validationResult = await userBlobsCollectionValidator.ValidateAsync(userBlobs);
-                                if (!validationResult.IsValid)
-                                {
-                                    await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
-                                    return new T().ToApiResponseFailed("FileUploadIsRequired");
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
+                                await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {propertyName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
                                 return new T().ToApiResponseFailed("FileUploadIsRequired");
                             }
+
                         }
-                        else
+                        catch (Exception)
                         {
-                            try
-                            {
-                                var userBlob = JsonConvert.DeserializeObject<UserBlobs>(propertyValue);
-                                var userBlobsValidator = new UserBlobsValidator();
-                                var validationResult = await userBlobsValidator.ValidateAsync(userBlob);
-                                if (!validationResult.IsValid)
-                                {
-                                    await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
-                                    return record.ToApiResponseFailed("FileUploadIsRequired");
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
-                                return record.ToApiResponseFailed("FileUploadIsRequired");
-                            }
+                            await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {propertyName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
+                            return new T().ToApiResponseFailed("FileUploadIsRequired");
                         }
                     }
                 }
             }
             return new ApiResponse<T>(ApiResponseStatus.Succeeded, record);
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> ValidatedRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, string userId, SaveOperation saveOperation, IEnumerable<IUploadFormFile> uploadFormFiles, IFormFileCollection files, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<T>>> ValidatedRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, string userId, SaveOperation saveOperation, IEnumerable<IUploadBlobData> uploadBlobDatas, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
             var apiResponse = await dbContext.ValidateRangeAuditedAsync(records, validator, userId, controllerName, actionName, remoteIpAddress);
@@ -1399,69 +1376,49 @@ namespace OneLine.Extensions
             foreach (var record in records)
             {
                 //Lets check if our files uploaded comply with our rules first
-                foreach (var uploadFormFile in uploadFormFiles)
+                foreach (var uploadBlobData in uploadBlobDatas)
                 {
-                    var formFileUploadedApiResponse = await dbContext.IsFormFileUploadedAsync(files, uploadFormFile.Predicate, uploadFormFile.FormFileRules, userId, controllerName, actionName, remoteIpAddress);
+                    var formFileUploadedApiResponse = await dbContext.IsBlobDataUploadedAsync(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, userId, controllerName, actionName, remoteIpAddress);
                     //Lets check if something went wrong
                     if (formFileUploadedApiResponse.Status.Failed() || !formFileUploadedApiResponse.Data)
                     {
                         //Does this file upload was required and we are creating it?
                         //Do we forced file upload on update operation?
-                        if ((uploadFormFile.FormFileRules.IsRequired && saveOperation.IsAdd()) ||
-                            (uploadFormFile.ForceUploadOnUpdate && saveOperation.IsUpdate()))
+                        if ((uploadBlobData.FormFileRules.IsRequired && saveOperation.IsAdd()) ||
+                            (uploadBlobData.ForceUploadOnUpdate && saveOperation.IsUpdate()))
                         {
-                            await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required on create and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
+                            await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} on a field was required on create and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
                             return records.ToApiResponseFailed("FileUploadIsRequired");
                         }
                         //Does the file is required but we are updating?
-                        else if (uploadFormFile.FormFileRules.IsRequired && saveOperation.IsUpdate())
+                        else if (uploadBlobData.FormFileRules.IsRequired && saveOperation.IsUpdate())
                         {
+                            var propertyName = uploadBlobData.BlobDatas.FirstOrDefault().InputName;
                             //Lets check that the required file was not deleted on update
-                            var propertyValue = record.GetType().GetProperty(uploadFormFile.FileInputName).GetValue(record)?.ToString();
-                            if (string.IsNullOrWhiteSpace(propertyValue))
+                            var propertyValue = record.GetType().GetProperty(propertyName).GetValue(record);
+                            if (propertyValue == null)
                             {
-                                await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required on update and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
+                                await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {propertyName} was required on update and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
                                 return records.ToApiResponseFailed("FileUploadIsRequired");
                             }
                             //Lets validate that userblobs were not overrided with random values 
                             //and that the value parses to user blobs and is valid userblobs
-                            if (uploadFormFile.IsMultiple)
+                            try
                             {
-                                try
+                                var userBlobs = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(Encoding.UTF8.GetString((byte[])propertyValue));
+                                var userBlobsCollectionValidator = new UserBlobsCollectionValidator();
+                                var validationResult = await userBlobsCollectionValidator.ValidateAsync(userBlobs);
+                                if (!validationResult.IsValid)
                                 {
-                                    var userBlobs = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(propertyValue);
-                                    var userBlobsCollectionValidator = new UserBlobsCollectionValidator();
-                                    var validationResult = await userBlobsCollectionValidator.ValidateAsync(userBlobs);
-                                    if (!validationResult.IsValid)
-                                    {
-                                        await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
-                                        return records.ToApiResponseFailed("FileUploadIsRequired");
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
+                                    await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {propertyName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
                                     return records.ToApiResponseFailed("FileUploadIsRequired");
                                 }
+
                             }
-                            else
+                            catch (Exception)
                             {
-                                try
-                                {
-                                    var userBlob = JsonConvert.DeserializeObject<UserBlobs>(propertyValue);
-                                    var userBlobsValidator = new UserBlobsValidator();
-                                    var validationResult = await userBlobsValidator.ValidateAsync(userBlob);
-                                    if (!validationResult.IsValid)
-                                    {
-                                        await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
-                                        return records.ToApiResponseFailed("FileUploadIsRequired");
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {uploadFormFile.FileInputName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
-                                    return records.ToApiResponseFailed("FileUploadIsRequired");
-                                }
+                                await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {propertyName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
+                                return records.ToApiResponseFailed("FileUploadIsRequired");
                             }
                         }
                     }

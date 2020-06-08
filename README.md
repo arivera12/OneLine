@@ -64,11 +64,15 @@ OneLine is an abstracted standardized redefined framework.
     - [x] Search
     - [x] Select Record/s
     - [x] Records Selection Mode (single or multiple)
+    - [x] Minimum and Maximun Range Management
+    - [x] Minimun and Maximun Reach Listenable
     - [x] Filtering
     - [x] Sorting
     - [x] Paged Data Management
-      - [x] Previous & Next Page
-      - [x] Page Index and Size
+      - [x] Go Previous Page
+      - [x] Go Next Page
+      - [x] Go to Page Index
+      - [x] Page Size
       - [x] Page Sort By
     - [x] Collection Mode Management (append or replace)
     - [x] Request and Response Management

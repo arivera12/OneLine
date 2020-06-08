@@ -13,11 +13,11 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added null check on response management. Refactored file management. Improved response management with a more realiable way to check wether session has expired.</PackageReleaseNotes>
-    <Version>2.0.73</Version>
+    <PackageReleaseNotes>Added [NotMapped] attribute to BlobData.</PackageReleaseNotes>
+    <Version>2.0.74</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.73.0</AssemblyVersion>
+    <AssemblyVersion>2.0.74.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

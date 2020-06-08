@@ -13,8 +13,10 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Added null check on response management. Refactored file management. Improved response management with a more realiable way to check wether session has expired.</PackageReleaseNotes>
-    <Version>2.0.73</Version>
+    <PackageReleaseNotes>Added [NotMapped] attribute to BlobData.</PackageReleaseNotes>
+    <Version>2.0.74</Version>
+    <AssemblyVersion>2.0.74.0</AssemblyVersion>
+    <FileVersion>2.0.74.0</FileVersion>
   </PropertyGroup>
 
 

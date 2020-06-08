@@ -1,9 +1,11 @@
 ﻿
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 
 namespace OneLine.Models
 {
+    [NotMapped]
     public class BlobData : IBlobData
     {
         /// <summary>

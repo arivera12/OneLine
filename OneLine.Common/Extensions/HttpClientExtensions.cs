@@ -40,7 +40,7 @@ namespace OneLine.Extensions
                 var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, requestUri));
                 if (response.IsNull())
                 {
-                    return new ResponseResult<T>(default, null, null);
+                    return new ResponseResult<T>(default, null, response);
                 }
                 else
                 {
@@ -67,7 +67,7 @@ namespace OneLine.Extensions
                 var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, $"{requestUri}?{queryStringParameters?.ToUrlQueryString()}"));
                 if (response.IsNull())
                 {
-                    return new ResponseResult<T>(default, null, null);
+                    return new ResponseResult<T>(default, null, response);
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace OneLine.Extensions
                 var response = await httpClient.SendAsync(request);
                 if (response.IsNull())
                 {
-                    return new ResponseResult<T>(default, null, null);
+                    return new ResponseResult<T>(default, null, response);
                 }
                 else
                 {
@@ -133,7 +133,7 @@ namespace OneLine.Extensions
                 var response = await httpClient.SendAsync(request);
                 if (response.IsNull())
                 {
-                    return new ResponseResult<T>(default, null, null);
+                    return new ResponseResult<T>(default, null, response);
                 }
                 else
                 {
@@ -166,7 +166,7 @@ namespace OneLine.Extensions
                 var response = await httpClient.SendAsync(request);
                 if (response.IsNull())
                 {
-                    return new ResponseResult<T>(default, null, null);
+                    return new ResponseResult<T>(default, null, response);
                 }
                 else
                 {
@@ -230,7 +230,7 @@ namespace OneLine.Extensions
                 var response = await httpClient.SendAsync(request);
                 if (response.IsNull())
                 {
-                    return new ResponseResult<T>(default, null, null);
+                    return new ResponseResult<T>(default, null, response);
                 }
                 else
                 {

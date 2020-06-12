@@ -21,21 +21,23 @@ namespace OneLine.Bases
     {
         public virtual async Task Load()
         {
-            if (Identifier != null && Identifier.Model != null)
+            if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
             {
                 Response = await HttpService.GetOne<T>(Identifier, new EmptyValidator());
                 ResponseChanged?.Invoke(Response);
-                if (Response.Succeed && Response.Response.Status.Succeeded())
+                if (Response.IsNotNull() && Response.HttpResponseMessage.IsSuccessStatusCode && 
+                    Response.Succeed && Response.Response.Status.Succeeded())
                 {
                     Record = Response.Response.Data;
                     RecordChanged?.Invoke(Record);
                 }
             }
-            else if (Identifiers != null && Identifiers.Any())
+            else if (Identifiers.IsNotNull() && Identifiers.Any())
             {
                 ResponseCollection = await HttpService.GetRange<T>(Identifiers, new EmptyValidator());
                 ResponseCollectionChanged?.Invoke(ResponseCollection);
-                if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
+                if (ResponseCollection.IsNotNull() && ResponseCollection.HttpResponseMessage.IsSuccessStatusCode && 
+                    ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
                 {
                     if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                     {
@@ -56,7 +58,8 @@ namespace OneLine.Bases
         {
             ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
             ResponsePagedChanged?.Invoke(ResponsePaged);
-            if (Response.IsNotNull() && ResponsePaged.Succeed && ResponsePaged.Response.Status.Succeeded())
+            if (ResponsePaged.IsNotNull() && ResponsePaged.HttpResponseMessage.IsSuccessStatusCode && 
+                ResponsePaged.Succeed && ResponsePaged.Response.Status.Succeeded())
             {
                 if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                 {
@@ -119,10 +122,10 @@ namespace OneLine.Bases
         }
         public virtual Task FilterAndSort()
         {
-            if (Records != null && Records.Any())
+            if (Records.IsNotNull() && Records.Any())
             {
                 IEnumerable<T> recordsFilteredSorted;
-                if (FilterPredicate != null)
+                if (FilterPredicate.IsNotNull())
                 {
                     recordsFilteredSorted = Records.Where(FilterPredicate);
                 }
@@ -130,7 +133,7 @@ namespace OneLine.Bases
                 {
                     recordsFilteredSorted = Records;
                 }
-                if (FilterSortBy != null)
+                if (FilterSortBy.IsNotNull())
                 {
                     if (FilterDescending)
                     {
@@ -149,7 +152,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoPreviousPage()
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.HasPreviousPage)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
             {
                 SearchPaging.PageIndex--;
                 SearchPagingChanged?.Invoke(SearchPaging);
@@ -158,7 +161,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoPreviousPage(int pageSize)
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.HasPreviousPage)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
             {
                 SearchPaging.PageIndex--;
                 SearchPaging.PageSize = pageSize;
@@ -168,7 +171,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoPreviousPage(string sortBy)
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.HasPreviousPage)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
             {
                 SearchPaging.PageIndex--;
                 SearchPaging.SortBy = sortBy;
@@ -178,7 +181,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoPreviousPage(int pageSize, string sortBy)
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.HasPreviousPage)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
             {
                 SearchPaging.PageIndex--;
                 SearchPaging.PageSize = pageSize;
@@ -189,7 +192,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoNextPage()
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.HasNextPage)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
             {
                 SearchPaging.PageIndex++;
                 SearchPagingChanged?.Invoke(SearchPaging);
@@ -198,7 +201,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoNextPage(int pageSize)
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.HasNextPage)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
             {
                 SearchPaging.PageIndex++;
                 SearchPaging.PageSize = pageSize;
@@ -208,7 +211,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoNextPage(string sortBy)
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.HasNextPage)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
             {
                 SearchPaging.PageIndex++;
                 SearchPaging.SortBy = sortBy;
@@ -218,7 +221,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoNextPage(int pageSize, string sortBy)
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.HasNextPage)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
             {
                 SearchPaging.PageIndex++;
                 SearchPaging.PageSize = pageSize;
@@ -229,7 +232,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoToPage(int pageIndex, int pageSize)
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.LastPage <= pageIndex)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.LastPage <= pageIndex)
             {
                 SearchPaging.PageIndex = pageIndex;
                 SearchPaging.PageSize = pageSize;
@@ -239,7 +242,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoToPage(int pageIndex, string sortBy)
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.LastPage <= pageIndex)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.LastPage <= pageIndex)
             {
                 SearchPaging.PageIndex = pageIndex;
                 SearchPaging.SortBy = sortBy;
@@ -249,7 +252,7 @@ namespace OneLine.Bases
         }
         public virtual Task GoToPage(int pageIndex, int pageSize, string sortBy)
         {
-            if (ResponsePaged != null && ResponsePaged.Response.Data.LastPage <= pageIndex)
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.LastPage <= pageIndex)
             {
                 SearchPaging.PageIndex = pageIndex;
                 SearchPaging.PageSize = pageSize;

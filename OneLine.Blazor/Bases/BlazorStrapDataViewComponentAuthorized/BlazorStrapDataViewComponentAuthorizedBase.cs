@@ -1,5 +1,4 @@
-﻿using BlazorCurrentDevice;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using OneLine.Bases;
 using OneLine.Enums;

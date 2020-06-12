@@ -231,21 +231,13 @@ namespace OneLine.Extensions
             {
                 return validationApiResponse;
             }
-            foreach (var uploadBlobData in uploadBlobDatas)
+            if (saveOperation.IsAdd())
             {
-                if (uploadBlobData.BlobDatas.IsNotNullAndNotEmpty())
-                {
-                    var fileInputName = uploadBlobData.BlobDatas.FirstOrDefault().InputName;
-                    if (saveOperation.IsAdd())
-                    {
-                        await dbContext.CreateRangeAndBindUserBlobsAsync(record, fileInputName, uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, blobsStorageService, userId, typeof(T).Name, controllerName, actionName, remoteIpAddress);
-                    }
-                    else if (saveOperation.IsUpdate())
-                    {
-                        await dbContext.UpdateRangeAndBindUserBlobsAsync(record, originalRecord, fileInputName, uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, blobsStorageService, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-                    }
-                }
-
+                await dbContext.CreateAndBindUserBlobsRangeAsync(record, uploadBlobDatas, blobsStorageService, userId, typeof(T).Name, controllerName, actionName, remoteIpAddress);
+            }
+            else if (saveOperation.IsUpdate())
+            {
+                await dbContext.UpdateAndBindUserBlobsRangeAsync(record, originalRecord, uploadBlobDatas, blobsStorageService, userId, typeof(T).Name, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             }
             return await dbContext.SaveAsync(record, saveOperation, beforeSave, afterSave);
         }
@@ -1318,7 +1310,7 @@ namespace OneLine.Extensions
             //Lets check if our files uploaded comply with our rules first
             foreach (var uploadBlobData in uploadBlobDatas)
             {
-                var formFileUploadedApiResponse = await dbContext.IsBlobDataUploadedAsync(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, userId, controllerName, actionName, remoteIpAddress);
+                var formFileUploadedApiResponse = await dbContext.IsValidBlobDataAsync(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, userId, controllerName, actionName, remoteIpAddress);
                 //Lets check if something went wrong
                 if (formFileUploadedApiResponse.Status.Failed() || !formFileUploadedApiResponse.Data)
                 {
@@ -1378,7 +1370,7 @@ namespace OneLine.Extensions
                 //Lets check if our files uploaded comply with our rules first
                 foreach (var uploadBlobData in uploadBlobDatas)
                 {
-                    var formFileUploadedApiResponse = await dbContext.IsBlobDataUploadedAsync(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, userId, controllerName, actionName, remoteIpAddress);
+                    var formFileUploadedApiResponse = await dbContext.IsValidBlobDataAsync(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, userId, controllerName, actionName, remoteIpAddress);
                     //Lets check if something went wrong
                     if (formFileUploadedApiResponse.Status.Failed() || !formFileUploadedApiResponse.Data)
                     {
@@ -1413,11 +1405,10 @@ namespace OneLine.Extensions
                                     await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {propertyName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
                                     return records.ToApiResponseFailed("FileUploadIsRequired");
                                 }
-
                             }
                             catch (Exception)
                             {
-                                await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {propertyName} was required and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
+                                await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} field {propertyName} was required and the file was null or empty or manipulated on the client side", userId, controllerName, actionName, remoteIpAddress);
                                 return records.ToApiResponseFailed("FileUploadIsRequired");
                             }
                         }

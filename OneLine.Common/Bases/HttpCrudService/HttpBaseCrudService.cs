@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using OneLine.Extensions;
 using OneLine.Models;
-using OneLine.Validations;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

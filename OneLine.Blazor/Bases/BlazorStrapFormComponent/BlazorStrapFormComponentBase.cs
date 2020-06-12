@@ -164,23 +164,24 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeSave()
         {
-            await ValidateBlobDatas();
-            if (!IsValidModelState)
+            if (HasBlobDatasWithRules())
             {
-                await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
-            }
-            else
-            {
-                await Validate();
-                if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToSaveTheRecord"),
-                                                                                        confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
-                {
-                    await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
-                }
-                else if (!IsValidModelState)
+                await ValidateBlobDatas();
+                if (!IsValidModelState)
                 {
                     await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
+                    return;
                 }
+            }
+            await Validate();
+            if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToSaveTheRecord"),
+                                                                                    confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            {
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
+            }
+            else if (!IsValidModelState)
+            {
+                await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
             }
             StateHasChanged();
         }
@@ -202,7 +203,8 @@ namespace OneLine.Blazor.Bases
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
                 await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
             }
-            else if (Response.Succeed && Response.Response.Status.Succeeded())
+            else if (Response.HttpResponseMessage.IsSuccessStatusCode &&
+                Response.Succeed && Response.Response.Status.Succeeded())
             {
                 if (IsChained)
                 {
@@ -244,7 +246,8 @@ namespace OneLine.Blazor.Bases
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
                 await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
             }
-            else if (Response.Succeed && Response.Response.Status.Succeeded())
+            else if (Response.HttpResponseMessage.IsSuccessStatusCode && 
+                Response.Succeed && Response.Response.Status.Succeeded())
             {
                 await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
             }

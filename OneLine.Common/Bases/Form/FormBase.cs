@@ -1,14 +1,12 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using Microsoft.Extensions.Configuration;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
 using OneLine.Validations;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
@@ -26,11 +24,12 @@ namespace OneLine.Bases
         {
             if (FormMode.IsSingle())
             {
-                if (Identifier != null && Identifier.Model != null)
+                if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
                 {
                     Response = await HttpService.GetOne<T>(Identifier);
                     ResponseChanged?.Invoke(Response);
-                    if (Response.Succeed && Response.Response.Status.Succeeded())
+                    if (Response.IsNotNull() && Response.HttpResponseMessage.IsSuccessStatusCode && 
+                        Response.Succeed && Response.Response.Status.Succeeded())
                     {
                         Record = Response.Response.Data;
                         RecordChanged?.Invoke(Record);
@@ -39,11 +38,12 @@ namespace OneLine.Bases
             }
             else if (FormMode.IsMultiple())
             {
-                if (Identifiers != null && Identifiers.Any())
+                if (Identifiers.IsNotNull() && Identifiers.Any())
                 {
                     ResponseCollection = await HttpService.GetRange<T>(Identifiers);
                     ResponseCollectionChanged?.Invoke(ResponseCollection);
-                    if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
+                    if (ResponseCollection.IsNotNull() && ResponseCollection.HttpResponseMessage.IsSuccessStatusCode && 
+                        ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
                     {
                         if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                         {
@@ -64,9 +64,10 @@ namespace OneLine.Bases
             ValidationResultChanged?.Invoke(ValidationResult);
             IsValidModelState = ValidationResult.IsValid;
             IsValidModelStateChanged?.Invoke(IsValidModelState);
-            if(IsValidModelState)
+            //May be removed soon after some testings
+            if (IsValidModelState)
             {
-                if (BlobDatas.IsNotNullAndNotEmpty() )
+                if (BlobDatas.IsNotNullAndNotEmpty())
                 {
                     var BlobValidator = new BlobDataCollectionValidator();
                     ValidationResult = await BlobValidator.ValidateAsync(BlobDatas);
@@ -135,7 +136,8 @@ namespace OneLine.Bases
         {
             if (FormMode.IsSingle())
             {
-                if (Response.Succeed && Response.Response.Status.Succeeded())
+                if (Response.IsNotNull() && Response.HttpResponseMessage.IsSuccessStatusCode && 
+                    Response.Succeed && Response.Response.Status.Succeeded())
                 {
                     Record = Response.Response.Data;
                     RecordChanged?.Invoke(Record);
@@ -145,7 +147,8 @@ namespace OneLine.Bases
             }
             else if (FormMode.IsMultiple())
             {
-                if (ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
+                if (ResponseCollection.IsNotNull() && ResponseCollection.HttpResponseMessage.IsSuccessStatusCode && 
+                    ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
                 {
                     Records.ReplaceRange(ResponseCollection.Response.Data);
                     RecordsChanged?.Invoke(Records);
@@ -162,10 +165,27 @@ namespace OneLine.Bases
                 OnAfterSave?.Invoke();
             }
         }
+        public virtual IEnumerable<PropertyInfo> GetBlobDatasWithRulesProperties()
+        {
+            return GetType().GetProperties()
+                .Where(w => w.PropertyType == typeof(IMutable<IEnumerable<TBlobData>, FormFileRules>) ||
+                        w.PropertyType == typeof(Mutable<IEnumerable<TBlobData>, FormFileRules>));
+        }
+        public virtual bool HasBlobDatasWithRules()
+        {
+            return GetBlobDatasWithRulesProperties().Any();
+        }
+        public virtual void ClearBlobDatasWithRules()
+        {
+            foreach (var blobDataProperty in GetBlobDatasWithRulesProperties())
+            {
+                var blobDatas = (IMutable<IEnumerable<TBlobData>, FormFileRules>)blobDataProperty.GetValue(this);
+                blobDataProperty.SetValue(this, new Mutable<IEnumerable<TBlobData>, FormFileRules>(Enumerable.Empty<TBlobData>(), blobDatas.Item2));
+            }
+        }
         public async virtual Task ValidateBlobDatas()
         {
-            foreach (var blobDataProperty in GetType().GetProperties().Where(w => w.PropertyType == typeof(IMutable<IEnumerable<TBlobData>, FormFileRules>) || 
-                                                                                w.PropertyType == typeof(Mutable<IEnumerable<TBlobData>, FormFileRules>)))
+            foreach (var blobDataProperty in GetBlobDatasWithRulesProperties())
             {
                 var blobDatas = (IMutable<IEnumerable<TBlobData>, FormFileRules>)blobDataProperty.GetValue(this);
                 var validator = new BlobDataCollectionValidator();
@@ -173,7 +193,7 @@ namespace OneLine.Bases
                 IsValidModelState = ValidationResult.IsValid;
                 if (!IsValidModelState)
                 {
-                    break; 
+                    break;
                 }
             }
         }
@@ -191,6 +211,10 @@ namespace OneLine.Bases
             IdentifiersChanged?.Invoke(Identifiers);
             BlobDatas?.Clear();
             BlobDatasChanged?.Invoke(BlobDatas);
+            if (HasBlobDatasWithRules())
+            {
+                ClearBlobDatasWithRules();
+            }
             OnAfterReset?.Invoke();
             return Task.CompletedTask;
         }

@@ -23,7 +23,11 @@ namespace OneLine.Extensions
                 return new ApiResponse<bool>(ApiResponseStatus.Failed, "FileNotFound");
             }
             var result = (await dbContext.UserBlobs.FirstOrDefaultAsync(x => x.UserBlobId == userBlobs.UserBlobId && x.CreatedBy == userId)) != null;
-            if (!result)
+            if (result)
+            {
+                await dbContext.CreateAuditrailsAsync(userBlobs, "User is the blob owner", userId, controllerName, actionName, remoteIpAddress);
+            }
+            else
             {
                 await dbContext.CreateAuditrailsAsync(userBlobs, "User is not the blob owner", userId, controllerName, actionName, remoteIpAddress);
             }
@@ -64,21 +68,13 @@ namespace OneLine.Extensions
         /// <param name="predicate"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<bool>> IsBlobDataUploadedAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<bool>> IsValidBlobDataAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            var any = blobDatas.IsNotNullAndNotEmpty();
-            if (!any)
+            var isValidFormFileApiResponse = blobDatas.IsValidBlobDataApiResponse(formFileRules);
+            if (isValidFormFileApiResponse.Status == ApiResponseStatus.Failed)
             {
-                await dbContext.CreateAuditrailsAsync(new UserBlobs(), "No file uploaded", userId, controllerName, actionName, remoteIpAddress);
-                return new ApiResponse<bool>(ApiResponseStatus.Failed, "FileIsNullOrEmpty", false);
-            }
-            if (any && formFileRules.IsNotNull())
-            {
-                var isValidFormFileApiResponse = blobDatas.IsValidBlobDataApiResponse(formFileRules);
-                if (isValidFormFileApiResponse.Status == ApiResponseStatus.Failed)
-                {
-                    return new ApiResponse<bool>(ApiResponseStatus.Failed, isValidFormFileApiResponse.Message, false);
-                }
+                await dbContext.CreateAuditrailsAsync(blobDatas, isValidFormFileApiResponse.Message, userId, controllerName, actionName, remoteIpAddress);
+                return new ApiResponse<bool>(ApiResponseStatus.Failed, isValidFormFileApiResponse.Message, true);
             }
             return new ApiResponse<bool>(ApiResponseStatus.Succeeded, true);
         }

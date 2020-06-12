@@ -70,30 +70,34 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task AfterSearch()
         {
-            if (Response.IsNull())
+            if (ResponsePaged.IsNull())
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
             }
-            else if (Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            else if (ResponsePaged.HttpResponseMessage.IsNotNull() && ResponsePaged.Succeed && 
+                ResponsePaged.Response.Status.Succeeded() && ResponsePaged.HttpResponseMessage.IsSuccessStatusCode)
+            {
+                if (IsDesktop)
+                {
+                    await SweetAlertService.HideLoaderAsync();
+                }
+                else
+                {
+                    ShowActivityIndicator = false;
+                }
+            }
+            else if (ResponsePaged.HttpResponseMessage.IsNotNull() && ResponsePaged.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
                 await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
             }
-            else if (Response.HasException)
+            else if (ResponsePaged.HasException)
             {
-                await SweetAlertService.FireAsync(null, Response.Exception.Message, SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync(null, ResponsePaged.Exception.Message, SweetAlertIcon.Error);
             }
             else
             {
-                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Error);
-            }
-            if (IsDesktop)
-            {
-                await SweetAlertService.HideLoaderAsync();
-            }
-            else
-            {
-                ShowActivityIndicator = false;
+                await SweetAlertService.FireAsync(null, Resourcer.GetString(ResponsePaged.Response.Message), SweetAlertIcon.Error);
             }
             StateHasChanged();
         }

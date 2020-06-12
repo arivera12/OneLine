@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
@@ -12,6 +13,9 @@ namespace OneLine.Bases
     {
         IList<TBlobData> BlobDatas { get; set; }
         Action<IList<TBlobData>> BlobDatasChanged { get; set; }
-        public Task ValidateBlobDatas();
+        Task ValidateBlobDatas();
+        bool HasBlobDatasWithRules();
+        void ClearBlobDatasWithRules();
+        IEnumerable<PropertyInfo> GetBlobDatasWithRulesProperties();
     }
 }

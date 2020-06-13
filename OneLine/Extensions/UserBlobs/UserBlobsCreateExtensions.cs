@@ -94,7 +94,10 @@ namespace OneLine.Extensions
                 var filename = $"{uniqueFileName}{fileExtension}";
                 await blobStorage.WriteAsync(filename, file.Data);
                 var userBlob = new UserBlobs().AutoMap(file);
+                userBlob.UserBlobId = Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier().ToString();
+                userBlob.FileName = file.Name;
                 userBlob.FilePath = filename;
+                userBlob.Length = file.Size;
                 userBlob.CreatedBy = userId;
                 userBlob.CreatedOn = createdOn;
                 userBlob.TableName = tableName;
@@ -146,7 +149,10 @@ namespace OneLine.Extensions
                 var filename = $"{uniqueFileName}{fileExtension}";
                 await blobStorage.WriteAsync(filename, file.Data);
                 var userBlob = new UserBlobs().AutoMap(file);
+                userBlob.UserBlobId = Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier().ToString();
+                userBlob.FileName = file.Name;
                 userBlob.FilePath = filename;
+                userBlob.Length = file.Size;
                 userBlob.CreatedBy = userId;
                 userBlob.CreatedOn = createdOn;
                 userBlob.TableName = tableName;
@@ -166,7 +172,6 @@ namespace OneLine.Extensions
         /// The UserBlobs collection reference value is serialized to json string.
         /// Then converted to a byte array.
         /// Then binded to the reference PropertyName.
-        /// Then blobdatas collection is set to null to free up resources once they aren't needed anymore.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dbContext"></param>
@@ -196,7 +201,6 @@ namespace OneLine.Extensions
                 var userBlobs = await dbContext.AddUserBlobsRangeAsync(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules, blobStorage, userId, tableName, controllerName, actionName, remoteIpAddress);
                 userBlobsList.Add(userBlobs);
                 record.GetType().GetProperty(uploadBlobData.PropertyName).SetValue(record, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(userBlobs)));
-                record.GetType().GetProperty(uploadBlobData.PropertyNameBlobData).SetValue(record, null);
             }
             return new ApiResponse<IList<IEnumerable<UserBlobs>>>(ApiResponseStatus.Succeeded, userBlobsList);
         }        

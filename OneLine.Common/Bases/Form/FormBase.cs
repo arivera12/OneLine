@@ -28,7 +28,7 @@ namespace OneLine.Bases
                 {
                     Response = await HttpService.GetOne<T>(Identifier);
                     ResponseChanged?.Invoke(Response);
-                    if (Response.IsNotNull() && Response.HttpResponseMessage.IsSuccessStatusCode && 
+                    if (Response.IsNotNull() && Response.HttpResponseMessage.IsSuccessStatusCode &&
                         Response.Succeed && Response.Response.Status.Succeeded())
                     {
                         Record = Response.Response.Data;
@@ -42,7 +42,7 @@ namespace OneLine.Bases
                 {
                     ResponseCollection = await HttpService.GetRange<T>(Identifiers);
                     ResponseCollectionChanged?.Invoke(ResponseCollection);
-                    if (ResponseCollection.IsNotNull() && ResponseCollection.HttpResponseMessage.IsSuccessStatusCode && 
+                    if (ResponseCollection.IsNotNull() && ResponseCollection.HttpResponseMessage.IsSuccessStatusCode &&
                         ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
                     {
                         if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
@@ -80,40 +80,57 @@ namespace OneLine.Bases
         }
         public virtual async Task Save()
         {
-            if (FormState.IsCopy() || FormState.IsCreate())
+            if(FormState.IsCreate() || FormState.IsEdit() || FormState.IsCopy())
             {
-                await Create();
+                if (FormMode.IsSingle())
+                {
+                    if (FormState.IsCopy() || FormState.IsCreate())
+                    {
+                        Response = await HttpService.Add<T>(Record);
+                    }
+                    else if (FormState.IsEdit())
+                    {
+                        Response = await HttpService.Update<T>(Record);
+                    }
+                    ResponseChanged?.Invoke(Response);
+                    if (Response.IsNotNull() &&
+                        Response.Succeed &&
+                        Response.Response.IsNotNull() &&
+                        Response.Response.Status.Succeeded() &&
+                        Response.HttpResponseMessage.IsNotNull() &&
+                        Response.HttpResponseMessage.IsSuccessStatusCode)
+                    {
+                        Record = Response.Response.Data;
+                        RecordChanged?.Invoke(Record);
+                        FormState = FormState.Edit;
+                        FormStateChanged?.Invoke(FormState);
+                    }
+                }
+                else if (FormMode.IsMultiple())
+                {
+                    if (FormState.IsCopy() || FormState.IsCreate())
+                    {
+                        ResponseCollection = await HttpService.AddRange<IEnumerable<T>>(Records);
+                    }
+                    else if (FormState.IsEdit())
+                    {
+                        ResponseCollection = await HttpService.UpdateRange<IEnumerable<T>>(Records);
+                    }
+                    ResponseCollectionChanged?.Invoke(ResponseCollection);
+                    if (ResponseCollection.IsNotNull() &&
+                        ResponseCollection.Succeed &&
+                        ResponseCollection.Response.IsNotNull() &&
+                        ResponseCollection.Response.Status.Succeeded() &&
+                        ResponseCollection.HttpResponseMessage.IsNotNull() &&
+                        ResponseCollection.HttpResponseMessage.IsSuccessStatusCode)
+                    {
+                        Records.ReplaceRange(ResponseCollection.Response.Data);
+                        RecordsChanged?.Invoke(Records);
+                        FormState = FormState.Edit;
+                        FormStateChanged?.Invoke(FormState);
+                    }
+                }
             }
-            else if (FormState.IsEdit())
-            {
-                await Update();
-            }
-        }
-        private async Task Create()
-        {
-            if (FormMode.IsSingle())
-            {
-                Response = await HttpService.Add<T>(Record);
-                ResponseChanged?.Invoke(Response);
-            }
-            else if (FormMode.IsMultiple())
-            {
-                ResponseCollection = await HttpService.AddRange<IEnumerable<T>>(Records);
-                ResponseCollectionChanged?.Invoke(ResponseCollection);
-            }
-            OnResponse(FormState.Edit);
-        }
-        private async Task Update()
-        {
-            if (FormMode.IsSingle())
-            {
-                Response = await HttpService.Update<T>(Record);
-            }
-            else if (FormMode.IsMultiple())
-            {
-                ResponseCollection = await HttpService.UpdateRange<IEnumerable<T>>(Records);
-            }
-            OnResponse(FormState.Edit);
         }
         public virtual async Task Delete()
         {
@@ -123,46 +140,36 @@ namespace OneLine.Bases
                 {
                     Response = await HttpService.Delete<T>(Identifier);
                     ResponseChanged?.Invoke(Response);
+                    if (Response.IsNotNull() &&
+                        Response.Succeed &&
+                        Response.Response.IsNotNull() &&
+                        Response.Response.Status.Succeeded() &&
+                        Response.HttpResponseMessage.IsNotNull() &&
+                        Response.HttpResponseMessage.IsSuccessStatusCode)
+                    {
+                        Record = Response.Response.Data;
+                        RecordChanged?.Invoke(Record);
+                        FormState = FormState.Deleted;
+                        FormStateChanged?.Invoke(FormState);
+                    }
                 }
                 else if (FormMode.IsMultiple())
                 {
                     ResponseCollection = await HttpService.DeleteRange<T>(Identifiers);
                     ResponseCollectionChanged?.Invoke(ResponseCollection);
+                    if (ResponseCollection.IsNotNull() &&
+                        ResponseCollection.Succeed &&
+                        ResponseCollection.Response.IsNotNull() &&
+                        ResponseCollection.Response.Status.Succeeded() &&
+                        ResponseCollection.HttpResponseMessage.IsNotNull() &&
+                        ResponseCollection.HttpResponseMessage.IsSuccessStatusCode)
+                    {
+                        Records.ReplaceRange(ResponseCollection.Response.Data);
+                        RecordsChanged?.Invoke(Records);
+                        FormState = FormState.Deleted;
+                        FormStateChanged?.Invoke(FormState);
+                    }
                 }
-                OnResponse(FormState.Deleted);
-            }
-        }
-        private void OnResponse(FormState formState)
-        {
-            if (FormMode.IsSingle())
-            {
-                if (Response.IsNotNull() && Response.HttpResponseMessage.IsSuccessStatusCode && 
-                    Response.Succeed && Response.Response.Status.Succeeded())
-                {
-                    Record = Response.Response.Data;
-                    RecordChanged?.Invoke(Record);
-                    FormState = formState;
-                    FormStateChanged?.Invoke(FormState);
-                }
-            }
-            else if (FormMode.IsMultiple())
-            {
-                if (ResponseCollection.IsNotNull() && ResponseCollection.HttpResponseMessage.IsSuccessStatusCode && 
-                    ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
-                {
-                    Records.ReplaceRange(ResponseCollection.Response.Data);
-                    RecordsChanged?.Invoke(Records);
-                    FormState = formState;
-                    FormStateChanged?.Invoke(FormState);
-                }
-            }
-            if (FormState.IsDelete() || FormState.IsDeleted())
-            {
-                OnAfterDelete?.Invoke();
-            }
-            else
-            {
-                OnAfterSave?.Invoke();
             }
         }
         public virtual IEnumerable<PropertyInfo> GetBlobDatasWithRulesProperties()

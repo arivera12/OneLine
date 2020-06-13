@@ -13,11 +13,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed and improved UserBlobs. Added new model UploadBlobData. Fixed and improved base classes formbase and Data View base. Added 3 new methods HasBlobDatasWithRules, ClearBlobDatasWithRules and GetBlobDatasWithRulesProperties.</PackageReleaseNotes>
-    <Version>2.0.75</Version>
+    <PackageReleaseNotes>Added back a deleted constructor on UploadBlobData.</PackageReleaseNotes>
+    <Version>2.0.80</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.75.0</AssemblyVersion>
+    <AssemblyVersion>2.0.80.0</AssemblyVersion>
+    <FileVersion>2.0.80.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

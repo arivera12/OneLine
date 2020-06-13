@@ -198,13 +198,19 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
             }
-            else if(Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            else if(Response.IsNotNull() &&
+                    Response.HttpResponseMessage.IsNotNull() &&
+                    Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
                 await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
             }
-            else if (Response.HttpResponseMessage.IsSuccessStatusCode &&
-                Response.Succeed && Response.Response.Status.Succeeded())
+            else if (Response.IsNotNull() &&
+                    Response.Succeed &&
+                    Response.Response.IsNotNull() &&
+                    Response.Response.Status.Succeeded() &&
+                    Response.HttpResponseMessage.IsNotNull() &&
+                    Response.HttpResponseMessage.IsSuccessStatusCode)
             {
                 if (IsChained)
                 {
@@ -215,13 +221,14 @@ namespace OneLine.Blazor.Bases
                     await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
                 }
             }
-            else if (Response.HasException)
+            else if (Response.IsNotNull() && 
+                    Response.HasException)
             {
                 await SweetAlertService.FireAsync(null, Response.Exception.Message, SweetAlertIcon.Error);
             }
             else
             {
-                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response?.Message), SweetAlertIcon.Error);
             }
             StateHasChanged();
         }
@@ -241,23 +248,30 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
             }
-            else if (Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            else if (Response.IsNotNull() &&
+                    Response.HttpResponseMessage.IsNotNull() &&
+                    Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
                 await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
             }
-            else if (Response.HttpResponseMessage.IsSuccessStatusCode && 
-                Response.Succeed && Response.Response.Status.Succeeded())
+            else if (Response.IsNotNull() &&
+                    Response.Succeed &&
+                    Response.Response.IsNotNull() &&
+                    Response.Response.Status.Succeeded() &&
+                    Response.HttpResponseMessage.IsNotNull() &&
+                    Response.HttpResponseMessage.IsSuccessStatusCode)
             {
                 await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
             }
-            else if (Response.HasException)
+            else if (Response.IsNotNull() && 
+                    Response.HasException)
             {
                 await SweetAlertService.FireAsync(null, Response.Exception.Message, SweetAlertIcon.Error);
             }
             else
             {
-                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response?.Message), SweetAlertIcon.Error);
             }
             StateHasChanged();
         }

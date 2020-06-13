@@ -35,10 +35,19 @@ namespace OneLine.Models
             BlobDatas = blobDatas;
             FormFileRules = formFileRules;
         }
-        public UploadBlobData(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, bool forceUploadOnUpdate)
+        public UploadBlobData(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, string propertyName, string propertyNameBlobData)
         {
             BlobDatas = blobDatas;
             FormFileRules = formFileRules;
+            PropertyName = propertyName;
+            PropertyNameBlobData = propertyNameBlobData;
+        }
+        public UploadBlobData(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, string propertyName, string propertyNameBlobData, bool forceUploadOnUpdate)
+        {
+            BlobDatas = blobDatas;
+            FormFileRules = formFileRules;
+            PropertyName = propertyName;
+            PropertyNameBlobData = propertyNameBlobData;
             ForceUploadOnUpdate = forceUploadOnUpdate;
         }
     }

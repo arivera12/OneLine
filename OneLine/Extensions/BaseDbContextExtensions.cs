@@ -226,17 +226,17 @@ namespace OneLine.Extensions
             {
                 return validationApiResponse;
             }
-            validationApiResponse = await dbContext.ValidatedAuditedAsync(originalRecord, validator, userId, saveOperation, uploadBlobDatas, controllerName, actionName, remoteIpAddress);
-            if (validationApiResponse.Status.Failed())
-            {
-                return validationApiResponse;
-            }
             if (saveOperation.IsAdd())
             {
                 await dbContext.CreateAndBindUserBlobsRangeAsync(record, uploadBlobDatas, blobsStorageService, userId, typeof(T).Name, controllerName, actionName, remoteIpAddress);
             }
             else if (saveOperation.IsUpdate())
             {
+                validationApiResponse = await dbContext.ValidatedAuditedAsync(originalRecord, validator, userId, saveOperation, uploadBlobDatas, controllerName, actionName, remoteIpAddress);
+                if (validationApiResponse.Status.Failed())
+                {
+                    return validationApiResponse;
+                }
                 await dbContext.UpdateAndBindUserBlobsRangeAsync(record, originalRecord, uploadBlobDatas, blobsStorageService, userId, typeof(T).Name, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
             }
             return await dbContext.SaveAsync(record, saveOperation, beforeSave, afterSave);

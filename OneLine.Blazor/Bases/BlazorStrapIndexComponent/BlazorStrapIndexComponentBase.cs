@@ -19,15 +19,12 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract partial class BlazorStrapIndexComponent<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
-        IBlazorStrapIndexComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract partial class BlazorStrapIndexComponent<T, TIdentifier, TId, THttpService> :
+        FormBase<T, TIdentifier, TId, THttpService>,
+        IBlazorStrapIndexComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         [Inject] public override IConfiguration Configuration { get; set; }
         [Inject] public virtual IJSRuntime JSRuntime { get; set; }
@@ -45,30 +42,20 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override ValidationResult ValidationResult { get; set; }
         [Parameter] public override bool IsValidModelState { get; set; }
         [Parameter] public override THttpService HttpService { get; set; }
-        [Parameter] public override IList<TBlobData> BlobDatas { get; set; }
         [Parameter] public override FormState FormState { get; set; }
         [Parameter] public override FormMode FormMode { get; set; }
-        [Parameter] public override ResponseResult<ApiResponse<T>> Response { get; set; }
-        [Parameter] public override ResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        [Parameter] public override ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> ResponseAddWithBlobs { get; set; }
-        [Parameter] public override ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> ResponseAddCollectionWithBlobs { get; set; }
-        [Parameter] public override ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateWithBlobs { get; set; }
-        [Parameter] public override ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>> ResponseUpdateCollectionWithBlobs { get; set; }
+        [Parameter] public override IResponseResult<ApiResponse<T>> Response { get; set; }
+        [Parameter] public override IResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
         [Parameter] public override Action<TIdentifier> IdentifierChanged { get; set; }
         [Parameter] public override Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
         [Parameter] public override Action<T> RecordChanged { get; set; }
         [Parameter] public override Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
-        [Parameter] public override Action<IList<TBlobData>> BlobDatasChanged { get; set; }
         [Parameter] public override Action<ValidationResult> ValidationResultChanged { get; set; }
         [Parameter] public override Action<bool> IsValidModelStateChanged { get; set; }
         [Parameter] public override Action<FormState> FormStateChanged { get; set; }
         [Parameter] public override Action<FormMode> FormModeChanged { get; set; }
-        [Parameter] public override Action<ResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
-        [Parameter] public override Action<ResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
-        [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>>> ResponseAddWithBlobsChanged { get; set; }
-        [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>>> ResponseAddCollectionWithBlobsChanged { get; set; }
-        [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateWithBlobsChanged { get; set; }
-        [Parameter] public override Action<ResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> ResponseUpdateCollectionWithBlobsChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         [Parameter] public override Action OnBeforeReset { get; set; }
         [Parameter] public override Action OnAfterReset { get; set; }
         [Parameter] public override Action OnBeforeCancel { get; set; }

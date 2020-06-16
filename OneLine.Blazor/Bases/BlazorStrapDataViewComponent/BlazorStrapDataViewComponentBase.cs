@@ -12,15 +12,12 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract partial class BlazorStrapDataViewComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        BlazorDataViewComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
-        IBlazorStrapDataViewComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract partial class BlazorStrapDataViewComponentBase<T, TIdentifier, TId, THttpService> :
+        BlazorDataViewComponentBase<T, TIdentifier, TId, THttpService>,
+        IBlazorStrapDataViewComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         public bool ShowActivityIndicator { get; set; }
         public override async Task OnAfterFirstRenderAsync()
@@ -70,6 +67,7 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task AfterSearch()
         {
+            await SweetAlertService.HideLoaderAsync();
             if (ResponsePaged.IsNull())
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);

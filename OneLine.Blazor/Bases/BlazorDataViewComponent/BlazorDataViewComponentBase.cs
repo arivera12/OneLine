@@ -1,7 +1,6 @@
 ﻿using BlazorCurrentDevice;
 using BlazorDownloadFile;
 using CurrieTechnologies.Razor.SweetAlert2;
-using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
@@ -12,21 +11,17 @@ using OneLine.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract partial class BlazorDataViewComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
-        IBlazorDataViewComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract partial class BlazorDataViewComponentBase<T, TIdentifier, TId, THttpService> :
+        DataViewBase<T, TIdentifier, TId, THttpService>,
+        IBlazorDataViewComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         [Inject] public override IConfiguration Configuration { get; set; }
         [Inject] public virtual IJSRuntime JSRuntime { get; set; }
@@ -44,9 +39,9 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override string FilterSortBy { get; set; }
         [Parameter] public override bool FilterDescending { get; set; }
         [Parameter] public override ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
-        [Parameter] public override ResponseResult<ApiResponse<T>> Response { get; set; }
-        [Parameter] public override ResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        [Parameter] public override ResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
+        [Parameter] public override IResponseResult<ApiResponse<T>> Response { get; set; }
+        [Parameter] public override IResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        [Parameter] public override IResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
         [Parameter] public override IPaging Paging { get; set; }
         [Parameter] public override ISearchPaging SearchPaging { get; set; }
         [Parameter] public override RecordsSelectionMode RecordsSelectionMode { get; set; }
@@ -57,9 +52,9 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override long MaximumRecordsSelections { get; set; }
         [Parameter] public override bool MinimunRecordsSelectionsReached { get; set; }
         [Parameter] public override bool MaximumRecordsSelectionsReached { get; set; }
-        [Parameter] public override Action<ResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
-        [Parameter] public override Action<ResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
-        [Parameter] public override Action<ResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
         [Parameter] public override Action OnBeforeSearch { get; set; }
         [Parameter] public override Action OnAfterSearch { get; set; }
         [Parameter] public override Action<TIdentifier> IdentifierChanged { get; set; }

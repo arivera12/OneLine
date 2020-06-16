@@ -1,3 +1,4 @@
+/****** Object:  Table [dbo].[AspNetRoleClaims]    Script Date: 8/14/2019 10:38:37 PM ******/
 SET ANSI_NULLS ON
                 
 SET QUOTED_IDENTIFIER ON
@@ -11,8 +12,9 @@ CREATE TABLE [dbo].[AspNetRoleClaims](
 (
 	[Id] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
                 
+/****** Object:  Table [dbo].[AspNetRoles]    Script Date: 8/14/2019 10:38:37 PM ******/
 SET ANSI_NULLS ON
                 
 SET QUOTED_IDENTIFIER ON
@@ -26,8 +28,9 @@ CREATE TABLE [dbo].[AspNetRoles](
 (
 	[Id] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
                 
+/****** Object:  Table [dbo].[AspNetUserClaims]    Script Date: 8/14/2019 10:38:37 PM ******/
 SET ANSI_NULLS ON
                 
 SET QUOTED_IDENTIFIER ON
@@ -41,8 +44,9 @@ CREATE TABLE [dbo].[AspNetUserClaims](
 (
 	[Id] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
                 
+/****** Object:  Table [dbo].[AspNetUserLogins]    Script Date: 8/14/2019 10:38:37 PM ******/
 SET ANSI_NULLS ON
                 
 SET QUOTED_IDENTIFIER ON
@@ -57,8 +61,9 @@ CREATE TABLE [dbo].[AspNetUserLogins](
 	[LoginProvider] ASC,
 	[ProviderKey] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
                 
+/****** Object:  Table [dbo].[AspNetUserRoles]    Script Date: 8/14/2019 10:38:37 PM ******/
 SET ANSI_NULLS ON
                 
 SET QUOTED_IDENTIFIER ON
@@ -73,6 +78,7 @@ CREATE TABLE [dbo].[AspNetUserRoles](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
                 
+/****** Object:  Table [dbo].[AspNetUsers]    Script Date: 8/14/2019 10:38:37 PM ******/
 SET ANSI_NULLS ON
                 
 SET QUOTED_IDENTIFIER ON
@@ -90,6 +96,7 @@ CREATE TABLE [dbo].[AspNetUsers](
 	[PhoneNumber] [nvarchar](4000) NULL,
 	[PhoneNumberConfirmed] [bit] NOT NULL,
 	[TwoFactorEnabled] [bit] NOT NULL,
+	[IsLocked] [bit] NOT NULL,
 	[LockoutEnd] [datetimeoffset](7) NULL,
 	[LockoutEnabled] [bit] NOT NULL,
 	[AccessFailedCount] [int] NOT NULL,
@@ -99,8 +106,9 @@ CREATE TABLE [dbo].[AspNetUsers](
 (
 	[Id] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
                 
+/****** Object:  Table [dbo].[AspNetUserTokens]    Script Date: 8/14/2019 10:38:37 PM ******/
 SET ANSI_NULLS ON
                 
 SET QUOTED_IDENTIFIER ON
@@ -116,7 +124,7 @@ CREATE TABLE [dbo].[AspNetUserTokens](
 	[LoginProvider] ASC,
 	[Name] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
                 
 ALTER TABLE [dbo].[AspNetRoleClaims]  WITH CHECK ADD  CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY([RoleId])
 REFERENCES [dbo].[AspNetRoles] ([Id])

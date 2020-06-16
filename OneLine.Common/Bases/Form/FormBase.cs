@@ -11,14 +11,11 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public abstract partial class FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract partial class FormBase<T, TIdentifier, TId, THttpService> :
+        IForm<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         public virtual async Task Load()
         {
@@ -64,18 +61,6 @@ namespace OneLine.Bases
             ValidationResultChanged?.Invoke(ValidationResult);
             IsValidModelState = ValidationResult.IsValid;
             IsValidModelStateChanged?.Invoke(IsValidModelState);
-            //May be removed soon after some testings
-            if (IsValidModelState)
-            {
-                if (BlobDatas.IsNotNullAndNotEmpty())
-                {
-                    var BlobValidator = new BlobDataCollectionValidator();
-                    ValidationResult = await BlobValidator.ValidateAsync(BlobDatas);
-                    ValidationResultChanged?.Invoke(ValidationResult);
-                    IsValidModelState = ValidationResult.IsValid;
-                    IsValidModelStateChanged?.Invoke(IsValidModelState);
-                }
-            }
             OnAfterValidate?.Invoke();
         }
         public virtual async Task Save()
@@ -104,6 +89,7 @@ namespace OneLine.Bases
                         RecordChanged?.Invoke(Record);
                         FormState = FormState.Edit;
                         FormStateChanged?.Invoke(FormState);
+                        ClearBlobDatasWithRules();
                     }
                 }
                 else if (FormMode.IsMultiple())
@@ -128,8 +114,10 @@ namespace OneLine.Bases
                         RecordsChanged?.Invoke(Records);
                         FormState = FormState.Edit;
                         FormStateChanged?.Invoke(FormState);
+                        ClearBlobDatasWithRules();
                     }
                 }
+                OnAfterSave?.Invoke();
             }
         }
         public virtual async Task Delete()
@@ -170,13 +158,12 @@ namespace OneLine.Bases
                         FormStateChanged?.Invoke(FormState);
                     }
                 }
+                OnAfterDelete?.Invoke();
             }
         }
         public virtual IEnumerable<PropertyInfo> GetBlobDatasWithRulesProperties()
         {
-            return GetType().GetProperties()
-                .Where(w => w.PropertyType == typeof(IMutable<IEnumerable<TBlobData>, FormFileRules>) ||
-                        w.PropertyType == typeof(Mutable<IEnumerable<TBlobData>, FormFileRules>));
+            return GetType().GetProperties().Where(w => w.PropertyType == typeof(Mutable<IEnumerable<BlobData>, FormFileRules>));
         }
         public virtual bool HasBlobDatasWithRules()
         {
@@ -186,15 +173,15 @@ namespace OneLine.Bases
         {
             foreach (var blobDataProperty in GetBlobDatasWithRulesProperties())
             {
-                var blobDatas = (IMutable<IEnumerable<TBlobData>, FormFileRules>)blobDataProperty.GetValue(this);
-                blobDataProperty.SetValue(this, new Mutable<IEnumerable<TBlobData>, FormFileRules>(Enumerable.Empty<TBlobData>(), blobDatas.Item2));
+                var blobDatas = (Mutable<IEnumerable<BlobData>, FormFileRules>)blobDataProperty.GetValue(this);
+                blobDataProperty.SetValue(this, new Mutable<IEnumerable<BlobData>, FormFileRules>(Enumerable.Empty<BlobData>(), blobDatas.Item2));
             }
         }
         public async virtual Task ValidateBlobDatas()
         {
             foreach (var blobDataProperty in GetBlobDatasWithRulesProperties())
             {
-                var blobDatas = (IMutable<IEnumerable<TBlobData>, FormFileRules>)blobDataProperty.GetValue(this);
+                var blobDatas = (Mutable<IEnumerable<BlobData>, FormFileRules>)blobDataProperty.GetValue(this);
                 var validator = new BlobDataCollectionValidator();
                 ValidationResult = await validator.ValidateFormFileRulesAsync(blobDatas.Item1, blobDatas.Item2);
                 IsValidModelState = ValidationResult.IsValid;
@@ -216,8 +203,6 @@ namespace OneLine.Bases
             IdentifierChanged?.Invoke(Identifier);
             Identifiers = new List<TIdentifier>();
             IdentifiersChanged?.Invoke(Identifiers);
-            BlobDatas?.Clear();
-            BlobDatasChanged?.Invoke(BlobDatas);
             if (HasBlobDatasWithRules())
             {
                 ClearBlobDatasWithRules();

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs> : IHttpCrudService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
+    public interface IHttpCrudExtendedService<T, TIdentifier> : IHttpCrudService<T, TIdentifier>
     {
         string DownloadCsvMethod { get; set; }
         string UploadCsvMethod { get; set; }
-        Task<ResponseResult<byte[]>> DownloadCsvAsByteArray(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<ResponseResult<Stream>> DownloadCsvAsStream(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<ResponseResult<ApiResponse<IEnumerable<T>>>> UploadCsv(IEnumerable<IBlobData> blobDatas, IValidator validator, HttpMethod httpMethod);
+        Task<IResponseResult<byte[]>> DownloadCsvAsByteArray(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<HttpResponseMessage>> DownloadCsvAsStream(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<ApiResponse<IEnumerable<T>>>> UploadCsv(IEnumerable<BlobData> blobDatas, IValidator validator, HttpMethod httpMethod);
     }
 }

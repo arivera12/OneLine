@@ -156,7 +156,7 @@ namespace OneLine.Blazor.Components
         [Inject] public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public SweetAlertService SweetAlertService { get; set; }
         [Inject] public HttpClient HttpClient { get; set; }
-        public HttpBaseUserBlobsService<UserBlobs, Identifier<string>, string, BlobData, BlobDataValidator> HttpBaseUserBlobsService { get; set; }
+        public HttpBaseUserBlobsService<Identifier<string>, string> HttpBaseUserBlobsService { get; set; }
         public ElementReference DropTarget { get; set; }
         public ElementReference DropTargetInput { get; set; }
         public IFileReaderRef DropReference { get; set; }
@@ -166,7 +166,7 @@ namespace OneLine.Blazor.Components
         {
             if (firstRender)
             {
-                HttpBaseUserBlobsService = new HttpBaseUserBlobsService<UserBlobs, Identifier<string>, string, BlobData, BlobDataValidator>()
+                HttpBaseUserBlobsService = new HttpBaseUserBlobsService<Identifier<string>, string>()
                 {
                     HttpClient = HttpClient
                 };
@@ -270,24 +270,39 @@ namespace OneLine.Blazor.Components
             if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDownloadTheFile"),
                                                                 confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
-                var responseResult = await HttpBaseUserBlobsService.DownloadBinary(new Identifier<string>(userBlobs.UserBlobId), new BlobDataValidator());
-                if (!responseResult.Succeed && !responseResult.HasException)
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () =>
                 {
-                    await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
-                    await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
-                }
-                else if (responseResult.Succeed)
-                {
-                    await BlazorDownloadFileService.DownloadFile(userBlobs.FileName, responseResult.Response);
-                }
-                else if (responseResult.HasException)
-                {
-                    await SweetAlertService.FireAsync(null, responseResult.Exception.Message, SweetAlertIcon.Error);
-                }
-                else
-                {
-                    await SweetAlertService.FireAsync(null, Resourcer.GetString(responseResult.Response.ToString()), SweetAlertIcon.Error);
-                }
+                    var Response = await HttpBaseUserBlobsService.DownloadBinary(new Identifier<string>(userBlobs.UserBlobId), new IdentifierStringValidator());
+                    await SweetAlertService.HideLoaderAsync();
+                    if (Response.IsNull())
+                    {
+                        await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
+                    }
+                    else if (Response.IsNotNull() &&
+                            Response.HttpResponseMessage.IsNotNull() &&
+                            Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                        await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
+                    }
+                    else if (Response.IsNotNull() &&
+                            Response.Succeed &&
+                            Response.Response.IsNotNull() &&
+                            Response.HttpResponseMessage.IsNotNull() &&
+                            Response.HttpResponseMessage.IsSuccessStatusCode)
+                    {
+                        await BlazorDownloadFileService.DownloadFile(userBlobs.FileName, await Response.Response.Content.ReadAsStreamAsync());
+                    }
+                    else if (Response.IsNotNull() &&
+                            Response.HasException)
+                    {
+                        await SweetAlertService.FireAsync(null, Response.Exception.Message, SweetAlertIcon.Error);
+                    }
+                    else
+                    {
+                        await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Error);
+                    }
+                }), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("DownloadingFile"));
                 StateHasChanged();
             }
         }

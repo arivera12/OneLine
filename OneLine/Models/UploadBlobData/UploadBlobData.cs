@@ -7,11 +7,11 @@ namespace OneLine.Models
         /// <summary>
         /// The blob datas to upload
         /// </summary>
-        public virtual IEnumerable<IBlobData> BlobDatas { get; set; }
+        public virtual IEnumerable<BlobData> BlobDatas { get; set; }
         /// <summary>
         /// The form file rules.
         /// </summary>
-        public virtual IFormFileRules FormFileRules { get; set; }
+        public virtual FormFileRules FormFileRules { get; set; }
         /// <summary>
         /// The property name should be the same as the file input name. 
         /// This field must and should match the property name where blob reference will be stored.
@@ -21,7 +21,7 @@ namespace OneLine.Models
         /// <summary>
         /// The property that holds the uploaded data. 
         /// This field must and should match the property name that holds the uploaded data.
-        /// This reference property must be always a IEnumerable<IBlobData> or IEnumerable<BlobData> data type to work properly. 
+        /// This reference property must be always a IEnumerable<BlobData> data type to work properly. 
         /// </summary>
         public virtual string PropertyNameBlobData { get; set; }
         /// <summary>
@@ -30,19 +30,19 @@ namespace OneLine.Models
         public virtual bool ForceUploadOnUpdate { get; set; }
         public UploadBlobData()
         { }
-        public UploadBlobData(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
+        public UploadBlobData(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
         {
             BlobDatas = blobDatas;
             FormFileRules = formFileRules;
         }
-        public UploadBlobData(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, string propertyName, string propertyNameBlobData)
+        public UploadBlobData(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, string propertyName, string propertyNameBlobData)
         {
             BlobDatas = blobDatas;
             FormFileRules = formFileRules;
             PropertyName = propertyName;
             PropertyNameBlobData = propertyNameBlobData;
         }
-        public UploadBlobData(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, string propertyName, string propertyNameBlobData, bool forceUploadOnUpdate)
+        public UploadBlobData(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, string propertyName, string propertyNameBlobData, bool forceUploadOnUpdate)
         {
             BlobDatas = blobDatas;
             FormFileRules = formFileRules;

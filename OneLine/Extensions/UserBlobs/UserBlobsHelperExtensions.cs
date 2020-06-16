@@ -68,7 +68,7 @@ namespace OneLine.Extensions
         /// <param name="predicate"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<bool>> IsValidBlobDataAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<bool>> IsValidBlobDataAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var isValidFormFileApiResponse = blobDatas.IsValidBlobDataApiResponse(formFileRules);
             if (isValidFormFileApiResponse.Status == ApiResponseStatus.Failed)

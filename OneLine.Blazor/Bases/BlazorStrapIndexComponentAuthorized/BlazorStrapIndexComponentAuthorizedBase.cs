@@ -1,6 +1,4 @@
-﻿using BlazorCurrentDevice;
-using FluentValidation;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using OneLine.Bases;
 using OneLine.Enums;
 using OneLine.Extensions;
@@ -13,15 +11,12 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract class BlazorStrapIndexComponentAuthorized<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        BlazorStrapIndexComponent<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
-        IBlazorStrapIndexComponentAuthorized<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract class BlazorStrapIndexComponentAuthorized<T, TIdentifier, TId, THttpService> :
+        BlazorStrapIndexComponent<T, TIdentifier, TId, THttpService>,
+        IBlazorStrapIndexComponentAuthorized<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
         public AspNetUsersViewModel User { get; set; }

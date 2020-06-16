@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace OneLine.Blazor.Bases
 {
-    public interface IBlazorStrapFormComponentAuthorized<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public interface IBlazorStrapFormComponentAuthorized<T, TIdentifier, THttpService> :
         IBlazorComponent,
-        IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+        IForm<T, TIdentifier, THttpService>
     {
         bool IsFormOpen { get; set; }
         BSModal Modal { get; set; }

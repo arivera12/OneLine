@@ -106,10 +106,7 @@ namespace OneLine.Extensions
             foreach (var property in model
                                 .GetType()
                                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                .Where(w => w.PropertyType.IsAssignableFrom(typeof(IUserBlobs)) ||
-                                            w.PropertyType.IsAssignableFrom(typeof(IEnumerable<IUserBlobs>)) ||
-                                            w.PropertyType.IsAssignableFrom(typeof(UserBlobs)) ||
-                                            w.PropertyType.IsAssignableFrom(typeof(IEnumerable<UserBlobs>))
+                                .Where(w => w.PropertyType.IsAssignableFrom(typeof(IEnumerable<UserBlobs>))
                                       )
                     )
             {

@@ -69,7 +69,7 @@ namespace OneLine.Extensions
         /// <param name="actionName"></param>
         /// <param name="remoteIpAddress"></param>
         /// <returns></returns>
-        public static async Task<IEnumerable<UserBlobs>> AddUserBlobsRangeAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IEnumerable<UserBlobs>> AddUserBlobsRangeAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var any = blobDatas.IsNotNullAndNotEmpty();
             if (!any)
@@ -124,7 +124,7 @@ namespace OneLine.Extensions
         /// <param name="actionName"></param>
         /// <param name="remoteIpAddress"></param>
         /// <returns></returns>
-        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateUserBlobsRangeAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateUserBlobsRangeAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
             var any = blobDatas.IsNotNullAndNotEmpty();
             if (!any)

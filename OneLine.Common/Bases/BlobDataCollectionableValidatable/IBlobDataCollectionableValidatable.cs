@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OneLine.Models;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -9,10 +10,8 @@ namespace OneLine.Bases
     /// This interface is a definition of blob data representation
     /// </summary>
     /// <typeparam name="TBlobData">The blob data type</typeparam>
-    public interface IBlobDataCollectionableValidatable<TBlobData>
+    public interface IBlobDataCollectionableValidatable
     {
-        IList<TBlobData> BlobDatas { get; set; }
-        Action<IList<TBlobData>> BlobDatasChanged { get; set; }
         Task ValidateBlobDatas();
         bool HasBlobDatasWithRules();
         void ClearBlobDatasWithRules();

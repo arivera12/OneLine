@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface IHttpCrudService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs> : IHttpService
+    public interface IHttpCrudService<T, TIdentifier> : IHttpService
     {
         string ControllerName { get; set; }
         string AddMethod { get; set; }
@@ -17,23 +17,22 @@ namespace OneLine.Bases
         string GetOneMethod { get; set; }
         string GetRangeMethod { get; set; }
         string SearchMethod { get; set; }
-        TBlobValidator BlobValidator { get; set; }
-        Task<ResponseResult<ApiResponse<TResponse>>> Add<TResponse>(T record);
-        Task<ResponseResult<ApiResponse<TResponse>>> Add<TResponse>(T record, IValidator validator);
-        Task<ResponseResult<ApiResponse<TResponse>>> AddRange<TResponse>(IEnumerable<T> records, IValidator validator);
-        Task<ResponseResult<ApiResponse<TResponse>>> AddRange<TResponse>(IEnumerable<T> records);
-        Task<ResponseResult<ApiResponse<TResponse>>> Update<TResponse>(T record);
-        Task<ResponseResult<ApiResponse<TResponse>>> Update<TResponse>(T record, IValidator validator);
-        Task<ResponseResult<ApiResponse<TResponse>>> UpdateRange<TResponse>(IEnumerable<T> records);
-        Task<ResponseResult<ApiResponse<TResponse>>> UpdateRange<TResponse>(IEnumerable<T> records, IValidator validator);
-        Task<ResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier);
-        Task<ResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier, IValidator validator);
-        Task<ResponseResult<ApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers);
-        Task<ResponseResult<ApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator);
-        Task<ResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier);
-        Task<ResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier, IValidator validator);
-        Task<ResponseResult<ApiResponse<IEnumerable<TResponse>>>> GetRange<TResponse>(IEnumerable<TIdentifier> identifiers);
-        Task<ResponseResult<ApiResponse<IEnumerable<TResponse>>>> GetRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator);
-        Task<ResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<ApiResponse<TResponse>>> Add<TResponse>(T record);
+        Task<IResponseResult<ApiResponse<TResponse>>> Add<TResponse>(T record, IValidator validator);
+        Task<IResponseResult<ApiResponse<TResponse>>> AddRange<TResponse>(IEnumerable<T> records, IValidator validator);
+        Task<IResponseResult<ApiResponse<TResponse>>> AddRange<TResponse>(IEnumerable<T> records);
+        Task<IResponseResult<ApiResponse<TResponse>>> Update<TResponse>(T record);
+        Task<IResponseResult<ApiResponse<TResponse>>> Update<TResponse>(T record, IValidator validator);
+        Task<IResponseResult<ApiResponse<TResponse>>> UpdateRange<TResponse>(IEnumerable<T> records);
+        Task<IResponseResult<ApiResponse<TResponse>>> UpdateRange<TResponse>(IEnumerable<T> records, IValidator validator);
+        Task<IResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier);
+        Task<IResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier, IValidator validator);
+        Task<IResponseResult<ApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers);
+        Task<IResponseResult<ApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator);
+        Task<IResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier);
+        Task<IResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier, IValidator validator);
+        Task<IResponseResult<ApiResponse<IEnumerable<TResponse>>>> GetRange<TResponse>(IEnumerable<TIdentifier> identifiers);
+        Task<IResponseResult<ApiResponse<IEnumerable<TResponse>>>> GetRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator);
+        Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
     }
 }

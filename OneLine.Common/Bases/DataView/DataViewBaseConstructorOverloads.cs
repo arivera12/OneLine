@@ -1,24 +1,21 @@
-﻿using FluentValidation;
-using OneLine.Models;
+﻿using OneLine.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace OneLine.Bases
 {
-    public abstract partial class DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract partial class DataViewBase<T, TIdentifier, TId, THttpService> :
+        IDataView<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         public DataViewBase()
         {
             Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
+            Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
@@ -29,7 +26,7 @@ namespace OneLine.Bases
         public DataViewBase(object[] searchExtraParams)
         {
             Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
+            Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
@@ -41,7 +38,7 @@ namespace OneLine.Bases
         public DataViewBase(SearchPaging searchPaging)
         {
             Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
+            Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
@@ -52,7 +49,7 @@ namespace OneLine.Bases
         public DataViewBase(Paging paging)
         {
             Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
+            Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
@@ -63,7 +60,7 @@ namespace OneLine.Bases
         public DataViewBase(SearchPaging searchPaging, object[] searchExtraParams)
         {
             Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
+            Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
@@ -74,7 +71,7 @@ namespace OneLine.Bases
         public DataViewBase(Paging paging, object[] searchExtraParams)
         {
             Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
+            Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
@@ -86,7 +83,7 @@ namespace OneLine.Bases
         public DataViewBase(TIdentifier identifier, bool autoLoad = false)
         {
             Identifier = identifier;
-            Identifiers = new List<TIdentifier>();
+            Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
@@ -116,7 +113,7 @@ namespace OneLine.Bases
         public DataViewBase(T record)
         {
             Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
+            Identifiers = Enumerable.Empty<TIdentifier>();
             Record = record;
             Records = new ObservableRangeCollection<T>();
             RecordsFilteredSorted = new ObservableRangeCollection<T>();
@@ -127,7 +124,7 @@ namespace OneLine.Bases
         public DataViewBase(IEnumerable<T> records)
         {
             Identifier = new TIdentifier();
-            Identifiers = new List<TIdentifier>();
+            Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
             Records = new ObservableRangeCollection<T>();
             Records.AddRange(records);

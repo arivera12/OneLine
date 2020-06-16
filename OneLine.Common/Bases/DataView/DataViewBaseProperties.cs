@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using OneLine.Enums;
 using OneLine.Models;
 using System;
@@ -8,14 +7,11 @@ using System.Collections.ObjectModel;
 
 namespace OneLine.Bases
 {
-    public abstract partial class DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract partial class DataViewBase<T, TIdentifier, TId, THttpService> :
+        IDataView<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         public virtual TIdentifier Identifier { get; set; }
         public virtual IEnumerable<TIdentifier> Identifiers { get; set; }
@@ -26,9 +22,9 @@ namespace OneLine.Bases
         public virtual string FilterSortBy { get; set; }
         public virtual bool FilterDescending { get; set; }
         public virtual ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
-        public virtual ResponseResult<ApiResponse<T>> Response { get; set; }
-        public virtual ResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
-        public virtual ResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
+        public virtual IResponseResult<ApiResponse<T>> Response { get; set; }
+        public virtual IResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        public virtual IResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
         public virtual THttpService HttpService { get; set; }
         public virtual IConfiguration Configuration { get; set; }
         public virtual IPaging Paging { get; set; }
@@ -41,9 +37,9 @@ namespace OneLine.Bases
         public virtual long MaximumRecordsSelections { get; set; }
         public virtual bool MinimunRecordsSelectionsReached { get; set; }
         public virtual bool MaximumRecordsSelectionsReached { get; set; }
-        public virtual Action<ResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
-        public virtual Action<ResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
-        public virtual Action<ResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
+        public virtual Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
+        public virtual Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        public virtual Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
         public virtual Action OnBeforeSearch { get; set; }
         public virtual Action OnAfterSearch { get; set; }
         public virtual Action<TIdentifier> IdentifierChanged { get; set; }

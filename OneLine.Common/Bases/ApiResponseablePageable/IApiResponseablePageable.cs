@@ -10,7 +10,7 @@ namespace OneLine.Bases
     /// <typeparam name="T">The api response paged type</typeparam>
     public interface IApiResponseablePageable<T>
     {
-        ResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
-        Action<ResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
+        IResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
+        Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
     }
 }

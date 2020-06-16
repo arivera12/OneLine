@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using OneLine.Bases;
 using OneLine.Models;
@@ -18,15 +17,12 @@ namespace OneLine.Blazor.Bases
     /// <typeparam name="TBlobData"></typeparam>
     /// <typeparam name="TBlobValidator"></typeparam>
     /// <typeparam name="TUserBlobs"></typeparam>
-    public abstract partial class BlazorStrapFormComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        FormBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
-        IBlazorStrapFormComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract partial class BlazorStrapFormComponentBase<T, TIdentifier, TId, THttpService> :
+        FormBase<T, TIdentifier, TId, THttpService>,
+        IBlazorStrapFormComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         private readonly RenderFragment _renderFragment;
         private RenderHandle _renderHandle;

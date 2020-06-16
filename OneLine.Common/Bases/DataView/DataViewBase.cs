@@ -10,14 +10,11 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public abstract partial class DataViewBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract partial class DataViewBase<T, TIdentifier, TId, THttpService> :
+        IDataView<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         public virtual async Task Load()
         {

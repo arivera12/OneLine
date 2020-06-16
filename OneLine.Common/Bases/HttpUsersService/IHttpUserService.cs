@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public interface IHttpUsersService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs> : IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>
+    public interface IHttpUsersService<T, TIdentifier> : IHttpCrudExtendedService<T, TIdentifier>
     {
         string LockUnlockMethod { get; set; }
         string ConfirmEmailMethod { get; set; }
@@ -16,23 +16,23 @@ namespace OneLine.Bases
         string ResetPasswordMethod { get; set; }
         string ResetPasswordInternalMethod { get; set; }
         string SetupMethod { get; set; }
-        Task<ResponseResult<ApiResponse<TResponse>>> LockUnlock<TResponse, TModel>(TModel record, IValidator validator);
-        Task<ResponseResult<ApiResponse<string>>> LockUnlock(ILockUnlock record);
-        Task<ResponseResult<ApiResponse<TResponse>>> ConfirmEmail<TResponse, TModel>(TModel record, IValidator validator);
-        Task<ResponseResult<ApiResponse<string>>> ConfirmEmail(IConfirmEmail record);
-        Task<ResponseResult<ApiResponse<TResponse>>> ForgotPassword<TResponse, TModel>(TModel record, IValidator validator);
-        Task<ResponseResult<ApiResponse<string>>> ForgotPassword(IForgotPassword record);
-        Task<ResponseResult<ApiResponse<TResponse>>> Login<TResponse, TModel>(TModel record, IValidator validator);
-        Task<ResponseResult<ApiResponse<AspNetUsersViewModel>>> Login(ILogin record);
-        Task<ResponseResult<ApiResponse<TResponse>>> Register<TResponse, TModel>(TModel record, IValidator validator);
-        Task<ResponseResult<ApiResponse<string>>> Register(IRegister record);
-        Task<ResponseResult<ApiResponse<TResponse>>> RegisterInternal<TResponse, TModel>(TModel record, IValidator validator);
-        Task<ResponseResult<ApiResponse<string>>> RegisterInternal(IRegisterInternal record);
-        Task<ResponseResult<ApiResponse<TResponse>>> ResetPassword<TResponse, TModel>(TModel record, IValidator validator);
-        Task<ResponseResult<ApiResponse<string>>> ResetPassword(IResetPassword record);
-        Task<ResponseResult<ApiResponse<TResponse>>> ResetPasswordInternal<TResponse, TModel>(TModel record, IValidator validator);
-        Task<ResponseResult<ApiResponse<string>>> ResetPasswordInternal(IResetPasswordInternal record);
-        Task<ResponseResult<ApiResponse<string>>> Setup();
+        Task<IResponseResult<ApiResponse<TResponse>>> LockUnlock<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<string>>> LockUnlock(ILockUnlock record);
+        Task<IResponseResult<ApiResponse<TResponse>>> ConfirmEmail<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<string>>> ConfirmEmail(IConfirmEmail record);
+        Task<IResponseResult<ApiResponse<TResponse>>> ForgotPassword<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<string>>> ForgotPassword(IForgotPassword record);
+        Task<IResponseResult<ApiResponse<TResponse>>> Login<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<AspNetUsersViewModel>>> Login(ILogin record);
+        Task<IResponseResult<ApiResponse<TResponse>>> Register<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<string>>> Register(IRegister record);
+        Task<IResponseResult<ApiResponse<TResponse>>> RegisterInternal<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<string>>> RegisterInternal(IRegisterInternal record);
+        Task<IResponseResult<ApiResponse<TResponse>>> ResetPassword<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<string>>> ResetPassword(IResetPassword record);
+        Task<IResponseResult<ApiResponse<TResponse>>> ResetPasswordInternal<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<string>>> ResetPasswordInternal(IResetPasswordInternal record);
+        Task<IResponseResult<ApiResponse<string>>> Setup();
  
     }
 }

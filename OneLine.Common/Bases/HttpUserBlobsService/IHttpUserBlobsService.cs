@@ -2,12 +2,12 @@
 using OneLine.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    interface IHttpUserBlobsService<TUserBlobs, TIdentifier, TBlobData, TBlobValidator> : IHttpService
+    interface IHttpUserBlobsService<TIdentifier> : IHttpService
     {
         string ControllerName { get; set; }
         string AddMethod { get; set; }
@@ -28,24 +28,23 @@ namespace OneLine.Bases
         string ListOwnsMethod { get; set; }
         string DownloadCsvExcelMethod { get; set; }
         string DownloadCsvExcelOwnsMethod { get; set; }
-        TBlobValidator BlobValidator { get; set; }
-        Task<ResponseResult<ApiResponse<TUserBlobs>>> Add(IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<IEnumerable<TUserBlobs>>>> AddRange(IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<Tuple<TUserBlobs, TUserBlobs>>>> Update(TUserBlobs userBlobs, IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<Tuple<IEnumerable<TUserBlobs>, IEnumerable<TUserBlobs>>>>> UpdateRange(IEnumerable<TUserBlobs> userBlobs, IEnumerable<TBlobData> blobDatas);
-        Task<ResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier, IValidator validator);
-        Task<ResponseResult<ApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator);
-        Task<ResponseResult<Stream>> DownloadBinary(TIdentifier identifier, IValidator validator);
-        Task<ResponseResult<Stream>> DownloadRangeBinary(IEnumerable<TIdentifier> identifiers, IValidator validator);
-        Task<ResponseResult<ApiResponse<Tuple<string, TUserBlobs>>>> DownloadBase64(TIdentifier identifier, IValidator validator);
-        Task<ResponseResult<ApiResponse<Tuple<IEnumerable<string>, IEnumerable<TUserBlobs>>>>> DownloadRangeBase64(IEnumerable<TIdentifier> identifiers, IValidator validator);
-        Task<ResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier, IValidator validator);
-        Task<ResponseResult<ApiResponse<TResponse>>> GetOneOwns<TResponse>(TIdentifier identifier, IValidator validator);
-        Task<ResponseResult<ApiResponse<IPaged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<ResponseResult<ApiResponse<IPaged<IEnumerable<TResponse>>>>> SearchOwns<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<ResponseResult<ApiResponse<IPaged<IEnumerable<TResponse>>>>> List<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<ResponseResult<ApiResponse<IPaged<IEnumerable<TResponse>>>>> ListOwns<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<ResponseResult<Stream>> DownloadCsvExcel(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<ResponseResult<Stream>> DownloadCsvExcelOwns(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<ApiResponse<UserBlobs>>> Add(IEnumerable<BlobData> blobDatas);
+        Task<IResponseResult<ApiResponse<IEnumerable<UserBlobs>>>> AddRange(IEnumerable<BlobData> blobDatas);
+        Task<IResponseResult<ApiResponse<Tuple<UserBlobs, UserBlobs>>>> Update(UserBlobs userBlobs, IEnumerable<BlobData> blobDatas);
+        Task<IResponseResult<ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>>> UpdateRange(IEnumerable<UserBlobs> userBlobs, IEnumerable<BlobData> blobDatas);
+        Task<IResponseResult<ApiResponse<TResponse>>> Delete<TResponse>(TIdentifier identifier, IValidator validator);
+        Task<IResponseResult<ApiResponse<IEnumerable<TResponse>>>> DeleteRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator);
+        Task<IResponseResult<HttpResponseMessage>> DownloadBinary(TIdentifier identifier, IValidator validator);
+        Task<IResponseResult<HttpResponseMessage>> DownloadRangeBinary(IEnumerable<TIdentifier> identifiers, IValidator validator);
+        Task<IResponseResult<ApiResponse<Tuple<string, UserBlobs>>>> DownloadBase64(TIdentifier identifier, IValidator validator);
+        Task<IResponseResult<ApiResponse<Tuple<IEnumerable<string>, IEnumerable<UserBlobs>>>>> DownloadRangeBase64(IEnumerable<TIdentifier> identifiers, IValidator validator);
+        Task<IResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier, IValidator validator);
+        Task<IResponseResult<ApiResponse<TResponse>>> GetOneOwns<TResponse>(TIdentifier identifier, IValidator validator);
+        Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> SearchOwns<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> List<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> ListOwns<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<HttpResponseMessage>> DownloadCsvExcel(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<HttpResponseMessage>> DownloadCsvExcelOwns(ISearchPaging SearchPaging, object searchExtraParams);
     }
 }

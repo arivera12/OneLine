@@ -9,23 +9,23 @@ namespace OneLine.Extensions
 {
     public static class BlobDataCollectionExtensions
     {
-        public static bool BlobDataExists(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate)
+        public static bool BlobDataExists(this IEnumerable<BlobData> blobDatas, Func<BlobData, bool> predicate)
         {
             return blobDatas.IsNotNullAndNotEmpty() && blobDatas.Any(predicate);
         }
-        public static bool IsValidBlobData(this IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
+        public static bool IsValidBlobData(this IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
         {
             return IsValidBlobData(blobDatas, null, formFileRules);
         }
-        public static bool IsValidBlobData(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate, IFormFileRules formFileRules)
+        public static bool IsValidBlobData(this IEnumerable<BlobData> blobDatas, Func<BlobData, bool> predicate, FormFileRules formFileRules)
         {
             return IsValidBlobDataApiResponse(blobDatas, predicate, formFileRules).Status == ApiResponseStatus.Succeeded;
         }
-        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
+        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
         {
             return IsValidBlobDataApiResponse(blobDatas, null, formFileRules);
         }
-        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate, IFormFileRules formFileRules)
+        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<BlobData> blobDatas, Func<BlobData, bool> predicate, FormFileRules formFileRules)
         {
             if (formFileRules.AllowedBlobMaxLength <= 0)
             {

@@ -2,9 +2,9 @@
 
 namespace OneLine.Blazor.Bases
 {
-    public interface IBlazorDataViewComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public interface IBlazorDataViewComponent<T, TIdentifier, THttpService> :
         IBlazorComponent,
-        IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+        IDataView<T, TIdentifier, THttpService>
     {
     }
 }

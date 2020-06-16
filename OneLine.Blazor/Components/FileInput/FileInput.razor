@@ -7,7 +7,7 @@
     <CascadingValue Value="this">
         @DropZoneInlineStyle
         <div class="@(PreventAdding || !CanAddMoreFiles() ? "m-0" : $"{DropClass} m-0")" style="@(PreventAdding || !CanAddMoreFiles() ? "" : "cursor: pointer")" @onclick=OpenDeviceFileSystem @ref=DropTarget @ondragenter=OnDragEnter @ondrop=OnDrop @ondragleave=OnDragLeave>
-            @if (CanAddMoreFiles())
+            @if (!PreventAdding && CanAddMoreFiles())
             {
                 @DropZoneText
             }

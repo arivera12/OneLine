@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Validations
 {
-    public class BlobDataValidator : AbstractValidator<IBlobData>
+    public class BlobDataValidator : AbstractValidator<BlobData>
     {
         public BlobDataValidator()
         {
@@ -26,7 +26,7 @@ namespace OneLine.Validations
         /// <param name="blobData"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public async Task<ValidationResult> ValidateFormFileRulesAsync(IBlobData blobData, IFormFileRules formFileRules)
+        public async Task<ValidationResult> ValidateFormFileRulesAsync(BlobData blobData, FormFileRules formFileRules)
         {
             if (formFileRules == null)
             {
@@ -66,7 +66,7 @@ namespace OneLine.Validations
             return new ValidationResult(validationFailures);
         }
     }
-    public class BlobDataCollectionValidator : AbstractValidator<IEnumerable<IBlobData>>
+    public class BlobDataCollectionValidator : AbstractValidator<IEnumerable<BlobData>>
     {
         public BlobDataCollectionValidator()
         {
@@ -79,7 +79,7 @@ namespace OneLine.Validations
         /// <param name="blobDatas"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public async Task<ValidationResult> ValidateFormFileRulesAsync(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
+        public async Task<ValidationResult> ValidateFormFileRulesAsync(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
         {
             if (formFileRules == null)
             {

@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OneLine.Bases;
 using OneLine.Enums;
@@ -246,19 +247,35 @@ namespace OneLine.Extensions
 
         #region Search
 
-        public static IApiResponse<IEnumerable<T>> Search<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null)
+        public static IApiResponse<IEnumerable<T>> Search<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null, bool NoTracking = true)
             where T : class
         {
-            var query = dbContext.Set<T>().AsQueryable<T>();
+            IQueryable<T> query;
+            if(NoTracking)
+            {
+                query = dbContext.Set<T>().AsNoTracking().AsQueryable();
+            }
+            else
+            {
+                query = dbContext.Set<T>().AsQueryable<T>();
+            }
             beforePredicate?.Invoke(query);
             query = query.Where(predicate).AsQueryable();
             afterPredicate?.Invoke(query);
             return query.AsEnumerable().ToApiResponse();
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> SearchAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<T>>> SearchAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null, bool NoTracking = true)
             where T : class
         {
-            var query = dbContext.Set<T>().AsQueryable();
+            IQueryable<T> query;
+            if (NoTracking)
+            {
+                query = dbContext.Set<T>().AsNoTracking().AsQueryable();
+            }
+            else
+            {
+                query = dbContext.Set<T>().AsQueryable<T>();
+            }
             beforePredicate?.Invoke(query);
             query = query.Where(predicate).AsQueryable();
             afterPredicate?.Invoke(query);
@@ -266,10 +283,18 @@ namespace OneLine.Extensions
             await dbContext.CreateAuditrailsAsync(results, "Records on search operation", userId, controllerName, actionName, remoteIpAddress);
             return results.ToApiResponse();
         }
-        public static IApiResponse<IPaged<IEnumerable<T>>> SearchPaged<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null)
+        public static IApiResponse<IPaged<IEnumerable<T>>> SearchPaged<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, bool NoTracking = true)
             where T : class
         {
-            var query = dbContext.Set<T>().AsQueryable();
+            IQueryable<T> query;
+            if (NoTracking)
+            {
+                query = dbContext.Set<T>().AsNoTracking().AsQueryable();
+            }
+            else
+            {
+                query = dbContext.Set<T>().AsQueryable<T>();
+            }
             beforePredicate?.Invoke(query);
             query = query.Where(predicate).AsQueryable();
             afterPredicateBeforeSorting?.Invoke(query);
@@ -289,10 +314,18 @@ namespace OneLine.Extensions
             afterPaging?.Invoke(pagedQuery);
             return pagedQuery.ToApiResponse();
         }
-        public static async Task<IApiResponse<IPaged<IEnumerable<T>>>> SearchPagedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IPaged<IEnumerable<T>>>> SearchPagedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null, bool NoTracking = true)
             where T : class
         {
-            var query = dbContext.Set<T>().AsQueryable();
+            IQueryable<T> query;
+            if(NoTracking)
+            {
+                query = dbContext.Set<T>().AsNoTracking().AsQueryable();
+            }
+            else
+            {
+                query = dbContext.Set<T>().AsQueryable<T>();
+            }
             beforePredicate?.Invoke(query);
             query = query.Where(predicate).AsQueryable();
             afterPredicateBeforeSorting?.Invoke(query);
@@ -318,28 +351,28 @@ namespace OneLine.Extensions
 
         #region Search and Convert to Csv
 
-        public static IApiResponse<byte[]> SearchAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null)
+        public static IApiResponse<byte[]> SearchAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null, bool NoTracking = true)
             where T : class
         {
-            var result = dbContext.Search(predicate, beforePredicate, afterPredicate);
+            var result = dbContext.Search(predicate, beforePredicate, afterPredicate, NoTracking);
             return result?.Data?.ToCsvByteArray().ToApiResponse();
         }
-        public static async Task<IApiResponse<byte[]>> SearchAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<byte[]>> SearchAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicate = null, string controllerName = null, string actionName = null, string remoteIpAddress = null, bool NoTracking = true)
             where T : class
         {
-            var result = await dbContext.SearchAuditedAsync(predicate, userId, beforePredicate, afterPredicate, controllerName, actionName, remoteIpAddress);
+            var result = await dbContext.SearchAuditedAsync(predicate, userId, beforePredicate, afterPredicate, controllerName, actionName, remoteIpAddress, NoTracking);
             return result?.Data?.ToCsvByteArray().ToApiResponse();
         }
-        public static IApiResponse<byte[]> SearchPagedAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null)
+        public static IApiResponse<byte[]> SearchPagedAndConvertToCsvByteArray<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, out int count, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, bool NoTracking = true)
             where T : class
         {
-            var result = dbContext.SearchPaged(predicate, pageIndex, pageSize, sortBy, descending, out count, beforePredicate, afterPredicateBeforeSorting, afterSortingBeforePaging, afterPaging);
+            var result = dbContext.SearchPaged(predicate, pageIndex, pageSize, sortBy, descending, out count, beforePredicate, afterPredicateBeforeSorting, afterSortingBeforePaging, afterPaging, NoTracking);
             return result?.Data?.Data?.ToCsvByteArray().ToApiResponse();
         }
-        public static async Task<IApiResponse<byte[]>> SearchPagedAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<byte[]>> SearchPagedAuditedAndConvertToCsvByteArrayAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, int? pageIndex, int? pageSize, string sortBy, bool? descending, string userId, Action<IQueryable<T>> beforePredicate = null, Action<IQueryable<T>> afterPredicateBeforeSorting = null, Action<IQueryable<T>> afterSortingBeforePaging = null, Action<IPaged<IEnumerable<T>>> afterPaging = null, string controllerName = null, string actionName = null, string remoteIpAddress = null, bool NoTracking = true)
             where T : class
         {
-            var result = await dbContext.SearchPagedAuditedAsync(predicate, pageIndex, pageSize, sortBy, descending, userId, beforePredicate, afterPredicateBeforeSorting, afterSortingBeforePaging, afterPaging, controllerName, actionName, remoteIpAddress);
+            var result = await dbContext.SearchPagedAuditedAsync(predicate, pageIndex, pageSize, sortBy, descending, userId, beforePredicate, afterPredicateBeforeSorting, afterSortingBeforePaging, afterPaging, controllerName, actionName, remoteIpAddress, NoTracking);
             return result?.Data?.Data?.ToCsvByteArray().ToApiResponse();
         }
 
@@ -399,7 +432,7 @@ namespace OneLine.Extensions
 
         #region Get One
 
-        public static async Task<IApiResponse<T>> GetOneAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier)
+        public static async Task<IApiResponse<T>> GetOneAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, bool NoTracking = true)
             where T : class, new()
         {
             if (identifier == null || string.IsNullOrWhiteSpace(identifier.Model))
@@ -411,9 +444,13 @@ namespace OneLine.Extensions
             {
                 return record.ToApiResponseFailed("RecordNotFound");
             }
+            if (NoTracking)
+            {
+                dbContext.Entry(record).State = EntityState.Detached;
+            }
             return record.ToApiResponse();
         }
-        public static async Task<IApiResponse<T>> GetOneAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<T>> GetOneAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null, bool NoTracking = true)
             where T : class, new()
         {
             if (identifier == null || string.IsNullOrWhiteSpace(identifier.Model))
@@ -427,10 +464,14 @@ namespace OneLine.Extensions
                 await dbContext.CreateAuditrailsAsync(record, "Record not found on select one operation", userId, controllerName, actionName, remoteIpAddress);
                 return record.ToApiResponseFailed("RecordNotFound");
             }
+            if (NoTracking)
+            {
+                dbContext.Entry(record).State = EntityState.Detached;
+            }
             await dbContext.CreateAuditrailsAsync(record, "Record selected on get one operation", userId, controllerName, actionName, remoteIpAddress);
             return record.ToApiResponse();
         }
-        public static async Task<IApiResponse<T>> GetOneAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate)
+        public static async Task<IApiResponse<T>> GetOneAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, bool NoTracking = true)
             where T : class, new()
         {
             if (predicate == null)
@@ -442,9 +483,13 @@ namespace OneLine.Extensions
             {
                 return record.ToApiResponseFailed("RecordNotFound");
             }
+            if (NoTracking)
+            {
+                dbContext.Entry(record).State = EntityState.Detached;
+            }
             return record.ToApiResponse();
         }
-        public static async Task<IApiResponse<T>> GetOneAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<T>> GetOneAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null, bool NoTracking = true)
             where T : class, new()
         {
             if (predicate == null)
@@ -457,6 +502,10 @@ namespace OneLine.Extensions
             {
                 await dbContext.CreateAuditrailsAsync(record, "Record not found on select one operation", userId, controllerName, actionName, remoteIpAddress);
                 return record.ToApiResponseFailed("RecordNotFound");
+            }
+            if (NoTracking)
+            {
+                dbContext.Entry(record).State = EntityState.Detached;
             }
             await dbContext.CreateAuditrailsAsync(record, "Record selected on get one operation", userId, controllerName, actionName, remoteIpAddress);
             return record.ToApiResponse();
@@ -514,21 +563,29 @@ namespace OneLine.Extensions
             await dbContext.CreateAuditrailsAsync(records, "Records selected on select range operation", userId, controllerName, actionName, remoteIpAddress);
             return records.AsEnumerable().ToApiResponse();
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> GetRangeAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate)
+        public static async Task<IApiResponse<IEnumerable<T>>> GetRangeAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, bool NoTracking = true)
             where T : class, new()
         {
             if (predicate == null)
             {
                 return Enumerable.Empty<T>().ToApiResponseFailed("PredicateIsNull");
             }
-            IList<T> records = await Task.Run(() => dbContext.Set<T>().Where(predicate).ToList());
+            IList<T> records = default;
+            if (NoTracking)
+            {
+                records = await Task.Run(() => dbContext.Set<T>().AsNoTracking().Where(predicate).ToList());
+            }
+            else
+            {
+                records = await Task.Run(() => dbContext.Set<T>().Where(predicate).ToList());
+            }
             if (records.IsNullOrEmpty())
             {
                 return records.AsEnumerable().ToApiResponseFailed("RecordNotFound");
             }
             return records.AsEnumerable().ToApiResponse();
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> GetRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<IApiResponse<IEnumerable<T>>> GetRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null, bool NoTracking = true)
             where T : class, new()
         {
             if (predicate == null)
@@ -536,7 +593,15 @@ namespace OneLine.Extensions
                 await dbContext.CreateAuditrailsAsync(predicate, "predicate was null or empty on delete operation", userId, controllerName, actionName, remoteIpAddress);
                 return Enumerable.Empty<T>().ToApiResponseFailed("PredicateIsNull");
             }
-            IList<T> records = await Task.Run(() => dbContext.Set<T>().Where(predicate).ToList());
+            IList<T> records = default;
+            if (NoTracking)
+            {
+                records = await Task.Run(() => dbContext.Set<T>().AsNoTracking().Where(predicate).ToList());
+            }
+            else
+            {
+                records = await Task.Run(() => dbContext.Set<T>().Where(predicate).ToList());
+            }
             if (records.IsNullOrEmpty())
             {
                 await dbContext.CreateAuditrailsAsync(records, "Records not found on select in operation", userId, controllerName, actionName, remoteIpAddress);

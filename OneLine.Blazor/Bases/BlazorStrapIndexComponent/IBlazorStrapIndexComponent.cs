@@ -2,9 +2,9 @@
 
 namespace OneLine.Blazor.Bases
 {
-    public interface IBlazorStrapIndexComponent<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public interface IBlazorStrapIndexComponent<T, TIdentifier, THttpService> :
         IBlazorComponent,
-        IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+        IForm<T, TIdentifier, THttpService>
     {
         bool IsFormOpen { get; set; }
         bool ShowModal { get; set; }

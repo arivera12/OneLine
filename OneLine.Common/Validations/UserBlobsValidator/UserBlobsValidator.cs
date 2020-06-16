@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace OneLine.Validations
 {
-    public class UserBlobsValidator : AbstractValidator<IUserBlobs>
+    public class UserBlobsValidator : AbstractValidator<UserBlobs>
     {
         public UserBlobsValidator()
         {
@@ -19,7 +19,7 @@ namespace OneLine.Validations
             RuleFor(x => x.IsDeleted).NotNull().WithMessage("UserBlobsIsDeletedIsRequired");
         }
     }
-    public class UserBlobsCollectionValidator : AbstractValidator<IEnumerable<IUserBlobs>>
+    public class UserBlobsCollectionValidator : AbstractValidator<IEnumerable<UserBlobs>>
     {
         public UserBlobsCollectionValidator()
         {

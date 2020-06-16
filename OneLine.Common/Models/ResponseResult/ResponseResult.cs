@@ -33,7 +33,7 @@ namespace OneLine.Models
             Response = response;
             Exception = exception;
             HasException = Exception.IsNotNull();
-            Succeed = (httpResponseMessage.IsNotNull() && httpResponseMessage.IsSuccessStatusCode) && !HasException;
+            Succeed = httpResponseMessage.IsNotNull() && httpResponseMessage.IsSuccessStatusCode && !HasException;
             HttpResponseMessage = httpResponseMessage;
         }
     }

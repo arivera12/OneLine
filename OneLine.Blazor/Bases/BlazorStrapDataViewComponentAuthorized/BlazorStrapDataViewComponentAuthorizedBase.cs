@@ -13,15 +13,12 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract class BlazorStrapDataViewComponentAuthorizedBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
-        BlazorStrapDataViewComponentBase<T, TIdentifier, TId, THttpService, TBlobData, TBlobValidator, TUserBlobs>,
-        IBlazorStrapDataViewComponentAuthorized<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+    public abstract class BlazorStrapDataViewComponentAuthorizedBase<T, TIdentifier, TId, THttpService> :
+        BlazorStrapDataViewComponentBase<T, TIdentifier, TId, THttpService>,
+        IBlazorStrapDataViewComponentAuthorized<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
-        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier, TBlobData, TBlobValidator, TUserBlobs>, new()
-        where TBlobData : class, IBlobData
-        where TBlobValidator : class, IValidator, new()
-        where TUserBlobs : class, IUserBlobs
+        where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
         public virtual AspNetUsersViewModel User { get; set; }

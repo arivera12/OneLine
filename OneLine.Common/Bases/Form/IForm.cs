@@ -1,12 +1,11 @@
 ﻿namespace OneLine.Bases
 {
-    public interface IForm<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public interface IForm<T, TIdentifier, THttpService> :
         IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
-        IBlobDataCollectionableValidatable<TBlobData>,
+        IBlobDataCollectionableValidatable,
         IApiResponseable<T>,
         IApiResponseableCollectionable<T>,
-        IApiResponseableBlobable<T, TUserBlobs>,
         IConfigurable,
         ISaveableEventable,
         IValidatableEventable,

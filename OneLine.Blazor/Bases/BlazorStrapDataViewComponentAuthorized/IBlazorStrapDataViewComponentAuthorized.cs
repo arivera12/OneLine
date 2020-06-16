@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace OneLine.Blazor.Bases
 {
-    public interface IBlazorStrapDataViewComponentAuthorized<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs> :
+    public interface IBlazorStrapDataViewComponentAuthorized<T, TIdentifier, THttpService> :
         IBlazorComponent,
-        IDataView<T, TIdentifier, THttpService, TBlobData, TBlobValidator, TUserBlobs>
+        IDataView<T, TIdentifier, THttpService>
     {
         bool ShowActivityIndicator { get; set; }
         public TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor);

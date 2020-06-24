@@ -19,15 +19,9 @@ namespace OneLine.Models
         /// </summary>
         public virtual string PropertyName { get; set; }
         /// <summary>
-        /// The property that holds the uploaded data. 
-        /// This field must and should match the property name that holds the uploaded data.
-        /// This reference property must be always a IEnumerable<BlobData> data type to work properly. 
+        /// Forces a file upload.
         /// </summary>
-        public virtual string PropertyNameBlobData { get; set; }
-        /// <summary>
-        /// Forces a file upload on update operation.
-        /// </summary>
-        public virtual bool ForceUploadOnUpdate { get; set; }
+        public virtual bool ForceUpload { get; set; }
         public UploadBlobData()
         { }
         public UploadBlobData(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
@@ -35,20 +29,18 @@ namespace OneLine.Models
             BlobDatas = blobDatas;
             FormFileRules = formFileRules;
         }
-        public UploadBlobData(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, string propertyName, string propertyNameBlobData)
+        public UploadBlobData(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, string propertyName)
         {
             BlobDatas = blobDatas;
             FormFileRules = formFileRules;
             PropertyName = propertyName;
-            PropertyNameBlobData = propertyNameBlobData;
         }
-        public UploadBlobData(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, string propertyName, string propertyNameBlobData, bool forceUploadOnUpdate)
+        public UploadBlobData(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, string propertyName, bool forceUpload)
         {
             BlobDatas = blobDatas;
             FormFileRules = formFileRules;
             PropertyName = propertyName;
-            PropertyNameBlobData = propertyNameBlobData;
-            ForceUploadOnUpdate = forceUploadOnUpdate;
+            ForceUpload = forceUpload;
         }
     }
 }

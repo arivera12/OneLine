@@ -45,6 +45,10 @@ namespace OneLine.Validations
                 throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
             }            
             var validationFailures = new List<ValidationFailure>();
+            if (formFileRules.ForceUpload && (blobData == null || blobData.Size <= 0))
+            {
+                return new ValidationResult(new List<ValidationFailure> { new ValidationFailure(nameof(blobData.Name), "FileUploadRequired", blobData.Size) });
+            }
             if (!formFileRules.IsRequired && (blobData == null || blobData.Size <= 0))
             {
                 return new ValidationResult(Enumerable.Empty<ValidationFailure>());

@@ -19,14 +19,8 @@ namespace OneLine.Models
         /// </summary>
         string PropertyName { get; set; }
         /// <summary>
-        /// The property that holds the uploaded data. 
-        /// This field must and should match the property name that holds the uploaded data.
-        /// This reference property must be always a IEnumerable<BlobData> data type to work properly. 
+        /// Forces a file upload on update operation. Overrides IsRequired property rule.
         /// </summary>
-        string PropertyNameBlobData { get; set; }
-        /// <summary>
-        /// Forces a file upload on update operation.
-        /// </summary>
-        bool ForceUploadOnUpdate { get; set; }
+        bool ForceUpload { get; set; }
     }
 }

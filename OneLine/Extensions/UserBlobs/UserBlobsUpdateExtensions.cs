@@ -87,12 +87,30 @@ namespace OneLine.Extensions
             var userBlobsList = new List<IEnumerable<UserBlobs>>();
             foreach (var uploadBlobData in uploadBlobDatas)
             {
-                var userBlobsOriginal = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(Encoding.UTF8.GetString((byte[])typeof(T).GetProperty(uploadBlobData.PropertyName).GetValue(originalRecord)));
-                var userBlobsOld = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(Encoding.UTF8.GetString((byte[])typeof(T).GetProperty(uploadBlobData.PropertyName).GetValue(record)));
-                var userBlobsToDelete = userBlobsOriginal.Where(w => !userBlobsOld.Contains(w));
+                IEnumerable<UserBlobs> userBlobsOriginal;
+                byte[] userBlobByteArrayOriginal;
+                var userBlobOriginal = typeof(T).GetProperty(uploadBlobData.PropertyName).GetValue(originalRecord);
+                if (userBlobOriginal.IsNull())
+                {
+                    continue;
+                }
+                else
+                {
+                    userBlobByteArrayOriginal = (byte[])userBlobOriginal;
+                    userBlobsOriginal = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(Encoding.UTF8.GetString(userBlobByteArrayOriginal));
+                }
+                IEnumerable<UserBlobs> userBlobsNew = Enumerable.Empty<UserBlobs>();
+                byte[] userBlobByteArrayNew;
+                var userBlobNew = typeof(T).GetProperty(uploadBlobData.PropertyName).GetValue(record);
+                if (userBlobNew.IsNotNull())
+                {
+                    userBlobByteArrayNew = (byte[])userBlobNew;
+                    userBlobsNew = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(Encoding.UTF8.GetString(userBlobByteArrayNew));
+                }
+                var userBlobsToDelete = userBlobsOriginal.Where(w => !userBlobsNew.Contains(w));
                 var deleteMultipleApiResponse = await dbContext.DeleteRangeUserBlobsAsync(userBlobsToDelete, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
                 userBlobsList.Add(deleteMultipleApiResponse.Data);
-                if (deleteMultipleApiResponse.Status.Failed())
+                if (deleteMultipleApiResponse.Status.Failed() && !string.IsNullOrWhiteSpace(deleteMultipleApiResponse.Message))
                 {
                     return new ApiResponse<IList<IEnumerable<UserBlobs>>>(deleteMultipleApiResponse.Status, userBlobsList, deleteMultipleApiResponse.Message);
                 }

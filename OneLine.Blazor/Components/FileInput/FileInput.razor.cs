@@ -151,6 +151,14 @@ namespace OneLine.Blazor.Components
         /// Hides the text below the dropzone containing the info about maximum size per file, mimimum and maximum allowed files and minimum or maximum files reached.
         /// </summary>
         [Parameter] public bool HideInformativeLabelText { get; set; }
+        /// <summary>
+        /// Adds an informative label that is required.
+        /// </summary>
+        [Parameter] public bool Required { get; set; }
+        /// <summary>
+        /// Adds an informative label that is required.
+        /// </summary>
+        [Parameter] public bool ForceUpload { get; set; }
         [Inject] public IFileReaderService FileReaderService { get; set; }
         [Inject] public IJSRuntime JSRuntime { get; set; }
         [Inject] public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
@@ -239,7 +247,7 @@ namespace OneLine.Blazor.Components
                 var blobDatas = new List<BlobData>(BlobDatas);
                 blobDatas.Remove(blobData);
                 BlobDatas = blobDatas;
-                await BlobDatasChanged.InvokeAsync(BlobDatas);
+                await BlobDatasChanged.InvokeAsync(blobDatas);
             }
             await UpdateMaximunMinimunReachedFiles();
             StateHasChanged();
@@ -260,7 +268,7 @@ namespace OneLine.Blazor.Components
                 var userBlobs = new List<UserBlobs>(UserBlobs);
                 userBlobs.Remove(userBlob);
                 UserBlobs = userBlobs;
-                await BlobDatasChanged.InvokeAsync(BlobDatas);
+                await UserBlobsChanged.InvokeAsync(userBlobs);
             }
             await UpdateMaximunMinimunReachedFiles();
             StateHasChanged();
@@ -335,27 +343,35 @@ namespace OneLine.Blazor.Components
         {
             return (MarkupString)(MaximumAllowedFiles <= 0 ? "" : $@"{Resourcer.GetString("AllowsUpTo")} {MaximumAllowedFiles} {(MaximumAllowedFiles == 1 ? Resourcer.GetString("File") : Resourcer.GetString("Files"))}");
         }
+        public virtual MarkupString RequiredText()
+        {
+            return (MarkupString)(Required  ? Resourcer.GetString("FileUploadRequired") + ", " : "");
+        }
+        public virtual MarkupString ForceUploadText()
+        {
+            return (MarkupString)(ForceUpload ? Resourcer.GetString("UploadingANewFileIsRequired") + ", " : "");
+        }
         public virtual MarkupString InformativeLabelText()
         {
             if (!MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}</small></div>";
             }
             else if (MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}, {Resourcer.GetString("MinimumReached")}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}, {Resourcer.GetString("MinimumReached")}</small></div>";
             }
             else if (MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}, {Resourcer.GetString("MaximunReached")}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}, {Resourcer.GetString("MaximunReached")}</small></div>";
             }
             else if (MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize <= 0)
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MinimumReached")}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MinimumReached")}</small></div>";
             }
             else if (MaximumAllowedFilesReached && MaxFileSize <= 0)
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{AllowsUpToFilesText()}, {Resourcer.GetString("MaximunReached")}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MaximunReached")}</small></div>";
             }
             else
             {

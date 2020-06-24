@@ -51,12 +51,16 @@ namespace OneLine.Extensions
             if (userBlobs.IsNullOrEmpty())
             {
                 await dbContext.CreateAuditrailsAsync(userBlobs, "UserBlobs is null or empty on method DeleteRange", userId, controllerName, actionName, remoteIpAddress);
-                return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Failed, "FileNotFound");
+                return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Succeeded, Enumerable.Empty<UserBlobs>());
             }
             foreach (var userBlob in userBlobs)
             {
                 var isBlobOwnerAndFileExists = await dbContext.IsBlobOwnerAndFileExistsAsync(userBlob, blobStorage, userId, ignoreBlobOwner, controllerName, actionName, remoteIpAddress);
-                if (isBlobOwnerAndFileExists.Status.Failed() || !isBlobOwnerAndFileExists.Data)
+                if (isBlobOwnerAndFileExists.Status.Failed() && isBlobOwnerAndFileExists.Message == "FileNotFound")
+                {
+                    continue;
+                }
+                else if (isBlobOwnerAndFileExists.Status.Failed() || !isBlobOwnerAndFileExists.Data)
                 {
                     return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
                 }

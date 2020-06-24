@@ -1382,7 +1382,7 @@ namespace OneLine.Extensions
                     //Does this file upload was required and we are creating it?
                     //Do we forced file upload on update operation?
                     if ((uploadBlobData.FormFileRules.IsRequired && saveOperation.IsAdd()) ||
-                        (uploadBlobData.ForceUploadOnUpdate && saveOperation.IsUpdate()))
+                        (uploadBlobData.ForceUpload && saveOperation.IsUpdate()))
                     {
                         await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} on a field was required on create and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
                         return record.ToApiResponseFailed("FileUploadIsRequired");
@@ -1390,7 +1390,7 @@ namespace OneLine.Extensions
                     //Does the file is required but we are updating?
                     else if (uploadBlobData.FormFileRules.IsRequired && saveOperation.IsUpdate())
                     {
-                        var propertyName = uploadBlobData.BlobDatas.FirstOrDefault().InputName;
+                        var propertyName = uploadBlobData.FormFileRules.PropertyName;
                         //Lets check that the required file was not deleted on update
                         var propertyValue = record.GetType().GetProperty(propertyName).GetValue(record);
                         if (propertyValue == null)
@@ -1442,7 +1442,7 @@ namespace OneLine.Extensions
                         //Does this file upload was required and we are creating it?
                         //Do we forced file upload on update operation?
                         if ((uploadBlobData.FormFileRules.IsRequired && saveOperation.IsAdd()) ||
-                            (uploadBlobData.ForceUploadOnUpdate && saveOperation.IsUpdate()))
+                            (uploadBlobData.ForceUpload && saveOperation.IsUpdate()))
                         {
                             await dbContext.CreateAuditrailsAsync(record, $@"A file upload on entity {typeof(T).Name} on a field was required on create and the file was null or empty", userId, controllerName, actionName, remoteIpAddress);
                             return records.ToApiResponseFailed("FileUploadIsRequired");
@@ -1450,7 +1450,7 @@ namespace OneLine.Extensions
                         //Does the file is required but we are updating?
                         else if (uploadBlobData.FormFileRules.IsRequired && saveOperation.IsUpdate())
                         {
-                            var propertyName = uploadBlobData.BlobDatas.FirstOrDefault().InputName;
+                            var propertyName = uploadBlobData.FormFileRules.PropertyName;
                             //Lets check that the required file was not deleted on update
                             var propertyValue = record.GetType().GetProperty(propertyName).GetValue(record);
                             if (propertyValue == null)

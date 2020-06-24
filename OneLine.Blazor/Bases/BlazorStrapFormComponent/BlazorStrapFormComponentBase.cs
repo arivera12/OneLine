@@ -151,9 +151,9 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeSave()
         {
-            if (HasBlobDatasWithRules())
+            if (GetMutableBlobDatasWithRulesProperties().IsNotNullAndNotEmpty())
             {
-                await ValidateBlobDatas();
+                await this.ValidateMutableBlobDatas();
                 if (!IsValidModelState)
                 {
                     await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);

@@ -3,7 +3,7 @@
     public interface IForm<T, TIdentifier, THttpService> :
         IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
-        IBlobDataCollectionableValidatable,
+        IMutableBlobDataCollectionableValidatable,
         IApiResponseable<T>,
         IApiResponseableCollectionable<T>,
         IConfigurable,

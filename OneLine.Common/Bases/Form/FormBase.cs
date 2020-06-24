@@ -57,7 +57,21 @@ namespace OneLine.Bases
         }
         public virtual async Task Validate()
         {
-            ValidationResult = await Validator.ValidateAsync(Record);
+            if(FormMode.IsSingle())
+            {
+                ValidationResult = await Validator.ValidateAsync(Record);
+            }
+            else
+            {
+                foreach (var record in Records)
+                {
+                    var result = await Validator.ValidateAsync(record);
+                    foreach (var validationFailure in result.Errors)
+                    {
+                        ValidationResult.Errors.Add(validationFailure);
+                    }
+                }
+            }
             ValidationResultChanged?.Invoke(ValidationResult);
             IsValidModelState = ValidationResult.IsValid;
             IsValidModelStateChanged?.Invoke(IsValidModelState);
@@ -89,7 +103,7 @@ namespace OneLine.Bases
                         RecordChanged?.Invoke(Record);
                         FormState = FormState.Edit;
                         FormStateChanged?.Invoke(FormState);
-                        ClearBlobDatasWithRules();
+                        ClearMutableBlobDatasWithRules();
                     }
                 }
                 else if (FormMode.IsMultiple())
@@ -114,7 +128,7 @@ namespace OneLine.Bases
                         RecordsChanged?.Invoke(Records);
                         FormState = FormState.Edit;
                         FormStateChanged?.Invoke(FormState);
-                        ClearBlobDatasWithRules();
+                        ClearMutableBlobDatasWithRules();
                     }
                 }
                 OnAfterSave?.Invoke();
@@ -161,33 +175,177 @@ namespace OneLine.Bases
                 OnAfterDelete?.Invoke();
             }
         }
-        public virtual IEnumerable<PropertyInfo> GetBlobDatasWithRulesProperties()
+        public virtual IEnumerable<PropertyInfo> GetMutableBlobDatasWithRulesProperties()
         {
-            return GetType().GetProperties().Where(w => w.PropertyType == typeof(Mutable<IEnumerable<BlobData>, FormFileRules>));
-        }
-        public virtual bool HasBlobDatasWithRules()
-        {
-            return GetBlobDatasWithRulesProperties().Any();
-        }
-        public virtual void ClearBlobDatasWithRules()
-        {
-            foreach (var blobDataProperty in GetBlobDatasWithRulesProperties())
+            if (FormMode.IsSingle())
             {
-                var blobDatas = (Mutable<IEnumerable<BlobData>, FormFileRules>)blobDataProperty.GetValue(this);
-                blobDataProperty.SetValue(this, new Mutable<IEnumerable<BlobData>, FormFileRules>(Enumerable.Empty<BlobData>(), blobDatas.Item2));
+                return Record.GetType().GetProperties().Where(w => w.PropertyType == typeof(Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>));
+            }
+            else if (FormMode.IsMultiple())
+            {
+                var propertiesInfos = new List<PropertyInfo>();
+                foreach (var record in Records)
+                {
+                    foreach(var property in record.GetType().GetProperties().Where(w => w.PropertyType == typeof(Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>)))
+                    {
+                        propertiesInfos.Add(property);
+                    }
+                }
+                return propertiesInfos;
+            }
+            else
+            {
+                return Enumerable.Empty<PropertyInfo>();
             }
         }
-        public async virtual Task ValidateBlobDatas()
+        public virtual void ClearMutableBlobDatasWithRules()
         {
-            foreach (var blobDataProperty in GetBlobDatasWithRulesProperties())
+            foreach (var blobDataProperty in GetMutableBlobDatasWithRulesProperties())
             {
-                var blobDatas = (Mutable<IEnumerable<BlobData>, FormFileRules>)blobDataProperty.GetValue(this);
-                var validator = new BlobDataCollectionValidator();
-                ValidationResult = await validator.ValidateFormFileRulesAsync(blobDatas.Item1, blobDatas.Item2);
-                IsValidModelState = ValidationResult.IsValid;
-                if (!IsValidModelState)
+                if(FormMode.IsSingle())
                 {
-                    break;
+                    var blobDatas = (Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>)blobDataProperty.GetValue(Record);
+                    blobDataProperty.SetValue(Record, new Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>(blobDatas.Item1, Enumerable.Empty<BlobData>(), blobDatas.Item3));
+                }
+                else
+                {
+                    foreach (var record in Records)
+                    {
+                        var blobDatas = (Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>)blobDataProperty.GetValue(record);
+                        blobDataProperty.SetValue(record, new Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>(blobDatas.Item1, Enumerable.Empty<BlobData>(), blobDatas.Item3));
+                    }
+                }
+            }
+        }
+        public virtual async Task ValidateMutableBlobDatas()
+        {
+            foreach (var blobDataProperty in GetMutableBlobDatasWithRulesProperties())
+            {
+                if(FormMode.IsSingle())
+                {
+                    var mutableBlobDatas = (Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>)blobDataProperty.GetValue(Record);
+                    var formFileRules = mutableBlobDatas.Item1;
+                    var blobDatas = mutableBlobDatas.Item2;
+                    var userBlobs = mutableBlobDatas.Item3;
+                    ValidationResult = new ValidationResult();
+                    var currentBlobsCount = 0;
+                    if (formFileRules.ForceUpload)
+                    {
+                        if (blobDatas.IsNullOrEmpty())
+                        {
+                            ValidationResult.Errors.Add(new ValidationFailure(formFileRules.PropertyName, $"{typeof(T).Name.Replace("ViewModel", "")}{formFileRules.PropertyName}IsRequired"));
+                        }
+                        else
+                        {
+                            await InternalValidateBlobDatas(blobDatas, formFileRules);
+                        }
+                    }
+                    else if (!formFileRules.IsRequired && blobDatas.IsNullOrEmpty())
+                    {
+                        continue;
+                    }
+                    else if (!formFileRules.IsRequired && blobDatas.IsNotNullAndNotEmpty())
+                    {
+                        await InternalValidateBlobDatas(blobDatas, formFileRules);
+                    }
+                    else if (formFileRules.IsRequired)
+                    {
+                        if (blobDatas.IsNullOrEmpty() && userBlobs.IsNullOrEmpty())
+                        {
+                            ValidationResult.Errors.Add(new ValidationFailure(formFileRules.PropertyName, $"{typeof(T).Name.Replace("ViewModel", "")}{formFileRules.PropertyName}IsRequired"));
+                            continue;
+                        }
+                        if (userBlobs.IsNotNullAndNotEmpty())
+                        {
+                            currentBlobsCount += userBlobs.Count();
+                        }
+                        if (blobDatas.IsNotNullAndNotEmpty())
+                        {
+                            currentBlobsCount += blobDatas.Count();
+                        }
+                        if (currentBlobsCount >= formFileRules.AllowedMinimunFiles)
+                        {
+                            if(blobDatas.IsNotNullAndNotEmpty())
+                            {
+                                await InternalValidateBlobDatas(blobDatas, formFileRules);
+                            }
+                        }
+                        else
+                        {
+                            ValidationResult.Errors.Add(new ValidationFailure(formFileRules.PropertyName, $"{typeof(T).Name.Replace("ViewModel", "")}{formFileRules.PropertyName}IsRequired"));
+                        }
+                    }
+                }
+                else
+                {
+                    ValidationResult = new ValidationResult();
+                    foreach (var record in Records)
+                    {
+                        var mutableBlobDatas = (Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>)blobDataProperty.GetValue(record);
+                        var formFileRules = mutableBlobDatas.Item1;
+                        var blobDatas = mutableBlobDatas.Item2;
+                        var userBlobs = mutableBlobDatas.Item3;
+                        var currentBlobsCount = 0;
+                        if (formFileRules.ForceUpload)
+                        {
+                            if (blobDatas.IsNullOrEmpty())
+                            {
+                                ValidationResult.Errors.Add(new ValidationFailure(formFileRules.PropertyName, $"{typeof(T).Name.Replace("ViewModel", "")}{formFileRules.PropertyName}IsRequired"));
+                            }
+                            else
+                            {
+                                await InternalValidateBlobDatas(blobDatas, formFileRules);
+                            }
+                        }
+                        else if (!formFileRules.IsRequired && blobDatas.IsNullOrEmpty())
+                        {
+                            continue;
+                        }
+                        else if (!formFileRules.IsRequired && blobDatas.IsNotNullAndNotEmpty())
+                        {
+                            await InternalValidateBlobDatas(blobDatas, formFileRules);
+                        }
+                        else if (formFileRules.IsRequired)
+                        {
+                            if (blobDatas.IsNullOrEmpty() && userBlobs.IsNullOrEmpty())
+                            {
+                                ValidationResult.Errors.Add(new ValidationFailure(formFileRules.PropertyName, $"{typeof(T).Name.Replace("ViewModel", "")}{formFileRules.PropertyName}IsRequired"));
+                                continue;
+                            }
+                            if (userBlobs.IsNotNullAndNotEmpty())
+                            {
+                                currentBlobsCount += userBlobs.Count();
+                            }
+                            if (blobDatas.IsNotNullAndNotEmpty())
+                            {
+                                currentBlobsCount += blobDatas.Count();
+                            }
+                            if (currentBlobsCount >= formFileRules.AllowedMinimunFiles)
+                            {
+                                if (blobDatas.IsNotNullAndNotEmpty())
+                                {
+                                    await InternalValidateBlobDatas(blobDatas, formFileRules);
+                                }
+                            }
+                            else
+                            {
+                                ValidationResult.Errors.Add(new ValidationFailure(formFileRules.PropertyName, $"{typeof(T).Name.Replace("ViewModel", "")}{formFileRules.PropertyName}IsRequired"));
+                            }
+                        }
+                    }
+                }
+            }
+            IsValidModelState = ValidationResult.IsValid;
+        }
+        private async Task InternalValidateBlobDatas(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
+        {
+            var validator = new BlobDataCollectionValidator();
+            var result = await validator.ValidateFormFileRulesAsync(blobDatas, formFileRules);
+            if (!result.IsValid)
+            {
+                foreach (var validationFailure in result.Errors)
+                {
+                    ValidationResult.Errors.Add(validationFailure);
                 }
             }
         }
@@ -203,9 +361,9 @@ namespace OneLine.Bases
             IdentifierChanged?.Invoke(Identifier);
             Identifiers = new List<TIdentifier>();
             IdentifiersChanged?.Invoke(Identifiers);
-            if (HasBlobDatasWithRules())
+            if (GetMutableBlobDatasWithRulesProperties().IsNotNullAndNotEmpty())
             {
-                ClearBlobDatasWithRules();
+                ClearMutableBlobDatasWithRules();
             }
             OnAfterReset?.Invoke();
             return Task.CompletedTask;

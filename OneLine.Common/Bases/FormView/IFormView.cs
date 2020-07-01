@@ -1,6 +1,6 @@
 ﻿namespace OneLine.Bases
 {
-    public interface IForm<T, TIdentifier, THttpService> :
+    public interface IFormView<T, TIdentifier, THttpService> :
         IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
         IMutableBlobDataCollectionableValidatable,

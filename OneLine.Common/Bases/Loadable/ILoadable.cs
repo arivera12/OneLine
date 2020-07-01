@@ -6,5 +6,6 @@ namespace OneLine.Bases
     public interface ILoadable
     {
         Task Load();
+        bool AutoLoad { get; set; }
     }
 }

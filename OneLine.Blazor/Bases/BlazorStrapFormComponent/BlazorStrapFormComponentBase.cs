@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 namespace OneLine.Blazor.Bases
 {
     public abstract partial class BlazorStrapFormComponentBase<T, TIdentifier, TId, THttpService> :
-        FormBase<T, TIdentifier, TId, THttpService>,
+        FormViewBase<T, TIdentifier, TId, THttpService>,
         IBlazorStrapFormComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
@@ -37,6 +37,8 @@ namespace OneLine.Blazor.Bases
         [Inject] public virtual HttpClient HttpClient { get; set; }
         [Parameter] public override T Record { get; set; }
         [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
+        [Parameter] public override bool AllowDuplicates { get; set; }
+        [Parameter] public override bool AutoLoad { get; set; }
         [Parameter] public override TIdentifier Identifier { get; set; }
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
         [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
@@ -87,34 +89,6 @@ namespace OneLine.Blazor.Bases
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            if (FormMode.IsSingle())
-            {
-                if (Record.IsNull())
-                {
-                    if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
-                    {
-                        await Load();
-                    }
-                    else if(!string.IsNullOrWhiteSpace(RecordId))
-                    {
-                        Identifier = new TIdentifier
-                        {
-                            Model = (TId)Convert.ChangeType(RecordId, typeof(TId))
-                        };
-                        await Load();
-                    }
-                }
-            }
-            else if (FormMode.IsMultiple())
-            {
-                if (Records.IsNullOrEmpty())
-                {
-                    if (Identifiers.IsNotNullAndNotEmpty())
-                    {
-                        await Load();
-                    }
-                }
-            }
             //This null check allows to prevent override the listeners from parent if it's listening to any of this events
             OnBeforeSave ??= new Action(async () => await BeforeSave());
             OnAfterSave ??= new Action(async () => await AfterSave());
@@ -124,6 +98,17 @@ namespace OneLine.Blazor.Bases
             OnAfterCancel ??= new Action(async () => await AfterCancel());
             OnBeforeReset ??= new Action(async () => await BeforeReset());
             OnAfterReset ??= new Action(async () => await AfterReset());
+            if (!string.IsNullOrWhiteSpace(RecordId))
+            {
+                Identifier = new TIdentifier
+                {
+                    Model = (TId)Convert.ChangeType(RecordId, typeof(TId))
+                };
+            }
+            if (AutoLoad)
+            {
+                await Load();
+            }
             StateHasChanged();
         }
         public virtual string FormStateTitle()
@@ -141,19 +126,11 @@ namespace OneLine.Blazor.Bases
         {
             return FormState.IsDetails() || FormState.IsDelete() || FormState.IsDeleted();
         }
-        public virtual Size InputSize()
-        {
-            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
-        }
-        public virtual Size ButtonSize()
-        {
-            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
-        }
         public virtual async Task BeforeSave()
         {
             if (GetMutableBlobDatasWithRulesProperties().IsNotNullAndNotEmpty())
             {
-                await this.ValidateMutableBlobDatas();
+                await ValidateMutableBlobDatas();
                 if (!IsValidModelState)
                 {
                     await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
@@ -170,18 +147,12 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
             }
-            StateHasChanged();
         }
         public virtual async Task InvalidSubmit()
         {
             await Validate();
             await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
-            StateHasChanged();
         }
-        /// <summary>
-        /// Fix
-        /// </summary>
-        /// <returns></returns>
         public virtual async Task AfterSave()
         {
             await SweetAlertService.HideLoaderAsync();
@@ -203,12 +174,14 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.IsSuccessStatusCode)
             {
+                //TODO: Parameters!!!!
                 if (IsChained)
                 {
                     NavigationManager.NavigateTo(RedirectUrl);
                 }
                 else
                 {
+                    StateHasChanged();
                     await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
                 }
             }
@@ -221,7 +194,6 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response?.Message), SweetAlertIcon.Error);
             }
-            StateHasChanged();
         }
         public virtual async Task BeforeDelete()
         {
@@ -230,7 +202,6 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Delete()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
             }
-            StateHasChanged();
         }
         public virtual async Task AfterDelete()
         {
@@ -253,6 +224,7 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.IsSuccessStatusCode)
             {
+                StateHasChanged();
                 await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
             }
             else if (Response.IsNotNull() && 
@@ -264,7 +236,6 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response?.Message), SweetAlertIcon.Error);
             }
-            StateHasChanged();
         }
         public virtual async Task BeforeCancel()
         {
@@ -274,7 +245,6 @@ namespace OneLine.Blazor.Bases
             {
                 await Cancel();
             }
-            StateHasChanged();
         }
         public virtual async Task AfterCancel()
         {
@@ -288,7 +258,6 @@ namespace OneLine.Blazor.Bases
             {
                 await Reset();
             }
-            StateHasChanged();
         }
         public virtual Task AfterReset()
         {

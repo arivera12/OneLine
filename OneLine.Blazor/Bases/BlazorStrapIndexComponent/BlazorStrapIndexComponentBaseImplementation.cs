@@ -19,7 +19,7 @@ namespace OneLine.Blazor.Bases
     /// <typeparam name="TBlobValidator"></typeparam>
     /// <typeparam name="TUserBlobs"></typeparam>
     public abstract partial class BlazorStrapIndexComponent<T, TIdentifier, TId, THttpService> :
-        FormBase<T, TIdentifier, TId, THttpService>,
+        FormViewBase<T, TIdentifier, TId, THttpService>,
         IBlazorStrapIndexComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()

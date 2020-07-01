@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public abstract partial class FormBase<T, TIdentifier, TId, THttpService> :
-        IForm<T, TIdentifier, THttpService>
+    public abstract partial class FormViewBase<T, TIdentifier, TId, THttpService> :
+        IFormView<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
@@ -25,8 +25,12 @@ namespace OneLine.Bases
                 {
                     Response = await HttpService.GetOne<T>(Identifier);
                     ResponseChanged?.Invoke(Response);
-                    if (Response.IsNotNull() && Response.HttpResponseMessage.IsSuccessStatusCode &&
-                        Response.Succeed && Response.Response.Status.Succeeded())
+                    if (Response.IsNotNull() &&
+                        Response.Succeed &&
+                        Response.Response.IsNotNull() &&
+                        Response.Response.Status.Succeeded() &&
+                        Response.HttpResponseMessage.IsNotNull() &&
+                        Response.HttpResponseMessage.IsSuccessStatusCode)
                     {
                         Record = Response.Response.Data;
                         RecordChanged?.Invoke(Record);
@@ -39,8 +43,12 @@ namespace OneLine.Bases
                 {
                     ResponseCollection = await HttpService.GetRange<T>(Identifiers);
                     ResponseCollectionChanged?.Invoke(ResponseCollection);
-                    if (ResponseCollection.IsNotNull() && ResponseCollection.HttpResponseMessage.IsSuccessStatusCode &&
-                        ResponseCollection.Succeed && ResponseCollection.Response.Status.Succeeded())
+                    if (ResponseCollection.IsNotNull() &&
+                        ResponseCollection.Succeed &&
+                        ResponseCollection.Response.IsNotNull() &&
+                        ResponseCollection.Response.Status.Succeeded() &&
+                        ResponseCollection.HttpResponseMessage.IsNotNull() &&
+                        ResponseCollection.HttpResponseMessage.IsSuccessStatusCode)
                     {
                         if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                         {

@@ -6,7 +6,7 @@ namespace OneLine.Blazor.Bases
 {
     public interface IBlazorFormComponentAuthorized<T, TIdentifier, THttpService> :
         IBlazorComponent,
-        IForm<T, TIdentifier, THttpService>
+        IFormView<T, TIdentifier, THttpService>
     {
         IEnumerable<string> AuthorizedRoles { get; set; }
         AspNetUsersViewModel User { get; set; }

@@ -4,7 +4,7 @@ namespace OneLine.Blazor.Bases
 {
     public interface IBlazorFormComponent<T, TIdentifier, THttpService> :
         IBlazorComponent,
-        IForm<T, TIdentifier, THttpService>
+        IFormView<T, TIdentifier, THttpService>
     {
     }
 }

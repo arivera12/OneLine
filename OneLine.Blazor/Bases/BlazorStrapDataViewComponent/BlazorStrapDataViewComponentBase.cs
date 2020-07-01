@@ -8,6 +8,8 @@ using OneLine.Extensions;
 using OneLine.Models;
 using OneLine.Models.Users;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
@@ -26,33 +28,29 @@ namespace OneLine.Blazor.Bases
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            if (RecordsSelectionMode.IsSingle())
-            {
-                if (Record.IsNull())
-                {
-                    if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
-                    {
-                        await Load();
-                    }
-                }
-            }
-            else if (RecordsSelectionMode.IsMultiple())
-            {
-                if (Records.IsNullOrEmpty())
-                {
-                    if (Identifiers.IsNotNullAndNotEmpty())
-                    {
-                        await Load();
-                    }
-                }
-            }
             //This null check allows to prevent override the listeners from parent if it's listening to any of this events
             OnBeforeSearch ??= new Action(async () => await BeforeSearch());
             OnAfterSearch ??= new Action(async () => await AfterSearch());
+            if (AutoLoad)
+            {
+                await Load();
+            }
+            if (InitialAutoSearch)
+            {
+                if (OnBeforeSearch.IsNotNull())
+                {
+                    OnBeforeSearch.Invoke();
+                }
+                else
+                {
+                    await Search();
+                }
+            }
             StateHasChanged();
         }
         public virtual async Task BeforeSearch()
         {
+            Paging.PageIndex = 0;
             if (IsDesktop)
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Search()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
@@ -61,27 +59,31 @@ namespace OneLine.Blazor.Bases
             else
             {
                 ShowActivityIndicator = true;
-                StateHasChanged();
                 await Search();
             }
         }
         public virtual async Task AfterSearch()
         {
-            await SweetAlertService.HideLoaderAsync();
+            CollectionAppendReplaceMode = CollectionAppendReplaceMode.Replace;
+            if (IsDesktop)
+            {
+                await SweetAlertService.HideLoaderAsync();
+            }
             if (ResponsePaged.IsNull())
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
             }
-            else if (ResponsePaged.HttpResponseMessage.IsNotNull() && ResponsePaged.Succeed && 
-                ResponsePaged.Response.Status.Succeeded() && ResponsePaged.HttpResponseMessage.IsSuccessStatusCode)
+            else if (ResponsePaged.IsNotNull() &&
+                    ResponsePaged.Succeed &&
+                    ResponsePaged.Response.IsNotNull() &&
+                    ResponsePaged.Response.Status.Succeeded() &&
+                    ResponsePaged.HttpResponseMessage.IsNotNull() &&
+                    ResponsePaged.HttpResponseMessage.IsSuccessStatusCode)
             {
-                if (IsDesktop)
-                {
-                    await SweetAlertService.HideLoaderAsync();
-                }
-                else
+                if (!IsDesktop && ShowActivityIndicator)
                 {
                     ShowActivityIndicator = false;
+                    StateHasChanged();
                 }
             }
             else if (ResponsePaged.HttpResponseMessage.IsNotNull() && ResponsePaged.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -97,18 +99,16 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.FireAsync(null, Resourcer.GetString(ResponsePaged.Response.Message), SweetAlertIcon.Error);
             }
-            StateHasChanged();
         }
-        public virtual Size InputSize()
+        public virtual async Task<IEnumerable<T>> TypeaheadSearch(string searchTerm)
         {
-            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
-        }
-        public virtual Size ButtonSize()
-        {
-            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
+            SearchPaging.SearchTerm = searchTerm;
+            await Search();
+            return Records;
         }
         public virtual async Task LoadMore()
         {
+            CollectionAppendReplaceMode = CollectionAppendReplaceMode.Add;
             await GoNextPage();
             await BeforeSearch();
         }

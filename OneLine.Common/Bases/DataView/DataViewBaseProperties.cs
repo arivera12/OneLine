@@ -17,6 +17,9 @@ namespace OneLine.Bases
         public virtual IEnumerable<TIdentifier> Identifiers { get; set; }
         public virtual T Record { get; set; }
         public virtual ObservableRangeCollection<T> Records { get; set; }
+        public virtual bool AutoLoad { get; set; }
+        public virtual bool AllowDuplicates { get; set; }
+        public virtual bool InitialAutoSearch { get; set; }
         public virtual object[] SearchExtraParams { get; set; }
         public virtual Func<T, bool> FilterPredicate { get; set; }
         public virtual string FilterSortBy { get; set; }
@@ -50,7 +53,7 @@ namespace OneLine.Bases
         public virtual Action<T> SelectedRecordChanged { get; set; }
         public virtual Action BeforeSelectedRecord { get; set; }
         public virtual Action AfterSelectedRecord { get; set; }
-        public virtual Action<IEnumerable<T>, bool, bool> SelectedRecordsChanged { get; set; }
+        public virtual Action<IEnumerable<T>> SelectedRecordsChanged { get; set; }
         public virtual Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
         public virtual Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
         public virtual Action<IPaging> PagingChanged { get; set; }

@@ -34,6 +34,9 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
         [Parameter] public override T Record { get; set; }
         [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
+        [Parameter] public override bool AllowDuplicates { get; set; }
+        [Parameter] public override bool AutoLoad { get; set; }
+        [Parameter] public override bool InitialAutoSearch { get; set; }
         [Parameter] public override object[] SearchExtraParams { get; set; }
         [Parameter] public override Func<T, bool> FilterPredicate { get; set; }
         [Parameter] public override string FilterSortBy { get; set; }
@@ -65,7 +68,7 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<T> SelectedRecordChanged { get; set; }
         [Parameter] public override Action BeforeSelectedRecord { get; set; }
         [Parameter] public override Action AfterSelectedRecord { get; set; }
-        [Parameter] public override Action<IEnumerable<T>, bool, bool> SelectedRecordsChanged { get; set; }
+        [Parameter] public override Action<IEnumerable<T>> SelectedRecordsChanged { get; set; }
         [Parameter] public override Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
         [Parameter] public override Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
         [Parameter] public override Action<IPaging> PagingChanged { get; set; }
@@ -83,24 +86,19 @@ namespace OneLine.Blazor.Bases
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            if (RecordsSelectionMode.IsSingle())
+            if (AutoLoad)
             {
-                if (Record.IsNull())
-                {
-                    if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
-                    {
-                        await Load();
-                    }
-                }
+                await Load();
             }
-            else if (RecordsSelectionMode.IsMultiple())
+            if (InitialAutoSearch)
             {
-                if (Records.IsNullOrEmpty())
+                if (OnBeforeSearch.IsNotNull())
                 {
-                    if (Identifiers.IsNotNullAndNotEmpty())
-                    {
-                        await Load();
-                    }
+                    OnBeforeSearch.Invoke();
+                }
+                else
+                {
+                    await Search();
                 }
             }
             StateHasChanged();

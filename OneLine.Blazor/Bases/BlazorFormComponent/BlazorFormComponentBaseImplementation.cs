@@ -15,7 +15,7 @@ namespace OneLine.Blazor.Bases
     /// <typeparam name="TId"></typeparam>
     /// <typeparam name="THttpService"></typeparam>
     public abstract partial class BlazorFormComponentBase<T, TIdentifier, TId, THttpService> :
-        FormBase<T, TIdentifier, TId, THttpService>,
+        FormViewBase<T, TIdentifier, TId, THttpService>,
         IBlazorFormComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()

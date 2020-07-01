@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace OneLine.Blazor.Bases
 {
     public abstract partial class BlazorStrapIndexComponent<T, TIdentifier, TId, THttpService> :
-        FormBase<T, TIdentifier, TId, THttpService>,
+        FormViewBase<T, TIdentifier, TId, THttpService>,
         IBlazorStrapIndexComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
@@ -35,6 +35,7 @@ namespace OneLine.Blazor.Bases
         [Inject] public virtual HttpClient HttpClient { get; set; }
         [Parameter] public override T Record { get; set; }
         [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
+        [Parameter] public override bool AllowDuplicates { get; set; }
         [Parameter] public override TIdentifier Identifier { get; set; }
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
         [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
@@ -78,35 +79,11 @@ namespace OneLine.Blazor.Bases
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            if (FormMode.IsSingle())
+            if (AutoLoad)
             {
-                if (Record.IsNull())
-                {
-                    if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
-                    {
-                        await Load();
-                    }
-                }
-            }
-            else if (FormMode.IsMultiple())
-            {
-                if (Records.IsNullOrEmpty())
-                {
-                    if (Identifiers.IsNotNullAndNotEmpty())
-                    {
-                        await Load();
-                    }
-                }
+                await Load();
             }
             StateHasChanged();
-        }
-        public virtual Size InputSize()
-        {
-            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
-        }
-        public virtual Size ButtonSize()
-        {
-            return IsDesktop ? Size.Large : IsTablet ? Size.None : IsMobile ? Size.Small : Size.None;
         }
         public virtual void RecordSelected(T record)
         {

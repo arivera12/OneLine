@@ -14,5 +14,6 @@ namespace OneLine.Bases
         Action<T> RecordChanged { get; set; }
         ObservableRangeCollection<T> Records { get; set; }
         Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
+        bool AllowDuplicates { get; set; }
     }
 }

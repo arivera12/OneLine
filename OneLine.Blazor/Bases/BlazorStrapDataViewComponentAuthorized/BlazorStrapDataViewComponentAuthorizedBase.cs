@@ -37,29 +37,24 @@ namespace OneLine.Blazor.Bases
                 IsMobile = await BlazorCurrentDeviceService.Mobile();
                 IsTablet = await BlazorCurrentDeviceService.Tablet();
                 IsDesktop = await BlazorCurrentDeviceService.Desktop();
-                if (RecordsSelectionMode.IsSingle())
-                {
-                    if (Record.IsNull())
-                    {
-                        if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
-                        {
-                            await Load();
-                        }
-                    }
-                }
-                else if (RecordsSelectionMode.IsMultiple())
-                {
-                    if (Records.IsNullOrEmpty())
-                    {
-                        if (Identifiers.IsNotNullAndNotEmpty())
-                        {
-                            await Load();
-                        }
-                    }
-                }
                 //This null check allows to prevent override the listeners from parent if it's listening to any of this events
                 OnBeforeSearch ??= new Action(async () => await BeforeSearch());
                 OnAfterSearch ??= new Action(async () => await AfterSearch());
+                if (AutoLoad)
+                {
+                    await Load();
+                }
+                if (InitialAutoSearch)
+                {
+                    if (OnBeforeSearch.IsNotNull())
+                    {
+                        OnBeforeSearch.Invoke();
+                    }
+                    else
+                    {
+                        await Search();
+                    }
+                }
             }
             StateHasChanged();
         }

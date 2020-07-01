@@ -17,8 +17,8 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             Paging = new Paging();
@@ -28,8 +28,8 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             Paging = new Paging();
@@ -40,8 +40,8 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             HttpService = new THttpService();
             SearchPaging = searchPaging;
             Paging = new Paging();
@@ -51,8 +51,8 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             Paging = paging;
@@ -62,8 +62,8 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             HttpService = new THttpService();
             SearchPaging = searchPaging;
             SearchExtraParams = searchExtraParams;
@@ -73,8 +73,8 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             Paging = paging;
@@ -85,14 +85,36 @@ namespace OneLine.Bases
             Identifier = identifier;
             Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             Paging = new Paging();
-            if (autoLoad)
+            AutoLoad = autoLoad;
+            if (AutoLoad)
             {
                 _ = new Action(async () => await Load());
+            }
+        }
+        public DataViewBase(TIdentifier identifier, bool autoLoad = false, bool initialAutoSearch = false)
+        {
+            Identifier = identifier;
+            Identifiers = Enumerable.Empty<TIdentifier>();
+            Record = new T();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+            Paging = new Paging();
+            AutoLoad = autoLoad;
+            InitialAutoSearch = initialAutoSearch;
+            if (AutoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
+            if (InitialAutoSearch)
+            {
+                _ = new Action(async () => await Search());
             }
         }
         public DataViewBase(IEnumerable<TIdentifier> identifiers, bool autoLoad = false)
@@ -100,14 +122,36 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = identifiers;
             Record = new T();
-            Records = new ObservableRangeCollection<T>();
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             Paging = new Paging();
-            if (autoLoad)
+            AutoLoad = autoLoad;
+            if (AutoLoad)
             {
                 _ = new Action(async () => await Load());
+            }
+        }
+        public DataViewBase(IEnumerable<TIdentifier> identifiers, bool autoLoad = false, bool initialAutoSearch = false)
+        {
+            Identifier = new TIdentifier();
+            Identifiers = identifiers;
+            Record = new T();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            HttpService = new THttpService();
+            SearchPaging = new SearchPaging();
+            Paging = new Paging();
+            AutoLoad = autoLoad;
+            InitialAutoSearch = initialAutoSearch;
+            if (AutoLoad)
+            {
+                _ = new Action(async () => await Load());
+            }
+            if(InitialAutoSearch)
+            {
+                _ = new Action(async () => await Search());
             }
         }
         public DataViewBase(T record)
@@ -115,8 +159,8 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = Enumerable.Empty<TIdentifier>();
             Record = record;
-            Records = new ObservableRangeCollection<T>();
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();
             Paging = new Paging();
@@ -126,9 +170,9 @@ namespace OneLine.Bases
             Identifier = new TIdentifier();
             Identifiers = Enumerable.Empty<TIdentifier>();
             Record = new T();
-            Records = new ObservableRangeCollection<T>();
+            Records = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             Records.AddRange(records);
-            RecordsFilteredSorted = new ObservableRangeCollection<T>();
+            RecordsFilteredSorted = new ObservableRangeCollection<T>() { AllowDuplicates = AllowDuplicates };
             RecordsFilteredSorted.AddRange(records);
             HttpService = new THttpService();
             SearchPaging = new SearchPaging();

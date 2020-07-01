@@ -9,14 +9,16 @@ using System.Collections.ObjectModel;
 
 namespace OneLine.Bases
 {
-    public abstract partial class FormBase<T, TIdentifier, TId, THttpService> :
-        IForm<T, TIdentifier, THttpService>
+    public abstract partial class FormViewBase<T, TIdentifier, TId, THttpService> :
+        IFormView<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         public virtual T Record { get; set; }
         public virtual ObservableRangeCollection<T> Records { get; set; }
+        public virtual bool AllowDuplicates { get; set; }
+        public virtual bool AutoLoad { get; set; }
         public virtual TIdentifier Identifier { get; set; }
         public virtual IEnumerable<TIdentifier> Identifiers { get; set; }
         public virtual CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }

@@ -35,25 +35,9 @@ namespace OneLine.Blazor.Bases
                 IsMobile = await BlazorCurrentDeviceService.Mobile();
                 IsTablet = await BlazorCurrentDeviceService.Tablet();
                 IsDesktop = await BlazorCurrentDeviceService.Desktop();
-                if (FormMode.IsSingle())
+                if (AutoLoad)
                 {
-                    if (Record.IsNull())
-                    {
-                        if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
-                        {
-                            await Load();
-                        }
-                    }
-                }
-                else if (FormMode.IsMultiple())
-                {
-                    if (Records.IsNullOrEmpty())
-                    {
-                        if (Identifiers.IsNotNullAndNotEmpty())
-                        {
-                            await Load();
-                        }
-                    }
+                    await Load();
                 }
             }
             StateHasChanged();

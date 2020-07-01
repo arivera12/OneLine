@@ -16,10 +16,11 @@ namespace OneLine.Bases
         bool MinimunRecordsSelectionsReached { get; set; }
         bool MaximumRecordsSelectionsReached { get; set; }
         Task SelectRecord(T selectedRecord);
+        Task SelectRecords(IEnumerable<T> selectedRecords);
         Action BeforeSelectedRecord { get; set; }
         Action AfterSelectedRecord { get; set; }
         Action<T> SelectedRecordChanged { get; set; }
-        Action<IEnumerable<T>, bool, bool> SelectedRecordsChanged { get; set; }
+        Action<IEnumerable<T>> SelectedRecordsChanged { get; set; }
         Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
         Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
     }

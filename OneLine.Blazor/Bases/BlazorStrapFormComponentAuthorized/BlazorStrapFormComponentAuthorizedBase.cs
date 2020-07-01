@@ -36,26 +36,6 @@ namespace OneLine.Blazor.Bases
                 IsMobile = await BlazorCurrentDeviceService.Mobile();
                 IsTablet = await BlazorCurrentDeviceService.Tablet();
                 IsDesktop = await BlazorCurrentDeviceService.Desktop();
-                if (FormMode.IsSingle())
-                {
-                    if (Record.IsNull())
-                    {
-                        if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
-                        {
-                            await Load();
-                        }
-                    }
-                }
-                else if (FormMode.IsMultiple())
-                {
-                    if (Records.IsNullOrEmpty())
-                    {
-                        if (Identifiers.IsNotNullAndNotEmpty())
-                        {
-                            await Load();
-                        }
-                    }
-                }
                 //This null check allows to prevent override the listeners from parent if it's listening to any of this events
                 OnBeforeSave ??= new Action(async () => await BeforeSave());
                 OnAfterSave ??= new Action(async () => await AfterSave());
@@ -65,6 +45,10 @@ namespace OneLine.Blazor.Bases
                 OnAfterCancel ??= new Action(async () => await AfterCancel());
                 OnBeforeReset ??= new Action(async () => await BeforeReset());
                 OnAfterReset ??= new Action(async () => await AfterReset());
+                if (AutoLoad)
+                {
+                    await Load();
+                }
             }
             StateHasChanged();
         }

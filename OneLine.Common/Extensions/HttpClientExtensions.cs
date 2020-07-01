@@ -225,8 +225,16 @@ namespace OneLine.Extensions
         {
             try
             {
-                var request = new HttpRequestMessage(method, requestUri);
-                request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                HttpRequestMessage request;
+                if (method == HttpMethod.Get)
+                {
+                    request = new HttpRequestMessage(method, $"{requestUri}?{content?.ToUrlQueryString()}");
+                }
+                else
+                {
+                    request = new HttpRequestMessage(method, requestUri);
+                    request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                }
                 var response = await httpClient.SendAsync(request);
                 if (response.IsNull())
                 {

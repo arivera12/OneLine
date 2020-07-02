@@ -1,9 +1,9 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
 using OneLine.Validations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,61 +11,126 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public abstract partial class FormViewBase<T, TIdentifier, TId, THttpService> :
-        IFormView<T, TIdentifier, THttpService>
+    public abstract partial class CoreViewBase<T, TIdentifier, TId, THttpService> :
+        ICoreView<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         public virtual async Task Load()
         {
-            if (FormMode.IsSingle())
+            if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
             {
-                if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
+                Response = await HttpService.GetOne<T>(Identifier, new EmptyValidator());
+                ResponseChanged?.Invoke(Response);
+                if (Response.IsNotNull() &&
+                    Response.Succeed &&
+                    Response.Response.IsNotNull() &&
+                    Response.Response.Status.Succeeded() &&
+                    Response.HttpResponseMessage.IsNotNull() &&
+                    Response.HttpResponseMessage.IsSuccessStatusCode)
                 {
-                    Response = await HttpService.GetOne<T>(Identifier);
-                    ResponseChanged?.Invoke(Response);
-                    if (Response.IsNotNull() &&
-                        Response.Succeed &&
-                        Response.Response.IsNotNull() &&
-                        Response.Response.Status.Succeeded() &&
-                        Response.HttpResponseMessage.IsNotNull() &&
-                        Response.HttpResponseMessage.IsSuccessStatusCode)
-                    {
-                        Record = Response.Response.Data;
-                        RecordChanged?.Invoke(Record);
-                    }
+                    Record = Response.Response.Data;
+                    RecordChanged?.Invoke(Record);
+                    await SelectRecord(Record);
                 }
             }
-            else if (FormMode.IsMultiple())
+            else if (Identifiers.IsNotNull() && Identifiers.Any())
             {
-                if (Identifiers.IsNotNull() && Identifiers.Any())
+                ResponseCollection = await HttpService.GetRange<T>(Identifiers, new EmptyValidator());
+                ResponseCollectionChanged?.Invoke(ResponseCollection);
+                if (ResponseCollection.IsNotNull() &&
+                    ResponseCollection.Succeed &&
+                    ResponseCollection.Response.IsNotNull() &&
+                    ResponseCollection.Response.Status.Succeeded() &&
+                    ResponseCollection.HttpResponseMessage.IsNotNull() &&
+                    ResponseCollection.HttpResponseMessage.IsSuccessStatusCode)
                 {
-                    ResponseCollection = await HttpService.GetRange<T>(Identifiers);
-                    ResponseCollectionChanged?.Invoke(ResponseCollection);
-                    if (ResponseCollection.IsNotNull() &&
-                        ResponseCollection.Succeed &&
-                        ResponseCollection.Response.IsNotNull() &&
-                        ResponseCollection.Response.Status.Succeeded() &&
-                        ResponseCollection.HttpResponseMessage.IsNotNull() &&
-                        ResponseCollection.HttpResponseMessage.IsSuccessStatusCode)
+                    if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                     {
-                        if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
-                        {
-                            Records.ReplaceRange(ResponseCollection.Response.Data);
-                        }
-                        else if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
-                        {
-                            Records.AddRange(ResponseCollection.Response.Data);
-                        }
-                        RecordsChanged?.Invoke(Records);
+                        Records.ReplaceRange(ResponseCollection.Response.Data);
+                        RecordsFilteredSorted.ReplaceRange(Records);
                     }
+                    else if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
+                    {
+                        Records.AddRange(ResponseCollection.Response.Data);
+                        RecordsFilteredSorted.AddRange(Records);
+                    }
+                    RecordsChanged?.Invoke(Records);
+                    RecordsFilteredSortedChanged?.Invoke(RecordsFilteredSorted);
+                    await SelectRecords(Records);
                 }
             }
         }
+        public virtual async Task Search()
+        {
+            ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
+            ResponsePagedChanged?.Invoke(ResponsePaged);
+            if (ResponsePaged.IsNotNull() &&
+                ResponsePaged.Succeed &&
+                ResponsePaged.Response.IsNotNull() &&
+                ResponsePaged.Response.Status.Succeeded() &&
+                ResponsePaged.HttpResponseMessage.IsNotNull() &&
+                ResponsePaged.HttpResponseMessage.IsSuccessStatusCode)
+            {
+                if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
+                {
+                    Records.ReplaceRange(ResponsePaged.Response.Data.Data);
+                    RecordsFilteredSorted.ReplaceRange(Records);
+                }
+                else if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
+                {
+                    Records.AddRange(ResponsePaged.Response.Data.Data);
+                    RecordsFilteredSorted.AddRange(Records);
+                }
+                RecordsChanged?.Invoke(Records);
+                RecordsFilteredSortedChanged?.Invoke(RecordsFilteredSorted);
+            }
+            OnAfterSearch?.Invoke();
+        }
+        public virtual Task SelectRecord(T selectedRecord)
+        {
+            if (RecordsSelectionMode.IsSingle())
+            {
+                SelectedRecord = selectedRecord;
+                SelectedRecordChanged?.Invoke(SelectedRecord);
+            }
+            else if (RecordsSelectionMode.IsMultiple())
+            {
+                if (SelectedRecords.Contains(selectedRecord))
+                {
+                    SelectedRecords.Remove(selectedRecord);
+                }
+                else if (MaximumRecordsSelections <= 0 || (MaximumRecordsSelections > 0 && SelectedRecords.Count < MaximumRecordsSelections))
+                {
+                    SelectedRecords.Add(selectedRecord);
+                }
+                MinimunRecordsSelectionsReached = SelectedRecords.Count >= MinimunRecordsSelections;
+                MinimunRecordsSelectionsReachedChanged?.Invoke(MinimunRecordsSelectionsReached);
+                MaximumRecordsSelectionsReached = SelectedRecords.Count >= MaximumRecordsSelections;
+                MaximumRecordsSelectionsReachedChanged?.Invoke(MaximumRecordsSelectionsReached);
+                SelectedRecordsChanged?.Invoke(SelectedRecords);
+            }
+            AfterSelectedRecord?.Invoke();
+            return Task.CompletedTask;
+        }
+        public virtual Task SelectRecords(IEnumerable<T> selectedRecords)
+        {
+            if (MaximumRecordsSelections <= 0 || (MaximumRecordsSelections > 0 && SelectedRecords.Count < MaximumRecordsSelections))
+            {
+                SelectedRecords.ReplaceRange(selectedRecords);
+            }
+            MinimunRecordsSelectionsReached = SelectedRecords.Count >= MinimunRecordsSelections;
+            MinimunRecordsSelectionsReachedChanged?.Invoke(MinimunRecordsSelectionsReached);
+            MaximumRecordsSelectionsReached = SelectedRecords.Count >= MaximumRecordsSelections;
+            MaximumRecordsSelectionsReachedChanged?.Invoke(MaximumRecordsSelectionsReached);
+            SelectedRecordsChanged?.Invoke(SelectedRecords);
+            AfterSelectedRecord?.Invoke();
+            return Task.CompletedTask;
+        }
         public virtual async Task Validate()
         {
-            if(FormMode.IsSingle())
+            if (FormMode.IsSingle())
             {
                 ValidationResult = await Validator.ValidateAsync(Record);
             }
@@ -87,7 +152,7 @@ namespace OneLine.Bases
         }
         public virtual async Task Save()
         {
-            if(FormState.IsCreate() || FormState.IsEdit() || FormState.IsCopy())
+            if (FormState.IsCreate() || FormState.IsEdit() || FormState.IsCopy())
             {
                 if (FormMode.IsSingle())
                 {
@@ -194,7 +259,7 @@ namespace OneLine.Bases
                 var propertiesInfos = new List<PropertyInfo>();
                 foreach (var record in Records)
                 {
-                    foreach(var property in record.GetType().GetProperties().Where(w => w.PropertyType == typeof(Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>)))
+                    foreach (var property in record.GetType().GetProperties().Where(w => w.PropertyType == typeof(Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>)))
                     {
                         propertiesInfos.Add(property);
                     }
@@ -210,7 +275,7 @@ namespace OneLine.Bases
         {
             foreach (var blobDataProperty in GetMutableBlobDatasWithRulesProperties())
             {
-                if(FormMode.IsSingle())
+                if (FormMode.IsSingle())
                 {
                     var blobDatas = (Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>)blobDataProperty.GetValue(Record);
                     blobDataProperty.SetValue(Record, new Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>(blobDatas.Item1, Enumerable.Empty<BlobData>(), blobDatas.Item3));
@@ -229,7 +294,7 @@ namespace OneLine.Bases
         {
             foreach (var blobDataProperty in GetMutableBlobDatasWithRulesProperties())
             {
-                if(FormMode.IsSingle())
+                if (FormMode.IsSingle())
                 {
                     var mutableBlobDatas = (Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<UserBlobs>>)blobDataProperty.GetValue(Record);
                     var formFileRules = mutableBlobDatas.Item1;
@@ -273,7 +338,7 @@ namespace OneLine.Bases
                         }
                         if (currentBlobsCount >= formFileRules.AllowedMinimunFiles)
                         {
-                            if(blobDatas.IsNotNullAndNotEmpty())
+                            if (blobDatas.IsNotNullAndNotEmpty())
                             {
                                 await InternalValidateBlobDatas(blobDatas, formFileRules);
                             }
@@ -379,6 +444,223 @@ namespace OneLine.Bases
         public virtual Task Cancel()
         {
             OnAfterCancel?.Invoke();
+            return Task.CompletedTask;
+        }
+        public virtual Task FilterAndSort(string sortBy, bool descending)
+        {
+            FilterSortBy = sortBy;
+            FilterSortByChanged?.Invoke(FilterSortBy);
+            FilterDescending = descending;
+            FilterDescendingChanged?.Invoke(FilterDescending);
+            return FilterAndSort();
+        }
+        public virtual Task FilterAndSort(string sortBy, bool descending, Func<T, bool> filterPredicate)
+        {
+            FilterSortBy = sortBy;
+            FilterSortByChanged?.Invoke(FilterSortBy);
+            FilterDescending = descending;
+            FilterDescendingChanged?.Invoke(FilterDescending);
+            FilterPredicate = filterPredicate;
+            FilterPredicateChanged?.Invoke(FilterPredicate);
+            return FilterAndSort();
+        }
+        public virtual Task FilterAndSort()
+        {
+            if (Records.IsNotNull() && Records.Any())
+            {
+                IEnumerable<T> recordsFilteredSorted;
+                if (FilterPredicate.IsNotNull())
+                {
+                    recordsFilteredSorted = Records.Where(FilterPredicate);
+                }
+                else
+                {
+                    recordsFilteredSorted = Records;
+                }
+                if (FilterSortBy.IsNotNull())
+                {
+                    if (FilterDescending)
+                    {
+                        recordsFilteredSorted = recordsFilteredSorted.OrderByPropertyDescending(FilterSortBy);
+                    }
+                    else
+                    {
+                        recordsFilteredSorted = recordsFilteredSorted.OrderByProperty(FilterSortBy);
+                    }
+                }
+                //Creates a deep copy prevent deleting the original collection.
+                RecordsFilteredSorted.ReplaceRange(recordsFilteredSorted.AutoMap<T, T>());
+                RecordsFilteredSortedChanged?.Invoke(RecordsFilteredSorted);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoPreviousPage()
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
+            {
+                SearchPaging.PageIndex--;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoPreviousPage(int pageSize)
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
+            {
+                SearchPaging.PageIndex--;
+                SearchPaging.PageSize = pageSize;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoPreviousPage(string sortBy)
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
+            {
+                SearchPaging.PageIndex--;
+                SearchPaging.SortBy = sortBy;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoPreviousPage(int pageSize, string sortBy)
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
+            {
+                SearchPaging.PageIndex--;
+                SearchPaging.PageSize = pageSize;
+                SearchPaging.SortBy = sortBy;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoNextPage()
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
+            {
+                SearchPaging.PageIndex++;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoNextPage(int pageSize)
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
+            {
+                SearchPaging.PageIndex++;
+                SearchPaging.PageSize = pageSize;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoNextPage(string sortBy)
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
+            {
+                SearchPaging.PageIndex++;
+                SearchPaging.SortBy = sortBy;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoNextPage(int pageSize, string sortBy)
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
+            {
+                SearchPaging.PageIndex++;
+                SearchPaging.PageSize = pageSize;
+                SearchPaging.SortBy = sortBy;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoToPage(int pageIndex, int pageSize)
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.LastPage <= pageIndex)
+            {
+                SearchPaging.PageIndex = pageIndex;
+                SearchPaging.PageSize = pageSize;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoToPage(int pageIndex, string sortBy)
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.LastPage <= pageIndex)
+            {
+                SearchPaging.PageIndex = pageIndex;
+                SearchPaging.SortBy = sortBy;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task GoToPage(int pageIndex, int pageSize, string sortBy)
+        {
+            if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.LastPage <= pageIndex)
+            {
+                SearchPaging.PageIndex = pageIndex;
+                SearchPaging.PageSize = pageSize;
+                SearchPaging.SortBy = sortBy;
+                SearchPagingChanged?.Invoke(SearchPaging);
+            }
+            return Task.CompletedTask;
+        }
+        public virtual Task Sort()
+        {
+            SearchPaging.Descending = !SearchPaging.Descending;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task Sort(bool descending)
+        {
+            SearchPaging.Descending = descending;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortAscending()
+        {
+            SearchPaging.Descending = false;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortDescending()
+        {
+            SearchPaging.Descending = true;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortBy(string sortBy)
+        {
+            if (SearchPaging.SortBy.Equals(sortBy))
+            {
+                SearchPaging.Descending = !SearchPaging.Descending;
+            }
+            else
+            {
+                SearchPaging.SortBy = sortBy;
+            }
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortBy(string sortBy, bool descending)
+        {
+            SearchPaging.SortBy = sortBy;
+            SearchPaging.Descending = descending;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortByAscending(string sortBy)
+        {
+            SearchPaging.SortBy = sortBy;
+            SearchPaging.Descending = false;
+            SearchPagingChanged?.Invoke(SearchPaging);
+            return Task.CompletedTask;
+        }
+        public virtual Task SortByDescending(string sortBy)
+        {
+            SearchPaging.SortBy = sortBy;
+            SearchPaging.Descending = true;
+            SearchPagingChanged?.Invoke(SearchPaging);
             return Task.CompletedTask;
         }
     }

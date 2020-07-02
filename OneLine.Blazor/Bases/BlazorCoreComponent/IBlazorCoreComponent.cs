@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public interface IBlazorComponent : IComponent, IHandleEvent, IHandleAfterRender
+    public interface IBlazorCoreComponent : IComponent, IHandleEvent, IHandleAfterRender
     {
         IJSRuntime JSRuntime { get; set; }
         NavigationManager NavigationManager { get; set; }
@@ -19,6 +19,12 @@ namespace OneLine.Blazor.Bases
         bool IsDesktop { get; set; }
         bool IsTablet { get; set; }
         bool IsMobile { get; set; }
+        bool IsFormOpen { get; set; }
+        bool ShowModal { get; set; }
+        bool HideCancelOrBackButton { get; set; }
+        bool HideResetButton { get; set; }
+        bool HideSaveButton { get; set; }
+        bool HideDeleteButton { get; set; }
         int DebounceInterval { get; set; }
         Task OnAfterFirstRenderAsync();
     }

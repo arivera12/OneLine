@@ -1,6 +1,5 @@
 ﻿using BlazorCurrentDevice;
 using BlazorDownloadFile;
-using BlazorStrap;
 using CurrieTechnologies.Razor.SweetAlert2;
 using FluentValidation;
 using FluentValidation.Results;
@@ -21,9 +20,9 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract partial class BlazorStrapFormComponentBase<T, TIdentifier, TId, THttpService> :
-        FormViewBase<T, TIdentifier, TId, THttpService>,
-        IBlazorStrapFormComponent<T, TIdentifier, THttpService>
+    public abstract partial class BlazorCoreViewComponentBase<T, TIdentifier, TId, THttpService> :
+        CoreViewBase<T, TIdentifier, TId, THttpService>,
+        IBlazorDataViewComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
@@ -35,31 +34,62 @@ namespace OneLine.Blazor.Bases
         [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
         [Inject] public virtual HttpClient HttpClient { get; set; }
-        [Parameter] public override T Record { get; set; }
-        [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
-        [Parameter] public override bool AllowDuplicates { get; set; }
-        [Parameter] public override bool AutoLoad { get; set; }
         [Parameter] public override TIdentifier Identifier { get; set; }
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
-        [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
+        [Parameter] public override T Record { get; set; }
+        [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
         [Parameter] public override IValidator Validator { get; set; }
         [Parameter] public override ValidationResult ValidationResult { get; set; }
         [Parameter] public override bool IsValidModelState { get; set; }
-        [Parameter] public override THttpService HttpService { get; set; }
         [Parameter] public override FormState FormState { get; set; }
         [Parameter] public override FormMode FormMode { get; set; }
+        [Parameter] public override bool AutoLoad { get; set; }
+        [Parameter] public override bool AllowDuplicates { get; set; }
+        [Parameter] public override bool InitialAutoSearch { get; set; }
+        [Parameter] public override object[] SearchExtraParams { get; set; }
+        [Parameter] public override Func<T, bool> FilterPredicate { get; set; }
+        [Parameter] public override string FilterSortBy { get; set; }
+        [Parameter] public override bool FilterDescending { get; set; }
+        [Parameter] public override ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
         [Parameter] public override IResponseResult<ApiResponse<T>> Response { get; set; }
         [Parameter] public override IResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        [Parameter] public override IResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
+        [Parameter] public override THttpService HttpService { get; set; }
+        [Parameter] public override IPaging Paging { get; set; }
+        [Parameter] public override ISearchPaging SearchPaging { get; set; }
+        [Parameter] public override RecordsSelectionMode RecordsSelectionMode { get; set; }
+        [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
+        [Parameter] public override T SelectedRecord { get; set; }
+        [Parameter] public override ObservableRangeCollection<T> SelectedRecords { get; set; }
+        [Parameter] public override long MinimunRecordsSelections { get; set; }
+        [Parameter] public override long MaximumRecordsSelections { get; set; }
+        [Parameter] public override bool MinimunRecordsSelectionsReached { get; set; }
+        [Parameter] public override bool MaximumRecordsSelectionsReached { get; set; }
+        [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        [Parameter] public override Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
+        [Parameter] public override Action OnBeforeSearch { get; set; }
+        [Parameter] public override Action OnAfterSearch { get; set; }
         [Parameter] public override Action<TIdentifier> IdentifierChanged { get; set; }
         [Parameter] public override Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
         [Parameter] public override Action<T> RecordChanged { get; set; }
         [Parameter] public override Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
+        [Parameter] public override Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
+        [Parameter] public override Action<T> SelectedRecordChanged { get; set; }
+        [Parameter] public override Action BeforeSelectedRecord { get; set; }
+        [Parameter] public override Action AfterSelectedRecord { get; set; }
+        [Parameter] public override Action<IEnumerable<T>> SelectedRecordsChanged { get; set; }
+        [Parameter] public override Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
+        [Parameter] public override Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
+        [Parameter] public override Action<IPaging> PagingChanged { get; set; }
+        [Parameter] public override Action<ISearchPaging> SearchPagingChanged { get; set; }
+        [Parameter] public override Action<Func<T, bool>> FilterPredicateChanged { get; set; }
+        [Parameter] public override Action<string> FilterSortByChanged { get; set; }
+        [Parameter] public override Action<bool> FilterDescendingChanged { get; set; }
         [Parameter] public override Action<ValidationResult> ValidationResultChanged { get; set; }
         [Parameter] public override Action<bool> IsValidModelStateChanged { get; set; }
         [Parameter] public override Action<FormState> FormStateChanged { get; set; }
         [Parameter] public override Action<FormMode> FormModeChanged { get; set; }
-        [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
-        [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         [Parameter] public override Action OnBeforeReset { get; set; }
         [Parameter] public override Action OnAfterReset { get; set; }
         [Parameter] public override Action OnBeforeCancel { get; set; }
@@ -70,26 +100,28 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnAfterDelete { get; set; }
         [Parameter] public override Action OnBeforeValidate { get; set; }
         [Parameter] public override Action OnAfterValidate { get; set; }
+        [Parameter] public virtual int DebounceInterval { get; set; }
         [Parameter] public virtual bool HideCancelOrBackButton { get; set; }
         [Parameter] public virtual bool HideResetButton { get; set; }
         [Parameter] public virtual bool HideSaveButton { get; set; }
         [Parameter] public virtual bool HideDeleteButton { get; set; }
-        [Parameter] public virtual int DebounceInterval { get; set; }
         [Parameter] public virtual string RecordId { get; set; }
         [Parameter] public virtual string RedirectUrl { get; set; }
-        public bool IsChained { get { return !string.IsNullOrWhiteSpace(RedirectUrl);  } }
+        public bool IsChained { get { return !string.IsNullOrWhiteSpace(RedirectUrl); } }
+        public bool ShowActivityIndicator { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
         public bool IsFormOpen { get; set; }
-        public BSModal Modal { get; set; }
+        public bool ShowModal { get; set; }
         public virtual async Task OnAfterFirstRenderAsync()
         {
             HttpService.HttpClient = HttpClient;
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            //This null check allows to prevent override the listeners from parent if it's listening to any of this events
+            OnBeforeSearch ??= new Action(async () => await BeforeSearch());
+            OnAfterSearch ??= new Action(async () => await AfterSearch());
             OnBeforeSave ??= new Action(async () => await BeforeSave());
             OnAfterSave ??= new Action(async () => await AfterSave());
             OnBeforeDelete ??= new Action(async () => await BeforeDelete());
@@ -109,7 +141,95 @@ namespace OneLine.Blazor.Bases
             {
                 await Load();
             }
+            if (InitialAutoSearch)
+            {
+                if (OnBeforeSearch.IsNotNull())
+                {
+                    OnBeforeSearch.Invoke();
+                }
+                else
+                {
+                    await Search();
+                }
+            }
             StateHasChanged();
+        }
+        public virtual async Task BeforeSearch()
+        {
+            Paging.PageIndex = 0;
+            if (IsDesktop)
+            {
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Search()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
+                StateHasChanged();
+            }
+            else
+            {
+                ShowActivityIndicator = true;
+                await Search();
+            }
+        }
+        public virtual async Task AfterSearch()
+        {
+            CollectionAppendReplaceMode = CollectionAppendReplaceMode.Replace;
+            if (IsDesktop)
+            {
+                await SweetAlertService.HideLoaderAsync();
+            }
+            if (ResponsePaged.IsNull())
+            {
+                await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
+            }
+            else if (ResponsePaged.IsNotNull() &&
+                    ResponsePaged.Succeed &&
+                    ResponsePaged.Response.IsNotNull() &&
+                    ResponsePaged.Response.Status.Succeeded() &&
+                    ResponsePaged.HttpResponseMessage.IsNotNull() &&
+                    ResponsePaged.HttpResponseMessage.IsSuccessStatusCode)
+            {
+                if (!IsDesktop && ShowActivityIndicator)
+                {
+                    ShowActivityIndicator = false;
+                    StateHasChanged();
+                }
+            }
+            else if (ResponsePaged.HttpResponseMessage.IsNotNull() && ResponsePaged.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
+            }
+            else if (ResponsePaged.HasException)
+            {
+                await SweetAlertService.FireAsync(null, ResponsePaged.Exception.Message, SweetAlertIcon.Error);
+            }
+            else
+            {
+                await SweetAlertService.FireAsync(null, Resourcer.GetString(ResponsePaged.Response.Message), SweetAlertIcon.Error);
+            }
+        }
+        public virtual async Task<IEnumerable<T>> TypeaheadSearch(string searchTerm)
+        {
+            SearchPaging.SearchTerm = searchTerm;
+            await Search();
+            return Records;
+        }
+        public virtual async Task LoadMore()
+        {
+            CollectionAppendReplaceMode = CollectionAppendReplaceMode.Add;
+            await GoNextPage();
+            await BeforeSearch();
+        }
+        public virtual async Task PagingChange(IPaging paging)
+        {
+            SearchPaging.AutoMap(paging);
+            await BeforeSearch();
+        }
+        public virtual void SearchTermChanged(string searchTerm)
+        {
+            SearchPaging.SearchTerm = searchTerm;
+            RateLimitingExtensionForObject.Debounce(SearchPaging, DebounceInterval, async (searchPagingDebounced) =>
+            {
+                await BeforeSearch();
+            });
         }
         public virtual string FormStateTitle()
         {
@@ -160,7 +280,7 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
             }
-            else if(Response.IsNotNull() &&
+            else if (Response.IsNotNull() &&
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
@@ -185,7 +305,7 @@ namespace OneLine.Blazor.Bases
                     await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
                 }
             }
-            else if (Response.IsNotNull() && 
+            else if (Response.IsNotNull() &&
                     Response.HasException)
             {
                 await SweetAlertService.FireAsync(null, Response.Exception.Message, SweetAlertIcon.Error);
@@ -227,7 +347,7 @@ namespace OneLine.Blazor.Bases
                 StateHasChanged();
                 await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
             }
-            else if (Response.IsNotNull() && 
+            else if (Response.IsNotNull() &&
                     Response.HasException)
             {
                 await SweetAlertService.FireAsync(null, Response.Exception.Message, SweetAlertIcon.Error);
@@ -240,7 +360,7 @@ namespace OneLine.Blazor.Bases
         public virtual async Task BeforeCancel()
         {
             var text = IsChained ? "AreYouSureYouWantToGoBack" : "AreYouSureYouWantToCancel";
-            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString(text), 
+            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString(text),
                                                                 confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
                 await Cancel();

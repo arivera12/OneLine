@@ -1,6 +1,6 @@
 ﻿namespace OneLine.Bases
 {
-    public interface IDataView<T, TIdentifier, THttpService> :
+    public interface ICoreView<T, TIdentifier, THttpService> :
         IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
         ISearchExtraParameterable<object[]>,
@@ -17,7 +17,15 @@
         IApiResponseablePageable<T>,
         IApiResponseableCollectionable<T>,
         IConfigurable,
-        ILoadable
-    {  
+        ILoadable,
+        IMutableBlobDataCollectionableValidatable,
+        ISaveableEventable,
+        IValidatableEventable,
+        IFormStateable,
+        IFormModeable,
+        IDeletableEventable,
+        IResettableEventable,
+        ICancelableEventable
+    {
     }
 }

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace OneLine.Blazor.Bases
 {
-    public interface IBlazorDataViewComponentAuthorized<T, TIdentifier, THttpService> :
-        IBlazorComponent,
-        IDataView<T, TIdentifier, THttpService>
+    public interface IBlazorCoreViewComponentAuthorized<T, TIdentifier, THttpService> :
+        IBlazorCoreComponent,
+        ICoreView<T, TIdentifier, THttpService>
     {
         IEnumerable<string> AuthorizedRoles { get; set; }
         AspNetUsersViewModel User { get; set; }

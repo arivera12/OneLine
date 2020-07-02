@@ -7,19 +7,8 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    /// <summary>
-    /// Base component implementation with form default behaviors
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TIdentifier"></typeparam>
-    /// <typeparam name="TId"></typeparam>
-    /// <typeparam name="THttpService"></typeparam>
-    /// <typeparam name="TBlobData"></typeparam>
-    /// <typeparam name="TBlobValidator"></typeparam>
-    /// <typeparam name="TUserBlobs"></typeparam>
-    public abstract partial class BlazorStrapFormComponentBase<T, TIdentifier, TId, THttpService> :
-        FormViewBase<T, TIdentifier, TId, THttpService>,
-        IBlazorStrapFormComponent<T, TIdentifier, THttpService>
+    public abstract partial class BlazorCoreViewComponentBase<T, TIdentifier, TId, THttpService> :
+        IBlazorDataViewComponent<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
@@ -33,7 +22,7 @@ namespace OneLine.Blazor.Bases
         /// <summary>
         /// Constructs an instance of <see cref="BlazorFormComponentBase"/>.
         /// </summary>
-        public BlazorStrapFormComponentBase() : base()
+        public BlazorCoreViewComponentBase() : base()
         {
             _renderFragment = builder =>
             {

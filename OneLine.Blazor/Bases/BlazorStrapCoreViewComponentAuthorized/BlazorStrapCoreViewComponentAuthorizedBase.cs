@@ -93,30 +93,5 @@ namespace OneLine.Blazor.Bases
             }
             return unSelectedColor;
         }
-        public virtual void RecordSelected(T record)
-        {
-            Record = record;
-            ShowModal = true;
-            StateHasChanged();
-        }
-        public virtual async Task OpenForm(FormState formState)
-        {
-            if (formState.IsCreate())
-            {
-                await Reset();
-            }
-            else
-            {
-                FormState = formState;
-            }
-            ShowModal = false;
-            IsFormOpen = true;
-            StateHasChanged();
-        }
-        public virtual void AfterFormCancel()
-        {
-            IsFormOpen = false;
-            StateHasChanged();
-        }
     }
 }

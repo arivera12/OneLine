@@ -17,7 +17,7 @@ namespace OneLine.Bases
         string ResetPasswordInternalMethod { get; set; }
         string SetupMethod { get; set; }
         Task<IResponseResult<ApiResponse<TResponse>>> LockUnlock<TResponse, TModel>(TModel record, IValidator validator);
-        Task<IResponseResult<ApiResponse<string>>> LockUnlock(ILockUnlock record);
+        Task<IResponseResult<ApiResponse<string>>> LockUnlock(TIdentifier record);
         Task<IResponseResult<ApiResponse<TResponse>>> ConfirmEmail<TResponse, TModel>(TModel record, IValidator validator);
         Task<IResponseResult<ApiResponse<string>>> ConfirmEmail(IConfirmEmail record);
         Task<IResponseResult<ApiResponse<TResponse>>> ForgotPassword<TResponse, TModel>(TModel record, IValidator validator);
@@ -28,8 +28,12 @@ namespace OneLine.Bases
         Task<IResponseResult<ApiResponse<string>>> Register(IRegister record);
         Task<IResponseResult<ApiResponse<TResponse>>> RegisterInternal<TResponse, TModel>(TModel record, IValidator validator);
         Task<IResponseResult<ApiResponse<string>>> RegisterInternal(IRegisterInternal record);
+        Task<IResponseResult<ApiResponse<TResponse>>> UpdateInternal<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<string>>> UpdateInternal(IUpdateInternal record);
         Task<IResponseResult<ApiResponse<TResponse>>> ResetPassword<TResponse, TModel>(TModel record, IValidator validator);
         Task<IResponseResult<ApiResponse<string>>> ResetPassword(IResetPassword record);
+        Task<IResponseResult<ApiResponse<TResponse>>> ResetOwnPasswordInternal<TResponse, TModel>(TModel record, IValidator validator);
+        Task<IResponseResult<ApiResponse<string>>> ResetOwnPasswordInternal(IResetOwnPasswordInternal record);
         Task<IResponseResult<ApiResponse<TResponse>>> ResetPasswordInternal<TResponse, TModel>(TModel record, IValidator validator);
         Task<IResponseResult<ApiResponse<string>>> ResetPasswordInternal(IResetPasswordInternal record);
         Task<IResponseResult<ApiResponse<string>>> Setup();

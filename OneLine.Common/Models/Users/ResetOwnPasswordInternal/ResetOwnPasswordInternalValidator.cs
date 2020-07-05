@@ -2,22 +2,17 @@
 
 namespace OneLine.Models.Users
 {
-    public class ResetPasswordInternalValidator : AbstractValidator<IResetPasswordInternal>
+    public class ResetOwnPasswordInternalValidator : AbstractValidator<IResetOwnPasswordInternal>
     {
-        public ResetPasswordInternalValidator()
+        public ResetOwnPasswordInternalValidator()
         {
-            RuleFor(x => x.Id)
-                .NotEmpty()
-                .WithMessage("UserIdIsRequired")
-                .MaximumLength(256)
-                .WithMessage("UserIdCanNotBeGreaterThan");
             RuleFor(x => x.CurrentPassword)
                 .NotEmpty()
                 .WithMessage("PasswordIsRequired")
-                .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9\S]{8,}$")
-                .WithMessage("CurrentPasswordShouldContainOneLowerOneUpperOneDigitOneSpecialChardAndEightMinimunLength")
-                .MaximumLength(4000)
-                .WithMessage("CurrentPasswordCanNotBeGreaterThan");
+               .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9\S]{8,}$")
+               .WithMessage("CurrentPasswordShouldContainOneLowerOneUpperOneDigitOneSpecialChardAndEightMinimunLength")
+               .MaximumLength(4000)
+               .WithMessage("CurrentPasswordCanNotBeGreaterThan");
             RuleFor(x => x.Password)
                 .NotEmpty()
                 .WithMessage("PasswordIsRequired")

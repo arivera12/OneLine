@@ -33,6 +33,8 @@ namespace OneLine.Bases
                     Record = Response.Response.Data;
                     RecordChanged?.Invoke(Record);
                     await SelectRecord(Record);
+                    FormState = FormState.Edit;
+                    FormStateChanged?.Invoke(FormState);
                 }
             }
             else if (Identifiers.IsNotNull() && Identifiers.Any())
@@ -59,6 +61,8 @@ namespace OneLine.Bases
                     RecordsChanged?.Invoke(Records);
                     RecordsFilteredSortedChanged?.Invoke(RecordsFilteredSorted);
                     await SelectRecords(Records);
+                    FormState = FormState.Edit;
+                    FormStateChanged?.Invoke(FormState);
                 }
             }
         }
@@ -105,8 +109,8 @@ namespace OneLine.Bases
                 {
                     SelectedRecords.Add(selectedRecord);
                 }
-                MinimunRecordsSelectionsReached = SelectedRecords.Count >= MinimunRecordsSelections;
-                MinimunRecordsSelectionsReachedChanged?.Invoke(MinimunRecordsSelectionsReached);
+                MinimumRecordsSelectionsReached = SelectedRecords.Count >= MinimumRecordsSelections;
+                MinimumRecordsSelectionsReachedChanged?.Invoke(MinimumRecordsSelectionsReached);
                 MaximumRecordsSelectionsReached = SelectedRecords.Count >= MaximumRecordsSelections;
                 MaximumRecordsSelectionsReachedChanged?.Invoke(MaximumRecordsSelectionsReached);
                 SelectedRecordsChanged?.Invoke(SelectedRecords);
@@ -120,8 +124,8 @@ namespace OneLine.Bases
             {
                 SelectedRecords.ReplaceRange(selectedRecords);
             }
-            MinimunRecordsSelectionsReached = SelectedRecords.Count >= MinimunRecordsSelections;
-            MinimunRecordsSelectionsReachedChanged?.Invoke(MinimunRecordsSelectionsReached);
+            MinimumRecordsSelectionsReached = SelectedRecords.Count >= MinimumRecordsSelections;
+            MinimumRecordsSelectionsReachedChanged?.Invoke(MinimumRecordsSelectionsReached);
             MaximumRecordsSelectionsReached = SelectedRecords.Count >= MaximumRecordsSelections;
             MaximumRecordsSelectionsReachedChanged?.Invoke(MaximumRecordsSelectionsReached);
             SelectedRecordsChanged?.Invoke(SelectedRecords);

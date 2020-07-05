@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OneLine.Models.Users
+﻿namespace OneLine.Models.Users
 {
     public interface IRegister
     {

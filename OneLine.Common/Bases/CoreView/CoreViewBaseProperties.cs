@@ -43,9 +43,9 @@ namespace OneLine.Bases
         public virtual CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
         public virtual T SelectedRecord { get; set; }
         public virtual ObservableRangeCollection<T> SelectedRecords { get; set; }
-        public virtual long MinimunRecordsSelections { get; set; }
+        public virtual long MinimumRecordsSelections { get; set; }
         public virtual long MaximumRecordsSelections { get; set; }
-        public virtual bool MinimunRecordsSelectionsReached { get; set; }
+        public virtual bool MinimumRecordsSelectionsReached { get; set; }
         public virtual bool MaximumRecordsSelectionsReached { get; set; }
         public virtual Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
         public virtual Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
@@ -60,8 +60,8 @@ namespace OneLine.Bases
         public virtual Action<T> SelectedRecordChanged { get; set; }
         public virtual Action BeforeSelectedRecord { get; set; }
         public virtual Action AfterSelectedRecord { get; set; }
-        public virtual Action<IEnumerable<T>> SelectedRecordsChanged { get; set; }
-        public virtual Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
+        public virtual Action<ObservableRangeCollection<T>> SelectedRecordsChanged { get; set; }
+        public virtual Action<bool> MinimumRecordsSelectionsReachedChanged { get; set; }
         public virtual Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
         public virtual Action<IPaging> PagingChanged { get; set; }
         public virtual Action<ISearchPaging> SearchPagingChanged { get; set; }

@@ -11,17 +11,17 @@ namespace OneLine.Bases
         RecordsSelectionMode RecordsSelectionMode { get; set; }
         T SelectedRecord { get; set; }
         ObservableRangeCollection<T> SelectedRecords { get; set; }
-        long MinimunRecordsSelections { get; set; }
+        long MinimumRecordsSelections { get; set; }
         long MaximumRecordsSelections { get; set; }
-        bool MinimunRecordsSelectionsReached { get; set; }
+        bool MinimumRecordsSelectionsReached { get; set; }
         bool MaximumRecordsSelectionsReached { get; set; }
         Task SelectRecord(T selectedRecord);
         Task SelectRecords(IEnumerable<T> selectedRecords);
         Action BeforeSelectedRecord { get; set; }
         Action AfterSelectedRecord { get; set; }
         Action<T> SelectedRecordChanged { get; set; }
-        Action<IEnumerable<T>> SelectedRecordsChanged { get; set; }
-        Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
+        Action<ObservableRangeCollection<T>> SelectedRecordsChanged { get; set; }
+        Action<bool> MinimumRecordsSelectionsReachedChanged { get; set; }
         Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
     }
 }

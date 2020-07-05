@@ -61,10 +61,26 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
         [Parameter] public override T SelectedRecord { get; set; }
         [Parameter] public override ObservableRangeCollection<T> SelectedRecords { get; set; }
-        [Parameter] public override long MinimunRecordsSelections { get; set; }
+        [Parameter] public override long MinimumRecordsSelections { get; set; }
         [Parameter] public override long MaximumRecordsSelections { get; set; }
-        [Parameter] public override bool MinimunRecordsSelectionsReached { get; set; }
+        [Parameter] public override bool MinimumRecordsSelectionsReached { get; set; }
         [Parameter] public override bool MaximumRecordsSelectionsReached { get; set; }
+        [Parameter] public virtual int DebounceInterval { get; set; }
+        [Parameter] public virtual bool HideCancelOrBackButton { get; set; }
+        [Parameter] public virtual bool HideResetButton { get; set; }
+        [Parameter] public virtual bool HideSaveButton { get; set; }
+        [Parameter] public virtual bool HideDeleteButton { get; set; }
+        [Parameter] public virtual bool HideCreateOrNewButton { get; set; }
+        [Parameter] public virtual string RecordId { get; set; }
+        [Parameter] public virtual string RedirectUrl { get; set; }
+        [Parameter] public virtual bool ShowOptionsDialog { get; set; }
+        [Parameter] public virtual bool HideDetailsDialogOption { get; set; }
+        [Parameter] public virtual bool HideCopyDialogOption { get; set; }
+        [Parameter] public virtual bool HideEditDialogOption { get; set; }
+        [Parameter] public virtual bool HideDeleteDialogOption { get; set; }
+        [Parameter] public virtual bool ShowForm { get; set; }
+        [Parameter] public virtual bool Hide { get; set; }
+        [Parameter] public virtual bool Hidden { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
@@ -78,8 +94,8 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<T> SelectedRecordChanged { get; set; }
         [Parameter] public override Action BeforeSelectedRecord { get; set; }
         [Parameter] public override Action AfterSelectedRecord { get; set; }
-        [Parameter] public override Action<IEnumerable<T>> SelectedRecordsChanged { get; set; }
-        [Parameter] public override Action<bool> MinimunRecordsSelectionsReachedChanged { get; set; }
+        [Parameter] public override Action<ObservableRangeCollection<T>> SelectedRecordsChanged { get; set; }
+        [Parameter] public override Action<bool> MinimumRecordsSelectionsReachedChanged { get; set; }
         [Parameter] public override Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
         [Parameter] public override Action<IPaging> PagingChanged { get; set; }
         [Parameter] public override Action<ISearchPaging> SearchPagingChanged { get; set; }
@@ -100,20 +116,13 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnAfterDelete { get; set; }
         [Parameter] public override Action OnBeforeValidate { get; set; }
         [Parameter] public override Action OnAfterValidate { get; set; }
-        [Parameter] public virtual int DebounceInterval { get; set; }
-        [Parameter] public virtual bool HideCancelOrBackButton { get; set; }
-        [Parameter] public virtual bool HideResetButton { get; set; }
-        [Parameter] public virtual bool HideSaveButton { get; set; }
-        [Parameter] public virtual bool HideDeleteButton { get; set; }
-        [Parameter] public virtual string RecordId { get; set; }
-        [Parameter] public virtual string RedirectUrl { get; set; }
+        [Parameter] public virtual Action<bool> ShowOptionsDialogChanged { get; set; }
+        [Parameter] public virtual Action<bool> ShowFormChanged { get; set; }
         public bool IsChained { get { return !string.IsNullOrWhiteSpace(RedirectUrl); } }
         public bool ShowActivityIndicator { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
-        public bool IsFormOpen { get; set; }
-        public bool ShowModal { get; set; }
         public virtual async Task OnAfterFirstRenderAsync()
         {
             HttpService.HttpClient = HttpClient;
@@ -381,6 +390,34 @@ namespace OneLine.Blazor.Bases
         }
         public virtual Task AfterReset()
         {
+            StateHasChanged();
+            return Task.CompletedTask;
+        }
+        public virtual Task ShowFormChangeFormState(FormState formState)
+        {
+            ShowForm = true;
+            ShowFormChanged?.Invoke(ShowForm);
+            FormState = formState;
+            FormStateChanged?.Invoke(FormState);
+            return Task.CompletedTask;
+        }
+        public virtual async Task ShowFormChangeFormStateHideOptionsDialog(FormState formState)
+        {
+            await ShowFormChangeFormState(formState);
+            await HideOptionsDialog();
+        }
+        public virtual void HideFormAfterFormCancel()
+        {
+            ShowForm = false;
+            ShowFormChanged?.Invoke(ShowForm);
+            FormState = FormState.Create;
+            FormStateChanged?.Invoke(FormState);
+            StateHasChanged();
+        }
+        public virtual Task HideOptionsDialog()
+        {
+            ShowOptionsDialog = false; 
+            ShowOptionsDialogChanged?.Invoke(ShowOptionsDialog);
             StateHasChanged();
             return Task.CompletedTask;
         }

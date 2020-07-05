@@ -2,37 +2,34 @@
 
 namespace OneLine.Models.Users
 {
-    public interface IRegisterInternal
+    public interface IUpdateInternal
     {
+        string Id { get; set; }
         string UserName { get; set; }
         string Email { get; set; }
         string FirstName { get; set; }
         string LastName { get; set; }
         string PhoneNumber { get; set; }
-        string Password { get; set; }
-        string ConfirmPassword { get; set; }
         IEnumerable<string> Roles { get; set; }
     }
-    public class RegisterInternal : IRegisterInternal
+    public class UpdateInternal : IUpdateInternal
     {
+        public string Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
         public IEnumerable<string> Roles { get; set; }
     }
-    public class RegisterInternalViewModel : IRegisterInternal
+    public class UpdateInternalViewModel : IUpdateInternal
     {
+        public string Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
         public IEnumerable<string> Roles { get; set; }
     }
 }

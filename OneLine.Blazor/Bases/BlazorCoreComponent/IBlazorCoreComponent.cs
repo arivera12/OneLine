@@ -3,6 +3,8 @@ using BlazorDownloadFile;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using OneLine.Enums;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -19,13 +21,26 @@ namespace OneLine.Blazor.Bases
         bool IsDesktop { get; set; }
         bool IsTablet { get; set; }
         bool IsMobile { get; set; }
-        bool IsFormOpen { get; set; }
-        bool ShowModal { get; set; }
+        bool ShowForm { get; set; }
+        Action<bool> ShowFormChanged { get; set; }
         bool HideCancelOrBackButton { get; set; }
         bool HideResetButton { get; set; }
         bool HideSaveButton { get; set; }
         bool HideDeleteButton { get; set; }
+        bool HideCreateOrNewButton { get; set; }
+        bool ShowOptionsDialog { get; set; }
+        Action<bool> ShowOptionsDialogChanged { get; set; }
+        bool HideDetailsDialogOption { get; set; }
+        bool HideCopyDialogOption { get; set; }
+        bool HideEditDialogOption { get; set; }
+        bool HideDeleteDialogOption { get; set; }
+        bool Hide { get; set; }
+        bool Hidden { get; set; }
         int DebounceInterval { get; set; }
         Task OnAfterFirstRenderAsync();
+        Task ShowFormChangeFormState(FormState formState);
+        Task ShowFormChangeFormStateHideOptionsDialog(FormState formState);
+        void HideFormAfterFormCancel();
+        Task HideOptionsDialog();
     }
 }

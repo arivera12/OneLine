@@ -16,7 +16,6 @@ namespace OneLine.Blazor.Bases
     {
         public override async Task OnAfterFirstRenderAsync()
         {
-            HttpService.HttpClient = HttpClient;
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();

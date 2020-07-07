@@ -9,36 +9,35 @@ namespace OneLine.Bases
 {
     public class WorkFlowManager<T, TState> : IWorkFlowManager<T, TState>
     {
-        public IEnumerable<IWorkFlowStateProcess<T, TState>> WorkFlowStateProcesses { get; set; }
+        public virtual Func<T, string> StatePropertyName { get; set; }
+        public virtual T Record { get; set; }
+        public virtual IEnumerable<IWorkFlowStateProcess<T, TState>> WorkFlowStateProcesses { get; set; }
         public async ValueTask<IApiResponse<T>> RunWorkFlowProcessAsync()
         {
             if (WorkFlowStateProcesses.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(WorkFlowStateProcesses));
-
-            var countOfTState = typeof(T).GetProperties().Where(w => w.PropertyType == typeof(TState)).Count();
-
-            if (countOfTState == 0)
-                throw new Exception("The T record doesn't contain any property with the TState specified. Please make sure that only one property is TState exist in the T record");
-            if (countOfTState >= 2)
-                throw new Exception($"We found {countOfTState} of TState in the T record. Please make sure that only one property is TState exist in the T record");
-
-            var record = WorkFlowStateProcesses.FirstOrDefault().Record;
-
-            var currentState = (TState)typeof(T).GetProperties().FirstOrDefault(w => w.PropertyType == typeof(TState)).GetValue(record);
-
-            var currentworkFlowStateProcesses = WorkFlowStateProcesses.Where(w => w.CurrentState.Equals(currentState));
-
-            foreach (var currentWorkFlowNextState in currentworkFlowStateProcesses)
+            if(Record.IsNull())
+                throw new ArgumentNullException(nameof(Record));
+            if(StatePropertyName.IsNull())
+                throw new ArgumentNullException(nameof(StatePropertyName));
+            var currentStateProperty = typeof(T).GetProperties().FirstOrDefault(w => w.PropertyType == typeof(TState) && w.Name == StatePropertyName(Record)).GetValue(Record);
+            if(currentStateProperty.IsNull())
+                throw new ArgumentNullException(nameof(currentStateProperty));
+            var recordCurrentState = (TState)currentStateProperty;
+            var nextAvailableWorkFlowStateProcessesFromCurrentState = WorkFlowStateProcesses.Where(w => w.CurrentState.Equals(recordCurrentState));
+            if (!nextAvailableWorkFlowStateProcessesFromCurrentState.Any())
+                return new ApiResponse<T>(Enums.ApiResponseStatus.Succeeded, Record, "ThereAreNoStepsAvailableAfterTheCurrentState");
+            IApiResponse<T> response = default;
+            foreach (var nextWorkFlowNextState in nextAvailableWorkFlowStateProcessesFromCurrentState)
             {
-                var result = await currentWorkFlowNextState.ProceedNextStateProcessWhen();
+                var result = await nextWorkFlowNextState.ProceedNextStateProcessWhen();
                 if (result)
                 {
-                    record = await currentWorkFlowNextState.ProceedNextStateProcess();
+                    response = await nextWorkFlowNextState.ProceedNextStateProcess();
                     break;
                 }
             }
-
-            return new ApiResponse<T>(Enums.ApiResponseStatus.Succeeded, record);
+            return response;
         }
     }
 }

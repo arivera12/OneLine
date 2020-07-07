@@ -11,7 +11,7 @@ namespace OneLine.Models
         {
             return default;
         }
-        public virtual Task<T> ProceedNextStateProcess()
+        public virtual Task<IApiResponse<T>> ProceedNextStateProcess()
         {
             return default;
         }

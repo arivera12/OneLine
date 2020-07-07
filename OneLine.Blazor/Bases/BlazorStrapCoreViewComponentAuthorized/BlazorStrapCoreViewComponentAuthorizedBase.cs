@@ -27,7 +27,6 @@ namespace OneLine.Blazor.Bases
             }
             else
             {
-                HttpService.HttpClient = HttpClient;
                 IsMobile = await BlazorCurrentDeviceService.Mobile();
                 IsTablet = await BlazorCurrentDeviceService.Tablet();
                 IsDesktop = await BlazorCurrentDeviceService.Desktop();

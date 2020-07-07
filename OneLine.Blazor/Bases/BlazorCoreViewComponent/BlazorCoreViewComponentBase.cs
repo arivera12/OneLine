@@ -34,6 +34,7 @@ namespace OneLine.Blazor.Bases
         [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
         [Inject] public virtual HttpClient HttpClient { get; set; }
+        [Inject] public override THttpService HttpService { get; set; }
         [Parameter] public override TIdentifier Identifier { get; set; }
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
         [Parameter] public override T Record { get; set; }
@@ -54,7 +55,6 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override IResponseResult<ApiResponse<T>> Response { get; set; }
         [Parameter] public override IResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
         [Parameter] public override IResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
-        [Parameter] public override THttpService HttpService { get; set; }
         [Parameter] public override IPaging Paging { get; set; }
         [Parameter] public override ISearchPaging SearchPaging { get; set; }
         [Parameter] public override RecordsSelectionMode RecordsSelectionMode { get; set; }
@@ -125,7 +125,6 @@ namespace OneLine.Blazor.Bases
         public bool IsMobile { get; set; }
         public virtual async Task OnAfterFirstRenderAsync()
         {
-            HttpService.HttpClient = HttpClient;
             IsMobile = await BlazorCurrentDeviceService.Mobile();
             IsTablet = await BlazorCurrentDeviceService.Tablet();
             IsDesktop = await BlazorCurrentDeviceService.Desktop();

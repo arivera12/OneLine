@@ -8,6 +8,6 @@ namespace OneLine.Models
         TState CurrentState { get; set; }
         TState NextState { get; set; }
         Task<bool> ProceedNextStateProcessWhen();
-        Task<T> ProceedNextStateProcess();
+        Task<IApiResponse<T>> ProceedNextStateProcess();
     }
 }

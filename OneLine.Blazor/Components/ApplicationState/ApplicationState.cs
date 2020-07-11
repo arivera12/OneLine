@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor
 {
-    public class ApplicationState<TUser> : ComponentBase
+    public class ApplicationState : ComponentBase
     {
         [Inject] public IJSRuntime JSRuntime { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
@@ -36,7 +36,7 @@ namespace OneLine.Blazor
 
         #region Unencrypted Methods
 
-        public static async ValueTask<TUser> GetApplicationUser()
+        public static async ValueTask<TUser> GetApplicationUser<TUser>()
         {
             try
             {
@@ -56,7 +56,7 @@ namespace OneLine.Blazor
             }
         }
 
-        public static async ValueTask SetApplicationUser(TUser user)
+        public static async ValueTask SetApplicationUser<TUser>(TUser user)
         {
             var applicationSession = await GetApplicationSession();
             if (applicationSession == ApplicationSession.LocalStorage)
@@ -69,7 +69,7 @@ namespace OneLine.Blazor
             }
         }
 
-        public static async ValueTask SetApplicationUser(TUser user, ApplicationSession applicationSession)
+        public static async ValueTask SetApplicationUser<TUser>(TUser user, ApplicationSession applicationSession)
         {
             if (applicationSession == ApplicationSession.LocalStorage)
             {
@@ -85,7 +85,7 @@ namespace OneLine.Blazor
 
         #region Encrypted Methods
 
-        public static async ValueTask<TUser> GetApplicationUserSecure()
+        public static async ValueTask<TUser> GetApplicationUserSecure<TUser>()
         {
             try
             {
@@ -110,7 +110,7 @@ namespace OneLine.Blazor
             }
         }
 
-        public static async ValueTask SetApplicationUserSecure(TUser user)
+        public static async ValueTask SetApplicationUserSecure<TUser>(TUser user)
         {
             var applicationSession = await GetApplicationSession();
             var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
@@ -128,7 +128,7 @@ namespace OneLine.Blazor
             }
         }
 
-        public static async ValueTask SetApplicationUserSecure(TUser user, ApplicationSession applicationSession)
+        public static async ValueTask SetApplicationUserSecure<TUser>(TUser user, ApplicationSession applicationSession)
         {
             var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
             key = key.EncryptData(key);
@@ -199,7 +199,7 @@ namespace OneLine.Blazor
             await _LocalStorage.SetItem("ApplicationLocale", locale);
         }
 
-        public static void SetHttpClientAuthorizationToken(string AuthorizationToken, bool AddBearerScheme = true)
+        public static void SetHttpClientAuthorizationToken(string AuthorizationToken, bool AddBearerScheme = false)
         {
             _HttpClient.AddJwtAuthorizationBearerHeader(AuthorizationToken, AddBearerScheme);
         }

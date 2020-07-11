@@ -21,14 +21,15 @@ namespace OneLine.Blazor.Bases
         public virtual AspNetUsersViewModel User { get; set; }
         public override async Task OnAfterFirstRenderAsync()
         {
-            User = await ApplicationState<AspNetUsersViewModel>.GetApplicationUserSecure();
+            User = await ApplicationState.GetApplicationUserSecure<AspNetUsersViewModel>();
             if (User.IsNull() || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => User.Roles.Contains(w))))
             {
-                await ApplicationState<AspNetUsersViewModel>.Logout();
+                await ApplicationState.Logout();
                 NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");
             }
             else
             {
+                HttpService.HttpClient.AddJwtAuthorizationBearerHeader(User.Token, true);
                 IsMobile = await BlazorCurrentDeviceService.Mobile();
                 IsTablet = await BlazorCurrentDeviceService.Tablet();
                 IsDesktop = await BlazorCurrentDeviceService.Desktop();

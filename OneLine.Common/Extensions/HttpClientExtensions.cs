@@ -16,7 +16,7 @@ namespace OneLine.Extensions
     {
         #region Add JWT Request Header
 
-        public static void AddJwtAuthorizationBearerHeader(this HttpClient HttpClient, string AuthorizationToken, bool AddBearerScheme = true)
+        public static void AddJwtAuthorizationBearerHeader(this HttpClient HttpClient, string AuthorizationToken, bool AddBearerScheme = false)
         {
             if (!string.IsNullOrWhiteSpace(AuthorizationToken))
             {

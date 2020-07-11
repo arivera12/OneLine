@@ -203,7 +203,7 @@ namespace OneLine.Blazor.Bases
             else if (ResponsePaged.HttpResponseMessage.IsNotNull() && ResponsePaged.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
-                await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
+                await ApplicationState.LogoutAndNavigateTo("/login");
             }
             else if (ResponsePaged.HasException)
             {
@@ -293,7 +293,7 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
-                await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
+                await ApplicationState.LogoutAndNavigateTo("/login");
             }
             else if (Response.IsNotNull() &&
                     Response.Succeed &&
@@ -343,7 +343,7 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
-                await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
+                await ApplicationState.LogoutAndNavigateTo("/login");
             }
             else if (Response.IsNotNull() &&
                     Response.Succeed &&
@@ -400,11 +400,6 @@ namespace OneLine.Blazor.Bases
             FormStateChanged?.Invoke(FormState);
             return Task.CompletedTask;
         }
-        public virtual async Task ShowFormChangeFormStateHideOptionsDialog(FormState formState)
-        {
-            await ShowFormChangeFormState(formState);
-            await HideOptionsDialog();
-        }
         public virtual void HideFormAfterFormCancel()
         {
             ShowForm = false;
@@ -415,10 +410,15 @@ namespace OneLine.Blazor.Bases
         }
         public virtual Task HideOptionsDialog()
         {
-            ShowOptionsDialog = false; 
+            ShowOptionsDialog = false;
             ShowOptionsDialogChanged?.Invoke(ShowOptionsDialog);
-            StateHasChanged();
             return Task.CompletedTask;
+        }
+        public virtual async Task ShowFormChangeFormStateHideOptionsDialog(FormState formState)
+        {
+            await ShowFormChangeFormState(formState);
+            await HideOptionsDialog();
+            AfterSelectedRecord?.Invoke();
         }
     }
 }

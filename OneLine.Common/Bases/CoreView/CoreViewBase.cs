@@ -5,6 +5,7 @@ using OneLine.Models;
 using OneLine.Validations;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -33,7 +34,6 @@ namespace OneLine.Bases
                     Record = Response.Response.Data;
                     RecordChanged?.Invoke(Record);
                     await SelectRecord(Record);
-                    FormState = FormState.Edit;
                     FormStateChanged?.Invoke(FormState);
                 }
             }
@@ -61,7 +61,6 @@ namespace OneLine.Bases
                     RecordsChanged?.Invoke(Records);
                     RecordsFilteredSortedChanged?.Invoke(RecordsFilteredSorted);
                     await SelectRecords(Records);
-                    FormState = FormState.Edit;
                     FormStateChanged?.Invoke(FormState);
                 }
             }
@@ -120,9 +119,9 @@ namespace OneLine.Bases
         }
         public virtual Task SelectRecords(IEnumerable<T> selectedRecords)
         {
-            if (MaximumRecordsSelections <= 0 || (MaximumRecordsSelections > 0 && SelectedRecords.Count < MaximumRecordsSelections))
+            if (MaximumRecordsSelections <= 0 || (MaximumRecordsSelections > 0 && selectedRecords.Count() < MaximumRecordsSelections))
             {
-                SelectedRecords.ReplaceRange(selectedRecords);
+                SelectedRecords = new ObservableRangeCollection<T>(selectedRecords);
             }
             MinimumRecordsSelectionsReached = SelectedRecords.Count >= MinimumRecordsSelections;
             MinimumRecordsSelectionsReachedChanged?.Invoke(MinimumRecordsSelectionsReached);

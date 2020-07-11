@@ -291,7 +291,7 @@ namespace OneLine.Blazor.Components
                             Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
                         await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
-                        await ApplicationState<AspNetUsersViewModel>.LogoutAndNavigateTo("/login");
+                        await ApplicationState.LogoutAndNavigateTo("/login");
                     }
                     else if (Response.IsNotNull() &&
                             Response.Succeed &&

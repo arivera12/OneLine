@@ -634,7 +634,40 @@ namespace OneLine.Extensions
             await dbContext.CreateAuditrailsAsync(record, "Record selected on get one operation", userId, controllerName, actionName, remoteIpAddress);
             return record.ToApiResponse();
         }
-
+        public static IApiResponse<T> GetOne<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Action<Action<T>> onGetOne)
+            where T : class, new()
+        {
+            if (onGetOne == null)
+            {
+                return new T().ToApiResponseFailed("PredicateIsNull");
+            }
+            T record = default;
+            onGetOne.Invoke(result => record = result);
+            if (record == null)
+            {
+                return record.ToApiResponseFailed("RecordNotFound");
+            }
+            return record.ToApiResponse();
+        }
+        public static async Task<IApiResponse<T>> GetOneAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, string userId, Action<Action<T>> onGetOne, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class, new()
+        {
+            if (onGetOne == null)
+            {
+                await dbContext.CreateAuditrailsAsync(onGetOne, "predicate was null on select one operation", userId, controllerName, actionName, remoteIpAddress);
+                return new T().ToApiResponseFailed("PredicateIsNull");
+            }
+            T record = default;
+            onGetOne.Invoke(result => record = result);
+            if (record == null)
+            {
+                await dbContext.CreateAuditrailsAsync(record, "Record not found on select one operation", userId, controllerName, actionName, remoteIpAddress);
+                return record.ToApiResponseFailed("RecordNotFound");
+            }
+            await dbContext.CreateAuditrailsAsync(record, "Record selected on get one operation", userId, controllerName, actionName, remoteIpAddress);
+            return record.ToApiResponse();
+        }
+        
         #endregion
 
         #region Get Range

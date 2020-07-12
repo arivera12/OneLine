@@ -33,11 +33,11 @@ namespace OneLine.Bases
         }
         public virtual async Task<IResponseResult<byte[]>> DownloadCsvAsByteArray(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.SendJsonDownloadBlobAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
+            return await HttpClient.SendJsonDownloadBlobAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }
         public virtual async Task<IResponseResult<HttpResponseMessage>> DownloadCsvAsStream(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
+            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }
         public virtual async Task<IResponseResult<ApiResponse<IEnumerable<T>>>> UploadCsv(IEnumerable<BlobData> blobDatas, IValidator validator, HttpMethod httpMethod)
         {

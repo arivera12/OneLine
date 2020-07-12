@@ -72,11 +72,11 @@ namespace OneLine.Bases
         }
         public virtual async Task<IResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier)
         {
-            return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{GetOneMethod}", identifier);
+            return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{GetOneMethod}", identifier);
         }
         public virtual async Task<IResponseResult<ApiResponse<IEnumerable<TResponse>>>> GetRange<TResponse>(IEnumerable<TIdentifier> identifiers)
         {
-            return await HttpClient.SendJsonRangeResponseResultAsync<IEnumerable<TResponse>, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{GetRangeMethod}", identifiers);
+            return await HttpClient.SendJsonRangeResponseResultAsync<IEnumerable<TResponse>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{GetRangeMethod}", identifiers);
         }
         /*Methods with Validators*/
         public virtual async Task<IResponseResult<ApiResponse<TResponse>>> Add<TResponse>(T record, IValidator validator)
@@ -105,16 +105,18 @@ namespace OneLine.Bases
         }
         public virtual async Task<IResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier, IValidator validator)
         {
-            return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{GetOneMethod}", identifier, validator);
+            return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{GetOneMethod}", identifier, validator);
         }
         public virtual async Task<IResponseResult<ApiResponse<IEnumerable<TResponse>>>> GetRange<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator)
         {
-            return await HttpClient.SendJsonRangeResponseResultAsync<IEnumerable<TResponse>, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{GetRangeMethod}", identifiers, validator); ;
+            return await HttpClient.SendJsonRangeResponseResultAsync<IEnumerable<TResponse>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{GetRangeMethod}", identifiers, validator); ;
         }
         /*Search method*/
         public virtual async Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.GetJsonResponseResultAsync<ApiResponse<Paged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{SearchMethod}", new[] { SearchPaging ?? new SearchPaging(), searchExtraParams ?? new { } });
+            SearchPaging ??= new SearchPaging();
+            searchExtraParams ??= new { };
+            return await HttpClient.SendJsonResponseResultAsync<Paged<IEnumerable<TResponse>>, object>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{SearchMethod}", new { SearchPaging, searchExtraParams });
         }
     }
 }

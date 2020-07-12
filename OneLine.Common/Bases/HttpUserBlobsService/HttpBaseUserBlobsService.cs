@@ -67,35 +67,35 @@ namespace OneLine.Bases
         }
         public virtual async Task<IResponseResult<ApiResponse<Tuple<string, UserBlobs>>>> DownloadBase64(TIdentifier identifier, IValidator validator)
         {
-            return await HttpClient.SendJsonResponseResultAsync<Tuple<string, UserBlobs>, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadBase64Method}", identifier, validator);
+            return await HttpClient.SendJsonResponseResultAsync<Tuple<string, UserBlobs>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadBase64Method}", identifier, validator);
         }
         public virtual async Task<IResponseResult<HttpResponseMessage>> DownloadBinary(TIdentifier identifier, IValidator validator)
         {
-            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadBinaryMethod}"), identifier, validator);
+            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadBinaryMethod}"), identifier, validator);
         }
         public virtual async Task<IResponseResult<HttpResponseMessage>> DownloadCsvExcel(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadCsvExcelMethod}"), new { SearchPaging, searchExtraParams });
+            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvExcelMethod}"), new { SearchPaging, searchExtraParams });
         }
         public virtual async Task<IResponseResult<HttpResponseMessage>> DownloadCsvExcelOwns(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadCsvExcelOwnsMethod}"), new { SearchPaging, searchExtraParams });
+            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvExcelOwnsMethod}"), new { SearchPaging, searchExtraParams });
         }
         public virtual async Task<IResponseResult<ApiResponse<Tuple<IEnumerable<string>, IEnumerable<UserBlobs>>>>> DownloadRangeBase64(IEnumerable<TIdentifier> identifiers, IValidator validator)
         {
-            return await HttpClient.SendJsonRangeResponseResultAsync<Tuple<IEnumerable<string>, IEnumerable<UserBlobs>>, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadRangeBase64Method}", identifiers, validator);
+            return await HttpClient.SendJsonRangeResponseResultAsync<Tuple<IEnumerable<string>, IEnumerable<UserBlobs>>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadRangeBase64Method}", identifiers, validator);
         }
         public virtual async Task<IResponseResult<HttpResponseMessage>> DownloadRangeBinary(IEnumerable<TIdentifier> identifiers, IValidator validator)
         {
-            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{DownloadRangeBase64Method}"), identifiers, validator);
+            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadRangeBase64Method}"), identifiers, validator);
         }
         public virtual async Task<IResponseResult<ApiResponse<TResponse>>> GetOne<TResponse>(TIdentifier identifier, IValidator validator)
         {
-            return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{GetOneMethod}", identifier, validator);
+            return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{GetOneMethod}", identifier, validator);
         }
         public virtual async Task<IResponseResult<ApiResponse<TResponse>>> GetOneOwns<TResponse>(TIdentifier identifier, IValidator validator)
         {
-            return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{GetOneOwnsMethod}", identifier, validator);
+            return await HttpClient.SendJsonResponseResultAsync<TResponse, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{GetOneOwnsMethod}", identifier, validator);
         }
         public virtual async Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> List<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
         {

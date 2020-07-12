@@ -53,11 +53,11 @@ namespace OneLine.Bases
         }
         public virtual async Task<IResponseResult<ApiResponse<TResponse>>> ConfirmEmail<TResponse, TModel>(TModel record, IValidator validator)
         {
-            return await HttpClient.SendJsonResponseResultAsync<TResponse, TModel>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{ConfirmEmailMethod}", record, validator);
+            return await HttpClient.SendJsonResponseResultAsync<TResponse, TModel>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{ConfirmEmailMethod}", record, validator);
         }
         public virtual async Task<IResponseResult<ApiResponse<string>>> ConfirmEmail(IConfirmEmail record)
         {
-            return await HttpClient.SendJsonResponseResultAsync<string, IConfirmEmail>(HttpMethod.Get, $"{GetApi()}/{ControllerName}/{ConfirmEmailMethod}", record, new ConfirmEmailValidator());
+            return await HttpClient.SendJsonResponseResultAsync<string, IConfirmEmail>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{ConfirmEmailMethod}", record, new ConfirmEmailValidator());
         }
         public virtual async Task<IResponseResult<ApiResponse<TResponse>>> ForgotPassword<TResponse, TModel>(TModel record, IValidator validator)
         {

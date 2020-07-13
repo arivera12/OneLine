@@ -47,7 +47,7 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override bool AutoLoad { get; set; }
         [Parameter] public override bool AllowDuplicates { get; set; }
         [Parameter] public override bool InitialAutoSearch { get; set; }
-        [Parameter] public override object[] SearchExtraParams { get; set; }
+        [Parameter] public override object SearchExtraParams { get; set; }
         [Parameter] public override Func<T, bool> FilterPredicate { get; set; }
         [Parameter] public override string FilterSortBy { get; set; }
         [Parameter] public override bool FilterDescending { get; set; }

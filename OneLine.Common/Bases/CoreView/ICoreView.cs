@@ -3,7 +3,7 @@
     public interface ICoreView<T, TIdentifier, THttpService> :
         IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,
-        ISearchExtraParameterable<object[]>,
+        ISearchExtraParameterable<object>,
         ISearchableEventable,
         ICollectionFilterableSortable<T>,
         ICollectionAppendableReplaceableModeable,

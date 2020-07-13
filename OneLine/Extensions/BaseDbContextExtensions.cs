@@ -1184,6 +1184,16 @@ namespace OneLine.Extensions
         {
             dbContext.Add(entity.CreateAuditTrails(transactionType, createdBy, controllerName, actionName, remoteIpAddress));
         }
+        public static void AddAuditrails<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T entity, string transactionMessage, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class
+        {
+            dbContext.Add(entity.CreateAuditTrails(transactionMessage, createdBy, controllerName, actionName, remoteIpAddress));
+        }
+        public static async Task AddAuditrailsAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T entity, TransactionType transactionType, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+            where T : class
+        {
+            await dbContext.AddAsync(entity.CreateAuditTrails(transactionType, createdBy, controllerName, actionName, remoteIpAddress));
+        }
         public static async Task AddAuditrailsAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, T entity, string transactionMessage, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class
         {

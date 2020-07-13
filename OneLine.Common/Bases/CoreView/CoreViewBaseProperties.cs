@@ -27,7 +27,7 @@ namespace OneLine.Bases
         public virtual bool AutoLoad { get; set; }
         public virtual bool AllowDuplicates { get; set; }
         public virtual bool InitialAutoSearch { get; set; }
-        public virtual object[] SearchExtraParams { get; set; }
+        public virtual object SearchExtraParams { get; set; }
         public virtual Func<T, bool> FilterPredicate { get; set; }
         public virtual string FilterSortBy { get; set; }
         public virtual bool FilterDescending { get; set; }

@@ -112,11 +112,13 @@ namespace OneLine.Bases
             return await HttpClient.SendJsonRangeResponseResultAsync<IEnumerable<TResponse>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{GetRangeMethod}", identifiers, validator); ;
         }
         /*Search method*/
-        public virtual async Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual async Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> Search<TResponse>(ISearchPaging searchPaging, object searchExtraParams)
         {
-            SearchPaging ??= new SearchPaging();
+            searchPaging ??= new SearchPaging();
             searchExtraParams ??= new { };
-            return await HttpClient.SendJsonResponseResultAsync<Paged<IEnumerable<TResponse>>, object>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{SearchMethod}", new { SearchPaging, searchExtraParams });
+            var dictionary = searchPaging.ToDictionary();
+            dictionary.Add(new KeyValuePair<string, object>("SearchExtraParams", searchExtraParams));
+            return await HttpClient.SendJsonResponseResultAsync<Paged<IEnumerable<TResponse>>, object>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{SearchMethod}", dictionary);
         }
     }
 }

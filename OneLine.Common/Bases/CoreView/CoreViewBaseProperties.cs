@@ -72,6 +72,8 @@ namespace OneLine.Bases
         public virtual Action<bool> IsValidModelStateChanged { get; set; }
         public virtual Action<FormState> FormStateChanged { get; set; }
         public virtual Action<FormMode> FormModeChanged { get; set; }
+        public virtual Action OnBeforeLoad { get; set; }
+        public virtual Action OnAfterLoad { get; set; }
         public virtual Action OnBeforeReset { get; set; }
         public virtual Action OnAfterReset { get; set; }
         public virtual Action OnBeforeCancel { get; set; }

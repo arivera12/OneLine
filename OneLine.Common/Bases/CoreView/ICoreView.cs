@@ -17,7 +17,7 @@
         IApiResponseablePageable<T>,
         IApiResponseableCollectionable<T>,
         IConfigurable,
-        ILoadable,
+        ILoadableEventable,
         IMutableBlobDataCollectionableValidatable,
         ISaveableEventable,
         IValidatableEventable,

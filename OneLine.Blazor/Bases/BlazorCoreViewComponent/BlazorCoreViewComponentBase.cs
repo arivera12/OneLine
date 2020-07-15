@@ -106,6 +106,8 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action<bool> IsValidModelStateChanged { get; set; }
         [Parameter] public override Action<FormState> FormStateChanged { get; set; }
         [Parameter] public override Action<FormMode> FormModeChanged { get; set; }
+        [Parameter] public override Action OnBeforeLoad { get; set; }
+        [Parameter] public override Action OnAfterLoad { get; set; }
         [Parameter] public override Action OnBeforeReset { get; set; }
         [Parameter] public override Action OnAfterReset { get; set; }
         [Parameter] public override Action OnBeforeCancel { get; set; }
@@ -147,7 +149,14 @@ namespace OneLine.Blazor.Bases
             }
             if (AutoLoad)
             {
-                await Load();
+                if(OnBeforeLoad.IsNotNull())
+                {
+                    OnBeforeLoad.Invoke();
+                }
+                else
+                {
+                    await Load();
+                }
             }
             if (InitialAutoSearch)
             {
@@ -302,7 +311,6 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.IsSuccessStatusCode)
             {
-                //TODO: Parameters!!!!
                 if (IsChained)
                 {
                     NavigationManager.NavigateTo(RedirectUrl);

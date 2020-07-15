@@ -51,7 +51,14 @@ namespace OneLine.Blazor.Bases
                 }
                 if (AutoLoad)
                 {
-                    await Load();
+                    if (OnBeforeLoad.IsNotNull())
+                    {
+                        OnBeforeLoad.Invoke();
+                    }
+                    else
+                    {
+                        await Load();
+                    }
                 }
                 if (InitialAutoSearch)
                 {

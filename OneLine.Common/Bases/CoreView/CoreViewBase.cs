@@ -36,6 +36,7 @@ namespace OneLine.Bases
                     await SelectRecord(Record);
                     FormStateChanged?.Invoke(FormState);
                 }
+                OnAfterLoad?.Invoke();
             }
             else if (Identifiers.IsNotNull() && Identifiers.Any())
             {
@@ -63,6 +64,7 @@ namespace OneLine.Bases
                     await SelectRecords(Records);
                     FormStateChanged?.Invoke(FormState);
                 }
+                OnAfterLoad?.Invoke();
             }
         }
         public virtual async Task Search()

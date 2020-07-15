@@ -45,37 +45,34 @@ OneLine is an abstracted standardized redefined framework.
       - [ ] MariaDB
       - [ ] Oracle DB 11.2 onwards
 
-## Client Side Core Features
+## Core Features
 
-- [x] Base Classes for Forms and Data Views Management
-  - [x] Form Management 
-    - [x] Load
-    - [x] Validate
-    - [x] Save (create & update)
-    - [x] Reset
-    - [x] Cancel
-    - [x] Delete
-    - [x] Form State Management
-    - [x] Blob Management
-    - [x] Request and Response Management
-    - [x] Single and Multiple State Management  
-  - [x] Data View Management
-    - [x] Load
-    - [x] Search
-    - [x] Select Record/s
-    - [x] Records Selection Mode (single or multiple)
-    - [x] Minimum and Maximun Range Management
-    - [x] Minimun and Maximun Reach Listenable
-    - [x] Filtering
-    - [x] Sorting
-    - [x] Paged Data Management
-      - [x] Go Previous Page
-      - [x] Go Next Page
-      - [x] Go to Page Index
-      - [x] Page Size
-      - [x] Page Sort By
-    - [x] Collection Mode Management (append or replace)
-    - [x] Request and Response Management
+- [x] Core Base Class for Forms and Data Views
+  - [x] Load (with before and after actions)
+  - [x] Validate (using fluentvalidation)
+  - [x] Save (create & update) (with before and after actions)
+  - [x] Reset (with before and after actions)
+  - [x] Cancel (with before and after actions)
+  - [x] Delete (with before and after actions)
+  - [x] Form State Management (create, update, details, copy, delete & deleted)
+  - [x] Blob Management
+  - [x] Request and Response Management
+  - [x] Single and Multiple State Management  
+  - [x] Search (with before and after actions)
+  - [x] Select Record/s (with before and after actions)
+  - [x] Records Selection Mode (single or multiple)
+  - [x] Minimum and Maximun Selection Range Management
+  - [x] Minimun and Maximun Selection Reach Listenable
+  - [x] Filtering (client and server)
+  - [x] Sorting (client and server)
+  - [x] Paged Data Management
+  - [x] Go Previous Page (client and server)
+  - [x] Go Next Page (client and server)
+  - [x] Go to Page Index (client and server)
+  - [x] Page Size (client and server)
+  - [x] Page Sort By (client and server)
+  - [x] Collection Mode Management (append or replace)
+  - [x] Request and Response Management
   
 ## Client Side Blazor Extended Features
 
@@ -93,7 +90,7 @@ OneLine is an abstracted standardized redefined framework.
   - [ ] Session Token Lifetime Management
     - [ ] Ask for More Session Time
     - [ ] Auto Renew Session Token on User Confirm
-    - [ ] Redirect on Session Expired
+    - [ ] Redirect on Session Expired Client time out
     - [x] Redirect when Session is Expired in a User Action after Server Response 
 - [x] Multi Language Support using Resource Files
 - [x] Translator Component

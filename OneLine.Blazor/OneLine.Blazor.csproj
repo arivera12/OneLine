@@ -13,10 +13,10 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Fixed wrong validator.</PackageReleaseNotes>
-    <Version>2.0.86</Version>
-    <AssemblyVersion>2.0.86.0</AssemblyVersion>
-    <FileVersion>2.0.86.0</FileVersion>
+    <PackageReleaseNotes>Lots of fixes. Almost ready for beta.</PackageReleaseNotes>
+    <Version>2.0.87</Version>
+    <AssemblyVersion>2.0.87.0</AssemblyVersion>
+    <FileVersion>2.0.87.0</FileVersion>
   </PropertyGroup>
 
 

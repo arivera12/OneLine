@@ -13,12 +13,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Lots of fixes. Almost ready for beta.</PackageReleaseNotes>
-    <Version>2.0.87</Version>
+    <PackageReleaseNotes>Dropped User namespace a move it to the project out as a plugin. Removed async and await from http client base. Added new type param TUser for authorized blazor component base.</PackageReleaseNotes>
+    <Version>2.0.88</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.87.0</AssemblyVersion>
-    <FileVersion>2.0.87.0</FileVersion>
+    <AssemblyVersion>2.0.88.0</AssemblyVersion>
+    <FileVersion>2.0.88.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

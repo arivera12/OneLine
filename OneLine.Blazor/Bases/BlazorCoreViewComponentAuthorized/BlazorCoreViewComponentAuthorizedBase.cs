@@ -2,7 +2,6 @@
 using OneLine.Bases;
 using OneLine.Extensions;
 using OneLine.Models;
-using OneLine.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,26 +9,34 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract class BlazorCoreViewComponentAuthorizedBase<T, TIdentifier, TId, THttpService> :
+    public abstract class BlazorCoreViewComponentAuthorizedBase<T, TIdentifier, TId, THttpService, TUser> :
         BlazorCoreViewComponentBase<T, TIdentifier, TId, THttpService>,
-        IBlazorCoreViewComponentAuthorized<T, TIdentifier, THttpService>
+        IBlazorCoreViewComponentAuthorized<T, TIdentifier, THttpService, TUser>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
+        where TUser : class, new()
     {
         [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
-        public virtual AspNetUsersViewModel User { get; set; }
+        public virtual TUser User { get; set; }
         public override async Task OnAfterFirstRenderAsync()
         {
-            User = await ApplicationState.GetApplicationUserSecure<AspNetUsersViewModel>();
-            if (User.IsNull() || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => User.Roles.Contains(w))))
+            User = await ApplicationState.GetApplicationUserSecure<TUser>();
+            IEnumerable<string> roles = default;
+            var rolesObject = User.GetType().GetProperty("Roles").GetValue(User);
+            if(rolesObject.IsNotNull())
+            {
+                roles = (rolesObject as IList<string>).AsEnumerable();
+            }
+            if (User.IsNull() || (!AuthorizedRoles.IsNullOrEmpty() && (roles.IsNullOrEmpty() || !AuthorizedRoles.Any(w => roles.Contains(w)))))
             {
                 await ApplicationState.Logout();
                 NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");
             }
             else
             {
-                HttpService.HttpClient.AddJwtAuthorizationBearerHeader(User.Token, true);
+                var token = User.GetType().GetProperty("Token").GetValue(User)?.ToString();
+                HttpService.HttpClient.AddJwtAuthorizationBearerHeader(token, true);
                 IsMobile = await BlazorCurrentDeviceService.Mobile();
                 IsTablet = await BlazorCurrentDeviceService.Tablet();
                 IsDesktop = await BlazorCurrentDeviceService.Desktop();

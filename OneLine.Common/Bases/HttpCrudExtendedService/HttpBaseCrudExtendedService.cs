@@ -31,17 +31,17 @@ namespace OneLine.Bases
         public HttpBaseCrudExtendedService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
         }
-        public virtual async Task<IResponseResult<byte[]>> DownloadCsvAsByteArray(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual Task<IResponseResult<byte[]>> DownloadCsvAsByteArray(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.SendJsonDownloadBlobAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
+            return HttpClient.SendJsonDownloadBlobAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<HttpResponseMessage>> DownloadCsvAsStream(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual Task<IResponseResult<HttpResponseMessage>> DownloadCsvAsStream(ISearchPaging SearchPaging, object searchExtraParams)
         {
-            return await HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
+            return HttpClient.SendJsonRequestResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }
-        public virtual async Task<IResponseResult<ApiResponse<IEnumerable<T>>>> UploadCsv(IEnumerable<BlobData> blobDatas, IValidator validator, HttpMethod httpMethod)
+        public virtual Task<IResponseResult<ApiResponse<IEnumerable<T>>>> UploadCsv(IEnumerable<BlobData> blobDatas, IValidator validator, HttpMethod httpMethod)
         {
-            return await HttpClient.SendJsonResponseResultAsync<IEnumerable<T>, IEnumerable<BlobData>>(httpMethod, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}", blobDatas, validator);
+            return HttpClient.SendJsonResponseResultAsync<IEnumerable<T>, IEnumerable<BlobData>>(httpMethod, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}", blobDatas, validator);
         }
     }
 }

@@ -14,7 +14,6 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using OneLine.Blazor.Extensions;
 using OneLine.Bases;
 using OneLine.Validations;
-using OneLine.Models.Users;
 
 namespace OneLine.Blazor.Components
 {

@@ -4,7 +4,6 @@ using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using OneLine.Enums;
 using OneLine.Extensions;
-using OneLine.Models.Users;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;

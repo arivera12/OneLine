@@ -13,17 +13,17 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Lots of fixes. Almost ready for beta.</PackageReleaseNotes>
-    <Version>2.0.87</Version>
-    <AssemblyVersion>2.0.87.0</AssemblyVersion>
-    <FileVersion>2.0.87.0</FileVersion>
+    <PackageReleaseNotes>Dropped User namespace a move it to the project out as a plugin. Removed async and await from http client base. Added new type param TUser for authorized blazor component base.</PackageReleaseNotes>
+    <Version>2.0.88</Version>
+    <AssemblyVersion>2.0.88.0</AssemblyVersion>
+    <FileVersion>2.0.88.0</FileVersion>
   </PropertyGroup>
 
 
   <ItemGroup>
     <PackageReference Include="BlazorBrowserStorage" Version="1.0.0" />
     <PackageReference Include="BlazorCurrentDevice" Version="1.0.6" />
-    <PackageReference Include="BlazorDownloadFile" Version="1.0.8" />
+    <PackageReference Include="BlazorDownloadFile" Version="1.0.10" />
     <PackageReference Include="Blazored.Typeahead" Version="4.3.0" />
     <PackageReference Include="BlazorStrap" Version="1.3.2-Preview1-04" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="2.6.6" />

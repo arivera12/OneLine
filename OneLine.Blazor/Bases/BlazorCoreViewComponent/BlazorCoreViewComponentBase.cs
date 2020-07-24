@@ -80,6 +80,8 @@ namespace OneLine.Blazor.Bases
         [Parameter] public virtual bool ShowForm { get; set; }
         [Parameter] public virtual bool Hide { get; set; }
         [Parameter] public virtual bool Hidden { get; set; }
+        [Parameter] public virtual bool ReadOnly { get; set; }
+        [Parameter] public virtual bool Disabled { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }

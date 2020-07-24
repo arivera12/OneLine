@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 
 namespace OneLine.Extensions
 {
@@ -6,15 +7,17 @@ namespace OneLine.Extensions
     {
         public static byte[] ToByteArray(this Stream stream)
         {
-            using MemoryStream ms = new MemoryStream();
-            stream.CopyTo(ms);
-            return ms.ToArray();
+            var streamLength = (int)stream.Length;
+            var data = new byte[streamLength];
+            stream.Read(data, 0, streamLength);
+            return data;
         }
-        public static byte[] ToByteArray(this Stream stream, int bufferSize)
+        public static async Task<byte[]> ToByteArrayAsync(this Stream stream)
         {
-            using MemoryStream ms = new MemoryStream();
-            stream.CopyTo(ms, bufferSize);
-            return ms.ToArray();
+            var streamLength = (int)stream.Length;
+            var data = new byte[streamLength];
+            await stream.ReadAsync(data, 0, streamLength);
+            return data;
         }
     }
 }

@@ -36,6 +36,8 @@ namespace OneLine.Blazor.Bases
         bool HideDeleteDialogOption { get; set; }
         bool Hide { get; set; }
         bool Hidden { get; set; }
+        bool ReadOnly { get; set; }
+        bool Disabled { get; set; }
         int DebounceInterval { get; set; }
         Task OnAfterFirstRenderAsync();
         Task ShowFormChangeFormState(FormState formState);

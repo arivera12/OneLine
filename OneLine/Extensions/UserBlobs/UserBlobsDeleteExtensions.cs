@@ -5,6 +5,7 @@ using Storage.Net.Blobs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -193,7 +194,7 @@ namespace OneLine.Extensions
         /// <param name="actionName"></param>
         /// <param name="remoteIpAddress"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse<Tuple<T, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntityAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<ApiResponse<Tuple<T, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntityAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Expression<Func<T, bool>> predicate, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
             if (predicate == null)
@@ -254,7 +255,7 @@ namespace OneLine.Extensions
         /// <param name="actionName"></param>
         /// <param name="remoteIpAddress"></param>
         /// <returns></returns>
-        public static async Task<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntitiesAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Func<T, bool> predicate, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        public static async Task<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<UserBlobs>>>> DeleteUserBlobsFromEntitiesAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, Expression<Func<T, bool>> predicate, IBlobStorage blobsStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class
         {
             if (predicate == null )

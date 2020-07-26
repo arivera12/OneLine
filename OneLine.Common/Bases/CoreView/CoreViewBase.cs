@@ -22,7 +22,7 @@ namespace OneLine.Bases
         {
             if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
             {
-                Response = await HttpService.GetOne<T>(Identifier, new EmptyValidator());
+                Response = await HttpService.GetOneAsync<T>(Identifier, new EmptyValidator());
                 ResponseChanged?.Invoke(Response);
                 if (Response.IsNotNull() &&
                     Response.Succeed &&
@@ -40,7 +40,7 @@ namespace OneLine.Bases
             }
             else if (Identifiers.IsNotNull() && Identifiers.Any())
             {
-                ResponseCollection = await HttpService.GetRange<T>(Identifiers, new EmptyValidator());
+                ResponseCollection = await HttpService.GetRangeAsync<T>(Identifiers, new EmptyValidator());
                 ResponseCollectionChanged?.Invoke(ResponseCollection);
                 if (ResponseCollection.IsNotNull() &&
                     ResponseCollection.Succeed &&
@@ -69,7 +69,7 @@ namespace OneLine.Bases
         }
         public virtual async Task Search()
         {
-            ResponsePaged = await HttpService.Search<T>(SearchPaging, SearchExtraParams);
+            ResponsePaged = await HttpService.SearchAsync<T>(SearchPaging, SearchExtraParams);
             ResponsePagedChanged?.Invoke(ResponsePaged);
             if (ResponsePaged.IsNotNull() &&
                 ResponsePaged.Succeed &&
@@ -163,11 +163,11 @@ namespace OneLine.Bases
                 {
                     if (FormState.IsCopy() || FormState.IsCreate())
                     {
-                        Response = await HttpService.Add<T>(Record);
+                        Response = await HttpService.AddAsync<T>(Record);
                     }
                     else if (FormState.IsEdit())
                     {
-                        Response = await HttpService.Update<T>(Record);
+                        Response = await HttpService.UpdateAsync<T>(Record);
                     }
                     ResponseChanged?.Invoke(Response);
                     if (Response.IsNotNull() &&
@@ -188,11 +188,11 @@ namespace OneLine.Bases
                 {
                     if (FormState.IsCopy() || FormState.IsCreate())
                     {
-                        ResponseCollection = await HttpService.AddRange<IEnumerable<T>>(Records);
+                        ResponseCollection = await HttpService.AddRangeAsync<IEnumerable<T>>(Records);
                     }
                     else if (FormState.IsEdit())
                     {
-                        ResponseCollection = await HttpService.UpdateRange<IEnumerable<T>>(Records);
+                        ResponseCollection = await HttpService.UpdateRangeAsync<IEnumerable<T>>(Records);
                     }
                     ResponseCollectionChanged?.Invoke(ResponseCollection);
                     if (ResponseCollection.IsNotNull() &&
@@ -218,7 +218,7 @@ namespace OneLine.Bases
             {
                 if (FormMode.IsSingle())
                 {
-                    Response = await HttpService.Delete<T>(Identifier);
+                    Response = await HttpService.DeleteAsync<T>(Identifier);
                     ResponseChanged?.Invoke(Response);
                     if (Response.IsNotNull() &&
                         Response.Succeed &&
@@ -235,7 +235,7 @@ namespace OneLine.Bases
                 }
                 else if (FormMode.IsMultiple())
                 {
-                    ResponseCollection = await HttpService.DeleteRange<T>(Identifiers);
+                    ResponseCollection = await HttpService.DeleteRangeAsync<T>(Identifiers);
                     ResponseCollectionChanged?.Invoke(ResponseCollection);
                     if (ResponseCollection.IsNotNull() &&
                         ResponseCollection.Succeed &&

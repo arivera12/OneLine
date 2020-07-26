@@ -163,7 +163,7 @@ namespace OneLine.Blazor.Components
         [Inject] public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         [Inject] public SweetAlertService SweetAlertService { get; set; }
         [Inject] public HttpClient HttpClient { get; set; }
-        public HttpBaseUserBlobsService<Identifier<string>, string> HttpBaseUserBlobsService { get; set; }
+        public HttpBaseUserBlobsService<UserBlobsViewModel, Identifier<string>, string> HttpBaseUserBlobsService { get; set; }
         public ElementReference DropTarget { get; set; }
         public ElementReference DropTargetInput { get; set; }
         public IFileReaderRef DropReference { get; set; }
@@ -173,7 +173,7 @@ namespace OneLine.Blazor.Components
         {
             if (firstRender)
             {
-                HttpBaseUserBlobsService = new HttpBaseUserBlobsService<Identifier<string>, string>()
+                HttpBaseUserBlobsService = new HttpBaseUserBlobsService<UserBlobsViewModel, Identifier<string>, string>()
                 {
                     HttpClient = HttpClient
                 };
@@ -279,7 +279,7 @@ namespace OneLine.Blazor.Components
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () =>
                 {
-                    var Response = await HttpBaseUserBlobsService.DownloadBinary(new Identifier<string>(userBlobs.UserBlobId), new IdentifierStringValidator());
+                    var Response = await HttpBaseUserBlobsService.DownloadBinaryAsync(new Identifier<string>(userBlobs.UserBlobId), new IdentifierStringValidator());
                     await SweetAlertService.HideLoaderAsync();
                     if (Response.IsNull())
                     {

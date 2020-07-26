@@ -11,8 +11,9 @@ namespace OneLine.Bases
     {
         string DownloadCsvMethod { get; set; }
         string UploadCsvMethod { get; set; }
-        Task<IResponseResult<byte[]>> DownloadCsvAsByteArray(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<IResponseResult<HttpResponseMessage>> DownloadCsvAsStream(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<IResponseResult<ApiResponse<IEnumerable<T>>>> UploadCsv(IEnumerable<BlobData> blobDatas, IValidator validator, HttpMethod httpMethod);
+        Task<IResponseResult<byte[]>> DownloadCsvAsByteArrayAsync(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<Stream>> DownloadCsvAsStreamAsync(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<HttpResponseMessage>> DownloadCsvAsHttpResponseMessageAsync(ISearchPaging SearchPaging, object searchExtraParams);
+        Task<IResponseResult<ApiResponse<IEnumerable<T>>>> UploadCsvAsync(IEnumerable<BlobData> blobDatas, IValidator validator, HttpMethod httpMethod);
     }
 }

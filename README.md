@@ -1,7 +1,7 @@
 # OneLine (Development, beta coming soon)
 <p>
     	<a href="https://www.nuget.org/packages/OneLine">
-         <img src="https://buildstats.info/nuget/OneLine?v=2.0.70" />
+         <img src="https://buildstats.info/nuget/OneLine?v=2.0.89" />
      </a>
      <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSE2NMEG3F7QU&source=url">
          <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" />
@@ -21,7 +21,6 @@ OneLine is an abstracted standardized redefined framework.
 - [x] Overridable
 - [x] Recyclable
 - [x] Scaffolding Tooling (Commercially available soon)
-  - [x] Pre-Implemented Enviroment
   - [x] RAD (Rapid Application Development) and Prototyping
   - [x] WORE (Write once, run everywhere)
   - [x] Multi Platform Deployment Support (Thanks to [BlazorMobile](https://github.com/Daddoon/BlazorMobile))
@@ -44,6 +43,75 @@ OneLine is an abstracted standardized redefined framework.
     - [ ] MySQL
       - [ ] MariaDB
       - [ ] Oracle DB 11.2 onwards
+  - [x] Application State Management
+  - [x] User Info Storage Management (Encrypted by default)
+    - [x] Session
+    - [x] Persistent
+  - [ ] Session Token Lifetime Management
+    - [ ] Ask for More Session Time
+    - [ ] Auto Renew Session Token on User Confirm
+    - [ ] Redirect on Session Expired Client time out
+    - [x] Redirect when Session is Expired in a User Action after Server Response 
+  - [x] Multi Language Support using Resource Files
+  - [x] Translator Component
+  - [x] Enviroment Chooser
+  - [x] In-Memory Configuration File
+  - [x] Pre-Implemented Core Base Classes for Forms and Data Views
+    - [x] Anonymous
+    - [x] Authorized
+    - [x] Authorized by Roles
+  - [x] Device Oriented UI/UX
+    - [x] Desktop
+    - [x] Tablet
+    - [x] Mobile
+  - [ ] Skin Mode
+    - [x] Light
+    - [ ] Dark
+  - [x] Pre-Implemented Service Enviroment (Controllers and Repositories)
+  - [x] Rest Arquitecture (JSON)
+  - [x] Pre-Implemented Users Account Basic Management
+  - [x] Services are pre-registered
+  - [x] Everything is secured and available for admins only by default
+  - [x] Request data is pre validate before arriving the controller method
+  - [x] Response has a base API Response Format
+  - [x] Search results are always paged by default
+  - [x] Repository and Service patterns have been redefined and reimplemented as Database Context Extended as Repository Service
+  - [x] CRUD methods are pre implemented supports single and multiple
+  - [x] Import data uploading *.csv file for create or update operations
+  - [x] Exporting data in *.csv file
+  - [x] Multiple Blob Storage Provider Support (Thanks to [Storage.Net](https://github.com/aloneguid/storage))
+    - [x] Microsoft Azure
+      - [x] Blob Storage
+      - [x] File Storage
+      - [x] Data Lake Gen 1
+      - [x] Data Lake Gen 2
+      - [x] Storage Queue
+      - [x] Event Hubs
+      - [x] Service Bus
+    - [x] Amazon Web Services
+      - [x] Simple Storage Service (S3)
+      - [x] Simple Queue Service (SQS)
+    - [x] Google Cloud Platform
+      - [x] Cloud Storage
+    - [x] Misc
+      - [x] Azure Databricks DBFS
+      - [x] Service Fabric Reliable Collections
+      - [x] Azure Key Vault
+      - [x] Local Disk (Blobs, Messaging)
+      - [x] Zip Archive (Blobs)
+      - [x] In-Memory (Blobs, Messaging)
+      - [x] FTP (Blobs)
+  - [x] Blobs Management is centralized and auto managed
+    - [x] Blobs doesn't never need a child tables to support multiple file upload references
+  - [x] Server exceptions are pre-handled and recorded
+  - [x] Every operation is auto audited with option of rolling back any operation at any time
+  - [x] Data BaseContext
+  - [x] Models
+  - [x] Validations
+  - [x] Http Services
+  - [x] Form File Validations Rules
+  - [x] Language Translations (English and Spanish (Extraction from DB))
+  - [x] SDK for .net
 
 ## Core Features
 
@@ -73,87 +141,15 @@ OneLine is an abstracted standardized redefined framework.
   - [x] Page Sort By (client and server)
   - [x] Collection Mode Management (append or replace)
   - [x] Request and Response Management
+- [x] Base DataBase Context
+- [x] Base Repository Extension Methods
   
-## Client Side Blazor Extended Features
+## Client Side Blazor Extending Core Features
 
-- [x] Single Page Application Arquitecture (SPA)
-- [x] Componetized
 - [x] Chained components behavior (behavior like stepper)
   - [x] Forms (Back or Save/Next)
   - [x] CRUD (Create, Read, Update, Delete operations) (back and/or next) 
   - [x] Data Views (Select single or multiple, back and/or next)
-- [x] Pre-Implemented Users Account Basic Management
-- [x] Application State Management
-  - [x] User Info Storage Management (Encrypted by default)
-    - [x] Session
-    - [x] Persistent
-  - [ ] Session Token Lifetime Management
-    - [ ] Ask for More Session Time
-    - [ ] Auto Renew Session Token on User Confirm
-    - [ ] Redirect on Session Expired Client time out
-    - [x] Redirect when Session is Expired in a User Action after Server Response 
-- [x] Multi Language Support using Resource Files
-- [x] Translator Component
-- [x] Enviroment Chooser
-- [x] In-Memory Configuration File
-- [x] Pre-Implemented Core Base Classes for Forms and Data Views
-  - [x] Anonymous
-  - [x] Authorized
-  - [x] Authorized by Roles
-- [x] Device Oriented UI/UX
-  - [x] Desktop
-  - [x] Tablet
-  - [x] Mobile
-- [ ] Skin Mode
-  - [x] Light
-  - [ ] Dark
-
-## Server Side Core API Features
-- [x] Rest Arquitecture
-- [x] Pre-Implemented Users Account Basic Management
-- [x] Services are pre-registered
-- [x] Everything is secured and available for admins only by default
-- [x] Request data is pre validate before arriving the controller method
-- [x] Response has a base API Response Format
-- [x] Search results are always paged by default
-- [x] Repository and Service patterns have been redefined and reimplemented as Database Context Extended as Repository Service
-- [x] CRUD methods are pre implemented supports single and multiple
-- [x] Import data uploading *.csv file for create or update operations
-- [x] Exporting data in *.csv file
-- [x] Multiple Blob Storage Provider Support (Thanks to [Storage.Net](https://github.com/aloneguid/storage))
-  - [x] Microsoft Azure
-    - [x] Blob Storage
-    - [x] File Storage
-    - [x] Data Lake Gen 1
-    - [x] Data Lake Gen 2
-    - [x] Storage Queue
-    - [x] Event Hubs
-    - [x] Service Bus
-  - [x] Amazon Web Services
-    - [x] Simple Storage Service (S3)
-    - [x] Simple Queue Service (SQS)
-  - [x] Google Cloud Platform
-    - [x] Cloud Storage
-  - [x] Misc
-    - [x] Azure Databricks DBFS
-    - [x] Service Fabric Reliable Collections
-    - [x] Azure Key Vault
-    - [x] Local Disk (Blobs, Messaging)
-    - [x] Zip Archive (Blobs)
-    - [x] In-Memory (Blobs, Messaging)
-    - [x] FTP (Blobs)
-- [x] Blobs Management is centralized
-  - [x] Blobs doesn't never need a child tables to support multiple file upload references
-- [x] Server exceptions are pre-handled and recorded
-- [x] Every operation is auto audited with option of rolling back any operation at any time
-
-## Client And Server Shared Features
-- [x] Models
-- [x] Validations
-- [x] Http Services
-- [x] Form File Validations Rules
-- [x] Language Translations (English and Spanish (Extraction from DB))
-- [x] SDK for .net
 
 ## Roadmap
 

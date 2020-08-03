@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.89</Version>
+    <Version>2.0.90</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine is a project that can be used on a server backend. This package already includes OneLine.Common.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed base db context search extensions and userblobs delete extensions. Added Disabled and ReadOnly blazor core components parameters. Rolled back stream extensions and added async method on stream extensions. Added new HttpClient Extensions to support streams and string reads. Fixed internal HttpBase method adding Async suffix at the end as all http methods are async by default. Fixed blazor file input. Added UserBlobs ViewModel. Refactored the UserBlobsBaseHttpService.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed FileInput. Fixed httpBaseUserBlobsService. Fixed some hub methods.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

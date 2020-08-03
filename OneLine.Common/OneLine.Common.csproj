@@ -13,12 +13,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed base db context search extensions and userblobs delete extensions. Added Disabled and ReadOnly blazor core components parameters. Rolled back stream extensions and added async method on stream extensions. Added new HttpClient Extensions to support streams and string reads. Fixed internal HttpBase method adding Async suffix at the end as all http methods are async by default. Fixed blazor file input. Added UserBlobs ViewModel. Refactored the UserBlobsBaseHttpService.</PackageReleaseNotes>
-    <Version>2.0.89</Version>
+    <PackageReleaseNotes>Fixed FileInput. Fixed httpBaseUserBlobsService. Fixed some hub methods.</PackageReleaseNotes>
+    <Version>2.0.90</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.89.0</AssemblyVersion>
-    <FileVersion>2.0.89.0</FileVersion>
+    <AssemblyVersion>2.0.90.0</AssemblyVersion>
+    <FileVersion>2.0.90.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

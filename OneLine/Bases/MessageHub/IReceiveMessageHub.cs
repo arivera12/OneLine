@@ -7,7 +7,9 @@ namespace OneLine.Bases
 {
     public interface IReceiveMessageHub
     {
-        Task ReceiveMessageToUser(string user, string message);
-        Task ReceiveMessageToAllUsers(string message);
+        Task ReceiveMessage<TMessage>(TMessage message);
+        Task ReceiveMessageToUser<TMessage>(string user, TMessage message);
+        Task ReceiveMessageToAllUsers<TMessage>(string user, TMessage message);
+        Task ReceiveMessageToAllUsersAnonymously<TMessage>(TMessage message);
     }
 }

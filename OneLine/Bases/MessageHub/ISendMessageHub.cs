@@ -4,7 +4,8 @@ namespace OneLine.Bases
 {
     public interface ISendMessageHub
     {
-        Task SendMessageToUser(string user, string message);
-        Task SendMessageToAllUsers(string message);
+        Task SendMessageToUser<TMessage>(string senderUser, TMessage message);
+        Task SendMessageToAllUsers<TMessage>(string senderUser, TMessage message);
+        Task SendMessageToAllUsersAnonymously<TMessage>(TMessage message);
     }
 }

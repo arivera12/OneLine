@@ -17,6 +17,7 @@ namespace OneLine.Bases
         where TIdentifier : class, IIdentifier<TId>
     {
         public override string Api { get; set; } = "api";
+        public override string ControllerName { get; set; } = nameof(UserBlobs).ToLower();
         public virtual string DownloadBinaryMethod { get; set; } = "downloadbinary";
         public virtual string DownloadRangeBinaryMethod { get; set; } = "downloadrangebinary";
         public virtual string DownloadBase64Method { get; set; } = "dowloadbase64";

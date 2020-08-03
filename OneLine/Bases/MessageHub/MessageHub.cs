@@ -16,14 +16,17 @@ namespace OneLine.Bases
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "SignalR Users");
             await base.OnDisconnectedAsync(exception);
         }
-
-        public async Task SendMessageToAllUsers(string message)
+        public async Task SendMessageToAllUsers<TMessage>(string user, TMessage message)
         {
-            await Clients.All.ReceiveMessageToAllUsers(message);
+            await Clients.All.ReceiveMessageToAllUsers(user, message);
         }
-        public async Task SendMessageToUser(string user, string message)
+        public async Task SendMessageToAllUsersAnonymously<TMessage>(TMessage message)
         {
-            await Clients.Caller.ReceiveMessageToUser(user, message);
+            await Clients.All.ReceiveMessageToAllUsersAnonymously(message);
+        }
+        public async Task SendMessageToUser<TMessage>(string userId, TMessage message)
+        {
+            await Clients.User(userId).ReceiveMessage(message);
         }
     }
 }

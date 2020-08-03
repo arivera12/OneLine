@@ -60,6 +60,14 @@ namespace OneLine.Blazor.Components
         /// </summary>
         [Parameter] public string InputName { get; set; }
         /// <summary>
+        /// The api version of the http client. 
+        /// </summary>
+        [Parameter] public string Api { get; set; }
+        /// <summary>
+        /// The controller name of the http client. 
+        /// </summary>
+        [Parameter] public string ControllerName { get; set; }
+        /// <summary>
         /// The border color on highlight. Default orangered. This property is ignored if DropTargetDragClass is changed of his default drop-zone-drop-target-drag.
         /// </summary>
         [Parameter] public string BorderColor { get; set; }
@@ -177,6 +185,14 @@ namespace OneLine.Blazor.Components
                 {
                     HttpClient = HttpClient
                 };
+                if(!string.IsNullOrWhiteSpace(Api))
+                {
+                    HttpBaseUserBlobsService.Api = Api;
+                }
+                if(!string.IsNullOrWhiteSpace(ControllerName))
+                {
+                    HttpBaseUserBlobsService.ControllerName = ControllerName;
+                }
                 if (string.IsNullOrWhiteSpace(DropTargetDragClass))
                 {
                     DropTargetDragClass = "drop-zone-drop-target-drag";

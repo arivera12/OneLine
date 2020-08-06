@@ -13,12 +13,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed FileInput. Fixed httpBaseUserBlobsService. Fixed some hub methods.</PackageReleaseNotes>
-    <Version>2.0.90</Version>
+    <PackageReleaseNotes>Removed Paging.PageIndex = 0; from inside BeforeSearch() method since this breaks the paging workflow for some cases.</PackageReleaseNotes>
+    <Version>2.0.91</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.90.0</AssemblyVersion>
-    <FileVersion>2.0.90.0</FileVersion>
+    <AssemblyVersion>2.0.91.0</AssemblyVersion>
+    <FileVersion>2.0.91.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

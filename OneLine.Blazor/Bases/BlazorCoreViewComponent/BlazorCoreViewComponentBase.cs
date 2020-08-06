@@ -174,7 +174,6 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeSearch()
         {
-            Paging.PageIndex = 0;
             if (IsDesktop)
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Search()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));

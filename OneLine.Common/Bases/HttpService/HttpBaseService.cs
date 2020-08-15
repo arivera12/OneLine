@@ -8,26 +8,23 @@ namespace OneLine.Bases
     /// </summary>
     public abstract class HttpBaseService : IHttpService
     {
-        public virtual string BaseAddress { get; set; }
         public virtual string Api { get; set; } = "api";
         public virtual HttpClient HttpClient { get; set; }
         public HttpBaseService()
         {
-            if (!string.IsNullOrWhiteSpace(BaseAddress))
-            {
-                HttpClient = new HttpClient
-                {
-                    BaseAddress = new Uri(BaseAddress)
-                };
-            }
-            else
-            {
-                HttpClient = new HttpClient();
-            }
+            HttpClient ??= new HttpClient();
         }
         public HttpBaseService(HttpClient httpClient)
         {
             HttpClient = httpClient;
+        }
+        public HttpBaseService(string baseAddress)
+        {
+            HttpClient = new HttpClient
+            {
+                BaseAddress = new Uri(baseAddress)
+            };
+
         }
         public HttpBaseService(Uri baseAddress)
         {
@@ -38,9 +35,18 @@ namespace OneLine.Bases
         }
         public HttpBaseService(string AuthorizationToken, bool AddBearerScheme = true)
         {
+            HttpClient = new HttpClient();
+            if (!string.IsNullOrWhiteSpace(AuthorizationToken))
+            {
+                HttpClient.DefaultRequestHeaders.Remove("Authorization");
+                HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
+            }
+        }
+        public HttpBaseService(string baseAddress, string AuthorizationToken, bool AddBearerScheme = true)
+        {
             HttpClient = new HttpClient
             {
-                BaseAddress = new Uri(BaseAddress)
+                BaseAddress = new Uri(baseAddress)
             };
             if (!string.IsNullOrWhiteSpace(AuthorizationToken))
             {

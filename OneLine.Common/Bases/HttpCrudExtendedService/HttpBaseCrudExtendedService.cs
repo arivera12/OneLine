@@ -23,10 +23,16 @@ namespace OneLine.Bases
         public HttpBaseCrudExtendedService(HttpClient httpClient) : base(httpClient)
         {
         }
+        public HttpBaseCrudExtendedService(string baseAddress) : base(baseAddress)
+        {
+        }
         public HttpBaseCrudExtendedService(Uri baseAddress) : base(baseAddress)
         {
         }
         public HttpBaseCrudExtendedService(string AuthorizationToken, bool AddBearerScheme = true) : base(AuthorizationToken, AddBearerScheme)
+        {
+        }
+        public HttpBaseCrudExtendedService(string baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
         }
         public HttpBaseCrudExtendedService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)

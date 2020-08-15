@@ -12,78 +12,25 @@ namespace OneLine.Blazor
 {
     public class ApplicationState : ComponentBase
     {
-        [Inject] public IJSRuntime JSRuntime { get; set; }
-        [Inject] public NavigationManager NavigationManager { get; set; }
-        [Inject] public HttpClient HttpClient { get; set; }
-        [Inject] public ISessionStorage SessionStorage { get; set; }
-        [Inject] public ILocalStorage LocalStorage { get; set; }
-        public static IJSRuntime _JSRuntime { get; set; }
-        public static NavigationManager _NavigationManager { get; set; }
-        public static HttpClient _HttpClient { get; set; }
-        public static ISessionStorage _SessionStorage { get; set; }
-        public static ILocalStorage _LocalStorage { get; set; }
+        [Inject] IJSRuntime jSRuntime { get; set; }
+        [Inject] NavigationManager navigationManager { get; set; }
+        [Inject] ISessionStorage sessionStorage { get; set; }
+        [Inject] ILocalStorage localStorage { get; set; }
+        public static IJSRuntime JSRuntime { get; set; }
+        public static NavigationManager NavigationManager { get; set; }
+        public static HttpClient HttpClient { get; set; }
+        public static ISessionStorage SessionStorage { get; set; }
+        public static ILocalStorage LocalStorage { get; set; }
         protected override void OnAfterRender(bool firstRender)
         {
             if (firstRender)
             {
-                _JSRuntime = JSRuntime;
-                _NavigationManager = NavigationManager;
-                _SessionStorage = SessionStorage;
-                _LocalStorage = LocalStorage;
+                JSRuntime = jSRuntime;
+                NavigationManager = navigationManager;
+                SessionStorage = sessionStorage;
+                LocalStorage = localStorage;
             }
         }
-
-        #region Unencrypted Methods
-
-        public static async ValueTask<TUser> GetApplicationUser<TUser>()
-        {
-            try
-            {
-                var applicationSession = await GetApplicationSession();
-                if (applicationSession == ApplicationSession.LocalStorage)
-                {
-                    return await _LocalStorage.GetItem<TUser>("User");
-                }
-                else
-                {
-                    return await _SessionStorage.GetItem<TUser>("User");
-                }
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-        public static async ValueTask SetApplicationUser<TUser>(TUser user)
-        {
-            var applicationSession = await GetApplicationSession();
-            if (applicationSession == ApplicationSession.LocalStorage)
-            {
-                await _LocalStorage.SetItem("User", user);
-            }
-            else
-            {
-                await _SessionStorage.SetItem("User", user);
-            }
-        }
-
-        public static async ValueTask SetApplicationUser<TUser>(TUser user, ApplicationSession applicationSession)
-        {
-            if (applicationSession == ApplicationSession.LocalStorage)
-            {
-                await _LocalStorage.SetItem("User", user);
-            }
-            else
-            {
-                await _SessionStorage.SetItem("User", user);
-            }
-        }
-
-        #endregion
-
-        #region Encrypted Methods
-
         public static async ValueTask<TUser> GetApplicationUserSecure<TUser>()
         {
             try
@@ -93,13 +40,13 @@ namespace OneLine.Blazor
                 string key;
                 if (applicationSession == ApplicationSession.LocalStorage)
                 {
-                    key = await _LocalStorage.GetItem<string>("DUEK");
-                    SUser = await _LocalStorage.GetItem<string>("SUser");
+                    key = await LocalStorage.GetItem<string>("DUEK");
+                    SUser = await LocalStorage.GetItem<string>("SUser");
                 }
                 else
                 {
-                    key = await _SessionStorage.GetItem<string>("DUEK");
-                    SUser = await _SessionStorage.GetItem<string>("SUser");
+                    key = await SessionStorage.GetItem<string>("DUEK");
+                    SUser = await SessionStorage.GetItem<string>("SUser");
                 }
                 return JsonConvert.DeserializeObject<TUser>(SUser.DecryptData(key));
             }
@@ -108,7 +55,6 @@ namespace OneLine.Blazor
                 return default;
             }
         }
-
         public static async ValueTask SetApplicationUserSecure<TUser>(TUser user)
         {
             var applicationSession = await GetApplicationSession();
@@ -117,16 +63,15 @@ namespace OneLine.Blazor
             var jsonUser = JsonConvert.SerializeObject(user);
             if (applicationSession == ApplicationSession.LocalStorage)
             {
-                await _LocalStorage.SetItem("DUEK", key);
-                await _LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                await LocalStorage.SetItem("DUEK", key);
+                await LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
             }
             else
             {
-                await _SessionStorage.SetItem("DUEK", key);
-                await _SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                await SessionStorage.SetItem("DUEK", key);
+                await SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
             }
         }
-
         public static async ValueTask SetApplicationUserSecure<TUser>(TUser user, ApplicationSession applicationSession)
         {
             var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
@@ -134,75 +79,58 @@ namespace OneLine.Blazor
             var jsonUser = JsonConvert.SerializeObject(user);
             if (applicationSession == ApplicationSession.LocalStorage)
             {
-                await _LocalStorage.SetItem("DUEK", key);
-                await _LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                await LocalStorage.SetItem("DUEK", key);
+                await LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
             }
             else
             {
-                await _SessionStorage.SetItem("DUEK", key);
-                await _SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                await SessionStorage.SetItem("DUEK", key);
+                await SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
             }
         }
-
-        #endregion
-
-        #region Common/Shared
-
         public static async ValueTask Logout()
         {
-            await _LocalStorage.RemoveItem("User");
-            await _SessionStorage.RemoveItem("User");
-            await _LocalStorage.RemoveItem("SUser");
-            await _SessionStorage.RemoveItem("SUser");
-            await _LocalStorage.RemoveItem("DUEK");
-            await _SessionStorage.RemoveItem("DUEK");
+            await LocalStorage.RemoveItem("User");
+            await SessionStorage.RemoveItem("User");
+            await LocalStorage.RemoveItem("SUser");
+            await SessionStorage.RemoveItem("SUser");
+            await LocalStorage.RemoveItem("DUEK");
+            await SessionStorage.RemoveItem("DUEK");
         }
-
         public static async ValueTask LogoutAndNavigateTo(string uri, bool forceReload = false)
         {
             await Logout();
-            _NavigationManager.NavigateTo(uri, forceReload);
+            NavigationManager.NavigateTo(uri, forceReload);
         }
-
-        public static async ValueTask<ApplicationSession> GetApplicationSession()
+        public static ValueTask<ApplicationSession> GetApplicationSession()
         {
             try
             {
-                return await _LocalStorage.GetItem<ApplicationSession>("ApplicationSession");
+                return LocalStorage.GetItem<ApplicationSession>("ApplicationSession");
             }
             catch (Exception)
             {
-                return 0;
+                return new ValueTask<ApplicationSession>(ApplicationSession.LocalStorage);
             }
         }
-
-        public static async ValueTask SetApplicationSession(ApplicationSession applicationSession)
+        public static ValueTask SetApplicationSession(ApplicationSession applicationSession)
         {
-            await _LocalStorage.SetItem("ApplicationSession", applicationSession);
+            return LocalStorage.SetItem("ApplicationSession", applicationSession);
         }
-
-        public static async ValueTask<string> GetApplicationLocale()
+        public static ValueTask<string> GetApplicationLocale()
         {
             try
             {
-                return await _LocalStorage.GetItem<string>("ApplicationLocale");
+                return LocalStorage.GetItem<string>("ApplicationLocale");
             }
             catch (Exception)
             {
                 return default;
             }
         }
-
-        public static async ValueTask SetApplicationLocale(string locale)
+        public static ValueTask SetApplicationLocale(string locale)
         {
-            await _LocalStorage.SetItem("ApplicationLocale", locale);
+            return LocalStorage.SetItem("ApplicationLocale", locale);
         }
-
-        public static void SetHttpClientAuthorizationToken(string AuthorizationToken, bool AddBearerScheme = false)
-        {
-            _HttpClient.AddJwtAuthorizationBearerHeader(AuthorizationToken, AddBearerScheme);
-        }
-
-        #endregion
     }
 }

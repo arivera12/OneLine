@@ -36,10 +36,16 @@ namespace OneLine.Bases
         public HttpBaseCrudService(HttpClient httpClient) : base(httpClient)
         {
         }
+        public HttpBaseCrudService(string baseAddress) : base(baseAddress)
+        {
+        }
         public HttpBaseCrudService(Uri baseAddress) : base(baseAddress)
         {
         }
         public HttpBaseCrudService(string AuthorizationToken, bool AddBearerScheme = true) : base(AuthorizationToken, AddBearerScheme)
+        {
+        }
+        public HttpBaseCrudService(string baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
         }
         public HttpBaseCrudService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)

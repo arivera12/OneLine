@@ -272,7 +272,7 @@ namespace OneLine.Blazor.Components
             if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDownloadTheFile"),
                                                                 confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
             {
-                await BlazorDownloadFileService.DownloadFile(blobData.Name, blobData.Data);
+                await BlazorDownloadFileService.DownloadFile(blobData.Name, blobData.Data, "application/octect-stream");
             }
         }
         public virtual async Task Remove(UserBlobs userBlob)
@@ -314,7 +314,7 @@ namespace OneLine.Blazor.Components
                             Response.HttpResponseMessage.IsNotNull() &&
                             Response.HttpResponseMessage.IsSuccessStatusCode)
                     {
-                        await BlazorDownloadFileService.DownloadFile(userBlobs.FileName, await Response.Response.Content.ReadAsStreamAsync());
+                        await BlazorDownloadFileService.DownloadFile(userBlobs.FileName, await Response.Response.Content.ReadAsStreamAsync(), "application/octect-stream");
                     }
                     else if (Response.IsNotNull() &&
                             Response.HasException)

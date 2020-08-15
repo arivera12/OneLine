@@ -13,17 +13,17 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Removed Paging.PageIndex = 0; from inside BeforeSearch() method since this breaks the paging workflow for some cases.</PackageReleaseNotes>
-    <Version>2.0.91</Version>
-    <AssemblyVersion>2.0.91.0</AssemblyVersion>
-    <FileVersion>2.0.91.0</FileVersion>
+    <PackageReleaseNotes>Dropped legacy extension for blazor EnviromentChooser and InMemoryFileProvider since blazor now supports that by default. Dropped webassemblyextensions. Fixed IHttpBase. Added HttpService extensions. Added ServiceProviderExtensions to manage service initialization using reflection. Dropped unsecure methods on ApplicationState component.</PackageReleaseNotes>
+    <Version>2.0.92</Version>
+    <AssemblyVersion>2.0.92.0</AssemblyVersion>
+    <FileVersion>2.0.92.0</FileVersion>
   </PropertyGroup>
 
 
   <ItemGroup>
     <PackageReference Include="BlazorBrowserStorage" Version="1.0.0" />
     <PackageReference Include="BlazorCurrentDevice" Version="1.0.6" />
-    <PackageReference Include="BlazorDownloadFile" Version="1.0.10" />
+    <PackageReference Include="BlazorDownloadFile" Version="2.1.1" />
     <PackageReference Include="Blazored.Typeahead" Version="4.3.0" />
     <PackageReference Include="BlazorStrap" Version="1.3.2-Preview1-04" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="2.6.6" />

@@ -23,7 +23,7 @@ namespace OneLine.Extensions
         {
             foreach(var type in assembly.GetTypes().Where(w => w.IsAssignableFrom(typeof(THttpService))))
             {
-                ((THttpService)serviceProvider.GetService(type)).SetHttpClientServiceBaseAddress(baseAddress);
+                ((THttpService)serviceProvider.GetRequiredService(type)).HttpClient.BaseAddress = new Uri(baseAddress);
             }
         }
         public static void SetHttpClientServiceBaseAddressFromAssembly<THttpService>(this IServiceProvider serviceProvider, Assembly assembly, Uri baseAddress)
@@ -31,21 +31,21 @@ namespace OneLine.Extensions
         {
             foreach (var type in assembly.GetTypes().Where(w => w.IsAssignableFrom(typeof(THttpService))))
             {
-                ((THttpService)serviceProvider.GetService(type)).SetHttpClientServiceBaseAddress(baseAddress);
+                ((THttpService)serviceProvider.GetRequiredService(type)).HttpClient.BaseAddress = baseAddress;
             }
         }
         public static void SetHttpClientServiceBaseAddressFromAssemblyContaining<T>(this IServiceProvider serviceProvider, string baseAddress)
         {
             foreach (var type in Assembly.GetAssembly(typeof(T)).GetTypes().Where(w => w.IsAssignableFrom(typeof(IHttpService))))
             {
-                ((IHttpService)serviceProvider.GetService(type)).SetHttpClientServiceBaseAddress(baseAddress);
+                ((IHttpService)serviceProvider.GetRequiredService(type)).HttpClient.BaseAddress = new Uri(baseAddress);
             }
         }
         public static void SetHttpClientServiceBaseAddressFromAssemblyContaining<T>(this IServiceProvider serviceProvider, Uri baseAddress)
         {
             foreach (var type in Assembly.GetAssembly(typeof(T)).GetTypes().Where(w => w.IsAssignableFrom(typeof(IHttpService))))
             {
-                ((IHttpService)serviceProvider.GetService(type)).SetHttpClientServiceBaseAddress(baseAddress);
+                ((IHttpService)serviceProvider.GetRequiredService(type)).HttpClient.BaseAddress = baseAddress;
             }
         }
     }

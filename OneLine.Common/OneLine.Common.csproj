@@ -13,12 +13,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Dropped legacy extension for blazor EnviromentChooser and InMemoryFileProvider since blazor now supports that by default. Dropped webassemblyextensions. Fixed IHttpBase. Added HttpService extensions. Added ServiceProviderExtensions to manage service initialization using reflection. Dropped unsecure methods on ApplicationState component.</PackageReleaseNotes>
-    <Version>2.0.92</Version>
+    <PackageReleaseNotes>Added missing base overloads for HttpBaseUserBlobsService.</PackageReleaseNotes>
+    <Version>2.0.94</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.92.0</AssemblyVersion>
-    <FileVersion>2.0.92.0</FileVersion>
+    <AssemblyVersion>2.0.94.0</AssemblyVersion>
+    <FileVersion>2.0.94.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

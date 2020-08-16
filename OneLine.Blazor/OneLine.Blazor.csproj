@@ -13,10 +13,10 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Dropped legacy extension for blazor EnviromentChooser and InMemoryFileProvider since blazor now supports that by default. Dropped webassemblyextensions. Fixed IHttpBase. Added HttpService extensions. Added ServiceProviderExtensions to manage service initialization using reflection. Dropped unsecure methods on ApplicationState component.</PackageReleaseNotes>
-    <Version>2.0.92</Version>
-    <AssemblyVersion>2.0.92.0</AssemblyVersion>
-    <FileVersion>2.0.92.0</FileVersion>
+    <PackageReleaseNotes>Added missing base overloads for HttpBaseUserBlobsService.</PackageReleaseNotes>
+    <Version>2.0.94</Version>
+    <AssemblyVersion>2.0.94.0</AssemblyVersion>
+    <FileVersion>2.0.94.0</FileVersion>
   </PropertyGroup>
 
 

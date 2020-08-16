@@ -34,10 +34,16 @@ namespace OneLine.Bases
         public HttpBaseUserBlobsService(HttpClient httpClient) : base(httpClient)
         {
         }
+        public HttpBaseUserBlobsService(string baseAddress) : base(baseAddress)
+        {
+        }
         public HttpBaseUserBlobsService(Uri baseAddress) : base(baseAddress)
         {
         }
         public HttpBaseUserBlobsService(string AuthorizationToken, bool AddBearerScheme = true) : base(AuthorizationToken, AddBearerScheme)
+        {
+        }
+        public HttpBaseUserBlobsService(string baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
         }
         public HttpBaseUserBlobsService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)

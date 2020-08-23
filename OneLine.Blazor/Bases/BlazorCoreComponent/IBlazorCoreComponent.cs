@@ -1,8 +1,10 @@
 ﻿using BlazorCurrentDevice;
 using BlazorDownloadFile;
 using CurrieTechnologies.Razor.SweetAlert2;
+using JsonLanguageLocalizerNet;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using OneLine.Blazor.Services;
 using OneLine.Enums;
 using System;
 using System.Net.Http;
@@ -18,6 +20,9 @@ namespace OneLine.Blazor.Bases
         IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         SweetAlertService SweetAlertService { get; set; }
         HttpClient HttpClient { get; set; }
+        IApplicationState ApplicationState { get; set; }
+        IJsonLanguageLocalizerService LanguageLocalizer { get; set; }
+        IJsonLanguageLocalizerSupportedCulturesService LanguageLocalizerSupportedCultures { get; set; }
         bool IsDesktop { get; set; }
         bool IsTablet { get; set; }
         bool IsMobile { get; set; }

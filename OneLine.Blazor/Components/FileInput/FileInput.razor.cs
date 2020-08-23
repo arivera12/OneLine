@@ -1,19 +1,21 @@
 ﻿using Blazor.FileReader;
+using BlazorDownloadFile;
+using CurrieTechnologies.Razor.SweetAlert2;
+using JsonLanguageLocalizerNet;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using OneLine.Bases;
+using OneLine.Blazor.Extensions;
+using OneLine.Blazor.Services;
 using OneLine.Extensions;
 using OneLine.Models;
-using System;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BlazorDownloadFile;
-using System.Net.Http;
-using CurrieTechnologies.Razor.SweetAlert2;
-using OneLine.Blazor.Extensions;
-using OneLine.Bases;
 using OneLine.Validations;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Components
 {
@@ -166,11 +168,13 @@ namespace OneLine.Blazor.Components
         /// Adds an informative label that is required.
         /// </summary>
         [Parameter] public bool ForceUpload { get; set; }
-        [Inject] public IFileReaderService FileReaderService { get; set; }
-        [Inject] public IJSRuntime JSRuntime { get; set; }
-        [Inject] public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
-        [Inject] public SweetAlertService SweetAlertService { get; set; }
-        [Inject] public HttpClient HttpClient { get; set; }
+        [Inject] public virtual IFileReaderService FileReaderService { get; set; }
+        [Inject] public virtual IJSRuntime JSRuntime { get; set; }
+        [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
+        [Inject] public virtual HttpClient HttpClient { get; set; }
+        [Inject] public virtual IApplicationState ApplicationState { get; set; }
+        [Inject] public virtual IJsonLanguageLocalizerService LanguageLocalizer { get; set; }
         public HttpBaseUserBlobsService<UserBlobsViewModel, Identifier<string>, string> HttpBaseUserBlobsService { get; set; }
         public ElementReference DropTarget { get; set; }
         public ElementReference DropTargetInput { get; set; }
@@ -185,11 +189,11 @@ namespace OneLine.Blazor.Components
                 {
                     HttpClient = HttpClient
                 };
-                if(!string.IsNullOrWhiteSpace(Api))
+                if (!string.IsNullOrWhiteSpace(Api))
                 {
                     HttpBaseUserBlobsService.Api = Api;
                 }
-                if(!string.IsNullOrWhiteSpace(ControllerName))
+                if (!string.IsNullOrWhiteSpace(ControllerName))
                 {
                     HttpBaseUserBlobsService.ControllerName = ControllerName;
                 }
@@ -203,15 +207,15 @@ namespace OneLine.Blazor.Components
                 }
                 if (string.IsNullOrWhiteSpace(DropZoneText.Value))
                 {
-                    DropZoneText = (MarkupString)Resourcer.GetString("DropFilesOrClickHere");
+                    DropZoneText = (MarkupString)LanguageLocalizer["DropFilesOrClickHere"];
                 }
                 if (string.IsNullOrWhiteSpace(ResetButtonText.Value))
                 {
-                    ResetButtonText = (MarkupString)Resourcer.GetString("Reset");
+                    ResetButtonText = (MarkupString)LanguageLocalizer["Reset"];
                 }
                 if (string.IsNullOrWhiteSpace(AddButtonText.Value))
                 {
-                    AddButtonText = (MarkupString)Resourcer.GetString("Add");
+                    AddButtonText = (MarkupString)LanguageLocalizer["Add"];
                 }
                 BorderColor = string.IsNullOrWhiteSpace(BorderColor) ? "orangered" : BorderColor;
                 if (string.IsNullOrWhiteSpace(DropZoneInlineStyle.Value))
@@ -256,8 +260,8 @@ namespace OneLine.Blazor.Components
         }
         public virtual async Task Remove(BlobData blobData)
         {
-            if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheFile"),
-                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToDeleteTheFile"],
+                                                                confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
             {
                 var blobDatas = new List<BlobData>(BlobDatas);
                 blobDatas.Remove(blobData);
@@ -269,16 +273,16 @@ namespace OneLine.Blazor.Components
         }
         public virtual async Task Download(BlobData blobData)
         {
-            if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDownloadTheFile"),
-                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToDownloadTheFile"],
+                                                                confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
             {
                 await BlazorDownloadFileService.DownloadFile(blobData.Name, blobData.Data, "application/octect-stream");
             }
         }
         public virtual async Task Remove(UserBlobs userBlob)
         {
-            if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheFile"),
-                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToDeleteTheFile"],
+                                                                confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
             {
                 var userBlobs = new List<UserBlobs>(UserBlobs);
                 userBlobs.Remove(userBlob);
@@ -290,8 +294,8 @@ namespace OneLine.Blazor.Components
         }
         public virtual async Task Download(UserBlobs userBlobs)
         {
-            if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDownloadTheFile"),
-                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToDownloadTheFile"],
+                                                                confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () =>
                 {
@@ -299,13 +303,13 @@ namespace OneLine.Blazor.Components
                     await SweetAlertService.HideLoaderAsync();
                     if (Response.IsNull())
                     {
-                        await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
+                        await SweetAlertService.FireAsync(LanguageLocalizer["UnknownErrorOccurred"], LanguageLocalizer["TheServerResponseIsNull"], SweetAlertIcon.Warning);
                     }
                     else if (Response.IsNotNull() &&
                             Response.HttpResponseMessage.IsNotNull() &&
                             Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
-                        await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                        await SweetAlertService.FireAsync(LanguageLocalizer["SessionExpired"], LanguageLocalizer["YourSessionHasExpiredPleaseLoginInBackAgain"], SweetAlertIcon.Warning);
                         await ApplicationState.LogoutAndNavigateTo("/login");
                     }
                     else if (Response.IsNotNull() &&
@@ -323,9 +327,9 @@ namespace OneLine.Blazor.Components
                     }
                     else
                     {
-                        await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Error);
+                        await SweetAlertService.FireAsync(LanguageLocalizer["UnknownErrorOccurred"], LanguageLocalizer["TheServerResponseIsNull"], SweetAlertIcon.Error);
                     }
-                }), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("DownloadingFile"));
+                }), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["DownloadingFile"]);
                 StateHasChanged();
             }
         }
@@ -356,37 +360,37 @@ namespace OneLine.Blazor.Components
         }
         public virtual MarkupString AllowsUpToFilesText()
         {
-            return (MarkupString)(MaximumAllowedFiles <= 0 ? "" : $@"{Resourcer.GetString("AllowsUpTo")} {MaximumAllowedFiles} {(MaximumAllowedFiles == 1 ? Resourcer.GetString("File") : Resourcer.GetString("Files"))}");
+            return (MarkupString)(MaximumAllowedFiles <= 0 ? "" : $@"{LanguageLocalizer["AllowsUpTo"]} {MaximumAllowedFiles} {(MaximumAllowedFiles == 1 ? LanguageLocalizer["File"] : LanguageLocalizer["Files"])}");
         }
         public virtual MarkupString RequiredText()
         {
-            return (MarkupString)(Required  ? Resourcer.GetString("FileUploadRequired") + ", " : "");
+            return (MarkupString)(Required ? LanguageLocalizer["FileUploadRequired"] + ", " : "");
         }
         public virtual MarkupString ForceUploadText()
         {
-            return (MarkupString)(ForceUpload ? Resourcer.GetString("UploadingANewFileIsRequired") + ", " : "");
+            return (MarkupString)(ForceUpload ? LanguageLocalizer["UploadingANewFileIsRequired"] + ", " : "");
         }
         public virtual MarkupString InformativeLabelText()
         {
             if (!MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {LanguageLocalizer["MaximumSizePerFile"]} {MaxFileSizeMeasuredText}</small></div>";
             }
             else if (MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}, {Resourcer.GetString("MinimumReached")}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {LanguageLocalizer["MaximumSizePerFile"]} {MaxFileSizeMeasuredText}, {LanguageLocalizer["MinimumReached"]}</small></div>";
             }
             else if (MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MaximumSizePerFile")} {MaxFileSizeMeasuredText}, {Resourcer.GetString("MaximunReached")}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {LanguageLocalizer["MaximumSizePerFile"]} {MaxFileSizeMeasuredText}, {LanguageLocalizer["MaximunReached"]}</small></div>";
             }
             else if (MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize <= 0)
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MinimumReached")}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {LanguageLocalizer["MinimumReached"]}</small></div>";
             }
             else if (MaximumAllowedFilesReached && MaxFileSize <= 0)
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {Resourcer.GetString("MaximunReached")}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {LanguageLocalizer["MaximunReached"]}</small></div>";
             }
             else
             {
@@ -430,15 +434,15 @@ namespace OneLine.Blazor.Components
                 {
                     await DropReference.ClearValue();
                     await DropInputReference.ClearValue();
-                    await SweetAlertService.FireAsync(Resourcer.GetString("MaximumAllowedFilesExceeded"), Resourcer.GetString("TheSumOfSelectedFilesExceedsTheMaximumAllowedFiles"), SweetAlertIcon.Warning);
+                    await SweetAlertService.FireAsync(LanguageLocalizer["MaximumAllowedFilesExceeded"], LanguageLocalizer["TheSumOfSelectedFilesExceedsTheMaximumAllowedFiles"], SweetAlertIcon.Warning);
                     return;
                 }
                 foreach (var fileReference in fileReferences)
                 {
                     var fileInfo = await fileReference.ReadFileInfoAsync();
-                    if(fileInfo.Size > MaxFileSize)
+                    if (fileInfo.Size > MaxFileSize)
                     {
-                        await SweetAlertService.FireAsync(Resourcer.GetString("MaxFileSizeExceeded"), fileInfo.Name, SweetAlertIcon.Warning);
+                        await SweetAlertService.FireAsync(LanguageLocalizer["MaxFileSizeExceeded"], fileInfo.Name, SweetAlertIcon.Warning);
                     }
                     else
                     {
@@ -468,7 +472,7 @@ namespace OneLine.Blazor.Components
                     var fileInfo = await fileReference.ReadFileInfoAsync();
                     if (fileInfo.Size > MaxFileSize)
                     {
-                        await SweetAlertService.FireAsync(Resourcer.GetString("MaxFileSizeExceeded"), fileInfo.Name, SweetAlertIcon.Warning);
+                        await SweetAlertService.FireAsync(LanguageLocalizer["MaxFileSizeExceeded"], fileInfo.Name, SweetAlertIcon.Warning);
                     }
                     else
                     {

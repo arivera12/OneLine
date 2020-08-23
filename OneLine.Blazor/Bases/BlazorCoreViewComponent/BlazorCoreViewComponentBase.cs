@@ -3,11 +3,13 @@ using BlazorDownloadFile;
 using CurrieTechnologies.Razor.SweetAlert2;
 using FluentValidation;
 using FluentValidation.Results;
+using JsonLanguageLocalizerNet;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 using OneLine.Bases;
 using OneLine.Blazor.Extensions;
+using OneLine.Blazor.Services;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
@@ -31,8 +33,11 @@ namespace OneLine.Blazor.Bases
         [Inject] public virtual NavigationManager NavigationManager { get; set; }
         [Inject] public virtual IBlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
         [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        [Inject] public virtual IJsonLanguageLocalizerService LanguageLocalizer { get; set; }
+        [Inject] public virtual IJsonLanguageLocalizerSupportedCulturesService LanguageLocalizerSupportedCultures { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
         [Inject] public virtual HttpClient HttpClient { get; set; }
+        [Inject] public virtual IApplicationState ApplicationState { get; set; }
         [Inject] public override THttpService HttpService { get; set; }
         [Parameter] public override TIdentifier Identifier { get; set; }
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
@@ -176,7 +181,7 @@ namespace OneLine.Blazor.Bases
         {
             if (IsDesktop)
             {
-                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Search()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Search()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
                 StateHasChanged();
             }
             else
@@ -194,7 +199,7 @@ namespace OneLine.Blazor.Bases
             }
             if (ResponsePaged.IsNull())
             {
-                await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
+                await SweetAlertService.FireAsync(LanguageLocalizer["UnknownErrorOccurred"], LanguageLocalizer["TheServerResponseIsNull"], SweetAlertIcon.Warning);
             }
             else if (ResponsePaged.IsNotNull() &&
                     ResponsePaged.Succeed &&
@@ -211,7 +216,7 @@ namespace OneLine.Blazor.Bases
             }
             else if (ResponsePaged.HttpResponseMessage.IsNotNull() && ResponsePaged.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                await SweetAlertService.FireAsync(LanguageLocalizer["SessionExpired"], LanguageLocalizer["YourSessionHasExpiredPleaseLoginInBackAgain"], SweetAlertIcon.Warning);
                 await ApplicationState.LogoutAndNavigateTo("/login");
             }
             else if (ResponsePaged.HasException)
@@ -220,7 +225,7 @@ namespace OneLine.Blazor.Bases
             }
             else
             {
-                await SweetAlertService.FireAsync(null, Resourcer.GetString(ResponsePaged.Response.Message), SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync(null, LanguageLocalizer[ResponsePaged.Response.Message], SweetAlertIcon.Error);
             }
         }
         public virtual async Task<IEnumerable<T>> TypeaheadSearch(string searchTerm)
@@ -270,38 +275,38 @@ namespace OneLine.Blazor.Bases
                 await ValidateMutableBlobDatas();
                 if (!IsValidModelState)
                 {
-                    await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
+                    await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult, LanguageLocalizer);
                     return;
                 }
             }
             await Validate();
-            if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToSaveTheRecord"),
-                                                                                    confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToSaveTheRecord"],
+                                                                                    confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
             {
-                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
             }
             else if (!IsValidModelState)
             {
-                await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
+                await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult, LanguageLocalizer);
             }
         }
         public virtual async Task InvalidSubmit()
         {
             await Validate();
-            await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult);
+            await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult, LanguageLocalizer);
         }
         public virtual async Task AfterSave()
         {
             await SweetAlertService.HideLoaderAsync();
             if (Response.IsNull())
             {
-                await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
+                await SweetAlertService.FireAsync(LanguageLocalizer["UnknownErrorOccurred"], LanguageLocalizer["TheServerResponseIsNull"], SweetAlertIcon.Warning);
             }
             else if (Response.IsNotNull() &&
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                await SweetAlertService.FireAsync(LanguageLocalizer["SessionExpired"], LanguageLocalizer["YourSessionHasExpiredPleaseLoginInBackAgain"], SweetAlertIcon.Warning);
                 await ApplicationState.LogoutAndNavigateTo("/login");
             }
             else if (Response.IsNotNull() &&
@@ -318,7 +323,7 @@ namespace OneLine.Blazor.Bases
                 else
                 {
                     StateHasChanged();
-                    await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
+                    await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response.Message], SweetAlertIcon.Success);
                 }
             }
             else if (Response.IsNotNull() &&
@@ -328,15 +333,15 @@ namespace OneLine.Blazor.Bases
             }
             else
             {
-                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response?.Message), SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response?.Message], SweetAlertIcon.Error);
             }
         }
         public virtual async Task BeforeDelete()
         {
-            if (Identifier.IsNotNull() && Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToDeleteTheRecord"),
-                                                                                    confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            if (Identifier.IsNotNull() && Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToDeleteTheRecord"],
+                                                                                    confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
             {
-                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Delete()), Resourcer.GetString("ProcessingRequest"), Resourcer.GetString("PleaseWait"));
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Delete()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
             }
         }
         public virtual async Task AfterDelete()
@@ -344,13 +349,13 @@ namespace OneLine.Blazor.Bases
             await SweetAlertService.HideLoaderAsync();
             if (Response.IsNull())
             {
-                await SweetAlertService.FireAsync(Resourcer.GetString("UnknownErrorOccurred"), Resourcer.GetString("TheServerResponseIsNull"), SweetAlertIcon.Warning);
+                await SweetAlertService.FireAsync(LanguageLocalizer["UnknownErrorOccurred"], LanguageLocalizer["TheServerResponseIsNull"], SweetAlertIcon.Warning);
             }
             else if (Response.IsNotNull() &&
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                await SweetAlertService.FireAsync(Resourcer.GetString("SessionExpired"), Resourcer.GetString("YourSessionHasExpiredPleaseLoginInBackAgain"), SweetAlertIcon.Warning);
+                await SweetAlertService.FireAsync(LanguageLocalizer["SessionExpired"], LanguageLocalizer["YourSessionHasExpiredPleaseLoginInBackAgain"], SweetAlertIcon.Warning);
                 await ApplicationState.LogoutAndNavigateTo("/login");
             }
             else if (Response.IsNotNull() &&
@@ -361,7 +366,7 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.IsSuccessStatusCode)
             {
                 StateHasChanged();
-                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response.Message), SweetAlertIcon.Success);
+                await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response.Message], SweetAlertIcon.Success);
             }
             else if (Response.IsNotNull() &&
                     Response.HasException)
@@ -370,14 +375,14 @@ namespace OneLine.Blazor.Bases
             }
             else
             {
-                await SweetAlertService.FireAsync(null, Resourcer.GetString(Response.Response?.Message), SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response?.Message], SweetAlertIcon.Error);
             }
         }
         public virtual async Task BeforeCancel()
         {
             var text = IsChained ? "AreYouSureYouWantToGoBack" : "AreYouSureYouWantToCancel";
-            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString(text),
-                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            if (await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer[text],
+                                                                confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
             {
                 await Cancel();
             }
@@ -389,8 +394,8 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeReset()
         {
-            if (await SweetAlertService.ShowConfirmAlertAsync(title: Resourcer.GetString("Confirm"), text: Resourcer.GetString("AreYouSureYouWantToReset"),
-                                                                confirmButtonText: Resourcer.GetString("Yes"), cancelButtonText: Resourcer.GetString("Cancel")))
+            if (await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToReset"],
+                                                                confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
             {
                 await Reset();
             }

@@ -19,18 +19,18 @@
             {
                 var localBlobData = BlobData;
                 <BSButton Color="Color.Link">
-                    <span @onclick:stopPropagation @onclick=@(async () => await Download(localBlobData)) title="@Resourcer.GetString("Download")">@localBlobData.Name</span>
-                    <span class="text-danger" @onclick:stopPropagation @onclick=@(() => Remove(localBlobData)) style="cursor: pointer" title="@Resourcer.GetString("Delete")">&times;</span>
+                    <span @onclick:stopPropagation @onclick=@(async () => await Download(localBlobData)) title="@LanguageLocalizer["Download"]">@localBlobData.Name</span>
+                    <span class="text-danger" @onclick:stopPropagation @onclick=@(() => Remove(localBlobData)) style="cursor: pointer" title="@LanguageLocalizer["Delete"]">&times;</span>
                 </BSButton>
             }
             @foreach (var UserBlob in UserBlobs ?? Enumerable.Empty<UserBlobs>())
             {
                 var localUserBlob = UserBlob;
                 <BSButton Color="Color.Link">
-                    <span @onclick:stopPropagation @onclick=@(async () => await Download(localUserBlob)) title="@Resourcer.GetString("Download")">@localUserBlob.Name</span>
+                    <span @onclick:stopPropagation @onclick=@(async () => await Download(localUserBlob)) title="@LanguageLocalizer["Download"]">@localUserBlob.Name</span>
                     @if (!HideDeleteButton)
                     {
-                        <span class="text-danger" @onclick:stopPropagation @onclick=@(() => Remove(localUserBlob)) style="cursor: pointer" title="@Resourcer.GetString("Delete")">&times;</span>
+                        <span class="text-danger" @onclick:stopPropagation @onclick=@(() => Remove(localUserBlob)) style="cursor: pointer" title="@LanguageLocalizer["Delete"]">&times;</span>
                     }
                 </BSButton>
             }
@@ -41,7 +41,7 @@
         }
         @if (!HideResetButton)
         {
-            <BSButton OnClick=Clear Color=Color.Primary>@ResetButtonText @(MaximumAllowedFiles == 1 ? Resourcer.GetString("File") : Resourcer.GetString("Files"))</BSButton>
+            <BSButton OnClick=Clear Color=Color.Primary>@ResetButtonText @(MaximumAllowedFiles == 1 ? LanguageLocalizer["File"] : LanguageLocalizer["Files"])</BSButton>
         }
         @if (CanAddMoreFiles())
         {

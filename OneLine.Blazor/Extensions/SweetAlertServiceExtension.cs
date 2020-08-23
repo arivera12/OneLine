@@ -1,19 +1,20 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using FluentValidation.Results;
+using JsonLanguageLocalizerNet;
 using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Extensions
 {
     public static class SweetAlertServiceExtension
     {
-        public static async Task ShowFluentValidationsAlertMessageAsync(this SweetAlertService Swal, ValidationResult FluentValidationResult, string title = null, string style = "color:red")
+        public static async Task ShowFluentValidationsAlertMessageAsync(this SweetAlertService Swal, ValidationResult FluentValidationResult, IJsonLanguageLocalizerService LanguageLocalizer, string title = null, string style = "color:red")
         {
             if (FluentValidationResult != null && !FluentValidationResult.IsValid && FluentValidationResult.Errors.Count > 0)
             {
                 string validations = "";
                 foreach (var item in FluentValidationResult.Errors)
                 {
-                    validations += $"<div>{Resourcer.GetString(item.ErrorMessage)}</div>";
+                    validations += $"<div>{LanguageLocalizer[item.ErrorMessage]}</div>";
                 }
                 string validationMessage = $@"<div style=""{style}"">{validations}</div>";
                 await Swal.FireAsync(title, validationMessage, SweetAlertIcon.Error);

@@ -13,10 +13,10 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Added missing base overloads for HttpBaseUserBlobsService.</PackageReleaseNotes>
-    <Version>2.0.94</Version>
-    <AssemblyVersion>2.0.94.0</AssemblyVersion>
-    <FileVersion>2.0.94.0</FileVersion>
+    <PackageReleaseNotes>Updated JsonLanguageLocalizerNet and JsonLanguageLocalizerNet.Blazor. Moved ApplicationState to a BlazorService. Fixed blazor core.</PackageReleaseNotes>
+    <Version>2.0.96</Version>
+    <AssemblyVersion>2.0.96.0</AssemblyVersion>
+    <FileVersion>2.0.96.0</FileVersion>
   </PropertyGroup>
 
 
@@ -27,9 +27,10 @@
     <PackageReference Include="Blazored.Typeahead" Version="4.3.0" />
     <PackageReference Include="BlazorStrap" Version="1.3.2-Preview1-04" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="2.6.6" />
+    <PackageReference Include="JsonLanguageLocalizerNet.Blazor" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview3.20168.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.3" />
     <PackageReference Include="Tewr.Blazor.FileReader" Version="1.5.0.20109" />
   </ItemGroup>

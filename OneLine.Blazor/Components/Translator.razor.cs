@@ -1,7 +1,7 @@
-﻿using BlazorBrowserStorage;
-using JsonLanguageLocalizerNet;
-using JsonLanguageLocalizerNet.Blazor.Helpers;
+﻿using JsonLanguageLocalizerNet;
+using JsonLanguageLocalizerNet.Helpers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -12,22 +12,23 @@ namespace OneLine.Blazor
 {
     public class TranslatorComponentModel : ComponentBase
     {
-        public virtual bool ReloadOnLanguageChange { get; set; }
-        public virtual bool AutoSetDefaultThreadCurrentCultureOnLanguageChange { get; set; }
-        public static Action<CultureInfo> OnLanguageChanged { get; set; }
-        public virtual string ApplicationLocale { get; set; }
+        [Parameter] public virtual bool ReloadOnLanguageChange { get; set; }
+        [Parameter] public virtual bool AutoSetDefaultThreadCurrentCultureOnLanguageChange { get; set; }
+        public static Action<JsonLanguageLocalizerService, CultureInfo> OnLanguageChanged { get; set; }
+        [Parameter] public Action<JsonLanguageLocalizerService, CultureInfo> OnChanged { get; set; }
+        [Parameter] public virtual string ApplicationLocale { get; set; }
         [Inject] public virtual NavigationManager NavigationManager { get; set; }
         [Inject] public virtual HttpClient HttpClient { get; set; }
-        [Inject] public virtual ILocalStorage LocalStorage { get; set; }
+        [Inject] public virtual IJSRuntime JSRuntime { get; set; }
         [Inject] public virtual IJsonLanguageLocalizerService LanguageLocalizer { get; set; }
         [Inject] public virtual IJsonLanguageLocalizerSupportedCulturesService LanguageLocalizerSupportedCultures { get; set; }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
-                if(string.IsNullOrWhiteSpace(ApplicationLocale))
+                if (string.IsNullOrWhiteSpace(ApplicationLocale))
                 {
-                    ApplicationLocale = await LocalStorage.GetItem<string>("ApplicationLocale");
+                    ApplicationLocale = await JSRuntime.InvokeAsync<string>("window.localStorage.getItem", "ApplicationLocale");
                 }
                 if (!string.IsNullOrWhiteSpace(ApplicationLocale))
                 {
@@ -35,7 +36,7 @@ namespace OneLine.Blazor
                     {
                         throw new ArgumentException($"The ApplicationLocale {ApplicationLocale} doesn't exists in the LanguageLocalizerSupportedCultures");
                     }
-                    var jsonLanguageLocalizerService = await JsonLanguageLocalizerServiceHelper.GetJsonLanguageLocalizerServiceFromSupportedCulturesAsync(HttpClient, LanguageLocalizerSupportedCultures.GetLanguageLocalizerSupportedCultures());
+                    var jsonLanguageLocalizerService = await JsonLanguageLocalizerServiceHelper.GetJsonLanguageLocalizerServiceFromSupportedCulturesAsync(HttpClient, LanguageLocalizerSupportedCultures.GetLanguageLocalizerSupportedCultures(), ApplicationLocale);
                     LanguageLocalizer.ChangeLanguageLocalizer(jsonLanguageLocalizerService);
                 }
                 StateHasChanged();
@@ -48,10 +49,10 @@ namespace OneLine.Blazor
             {
                 throw new ArgumentException($"The ApplicationLocale {ApplicationLocale} doesn't exists in the LanguageLocalizerSupportedCultures");
             }
-            var jsonLanguageLocalizerService = await JsonLanguageLocalizerServiceHelper.GetJsonLanguageLocalizerServiceFromSupportedCulturesAsync(HttpClient, LanguageLocalizerSupportedCultures.GetLanguageLocalizerSupportedCultures());
+            var jsonLanguageLocalizerService = await JsonLanguageLocalizerServiceHelper.GetJsonLanguageLocalizerServiceFromSupportedCulturesAsync(HttpClient, LanguageLocalizerSupportedCultures.GetLanguageLocalizerSupportedCultures(), ApplicationLocale);
             LanguageLocalizer.ChangeLanguageLocalizer(jsonLanguageLocalizerService);
-            await LocalStorage.SetItem("ApplicationLocale", ApplicationLocale);
-            if(ReloadOnLanguageChange)
+            await JSRuntime.InvokeAsync<string>("window.localStorage.setItem", "ApplicationLocale", ApplicationLocale);
+            if (ReloadOnLanguageChange)
             {
                 NavigationManager.NavigateTo(NavigationManager.Uri);
             }
@@ -63,7 +64,8 @@ namespace OneLine.Blazor
                     CultureInfo.DefaultThreadCurrentCulture = cultureInfoSelected;
                     CultureInfo.DefaultThreadCurrentUICulture = cultureInfoSelected;
                 }
-                OnLanguageChanged?.Invoke(cultureInfoSelected);
+                OnLanguageChanged?.Invoke(jsonLanguageLocalizerService, cultureInfoSelected);
+                OnChanged?.Invoke(jsonLanguageLocalizerService, cultureInfoSelected);
             }
             StateHasChanged();
         }

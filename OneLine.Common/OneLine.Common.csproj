@@ -13,17 +13,17 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed js calls, added new JsonLanguageLocalizerServiceHelper method.</PackageReleaseNotes>
-    <Version>2.1.3</Version>
+    <PackageReleaseNotes>Fixed Translator.</PackageReleaseNotes>
+    <Version>2.1.5</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.1.3.0</AssemblyVersion>
-    <FileVersion>2.1.3.0</FileVersion>
+    <AssemblyVersion>2.1.5.0</AssemblyVersion>
+    <FileVersion>2.1.5.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BlazorMobile.Common" Version="3.2.8" />
-    <PackageReference Include="JsonLanguageLocalizerNet" Version="1.0.4" />
+    <PackageReference Include="JsonLanguageLocalizerNet" Version="1.0.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />

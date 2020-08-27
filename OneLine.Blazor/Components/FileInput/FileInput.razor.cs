@@ -1,4 +1,4 @@
-﻿using Blazor.FileReader;
+﻿using Tewr.Blazor.FileReader;
 using BlazorDownloadFile;
 using CurrieTechnologies.Razor.SweetAlert2;
 using JsonLanguageLocalizerNet;

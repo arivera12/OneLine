@@ -1,4 +1,5 @@
 ﻿using BlazorBrowserStorage;
+using BlazorMobile.Common;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -6,6 +7,7 @@ using OneLine.Enums;
 using OneLine.Extensions;
 using System;
 using System.Threading.Tasks;
+using Xamarin.Essentials.Interfaces;
 
 namespace OneLine.Blazor.Services
 {
@@ -14,30 +16,50 @@ namespace OneLine.Blazor.Services
         [Inject] public NavigationManager NavigationManager { get; set; }
         [Inject] public ISessionStorage SessionStorage { get; set; }
         [Inject] public ILocalStorage LocalStorage { get; set; }
-        public ApplicationState(NavigationManager navigationManager, ISessionStorage sessionStorage, ILocalStorage localStorage)
+        [Inject] public ISecureStorage SecureStorage { get; set; }
+        public bool IsBlazorMobileDevice { get; set; }
+        public ApplicationState()
         {
-            NavigationManager = navigationManager;
-            SessionStorage = sessionStorage;
-            LocalStorage = localStorage;
+            IsBlazorMobileDevice = BlazorDevice.RuntimePlatform == BlazorDevice.Android ||
+                   BlazorDevice.RuntimePlatform == BlazorDevice.iOS ||
+                   BlazorDevice.RuntimePlatform == BlazorDevice.UWP;
         }
+        //public ApplicationState(NavigationManager navigationManager, ISessionStorage sessionStorage, ILocalStorage localStorage, ISecureStorage secureStorage)
+        //{
+        //    NavigationManager = navigationManager;
+        //    SessionStorage = sessionStorage;
+        //    LocalStorage = localStorage;
+        //    SecureStorage = secureStorage;
+        //    IsBlazorMobileDevice = BlazorDevice.RuntimePlatform == BlazorDevice.Android ||
+        //           BlazorDevice.RuntimePlatform == BlazorDevice.iOS ||
+        //           BlazorDevice.RuntimePlatform == BlazorDevice.UWP;
+        //}
         public async ValueTask<TUser> GetApplicationUserSecure<TUser>()
         {
             try
             {
-                var applicationSession = await GetApplicationSession();
                 string SUser;
-                string key;
-                if (applicationSession == ApplicationSession.LocalStorage)
+                var applicationSession = await GetApplicationSession();
+                if (IsBlazorMobileDevice && applicationSession == ApplicationSession.LocalStorage)
                 {
-                    key = await LocalStorage.GetItem<string>("DUEK");
-                    SUser = await LocalStorage.GetItem<string>("SUser");
+                    SUser = await SecureStorage.GetAsync("SUser");
+                    return JsonConvert.DeserializeObject<TUser>(SUser);
                 }
                 else
                 {
-                    key = await SessionStorage.GetItem<string>("DUEK");
-                    SUser = await SessionStorage.GetItem<string>("SUser");
+                    string key;
+                    if (applicationSession == ApplicationSession.LocalStorage)
+                    {
+                        key = await LocalStorage.GetItem<string>("DUEK");
+                        SUser = await LocalStorage.GetItem<string>("SUser");
+                    }
+                    else
+                    {
+                        key = await SessionStorage.GetItem<string>("DUEK");
+                        SUser = await SessionStorage.GetItem<string>("SUser");
+                    }
+                    return JsonConvert.DeserializeObject<TUser>(SUser.DecryptData(key));
                 }
-                return JsonConvert.DeserializeObject<TUser>(SUser.DecryptData(key));
             }
             catch (Exception)
             {
@@ -46,83 +68,131 @@ namespace OneLine.Blazor.Services
         }
         public async ValueTask SetApplicationUserSecure<TUser>(TUser user)
         {
-            var applicationSession = await GetApplicationSession();
-            var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
-            key = key.EncryptData(key);
             var jsonUser = JsonConvert.SerializeObject(user);
-            if (applicationSession == ApplicationSession.LocalStorage)
+            var applicationSession = await GetApplicationSession();
+            if (IsBlazorMobileDevice && applicationSession == ApplicationSession.LocalStorage)
             {
-                await LocalStorage.SetItem("DUEK", key);
-                await LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                await SecureStorage.SetAsync("SUser", jsonUser);
             }
             else
             {
-                await SessionStorage.SetItem("DUEK", key);
-                await SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
+                key = key.EncryptData(key);
+                if (applicationSession == ApplicationSession.LocalStorage)
+                {
+
+                    await LocalStorage.SetItem("DUEK", key);
+                    await LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                }
+                else
+                {
+                    await SessionStorage.SetItem("DUEK", key);
+                    await SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                }
             }
         }
         public async ValueTask SetApplicationUserSecure<TUser>(TUser user, ApplicationSession applicationSession)
         {
-            var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
-            key = key.EncryptData(key);
             var jsonUser = JsonConvert.SerializeObject(user);
-            if (applicationSession == ApplicationSession.LocalStorage)
+            if (IsBlazorMobileDevice && applicationSession == ApplicationSession.LocalStorage)
             {
-                await LocalStorage.SetItem("DUEK", key);
-                await LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                await SecureStorage.SetAsync("SUser", jsonUser);
             }
             else
             {
-                await SessionStorage.SetItem("DUEK", key);
-                await SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
+                key = key.EncryptData(key);
+                if (applicationSession == ApplicationSession.LocalStorage)
+                {
+                    await LocalStorage.SetItem("DUEK", key);
+                    await LocalStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                }
+                else
+                {
+                    await SessionStorage.SetItem("DUEK", key);
+                    await SessionStorage.SetItem("SUser", jsonUser.EncryptData(key));
+                }
             }
         }
         public async ValueTask Logout()
         {
-            await LocalStorage.RemoveItem("User");
-            await SessionStorage.RemoveItem("User");
-            await LocalStorage.RemoveItem("SUser");
-            await SessionStorage.RemoveItem("SUser");
-            await LocalStorage.RemoveItem("DUEK");
-            await SessionStorage.RemoveItem("DUEK");
+            if (IsBlazorMobileDevice)
+            {
+                await SecureStorage.Remove("SUser");
+            }
+            else
+            {
+                await LocalStorage.RemoveItem("SUser");
+                await SessionStorage.RemoveItem("SUser");
+                await LocalStorage.RemoveItem("DUEK");
+                await SessionStorage.RemoveItem("DUEK");
+            }
         }
         public async ValueTask LogoutAndNavigateTo(string uri, bool forceReload = false)
         {
             await Logout();
             NavigationManager.NavigateTo(uri, forceReload);
         }
-        public ValueTask<ApplicationSession> GetApplicationSession()
+        public async ValueTask<ApplicationSession> GetApplicationSession()
         {
             try
             {
-                return LocalStorage.GetItem<ApplicationSession>("ApplicationSession");
+                if (IsBlazorMobileDevice)
+                {
+                    return Enum.Parse<ApplicationSession>(await SecureStorage.GetAsync("ApplicationSession"));
+                }
+                else
+                {
+                    return await LocalStorage.GetItem<ApplicationSession>("ApplicationSession");
+                }
             }
             catch (Exception)
             {
-                return new ValueTask<ApplicationSession>(ApplicationSession.LocalStorage);
+                return ApplicationSession.LocalStorage;
             }
         }
-        public ValueTask SetApplicationSession(ApplicationSession applicationSession)
+        public async ValueTask SetApplicationSession(ApplicationSession applicationSession)
         {
-            return LocalStorage.SetItem("ApplicationSession", applicationSession);
+            if (IsBlazorMobileDevice)
+            {
+                await SecureStorage.SetAsync("ApplicationSession", applicationSession.ToString());
+            }
+            else
+            {
+                await LocalStorage.SetItem("ApplicationSession", applicationSession);
+            }
         }
-        public ValueTask<string> GetApplicationLocale()
+        public async ValueTask<string> GetApplicationLocale()
         {
             try
             {
-                return LocalStorage.GetItem<string>("ApplicationLocale");
+                if (IsBlazorMobileDevice)
+                {
+                    return await SecureStorage.GetAsync("ApplicationLocale");
+                }
+                else
+                {
+                    return await LocalStorage.GetItem<string>("ApplicationLocale");
+                }
             }
             catch (Exception)
             {
                 return default;
             }
         }
-        public ValueTask SetApplicationLocale(string locale)
+        public async ValueTask SetApplicationLocale(string locale)
         {
-            return LocalStorage.SetItem("ApplicationLocale", locale);
+            if (IsBlazorMobileDevice)
+            {
+                await SecureStorage.SetAsync("ApplicationLocale", locale);
+            }
+            else
+            {
+                await LocalStorage.SetItem("ApplicationLocale", locale);
+            }
         }
     }
-    
+
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddApplicationState(this IServiceCollection services)

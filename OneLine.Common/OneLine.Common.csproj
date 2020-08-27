@@ -22,6 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorMobile.Common" Version="3.2.8" />
     <PackageReference Include="JsonLanguageLocalizerNet" Version="1.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.3" />
@@ -32,6 +33,8 @@
     <PackageReference Include="FluentValidation" Version="9.0.0-preview4" />
     <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.24" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3" />
+    <PackageReference Include="Xamarin.Forms" Version="3.5.0.169047" />
   </ItemGroup>
 
   <ItemGroup>

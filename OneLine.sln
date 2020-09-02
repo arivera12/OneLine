@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{
 	ProjectSection(SolutionItems) = preProject
 		SqlScripts\SqlServer\AspNetIdentityTables.sql = SqlScripts\SqlServer\AspNetIdentityTables.sql
 		SqlScripts\SqlServer\AuditTrails.sql = SqlScripts\SqlServer\AuditTrails.sql
+		Constraints.sql = Constraints.sql
 		SqlScripts\SqlServer\ExceptionLogs.sql = SqlScripts\SqlServer\ExceptionLogs.sql
 		SqlScripts\SqlServer\UserBlobs.sql = SqlScripts\SqlServer\UserBlobs.sql
 	EndProjectSection

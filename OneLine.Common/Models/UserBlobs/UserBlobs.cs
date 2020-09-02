@@ -6,6 +6,7 @@ namespace OneLine.Models
     public class UserBlobs : IUserBlobs
     {
         public virtual string UserBlobId { get; set; }
+        public virtual string UserIdentifier { get; set; }
         public virtual string ContentDisposition { get; set; }
         public virtual string ContentType { get; set; }
         public virtual string FileName { get; set; }
@@ -21,6 +22,7 @@ namespace OneLine.Models
     public class UserBlobsViewModel : IUserBlobs
     {
         public virtual string UserBlobId { get; set; }
+        public virtual string UserIdentifier { get; set; }
         public virtual string ContentDisposition { get; set; }
         public virtual string ContentType { get; set; }
         public virtual string FileName { get; set; }

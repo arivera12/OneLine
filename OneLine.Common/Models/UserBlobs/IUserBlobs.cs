@@ -5,6 +5,7 @@ namespace OneLine.Models
     public interface IUserBlobs
     {
         string UserBlobId { get; set; }
+        string UserIdentifier { get; set; }
         string ContentDisposition { get; set; }
         string ContentType { get; set; }
         string FileName { get; set; }

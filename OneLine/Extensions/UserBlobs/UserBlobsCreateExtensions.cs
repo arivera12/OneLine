@@ -98,6 +98,7 @@ namespace OneLine.Extensions
                 userBlob.FileName = file.Name;
                 userBlob.FilePath = filename;
                 userBlob.Length = file.Size;
+                userBlob.UserIdentifier = userId;
                 userBlob.CreatedBy = userId;
                 userBlob.CreatedOn = createdOn;
                 userBlob.TableName = tableName;
@@ -153,6 +154,7 @@ namespace OneLine.Extensions
                 userBlob.FileName = file.Name;
                 userBlob.FilePath = filename;
                 userBlob.Length = file.Size;
+                userBlob.UserIdentifier = userId;
                 userBlob.CreatedBy = userId;
                 userBlob.CreatedOn = createdOn;
                 userBlob.TableName = tableName;

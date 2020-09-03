@@ -417,6 +417,14 @@ namespace OneLine.Blazor.Bases
         {
             ShowForm = false;
             ShowFormChanged?.Invoke(ShowForm);
+            if(RecordsSelectionMode.IsSingle())
+            {
+                SelectedRecord = null;
+            }
+            else
+            {
+                SelectedRecords = null;
+            }
             FormState = FormState.Create;
             FormStateChanged?.Invoke(FormState);
             StateHasChanged();

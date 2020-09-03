@@ -13,10 +13,10 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Fixed ApplicationState DI.</PackageReleaseNotes>
-    <Version>2.1.7</Version>
-    <AssemblyVersion>2.1.7.0</AssemblyVersion>
-    <FileVersion>2.1.7.0</FileVersion>
+    <PackageReleaseNotes>Fixed cancel button to set null selected record/s to prevent persistence.</PackageReleaseNotes>
+    <Version>2.1.8</Version>
+    <AssemblyVersion>2.1.8.0</AssemblyVersion>
+    <FileVersion>2.1.8.0</FileVersion>
   </PropertyGroup>
 
 

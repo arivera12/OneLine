@@ -13,27 +13,30 @@ namespace OneLine.Blazor.Services
 {
     public class ApplicationState : IApplicationState
     {
-        [Inject] public NavigationManager NavigationManager { get; set; }
-        [Inject] public ISessionStorage SessionStorage { get; set; }
-        [Inject] public ILocalStorage LocalStorage { get; set; }
-        [Inject] public ISecureStorage SecureStorage { get; set; }
+        public NavigationManager NavigationManager { get; set; }
+        public ISessionStorage SessionStorage { get; set; }
+        public ILocalStorage LocalStorage { get; set; }
+        public ISecureStorage SecureStorage { get; set; }
         public bool IsBlazorMobileDevice { get; set; }
-        public ApplicationState()
+        public ApplicationState(NavigationManager navigationManager, ISessionStorage sessionStorage, ILocalStorage localStorage)
         {
+            NavigationManager = navigationManager;
+            SessionStorage = sessionStorage;
+            LocalStorage = localStorage;
             IsBlazorMobileDevice = BlazorDevice.RuntimePlatform == BlazorDevice.Android ||
                    BlazorDevice.RuntimePlatform == BlazorDevice.iOS ||
                    BlazorDevice.RuntimePlatform == BlazorDevice.UWP;
         }
-        //public ApplicationState(NavigationManager navigationManager, ISessionStorage sessionStorage, ILocalStorage localStorage, ISecureStorage secureStorage)
-        //{
-        //    NavigationManager = navigationManager;
-        //    SessionStorage = sessionStorage;
-        //    LocalStorage = localStorage;
-        //    SecureStorage = secureStorage;
-        //    IsBlazorMobileDevice = BlazorDevice.RuntimePlatform == BlazorDevice.Android ||
-        //           BlazorDevice.RuntimePlatform == BlazorDevice.iOS ||
-        //           BlazorDevice.RuntimePlatform == BlazorDevice.UWP;
-        //}
+        public ApplicationState(NavigationManager navigationManager, ISessionStorage sessionStorage, ILocalStorage localStorage, ISecureStorage secureStorage)
+        {
+            NavigationManager = navigationManager;
+            SessionStorage = sessionStorage;
+            LocalStorage = localStorage;
+            SecureStorage = secureStorage;
+            IsBlazorMobileDevice = BlazorDevice.RuntimePlatform == BlazorDevice.Android ||
+                   BlazorDevice.RuntimePlatform == BlazorDevice.iOS ||
+                   BlazorDevice.RuntimePlatform == BlazorDevice.UWP;
+        }
         public async ValueTask<TUser> GetApplicationUserSecure<TUser>()
         {
             try

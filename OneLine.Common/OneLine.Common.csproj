@@ -13,12 +13,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added UserIdentifier property to UserBlobs.</PackageReleaseNotes>
-    <Version>2.1.6</Version>
+    <PackageReleaseNotes>Fixed ApplicationState DI.</PackageReleaseNotes>
+    <Version>2.1.7</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.1.6.0</AssemblyVersion>
-    <FileVersion>2.1.6.0</FileVersion>
+    <AssemblyVersion>2.1.7.0</AssemblyVersion>
+    <FileVersion>2.1.7.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,18 +1,16 @@
 ﻿@namespace OneLine.Blazor
 @inherits TranslatorComponentModel
-<BSFormGroup>
-    <BSLabel for="translator">@LanguageLocalizer["PreferredLanguage"]</BSLabel>
-    <BSBasicInput T="string" id="translator" name="translator" InputType="InputType.Select" ValueChanged=@((v) => OnValueChanged(v)) Value="ApplicationLocale">
-        @foreach (var culture in LanguageLocalizerSupportedCultures.GetLanguageLocalizerSupportedCultures().SupportedCultures)
+
+<BSBasicInput T="string" id="translator" name="translator" InputType="InputType.Select" ValueChanged=@((v) => OnValueChanged(v)) Value="ApplicationLocale">
+    @foreach (var culture in LanguageLocalizerSupportedCultures.GetLanguageLocalizerSupportedCultures().SupportedCultures)
+    {
+        if (culture.Name == ApplicationLocale)
         {
-            if (culture.Name == ApplicationLocale)
-            {
-                <option value="@culture.Name" selected>@culture.CultureInfo.EnglishName</option>
-            }
-            else
-            {
-                <option value="@culture.Name">@culture.CultureInfo.EnglishName</option>
-            }
+            <option value="@culture.Name" selected>@culture.CultureInfo.EnglishName</option>
         }
-    </BSBasicInput>
-</BSFormGroup>
+        else
+        {
+            <option value="@culture.Name">@culture.CultureInfo.EnglishName</option>
+        }
+    }
+</BSBasicInput>

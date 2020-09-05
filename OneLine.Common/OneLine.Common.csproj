@@ -13,12 +13,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added enhancements. Added option and defaults settings for action confirmations. Dropped IsChained property, added enhancement to application state, Added translator service and fixed translator component.</PackageReleaseNotes>
-    <Version>2.1.9</Version>
+    <PackageReleaseNotes>Added missing Translator service initialization.</PackageReleaseNotes>
+    <Version>2.1.11</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.1.9.0</AssemblyVersion>
-    <FileVersion>2.1.9.0</FileVersion>
+    <AssemblyVersion>2.1.11.0</AssemblyVersion>
+    <FileVersion>2.1.11.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

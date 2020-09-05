@@ -158,8 +158,7 @@ namespace OneLine.Blazor.Services
             }
         }
     }
-
-    public static class ServiceCollectionExtensions
+    public static partial class ServiceCollectionExtensions
     {
         public static IServiceCollection AddApplicationState(this IServiceCollection services)
         {

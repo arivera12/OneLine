@@ -1,5 +1,4 @@
 ﻿using BlazorBrowserStorage;
-using BlazorMobile.Common;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -17,15 +16,11 @@ namespace OneLine.Blazor.Services
         public ISessionStorage SessionStorage { get; set; }
         public ILocalStorage LocalStorage { get; set; }
         public ISecureStorage SecureStorage { get; set; }
-        public bool IsBlazorMobileDevice { get; set; }
         public ApplicationState(NavigationManager navigationManager, ISessionStorage sessionStorage, ILocalStorage localStorage)
         {
             NavigationManager = navigationManager;
             SessionStorage = sessionStorage;
             LocalStorage = localStorage;
-            IsBlazorMobileDevice = BlazorDevice.RuntimePlatform == BlazorDevice.Android ||
-                   BlazorDevice.RuntimePlatform == BlazorDevice.iOS ||
-                   BlazorDevice.RuntimePlatform == BlazorDevice.UWP;
         }
         public ApplicationState(NavigationManager navigationManager, ISessionStorage sessionStorage, ILocalStorage localStorage, ISecureStorage secureStorage)
         {
@@ -33,9 +28,6 @@ namespace OneLine.Blazor.Services
             SessionStorage = sessionStorage;
             LocalStorage = localStorage;
             SecureStorage = secureStorage;
-            IsBlazorMobileDevice = BlazorDevice.RuntimePlatform == BlazorDevice.Android ||
-                   BlazorDevice.RuntimePlatform == BlazorDevice.iOS ||
-                   BlazorDevice.RuntimePlatform == BlazorDevice.UWP;
         }
         public async ValueTask<TUser> GetApplicationUserSecure<TUser>()
         {
@@ -43,7 +35,7 @@ namespace OneLine.Blazor.Services
             {
                 string SUser;
                 var applicationSession = await GetApplicationSession();
-                if (IsBlazorMobileDevice && applicationSession == ApplicationSession.LocalStorage)
+                if (SecureStorage.IsNotNull() && applicationSession == ApplicationSession.LocalStorage)
                 {
                     SUser = await SecureStorage.GetAsync("SUser");
                     return JsonConvert.DeserializeObject<TUser>(SUser);
@@ -73,7 +65,7 @@ namespace OneLine.Blazor.Services
         {
             var jsonUser = JsonConvert.SerializeObject(user);
             var applicationSession = await GetApplicationSession();
-            if (IsBlazorMobileDevice && applicationSession == ApplicationSession.LocalStorage)
+            if (SecureStorage.IsNotNull() && applicationSession == ApplicationSession.LocalStorage)
             {
                 await SecureStorage.SetAsync("SUser", jsonUser);
             }
@@ -97,7 +89,7 @@ namespace OneLine.Blazor.Services
         public async ValueTask SetApplicationUserSecure<TUser>(TUser user, ApplicationSession applicationSession)
         {
             var jsonUser = JsonConvert.SerializeObject(user);
-            if (IsBlazorMobileDevice && applicationSession == ApplicationSession.LocalStorage)
+            if (SecureStorage.IsNotNull() && applicationSession == ApplicationSession.LocalStorage)
             {
                 await SecureStorage.SetAsync("SUser", jsonUser);
             }
@@ -119,7 +111,7 @@ namespace OneLine.Blazor.Services
         }
         public async ValueTask Logout()
         {
-            if (IsBlazorMobileDevice)
+            if (SecureStorage.IsNotNull())
             {
                 await SecureStorage.Remove("SUser");
             }
@@ -140,7 +132,7 @@ namespace OneLine.Blazor.Services
         {
             try
             {
-                if (IsBlazorMobileDevice)
+                if (SecureStorage.IsNotNull())
                 {
                     return Enum.Parse<ApplicationSession>(await SecureStorage.GetAsync("ApplicationSession"));
                 }
@@ -156,42 +148,13 @@ namespace OneLine.Blazor.Services
         }
         public async ValueTask SetApplicationSession(ApplicationSession applicationSession)
         {
-            if (IsBlazorMobileDevice)
+            if (SecureStorage.IsNotNull())
             {
                 await SecureStorage.SetAsync("ApplicationSession", applicationSession.ToString());
             }
             else
             {
                 await LocalStorage.SetItem("ApplicationSession", applicationSession);
-            }
-        }
-        public async ValueTask<string> GetApplicationLocale()
-        {
-            try
-            {
-                if (IsBlazorMobileDevice)
-                {
-                    return await SecureStorage.GetAsync("ApplicationLocale");
-                }
-                else
-                {
-                    return await LocalStorage.GetItem<string>("ApplicationLocale");
-                }
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-        public async ValueTask SetApplicationLocale(string locale)
-        {
-            if (IsBlazorMobileDevice)
-            {
-                await SecureStorage.SetAsync("ApplicationLocale", locale);
-            }
-            else
-            {
-                await LocalStorage.SetItem("ApplicationLocale", locale);
             }
         }
     }

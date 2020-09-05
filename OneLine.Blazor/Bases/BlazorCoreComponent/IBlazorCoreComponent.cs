@@ -43,6 +43,10 @@ namespace OneLine.Blazor.Bases
         bool Hidden { get; set; }
         bool ReadOnly { get; set; }
         bool Disabled { get; set; }
+        bool EnableConfirmOnSave { get; set; }
+        bool EnableConfirmOnReset { get; set; }
+        bool EnableConfirmOnDelete { get; set; }
+        bool EnableConfirmOnCancel { get; set; }
         int DebounceInterval { get; set; }
         Task OnAfterFirstRenderAsync();
         Task ShowFormChangeFormState(FormState formState);

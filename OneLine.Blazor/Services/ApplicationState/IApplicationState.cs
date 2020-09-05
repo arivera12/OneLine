@@ -12,7 +12,5 @@ namespace OneLine.Blazor.Services
         ValueTask LogoutAndNavigateTo(string uri, bool forceReload = false);
         ValueTask<ApplicationSession> GetApplicationSession();
         ValueTask SetApplicationSession(ApplicationSession applicationSession);
-        ValueTask<string> GetApplicationLocale();
-        ValueTask SetApplicationLocale(string locale);
     }
 }

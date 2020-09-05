@@ -76,7 +76,7 @@ namespace OneLine.Blazor.Bases
         [Parameter] public virtual bool HideDeleteButton { get; set; }
         [Parameter] public virtual bool HideCreateOrNewButton { get; set; }
         [Parameter] public virtual string RecordId { get; set; }
-        [Parameter] public virtual string RedirectUrl { get; set; }
+        [Parameter] public virtual string RedirectUrlAfterSave { get; set; }
         [Parameter] public virtual bool ShowOptionsDialog { get; set; }
         [Parameter] public virtual bool HideDetailsDialogOption { get; set; }
         [Parameter] public virtual bool HideCopyDialogOption { get; set; }
@@ -87,6 +87,10 @@ namespace OneLine.Blazor.Bases
         [Parameter] public virtual bool Hidden { get; set; }
         [Parameter] public virtual bool ReadOnly { get; set; }
         [Parameter] public virtual bool Disabled { get; set; }
+        [Parameter] public virtual bool EnableConfirmOnSave { get; set; }
+        [Parameter] public virtual bool EnableConfirmOnReset { get; set; }
+        [Parameter] public virtual bool EnableConfirmOnDelete { get; set; } = true;
+        [Parameter] public virtual bool EnableConfirmOnCancel { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
@@ -126,7 +130,6 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnAfterValidate { get; set; }
         [Parameter] public virtual Action<bool> ShowOptionsDialogChanged { get; set; }
         [Parameter] public virtual Action<bool> ShowFormChanged { get; set; }
-        public bool IsChained { get { return !string.IsNullOrWhiteSpace(RedirectUrl); } }
         public bool ShowActivityIndicator { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
@@ -280,8 +283,12 @@ namespace OneLine.Blazor.Bases
                 }
             }
             await Validate();
-            if (IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToSaveTheRecord"],
+            if (EnableConfirmOnSave && IsValidModelState && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToSaveTheRecord"],
                                                                                     confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
+            {
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
+            }
+            else if(!EnableConfirmOnSave && IsValidModelState)
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
             }
@@ -316,9 +323,9 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.IsSuccessStatusCode)
             {
-                if (IsChained)
+                if (!string.IsNullOrWhiteSpace(RedirectUrlAfterSave))
                 {
-                    NavigationManager.NavigateTo(RedirectUrl);
+                    NavigationManager.NavigateTo(RedirectUrlAfterSave);
                 }
                 else
                 {
@@ -338,8 +345,12 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeDelete()
         {
-            if (Identifier.IsNotNull() && Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToDeleteTheRecord"],
+            if (EnableConfirmOnDelete && Identifier.IsNotNull() && Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToDeleteTheRecord"],
                                                                                     confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
+            {
+                await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Delete()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
+            }
+            else if (!EnableConfirmOnDelete && Identifier.IsNotNull() && Identifier.Model.IsNotNull())
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Delete()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
             }
@@ -380,9 +391,13 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeCancel()
         {
-            var text = IsChained ? "AreYouSureYouWantToGoBack" : "AreYouSureYouWantToCancel";
-            if (await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer[text],
+            var text = !string.IsNullOrWhiteSpace(RedirectUrlAfterSave) ? "AreYouSureYouWantToGoBack" : "AreYouSureYouWantToCancel";
+            if (EnableConfirmOnCancel && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer[text],
                                                                 confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
+            {
+                await Cancel();
+            }
+            else if(!EnableConfirmOnCancel)
             {
                 await Cancel();
             }
@@ -394,8 +409,12 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeReset()
         {
-            if (await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToReset"],
+            if (EnableConfirmOnReset && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToReset"],
                                                                 confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
+            {
+                await Reset();
+            }
+            else if(!EnableConfirmOnReset)
             {
                 await Reset();
             }

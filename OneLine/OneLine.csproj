@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.1.11</Version>
+    <Version>2.1.15</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine is a project that can be used on a server backend. This package already includes OneLine.Common.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,12 +12,12 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Removed internal layout and label of the translator.</PackageReleaseNotes>
+    <PackageReleaseNotes>Removed ApplictionState and Translator implementations to the output project on blazr. Dropped xamarin stuff.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.1.11.0</AssemblyVersion>
-    <FileVersion>2.1.11.0</FileVersion>
+    <AssemblyVersion>2.1.15.0</AssemblyVersion>
+    <FileVersion>2.1.15.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

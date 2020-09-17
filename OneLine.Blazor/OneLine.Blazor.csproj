@@ -13,10 +13,10 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Removed ApplictionState and Translator implementations to the output project on blazr. Dropped xamarin stuff.</PackageReleaseNotes>
-    <Version>2.1.15</Version>
-    <AssemblyVersion>2.1.15.0</AssemblyVersion>
-    <FileVersion>2.1.15.0</FileVersion>
+    <PackageReleaseNotes>Moved internal implementation to core base of blazor and added a method on OnAfterFirstRenderAsync to be fired after initialization is completed. Refactored some extension methods internally and names.</PackageReleaseNotes>
+    <Version>2.1.16</Version>
+    <AssemblyVersion>2.1.16.0</AssemblyVersion>
+    <FileVersion>2.1.16.0</FileVersion>
   </PropertyGroup>
 
 

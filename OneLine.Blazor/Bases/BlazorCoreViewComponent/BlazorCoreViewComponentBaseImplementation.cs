@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using OneLine.Bases;
+using OneLine.Extensions;
 using OneLine.Models;
 using System;
 using System.Threading.Tasks;
@@ -147,11 +148,54 @@ namespace OneLine.Blazor.Bases
         /// Use the <paramref name="firstRender"/> parameter to ensure that initialization work is only performed
         /// once.
         /// </remarks>
-        protected virtual async Task OnAfterRenderAsync(bool firstRender)
+        protected virtual async Task OnAfterRenderAsync(bool firstRender) 
         {
             if (firstRender)
             {
+                IsMobile = await BlazorCurrentDeviceService.Mobile();
+                IsTablet = await BlazorCurrentDeviceService.Tablet();
+                IsDesktop = await BlazorCurrentDeviceService.Desktop();
+                OnBeforeSearch ??= new Action(async () => await BeforeSearch());
+                OnAfterSearch ??= new Action(async () => await AfterSearch());
+                OnBeforeSave ??= new Action(async () => await BeforeSave());
+                OnAfterSave ??= new Action(async () => await AfterSave());
+                OnBeforeDelete ??= new Action(async () => await BeforeDelete());
+                OnAfterDelete ??= new Action(async () => await AfterDelete());
+                OnBeforeCancel ??= new Action(async () => await BeforeCancel());
+                OnAfterCancel ??= new Action(async () => await AfterCancel());
+                OnBeforeReset ??= new Action(async () => await BeforeReset());
+                OnAfterReset ??= new Action(async () => await AfterReset());
+                if (!string.IsNullOrWhiteSpace(RecordId))
+                {
+                    Identifier = new TIdentifier
+                    {
+                        Model = (TId)Convert.ChangeType(RecordId, typeof(TId))
+                    };
+                }
+                if (AutoLoad)
+                {
+                    if (OnBeforeLoad.IsNotNull())
+                    {
+                        OnBeforeLoad.Invoke();
+                    }
+                    else
+                    {
+                        await Load();
+                    }
+                }
+                if (InitialAutoSearch)
+                {
+                    if (OnBeforeSearch.IsNotNull())
+                    {
+                        OnBeforeSearch.Invoke();
+                    }
+                    else
+                    {
+                        await Search();
+                    }
+                }
                 await OnAfterFirstRenderAsync();
+                StateHasChanged();
             }
         }
 

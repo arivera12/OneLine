@@ -134,52 +134,8 @@ namespace OneLine.Blazor.Bases
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
         public bool IsMobile { get; set; }
-        public virtual async Task OnAfterFirstRenderAsync()
-        {
-            IsMobile = await BlazorCurrentDeviceService.Mobile();
-            IsTablet = await BlazorCurrentDeviceService.Tablet();
-            IsDesktop = await BlazorCurrentDeviceService.Desktop();
-            OnBeforeSearch ??= new Action(async () => await BeforeSearch());
-            OnAfterSearch ??= new Action(async () => await AfterSearch());
-            OnBeforeSave ??= new Action(async () => await BeforeSave());
-            OnAfterSave ??= new Action(async () => await AfterSave());
-            OnBeforeDelete ??= new Action(async () => await BeforeDelete());
-            OnAfterDelete ??= new Action(async () => await AfterDelete());
-            OnBeforeCancel ??= new Action(async () => await BeforeCancel());
-            OnAfterCancel ??= new Action(async () => await AfterCancel());
-            OnBeforeReset ??= new Action(async () => await BeforeReset());
-            OnAfterReset ??= new Action(async () => await AfterReset());
-            if (!string.IsNullOrWhiteSpace(RecordId))
-            {
-                Identifier = new TIdentifier
-                {
-                    Model = (TId)Convert.ChangeType(RecordId, typeof(TId))
-                };
-            }
-            if (AutoLoad)
-            {
-                if(OnBeforeLoad.IsNotNull())
-                {
-                    OnBeforeLoad.Invoke();
-                }
-                else
-                {
-                    await Load();
-                }
-            }
-            if (InitialAutoSearch)
-            {
-                if (OnBeforeSearch.IsNotNull())
-                {
-                    OnBeforeSearch.Invoke();
-                }
-                else
-                {
-                    await Search();
-                }
-            }
-            StateHasChanged();
-        }
+        public virtual Task OnAfterFirstRenderAsync()
+            => Task.CompletedTask;
         public virtual async Task BeforeSearch()
         {
             if (IsDesktop)

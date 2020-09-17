@@ -10,6 +10,10 @@ namespace OneLine.Models
         {
 
         }
+        public ApiResponse(ApiResponseStatus status)
+        {
+            Status = status;
+        }
         public ApiResponse(ApiResponseStatus status, T data)
         {
             Status = status;

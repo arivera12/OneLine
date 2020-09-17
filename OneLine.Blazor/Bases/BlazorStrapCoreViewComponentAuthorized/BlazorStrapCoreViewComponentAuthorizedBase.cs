@@ -18,69 +18,73 @@ namespace OneLine.Blazor.Bases
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
         where TUser : class, new()
     {
-        public override async Task OnAfterFirstRenderAsync()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            User = await ApplicationState.GetApplicationUserSecure<TUser>();
-            IEnumerable<string> roles = default;
-            var rolesObject = User.GetType().GetProperty("Roles").GetValue(User);
-            if (rolesObject.IsNotNull())
+            if (firstRender)
             {
-                roles = (rolesObject as IList<string>).AsEnumerable();
-            }
-            if (User.IsNull() || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => roles.Contains(w))))
-            {
-                await ApplicationState.Logout();
-                NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");
-            }
-            else
-            {
-                var token = User.GetType().GetProperty("Token").GetValue(User)?.ToString();
-                HttpService.HttpClient.AddJwtAuthorizationBearerHeader(token, true);
-                IsMobile = await BlazorCurrentDeviceService.Mobile();
-                IsTablet = await BlazorCurrentDeviceService.Tablet();
-                IsDesktop = await BlazorCurrentDeviceService.Desktop();
-                //This null check allows to prevent override the listeners from parent if it's listening to any of this events
-                OnBeforeSearch ??= new Action(async () => await BeforeSearch());
-                OnAfterSearch ??= new Action(async () => await AfterSearch());
-                OnBeforeSave ??= new Action(async () => await BeforeSave());
-                OnAfterSave ??= new Action(async () => await AfterSave());
-                OnBeforeDelete ??= new Action(async () => await BeforeDelete());
-                OnAfterDelete ??= new Action(async () => await AfterDelete());
-                OnBeforeCancel ??= new Action(async () => await BeforeCancel());
-                OnAfterCancel ??= new Action(async () => await AfterCancel());
-                OnBeforeReset ??= new Action(async () => await BeforeReset());
-                OnAfterReset ??= new Action(async () => await AfterReset());
-                if (!string.IsNullOrWhiteSpace(RecordId))
+                User = await ApplicationState.GetApplicationUserSecure<TUser>();
+                IEnumerable<string> roles = default;
+                var rolesObject = User.GetType().GetProperty("Roles").GetValue(User);
+                if (rolesObject.IsNotNull())
                 {
-                    Identifier = new TIdentifier
-                    {
-                        Model = (TId)Convert.ChangeType(RecordId, typeof(TId))
-                    };
+                    roles = (rolesObject as IList<string>).AsEnumerable();
                 }
-                if (AutoLoad)
+                if (User.IsNull() || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => roles.Contains(w))))
                 {
-                    if (OnBeforeLoad.IsNotNull())
-                    {
-                        OnBeforeLoad.Invoke();
-                    }
-                    else
-                    {
-                        await Load();
-                    }
+                    await ApplicationState.Logout();
+                    NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");
                 }
-                if (InitialAutoSearch)
+                else
                 {
-                    if (OnBeforeSearch.IsNotNull())
+                    var token = User.GetType().GetProperty("Token").GetValue(User)?.ToString();
+                    HttpService.HttpClient.AddJwtAuthorizationBearerHeader(token, true);
+                    IsMobile = await BlazorCurrentDeviceService.Mobile();
+                    IsTablet = await BlazorCurrentDeviceService.Tablet();
+                    IsDesktop = await BlazorCurrentDeviceService.Desktop();
+                    //This null check allows to prevent override the listeners from parent if it's listening to any of this events
+                    OnBeforeSearch ??= new Action(async () => await BeforeSearch());
+                    OnAfterSearch ??= new Action(async () => await AfterSearch());
+                    OnBeforeSave ??= new Action(async () => await BeforeSave());
+                    OnAfterSave ??= new Action(async () => await AfterSave());
+                    OnBeforeDelete ??= new Action(async () => await BeforeDelete());
+                    OnAfterDelete ??= new Action(async () => await AfterDelete());
+                    OnBeforeCancel ??= new Action(async () => await BeforeCancel());
+                    OnAfterCancel ??= new Action(async () => await AfterCancel());
+                    OnBeforeReset ??= new Action(async () => await BeforeReset());
+                    OnAfterReset ??= new Action(async () => await AfterReset());
+                    if (!string.IsNullOrWhiteSpace(RecordId))
                     {
-                        OnBeforeSearch.Invoke();
+                        Identifier = new TIdentifier
+                        {
+                            Model = (TId)Convert.ChangeType(RecordId, typeof(TId))
+                        };
                     }
-                    else
+                    if (AutoLoad)
                     {
-                        await Search();
+                        if (OnBeforeLoad.IsNotNull())
+                        {
+                            OnBeforeLoad.Invoke();
+                        }
+                        else
+                        {
+                            await Load();
+                        }
+                    }
+                    if (InitialAutoSearch)
+                    {
+                        if (OnBeforeSearch.IsNotNull())
+                        {
+                            OnBeforeSearch.Invoke();
+                        }
+                        else
+                        {
+                            await Search();
+                        }
                     }
                 }
+                await OnAfterFirstRenderAsync();
+                StateHasChanged();
             }
-            StateHasChanged();
         }
         public virtual TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor)
         {

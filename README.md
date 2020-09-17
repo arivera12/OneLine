@@ -64,9 +64,9 @@ OneLine is an abstracted standardized redefined framework.
     - [x] Desktop
     - [x] Tablet
     - [x] Mobile
-  - [ ] Skin Mode
+  - [x] Skin Mode
     - [x] Light
-    - [ ] Dark
+    - [x] Dark
   - [x] Pre-Implemented Service Enviroment (Controllers and Repositories)
   - [x] Rest Arquitecture (JSON)
   - [x] Pre-Implemented Users Account Basic Management

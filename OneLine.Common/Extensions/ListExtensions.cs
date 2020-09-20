@@ -2,7 +2,6 @@ using OneLine.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -50,54 +49,6 @@ namespace OneLine.Extensions
                 throw new InvalidOperationException("source can't be an anonymous type");
 
             return source.Skip((Page.Value - 1) * RowsPerPage.Value).Take(RowsPerPage.Value).ToList();
-        }
-
-        public static IList<T> FlattenMapping<T>(this IList<T> source, bool RemoveAuditableFields, params Expression<Func<T, object>>[] PropertiesToFlatten)
-        {
-            string DynamicSelect = "new (";
-            foreach (Expression<Func<T, object>> Property in PropertiesToFlatten)
-            {
-                Type PropertyType = Property.Body.Type;
-                MemberExpression memberExpression = Property.Body as MemberExpression;
-                string[] NavigationProperties = GetNavigationsPropertiess<object>(Activator.CreateInstance(PropertyType));
-                foreach (PropertyInfo prop in PropertyType.GetProperties())
-                {
-                    //remove navigations properties that exists in the current object for the flatten mapping
-                    if (!NavigationProperties.Contains(prop.Name))
-                    {
-                        if (!RemoveAuditableFields)
-                        {
-                            DynamicSelect += memberExpression.Member.Name + "." + prop.Name + " AS " + PropertyType.Name + prop.Name + ",";
-                        }
-                        else if (IsAuditableField(prop.Name))
-                        {
-                            DynamicSelect += memberExpression.Member.Name + "." + prop.Name + " AS " + PropertyType.Name + prop.Name + ",";
-                        }
-                    }
-                }
-            }
-            DynamicSelect = DynamicSelect.Remove(DynamicSelect.Length - 1);
-            DynamicSelect += ")";
-            return (IList<T>)source.AsQueryable().Select(DynamicSelect);
-        }
-
-        private static string[] GetNavigationsPropertiess<T>(object entityType)
-        {
-            return entityType.GetType()
-                                .GetProperties()
-                                .Where(p => (typeof(IEnumerable<T>).IsAssignableFrom(p.PropertyType) && p.PropertyType != typeof(string)) ||
-                                        (typeof(ICollection<T>).IsAssignableFrom(p.PropertyType) && p.PropertyType != typeof(string)) ||
-                                        p.PropertyType.Namespace == entityType.GetType().Namespace)
-                                .Select(p => p.Name)
-                                .ToArray();
-        }
-
-        private static bool IsAuditableField(string PropertyName)
-        {
-            return PropertyName != "CreatedOn" &&
-                    PropertyName != "CreatedBy" &&
-                    PropertyName != "ModifiedOn" &&
-                    PropertyName != "ModifiedBy";
         }
              
         public static IList<T> WhereIsDeleted<T>(this IList<T> source) where T : ISoftDeletable

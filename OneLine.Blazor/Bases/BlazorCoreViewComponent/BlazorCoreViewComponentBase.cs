@@ -91,6 +91,8 @@ namespace OneLine.Blazor.Bases
         [Parameter] public virtual bool EnableConfirmOnReset { get; set; }
         [Parameter] public virtual bool EnableConfirmOnDelete { get; set; } = true;
         [Parameter] public virtual bool EnableConfirmOnCancel { get; set; }
+        [Parameter] public virtual bool CloseFormAfterSaveOrDelete { get; set; } = true;
+        [Parameter] public virtual bool AutoSearchAfterFormClose { get; set; } = true;
         [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
@@ -279,7 +281,11 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.IsSuccessStatusCode)
             {
-                if (!string.IsNullOrWhiteSpace(RedirectUrlAfterSave))
+                if(CloseFormAfterSaveOrDelete)
+                {
+                    await AfterCancel();
+                }
+                else if (!string.IsNullOrWhiteSpace(RedirectUrlAfterSave))
                 {
                     NavigationManager.NavigateTo(RedirectUrlAfterSave);
                 }
@@ -332,8 +338,15 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.IsSuccessStatusCode)
             {
-                StateHasChanged();
-                await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response.Message], SweetAlertIcon.Success);
+                if (CloseFormAfterSaveOrDelete)
+                {
+                    await AfterCancel();
+                }
+                else
+                {
+                    StateHasChanged();
+                    await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response.Message], SweetAlertIcon.Success);
+                }
             }
             else if (Response.IsNotNull() &&
                     Response.HasException)
@@ -388,7 +401,7 @@ namespace OneLine.Blazor.Bases
             FormStateChanged?.Invoke(FormState);
             return Task.CompletedTask;
         }
-        public virtual void HideFormAfterFormCancel()
+        public virtual async Task HideFormAfterFormCancel()
         {
             ShowForm = false;
             ShowFormChanged?.Invoke(ShowForm);
@@ -402,6 +415,10 @@ namespace OneLine.Blazor.Bases
             }
             FormState = FormState.Create;
             FormStateChanged?.Invoke(FormState);
+            if(AutoSearchAfterFormClose)
+            {
+                await BeforeSearch();
+            }
             StateHasChanged();
         }
         public virtual Task HideOptionsDialog()

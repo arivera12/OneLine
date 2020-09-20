@@ -13,12 +13,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Moved internal implementation to core base of blazor and added a method on OnAfterFirstRenderAsync to be fired after initialization is completed. Refactored some extension methods internally and names.</PackageReleaseNotes>
-    <Version>2.1.16</Version>
+    <PackageReleaseNotes>Code cleanup. Added new options and behaviors on blazor core: CloseFormAfterSaveOrDelete &amp; AutoSearchAfterFormClose.</PackageReleaseNotes>
+    <Version>2.1.17</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.1.16.0</AssemblyVersion>
-    <FileVersion>2.1.16.0</FileVersion>
+    <AssemblyVersion>2.1.17.0</AssemblyVersion>
+    <FileVersion>2.1.17.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

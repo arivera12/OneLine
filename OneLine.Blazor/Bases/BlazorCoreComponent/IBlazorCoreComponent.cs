@@ -47,11 +47,13 @@ namespace OneLine.Blazor.Bases
         bool EnableConfirmOnReset { get; set; }
         bool EnableConfirmOnDelete { get; set; }
         bool EnableConfirmOnCancel { get; set; }
+        bool CloseFormAfterSaveOrDelete { get; set; }
+        bool AutoSearchAfterFormClose { get; set; }
         int DebounceInterval { get; set; }
         Task OnAfterFirstRenderAsync();
         Task ShowFormChangeFormState(FormState formState);
         Task ShowFormChangeFormStateHideOptionsDialog(FormState formState);
-        void HideFormAfterFormCancel();
+        Task HideFormAfterFormCancel();
         Task HideOptionsDialog();
     }
 }

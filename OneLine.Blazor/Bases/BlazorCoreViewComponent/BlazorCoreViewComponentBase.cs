@@ -283,7 +283,7 @@ namespace OneLine.Blazor.Bases
             {
                 if(CloseFormAfterSaveOrDelete)
                 {
-                    await AfterCancel();
+                    OnAfterCancel?.Invoke();
                 }
                 else if (!string.IsNullOrWhiteSpace(RedirectUrlAfterSave))
                 {
@@ -340,7 +340,7 @@ namespace OneLine.Blazor.Bases
             {
                 if (CloseFormAfterSaveOrDelete)
                 {
-                    await AfterCancel();
+                    OnAfterCancel?.Invoke();
                 }
                 else
                 {

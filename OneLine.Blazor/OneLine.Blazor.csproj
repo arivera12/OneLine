@@ -13,10 +13,10 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Code cleanup. Added new options and behaviors on blazor core: CloseFormAfterSaveOrDelete &amp; AutoSearchAfterFormClose.</PackageReleaseNotes>
-    <Version>2.1.17</Version>
-    <AssemblyVersion>2.1.17.0</AssemblyVersion>
-    <FileVersion>2.1.17.0</FileVersion>
+    <PackageReleaseNotes>Fixed missing StateHasChangedCall()</PackageReleaseNotes>
+    <Version>2.1.22</Version>
+    <AssemblyVersion>2.1.22.0</AssemblyVersion>
+    <FileVersion>2.1.22.0</FileVersion>
   </PropertyGroup>
 
 

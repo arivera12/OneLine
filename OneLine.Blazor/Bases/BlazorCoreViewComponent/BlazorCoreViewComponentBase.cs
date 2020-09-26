@@ -92,7 +92,21 @@ namespace OneLine.Blazor.Bases
         [Parameter] public virtual bool EnableConfirmOnDelete { get; set; } = true;
         [Parameter] public virtual bool EnableConfirmOnCancel { get; set; }
         [Parameter] public virtual bool CloseFormAfterSaveOrDelete { get; set; } = true;
-        [Parameter] public virtual bool AutoSearchAfterFormClose { get; set; } = true;
+        [Parameter] public virtual bool AutoSearchAfterFormClose { get; set; }
+        [Parameter] public virtual bool TriggerSearchMethod { get; set; }
+        [Parameter]
+        public virtual bool TriggerSearch
+        {
+            set
+            {
+                if (value)
+                {
+                    new Action(async () => await BeforeSearch()).Invoke();
+                }
+                TriggerSearchChanged?.Invoke(false);
+            }
+            get { return false; }
+        }
         [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         [Parameter] public override Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
@@ -132,6 +146,7 @@ namespace OneLine.Blazor.Bases
         [Parameter] public override Action OnAfterValidate { get; set; }
         [Parameter] public virtual Action<bool> ShowOptionsDialogChanged { get; set; }
         [Parameter] public virtual Action<bool> ShowFormChanged { get; set; }
+        [Parameter] public virtual Action<bool> TriggerSearchChanged { get; set; }
         public bool ShowActivityIndicator { get; set; }
         public bool IsDesktop { get; set; }
         public bool IsTablet { get; set; }
@@ -246,7 +261,7 @@ namespace OneLine.Blazor.Bases
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
             }
-            else if(!EnableConfirmOnSave && IsValidModelState)
+            else if (!EnableConfirmOnSave && IsValidModelState)
             {
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Save()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
             }
@@ -281,11 +296,7 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.IsSuccessStatusCode)
             {
-                if(CloseFormAfterSaveOrDelete)
-                {
-                    OnAfterCancel?.Invoke();
-                }
-                else if (!string.IsNullOrWhiteSpace(RedirectUrlAfterSave))
+                if (!string.IsNullOrWhiteSpace(RedirectUrlAfterSave))
                 {
                     NavigationManager.NavigateTo(RedirectUrlAfterSave);
                 }
@@ -293,6 +304,10 @@ namespace OneLine.Blazor.Bases
                 {
                     StateHasChanged();
                     await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response.Message], SweetAlertIcon.Success);
+                    if (CloseFormAfterSaveOrDelete)
+                    {
+                        OnAfterCancel?.Invoke();
+                    }
                 }
             }
             else if (Response.IsNotNull() &&
@@ -338,14 +353,11 @@ namespace OneLine.Blazor.Bases
                     Response.HttpResponseMessage.IsNotNull() &&
                     Response.HttpResponseMessage.IsSuccessStatusCode)
             {
+                StateHasChanged();
+                await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response.Message], SweetAlertIcon.Success);
                 if (CloseFormAfterSaveOrDelete)
                 {
                     OnAfterCancel?.Invoke();
-                }
-                else
-                {
-                    StateHasChanged();
-                    await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response.Message], SweetAlertIcon.Success);
                 }
             }
             else if (Response.IsNotNull() &&
@@ -366,7 +378,7 @@ namespace OneLine.Blazor.Bases
             {
                 await Cancel();
             }
-            else if(!EnableConfirmOnCancel)
+            else if (!EnableConfirmOnCancel)
             {
                 await Cancel();
             }
@@ -383,7 +395,7 @@ namespace OneLine.Blazor.Bases
             {
                 await Reset();
             }
-            else if(!EnableConfirmOnReset)
+            else if (!EnableConfirmOnReset)
             {
                 await Reset();
             }
@@ -401,11 +413,12 @@ namespace OneLine.Blazor.Bases
             FormStateChanged?.Invoke(FormState);
             return Task.CompletedTask;
         }
-        public virtual async Task HideFormAfterFormCancel()
+        public virtual void HideFormAfterFormCancel()
         {
             ShowForm = false;
             ShowFormChanged?.Invoke(ShowForm);
-            if(RecordsSelectionMode.IsSingle())
+            StateHasChanged();
+            if (RecordsSelectionMode.IsSingle())
             {
                 SelectedRecord = null;
             }
@@ -415,11 +428,11 @@ namespace OneLine.Blazor.Bases
             }
             FormState = FormState.Create;
             FormStateChanged?.Invoke(FormState);
-            if(AutoSearchAfterFormClose)
+            if (AutoSearchAfterFormClose)
             {
-                await BeforeSearch();
+                TriggerSearchMethod = true;
+                StateHasChanged();
             }
-            StateHasChanged();
         }
         public virtual Task HideOptionsDialog()
         {

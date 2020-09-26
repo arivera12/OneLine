@@ -27,20 +27,6 @@ namespace OneLine.Extensions
                                 .Single(method => method.Name == "OrderByDescending" &&
                                                     method.GetParameters().Length == 2);
 
-        public static bool IsNullOrEmpty<T>(this IList<T> source)
-        {
-            if (source.IsNull())
-            {
-                return true;
-            }
-            return !source.Any();
-        }
-
-        public static bool IsEmpty<T>(this IList<T> source)
-        {
-            return !source.Any();
-        }
-
         public static IList<T> Paged<T>(this IList<T> source, int? Page, int? RowsPerPage)
         {
             if (source == null)

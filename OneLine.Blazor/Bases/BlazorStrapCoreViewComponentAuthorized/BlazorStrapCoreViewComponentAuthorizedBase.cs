@@ -29,7 +29,10 @@ namespace OneLine.Blazor.Bases
                 {
                     roles = (rolesObject as IList<string>).AsEnumerable();
                 }
-                if (User.IsNull() || (!AuthorizedRoles.IsNullOrEmpty() && !AuthorizedRoles.Any(w => roles.Contains(w))))
+                if (User.IsNull() ||
+                    (AuthorizedRoles.IsNotNull() && AuthorizedRoles.Any() &&
+                    roles.IsNotNull() && roles.Any() &&
+                    !AuthorizedRoles.Any(w => roles.Contains(w))))
                 {
                     await ApplicationState.Logout();
                     NavigationManager.NavigateTo($@"/login/{NavigationManager.Uri.Split().Last()}");

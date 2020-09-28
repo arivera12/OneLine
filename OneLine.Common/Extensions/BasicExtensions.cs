@@ -394,6 +394,11 @@ namespace OneLine.Extensions
         {
             return !type.IsSimpleType();
         }
+        public static bool PropertyExists<T>(string propertyName)
+        {
+            return typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
+                BindingFlags.Public | BindingFlags.Instance) != null;
+        }
         public static async Task<IApiResponse<T>> ValidateAsync<T>(this T record, IValidator validator)
             where T : class
         {

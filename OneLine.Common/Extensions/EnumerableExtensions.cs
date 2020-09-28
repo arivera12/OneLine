@@ -1,3 +1,5 @@
+using OneLine.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,29 +11,20 @@ namespace OneLine.Extensions
     {
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
         {
-            if (source.IsNull())
-            {
-                return true;
-            }
-            return !source.Any();
+            return source == null || !source.Any();
         }
         public static bool IsNotNullAndNotEmpty<T>(this IEnumerable<T> source)
         {
-            if (source.IsNull())
-            {
-                return false;
-            }
-            return source.Any();
+            return source != null && source.Any();
         }
-        public static bool IsEmpty<T>(this IEnumerable<T> source)
+        public static IEnumerable<T> WhereIsDeleted<T>(this IEnumerable<T> source) where T : ISoftDeletable
         {
-            return !source.Any();
+            return source.Where(e => e.IsDeleted);
         }
-        public static bool IsNotEmpty<T>(this IEnumerable<T> source)
+        public static IEnumerable<T> WhereNotDeleted<T>(this IEnumerable<T> source) where T : ISoftDeletable
         {
-            return source.Any();
+            return source.Where(e => !e.IsDeleted);
         }
-
         private static readonly MethodInfo OrderByMethod =
                                 typeof(Queryable)
                                     .GetMethods()
@@ -43,12 +36,6 @@ namespace OneLine.Extensions
                                 .GetMethods()
                                 .Single(method => method.Name == "OrderByDescending" &&
                                                     method.GetParameters().Length == 2);
-
-        public static bool PropertyExists<T>(string propertyName)
-        {
-            return typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
-                BindingFlags.Public | BindingFlags.Instance) != null;
-        }
 
         public static IEnumerable<T> OrderByProperty<T>(this IEnumerable<T> source, string propertyName)
         {

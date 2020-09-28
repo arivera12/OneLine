@@ -13,12 +13,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Removed ListExtensions.</PackageReleaseNotes>
-    <Version>2.1.23</Version>
+    <PackageReleaseNotes>Fixed unknown explained bug on blazor.</PackageReleaseNotes>
+    <Version>2.1.27</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.1.23.0</AssemblyVersion>
-    <FileVersion>2.1.23.0</FileVersion>
+    <AssemblyVersion>2.1.27.0</AssemblyVersion>
+    <FileVersion>2.1.27.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

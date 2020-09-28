@@ -400,8 +400,8 @@ namespace OneLine.Blazor.Components
         public virtual int FilesCount()
         {
             var currentBlobsCount = 0;
-            currentBlobsCount += BlobDatas.IsNullOrEmpty() ? 0 : BlobDatas.Count();
-            currentBlobsCount += UserBlobs.IsNullOrEmpty() ? 0 : UserBlobs.Count();
+            currentBlobsCount += BlobDatas.IsNull() || !BlobDatas.Any() ? 0 : BlobDatas.Count();
+            currentBlobsCount += UserBlobs.IsNull() || !UserBlobs.Any() ? 0 : UserBlobs.Count();
             return currentBlobsCount;
         }
         public virtual async Task UpdateMaximunMinimunReachedFiles()
@@ -463,7 +463,7 @@ namespace OneLine.Blazor.Components
             else
             {
                 var fileReferences = await DropReference.EnumerateFilesAsync();
-                if (fileReferences.IsNullOrEmpty())
+                if (fileReferences.IsNull() || !fileReferences.Any())
                 {
                     fileReferences = await DropInputReference.EnumerateFilesAsync();
                 }
@@ -491,7 +491,7 @@ namespace OneLine.Blazor.Components
                     break;
                 }
             }
-            if (BlobDatas.IsNullOrEmpty() || !AllowMultiple)
+            if (BlobDatas.IsNull() || !BlobDatas.Any() || !AllowMultiple)
             {
                 BlobDatas = blobDatas;
             }

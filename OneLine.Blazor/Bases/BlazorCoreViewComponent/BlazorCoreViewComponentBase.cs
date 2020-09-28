@@ -16,6 +16,7 @@ using OneLine.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -246,7 +247,7 @@ namespace OneLine.Blazor.Bases
         }
         public virtual async Task BeforeSave()
         {
-            if (GetMutableBlobDatasWithRulesProperties().IsNotNullAndNotEmpty())
+            if (GetMutableBlobDatasWithRulesProperties().IsNotNull() && GetMutableBlobDatasWithRulesProperties().Any())
             {
                 await ValidateMutableBlobDatas();
                 if (!IsValidModelState)

@@ -13,10 +13,10 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Fixed unknown explained bug on blazor.</PackageReleaseNotes>
-    <Version>2.1.27</Version>
-    <AssemblyVersion>2.1.27.0</AssemblyVersion>
-    <FileVersion>2.1.27.0</FileVersion>
+    <PackageReleaseNotes>Blazor Fixes.</PackageReleaseNotes>
+    <Version>2.1.28</Version>
+    <AssemblyVersion>2.1.28.0</AssemblyVersion>
+    <FileVersion>2.1.28.0</FileVersion>
   </PropertyGroup>
 
 

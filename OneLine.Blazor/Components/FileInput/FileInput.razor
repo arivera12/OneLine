@@ -11,7 +11,7 @@
             {
                 @DropZoneText
             }
-            @if ((BlobDatas.IsNotNullAndNotEmpty() || UserBlobs.IsNotNullAndNotEmpty()) && CanAddMoreFiles())
+            @if (((BlobDatas.IsNotNull() && BlobDatas.Any()) || (UserBlobs.IsNotNull() && UserBlobs.Any())) && CanAddMoreFiles())
             {
                 <br class="p-0" />
             }

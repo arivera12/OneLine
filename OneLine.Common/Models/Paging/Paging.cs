@@ -1,27 +1,32 @@
 ﻿namespace OneLine.Models
 {
+    /// <summary>
+    /// Implements a paging structure to be applied
+    /// </summary>
     public class Paging : IPaging
     {
-        /// <summary>
-        /// Determines wether data should be decending
-        /// </summary>
+        /// <inheritdoc/>
         public virtual bool? Descending { get; set; }
-        /// <summary>
-        /// Sets the page index of the data
-        /// </summary>
+        /// <inheritdoc/>
         public virtual int? PageIndex { get; set; }
-        /// <summary>
-        /// Sets the page size of the data
-        /// </summary>
+        /// <inheritdoc/>
         public virtual int? PageSize { get; set; }
-        /// <summary>
-        /// Sets whichs property of the data model wants to be used for sorting
-        /// </summary>
+        /// <inheritdoc/>
         public virtual string SortBy { get; set; }
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Paging()
         {
 
         }
+        /// <summary>
+        /// The paging main constructor
+        /// </summary>
+        /// <param name="pageIndex">The page index</param>
+        /// <param name="pageSize">The page size</param>
+        /// <param name="descending">Descending indicator</param>
+        /// <param name="sortBy">Sort by property name</param>
         public Paging(int pageIndex, int pageSize, bool descending, string sortBy)
         {
             PageIndex = pageIndex;

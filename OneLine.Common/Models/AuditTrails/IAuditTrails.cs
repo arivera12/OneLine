@@ -2,6 +2,9 @@
 
 namespace OneLine.Models
 {
+    /// <summary>
+    /// Defines a structure to save audit trails
+    /// </summary>
     public interface IAuditTrails
     {
         /// <summary>
@@ -9,7 +12,7 @@ namespace OneLine.Models
         /// </summary>
         string AuditTrailId { get; set; }
         /// <summary>
-        /// The action that was performed.
+        /// The action that was performed on the api.
         /// </summary>
         string Action { get; set; }
         /// <summary>

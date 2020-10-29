@@ -2,48 +2,35 @@
 
 namespace OneLine.Models
 {
+    /// <summary>
+    /// Implements a paged data structure
+    /// </summary>
+    /// <typeparam name="T">The type of the data</typeparam>
     public class Paged<T> : IPaged<T>
     {
-        /// <summary>
-        /// The page index
-        /// </summary>
+        /// <inheritdoc/>
         public virtual int PageIndex { get; set; }
-        /// <summary>
-        /// The page size
-        /// </summary>
-
+        /// <inheritdoc/>
         public virtual int PageSize { get; set; }
-        /// <summary>
-        /// The total count of records
-        /// </summary>
-
+        /// <inheritdoc/>
         public virtual int TotalCount { get; set; }
-        /// <summary>
-        /// The last page is the same as the total of pages. This property is for reference purpose only.
-        /// </summary>
-
+        /// <inheritdoc/>
         public virtual int LastPage { get; set; }
-        /// <summary>
-        /// The total pages
-        /// </summary>
-
+        /// <inheritdoc/>
         public virtual int TotalPages { get; set; }
-        /// <summary>
-        /// Determines wether you can go back to the previous page of records
-        /// </summary>
-
+        /// <inheritdoc/>
         public virtual bool HasPreviousPage { get; set; }
-        /// <summary>
-        /// Determines wether you can go foward to the next page of record
-        /// </summary>
-
+        /// <inheritdoc/>
         public virtual bool HasNextPage { get; set; }
-        /// <summary>
-        /// The data
-        /// </summary>
-
+        /// <inheritdoc/>
         public virtual T Data { get; set; }
-
+        /// <summary>
+        /// The paged main constructors
+        /// </summary>
+        /// <param name="pageIndex">The page index</param>
+        /// <param name="pageSize">The page sie</param>
+        /// <param name="totalCount">The records total count</param>
+        /// <param name="data">The paged data</param>
         public Paged(int pageIndex, int pageSize, int totalCount, T data)
         {
             PageIndex = pageIndex;
@@ -55,7 +42,9 @@ namespace OneLine.Models
             HasNextPage = TotalCount != 0 && PageIndex == 0 ? TotalCount > PageSize : TotalCount > (PageIndex + 1) * PageSize;
             Data = data;
         }
-
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Paged()
         {
         }

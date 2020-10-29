@@ -7,33 +7,70 @@ namespace OneLine.Extensions
 {
     public static class IntergerExtensions
     {
+        /// <summary>
+        /// True when a value is greater than zero (0) otherwise false
+        /// </summary>
+        /// <param name="value">The int value</param>
+        /// <returns></returns>
         public static bool Succeeded(this int value)
         {
             return value > 0;
         }
-        public static IApiResponse<TEntity> TransactionResultApiResponse<TEntity>(this int value, TEntity model)
+        /// <summary>
+        /// True when a value is greater than zero (0) otherwise false
+        /// </summary>
+        /// <typeparam name="T">The type param</typeparam>
+        /// <param name="value">The int value</param>
+        /// <param name="data">The data of type of <see cref="{T}"/></param>
+        /// <returns></returns>
+        public static IApiResponse<T> TransactionResultApiResponse<T>(this int value, T data)
         {
             var status = value.Succeeded() ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
-            return new ApiResponse<TEntity> { Status = status, Data = model };
+            return new ApiResponse<T>(status, data);
         }
-        public static IApiResponse<IEnumerable<TEntity>> TransactionResultApiResponse<TEntity>(this int value, IEnumerable<TEntity> models)
+        /// <summary>
+        /// True when a value is greater than zero (0) otherwise false
+        /// </summary>
+        /// <typeparam name="T">The type param</typeparam>
+        /// <param name="value">The int value</param>
+        /// <param name="data">The data of type of <see cref="IEnumerable{T}"/></param>
+        /// <returns></returns>
+        public static IApiResponse<IEnumerable<T>> TransactionResultApiResponse<T>(this int value, IEnumerable<T> data)
         {
-            var status = value.Succeeded() && value == models.Count() ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
-            return new ApiResponse<IEnumerable<TEntity>> { Status = status, Data = models };
+            var status = value.Succeeded() && value == data.Count() ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
+            return new ApiResponse<IEnumerable<T>>(status, data);
         }
-        public static IApiResponse<TEntity> TransactionResultApiResponse<TEntity>(this int value, TEntity model, string SuccessMessage, string ErrorMessage)
+        /// <summary>
+        /// True when a value is greater than zero (0) otherwise false
+        /// </summary>
+        /// <typeparam name="T">The type param</typeparam>
+        /// <param name="value">The int value</param>
+        /// <param name="data">The data of type of <see cref="{T}"/></param>
+        /// <param name="successMessage">The success message</param>
+        /// <param name="errorMessage">The error message</param>
+        /// <returns></returns>
+        public static IApiResponse<T> TransactionResultApiResponse<T>(this int value, T data, string successMessage, string errorMessage)
         {
             var success = value.Succeeded();
             var status = success ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
-            var message = success ? SuccessMessage : ErrorMessage;
-            return new ApiResponse<TEntity> { Status = status, Data = model, Message = message };
+            var message = success ? successMessage : errorMessage;
+            return new ApiResponse<T>(status, data, message);
         }
-        public static IApiResponse<IEnumerable<TEntity>> TransactionResultApiResponse<TEntity>(this int value, IEnumerable<TEntity> models, string SuccessMessage, string ErrorMessage)
+        /// <summary>
+        /// True when a value is greater than zero (0) otherwise false
+        /// </summary>
+        /// <typeparam name="T">The type param</typeparam>
+        /// <param name="value">The int value</param>
+        /// <param name="data">The data of type of <see cref="IEnumerable{T}"/></param>
+        /// <param name="successMessage">The success message</param>
+        /// <param name="errorMessage">The error message</param>
+        /// <returns></returns>
+        public static IApiResponse<IEnumerable<T>> TransactionResultApiResponse<T>(this int value, IEnumerable<T> data, string successMessage, string errorMessage)
         {
             var success = value.Succeeded();
-            var status = success && value == models.Count() ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
-            var message = success && value == models.Count() ? SuccessMessage : ErrorMessage;
-            return new ApiResponse<IEnumerable<TEntity>> { Status = status, Data = models, Message = message };
+            var status = success && value == data.Count() ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
+            var message = success && value == data.Count() ? successMessage : errorMessage;
+            return new ApiResponse<IEnumerable<T>> (status, data, message);
         }
     }
 }

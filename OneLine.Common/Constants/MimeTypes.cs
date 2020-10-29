@@ -1,5 +1,8 @@
 ﻿namespace OneLine.Constants
 {
+    /// <summary>
+    /// Mime types utility used for upload and download purpose
+    /// </summary>
     public static class MimeTypes
     {
         public static class Application

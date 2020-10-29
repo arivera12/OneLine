@@ -3,6 +3,10 @@ using System.Net.Http;
 
 namespace OneLine.Models
 {
+    /// <summary>
+    /// This interface defines a holder and evaluator of a response result of a <see cref="HttpClient"/> and the <see cref="System.Net.Http.HttpResponseMessage"/>
+    /// </summary>
+    /// <typeparam name="T">The type of the response data</typeparam>
     public interface IResponseResult<T>
     {
         /// <summary>

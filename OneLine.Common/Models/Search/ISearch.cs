@@ -1,5 +1,8 @@
 ﻿namespace OneLine.Models
 {
+    /// <summary>
+    /// Defines a structure with a search term
+    /// </summary>
     public interface ISearch
     {
         /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace OneLine.Models
 {
+    /// <summary>
+    /// Implements a generic mutable structure
+    /// </summary>
     public class Mutable<T> : IMutable<T>
     {
         public Mutable()
@@ -11,6 +14,9 @@
         }
         public T Item1 { get; set; }
     }
+    /// <summary>
+    /// Implements a generic mutable structure
+    /// </summary>
     public class Mutable<T1, T2> : IMutable<T1, T2>
     {
         public Mutable()
@@ -24,6 +30,9 @@
         public T1 Item1 { get; set; }
         public T2 Item2 { get; set; }
     }
+    /// <summary>
+    /// Implements a generic mutable structure
+    /// </summary>
     public class Mutable<T1, T2, T3> : IMutable<T1, T2, T3>
     {
         public Mutable()
@@ -39,6 +48,9 @@
         public T2 Item2 { get; set; }
         public T3 Item3 { get; set; }
     }
+    /// <summary>
+    /// Implements a generic mutable structure
+    /// </summary>
     public class Mutable<T1, T2, T3, T4> : IMutable<T1, T2, T3, T4>
     {
         public Mutable()

@@ -8,18 +8,30 @@ using System.Threading.Tasks;
 
 namespace OneLine.Messaging
 {
+    /// <summary>
+    /// Implements send grid api service
+    /// </summary>
     public class SendGrid : ISendGridApi
     {
+        /// <inheritdoc/>
         public ISendGridApiSettings SendGridApiSettings { get; set; }
-
+        /// <summary>
+        /// Send grid constructor using DI
+        /// </summary>
+        /// <param name="options"></param>
         public SendGrid(IOptions<SendGridApiSettings> options)
         {
             SendGridApiSettings = options.Value;
         }
+        /// <summary>
+        ///  Send grid constructor using DI
+        /// </summary>
+        /// <param name="sendGridApiSettings"></param>
         public SendGrid(ISendGridApiSettings sendGridApiSettings)
         {
             SendGridApiSettings = sendGridApiSettings;
         }
+        /// <inheritdoc/>
         public Task SendEmailAsync(
             EmailAddress from,
             IEnumerable<EmailAddress> toMailAddresses,
@@ -61,7 +73,7 @@ namespace OneLine.Messaging
 
             return client.SendEmailAsync(msg);
         }
-
+        /// <inheritdoc/>
         public Task SendEmailAsync(
             IEnumerable<EmailAddress> toMailAddresses,
             string subject,

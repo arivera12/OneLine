@@ -7,7 +7,13 @@ namespace OneLine.Blazor.Bases
         IBlazorCoreComponent,
         ICoreView<T, TIdentifier, THttpService>
     {
+        /// <summary>
+        /// The context view authorized roles
+        /// </summary>
         IEnumerable<string> AuthorizedRoles { get; set; }
+        /// <summary>
+        /// The context user
+        /// </summary>
         TUser User { get; set; }
     }
 }

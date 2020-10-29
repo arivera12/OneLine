@@ -1,5 +1,11 @@
 ﻿namespace OneLine.Bases
 {
+    /// <summary>
+    /// Defines a base core view with most common actions and options
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TIdentifier"></typeparam>
+    /// <typeparam name="THttpService"></typeparam>
     public interface ICoreView<T, TIdentifier, THttpService> :
         IModelable<T, TIdentifier>,
         IHttpServiceable<THttpService>,

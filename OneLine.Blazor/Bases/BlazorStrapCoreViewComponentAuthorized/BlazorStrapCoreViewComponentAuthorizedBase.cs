@@ -18,6 +18,7 @@ namespace OneLine.Blazor.Bases
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
         where TUser : class, new()
     {
+        /// <inheritdoc/>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
@@ -89,6 +90,14 @@ namespace OneLine.Blazor.Bases
                 StateHasChanged();
             }
         }
+        /// <summary>
+        /// Highlights the selected record/s
+        /// </summary>
+        /// <typeparam name="TColor"></typeparam>
+        /// <param name="record"></param>
+        /// <param name="selectedColor"></param>
+        /// <param name="unSelectedColor"></param>
+        /// <returns></returns>
         public virtual TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor)
         {
             if (RecordsSelectionMode.IsSingle())

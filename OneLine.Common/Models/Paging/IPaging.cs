@@ -1,5 +1,8 @@
 ﻿namespace OneLine.Models
 {
+    /// <summary>
+    /// Defined a paging structure to be applied
+    /// </summary>
     public interface IPaging
     {
         /// <summary>

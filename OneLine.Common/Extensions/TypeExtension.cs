@@ -7,6 +7,11 @@ namespace OneLine.Extensions
 {
     public static class TypeExtension
     {
+        /// <summary>
+        /// Checks if the type is anonymous type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static bool IsAnonymousType(this Type type)
         {
             if (type == null)

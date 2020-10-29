@@ -1,31 +1,31 @@
 ﻿namespace OneLine.Models
 {
+    /// <summary>
+    /// Implements a structure with search term and paging capabilities
+    /// </summary>
     public class SearchPaging : ISearchPaging
     {
-        /// <summary>
-        /// Sets a search term to be used in the query
-        /// </summary>
+        /// <inheritdoc/>
         public virtual string SearchTerm { get; set; }
-        /// <summary>
-        /// Determines wether data should be decending
-        /// </summary>
+        /// <inheritdoc/>
         public virtual bool? Descending { get; set; }
-        /// <summary>
-        /// Sets the page index of the data
-        /// </summary>
+        /// <inheritdoc/>
         public virtual int? PageIndex { get; set; }
-        /// <summary>
-        /// Sets the page size of the data
-        /// </summary>
+        /// <inheritdoc/>
         public virtual int? PageSize { get; set; }
-        /// <summary>
-        /// Sets whichs property of the data model wants to be used for sorting
-        /// </summary>
+        /// <inheritdoc/>
         public virtual string SortBy { get; set; }
-        public SearchPaging()
-        {
-
-        }
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public SearchPaging() { }
+        /// <summary>
+        /// Constructor with paging capabilities
+        /// </summary>
+        /// <param name="pageIndex">The page index</param>
+        /// <param name="pageSize">The page size</param>
+        /// <param name="descending">Descending indicator</param>
+        /// <param name="sortBy">Sort by property name</param>
         public SearchPaging(int pageIndex, int pageSize, bool descending, string sortBy)
         {
             PageIndex = pageIndex;
@@ -33,6 +33,14 @@
             Descending = descending;
             SortBy = sortBy;
         }
+        /// <summary>
+        /// Constructor with search term and paging capabilities
+        /// </summary>
+        /// <param name="pageIndex">The page index</param>
+        /// <param name="pageSize">The page size</param>
+        /// <param name="descending">Descending indicator</param>
+        /// <param name="sortBy">Sort by property name</param>
+        /// <param name="searchTerm">The search term</param>
         public SearchPaging(int pageIndex, int pageSize, bool descending, string sortBy, string searchTerm)
         {
             PageIndex = pageIndex;

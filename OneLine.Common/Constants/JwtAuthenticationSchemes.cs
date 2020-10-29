@@ -1,5 +1,8 @@
 ﻿namespace OneLine.Constants
 {
+    /// <summary>
+    /// Jwt authenticantion schemes
+    /// </summary>
     public class JwtAuthenticationSchemes
     {
         /// <summary>

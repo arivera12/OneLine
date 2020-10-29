@@ -13,7 +13,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static bool Succeeded<T>(this IApiResponse<T> apiResponse)
         {
-            return apiResponse.Status == ApiResponseStatus.Succeeded;
+            return apiResponse.Status.Equals(ApiResponseStatus.Succeeded);
         }
         /// <summary>
         /// Checks if the Api Response Status Failed 
@@ -23,7 +23,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static bool Failed<T>(this IApiResponse<T> apiResponse)
         {
-            return apiResponse.Status == ApiResponseStatus.Failed;
+            return apiResponse.Status.Equals(ApiResponseStatus.Failed);
         }
         /// <summary>
         /// Checks if the Api Response Status Succeeded
@@ -33,7 +33,7 @@ namespace OneLine.Extensions
 
         public static bool Succeeded(this ApiResponseStatus apiResponseStatus)
         {
-            return apiResponseStatus == ApiResponseStatus.Succeeded;
+            return apiResponseStatus.Equals(ApiResponseStatus.Succeeded);
         }
         /// <summary>
         /// Checks if the Api Response Status Failed 
@@ -43,7 +43,7 @@ namespace OneLine.Extensions
 
         public static bool Failed(this ApiResponseStatus apiResponseStatus)
         {
-            return apiResponseStatus == ApiResponseStatus.Failed;
+            return apiResponseStatus.Equals(ApiResponseStatus.Failed);
         }
     }
 }

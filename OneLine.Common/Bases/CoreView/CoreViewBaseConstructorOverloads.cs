@@ -7,6 +7,13 @@ using System.Linq;
 
 namespace OneLine.Bases
 {
+    /// <summary>
+    /// Base core view implementation
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TIdentifier"></typeparam>
+    /// <typeparam name="TId"></typeparam>
+    /// <typeparam name="THttpService"></typeparam>
     public abstract partial class CoreViewBase<T, TIdentifier, TId, THttpService> :
         ICoreView<T, TIdentifier, THttpService>
         where T : class, new()

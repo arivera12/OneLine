@@ -7,6 +7,15 @@ namespace OneLine.Blazor.Extensions
 {
     public static class SweetAlertServiceExtension
     {
+        /// <summary>
+        /// Method that show a sweet alert dialog if there is any error on the <paramref name="FluentValidationResult"/> and localizes the message using the <paramref name="LanguageLocalizer"/>
+        /// </summary>
+        /// <param name="Swal"></param>
+        /// <param name="FluentValidationResult"></param>
+        /// <param name="LanguageLocalizer"></param>
+        /// <param name="title"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
         public static async Task ShowFluentValidationsAlertMessageAsync(this SweetAlertService Swal, ValidationResult FluentValidationResult, IJsonLanguageLocalizerService LanguageLocalizer, string title = null, string style = "color:red")
         {
             if (FluentValidationResult != null && !FluentValidationResult.IsValid && FluentValidationResult.Errors.Count > 0)
@@ -20,6 +29,15 @@ namespace OneLine.Blazor.Extensions
                 await Swal.FireAsync(title, validationMessage, SweetAlertIcon.Error);
             }
         }
+        /// <summary>
+        /// Shows a confirm alert dialog
+        /// </summary>
+        /// <param name="Swal"></param>
+        /// <param name="title"></param>
+        /// <param name="text"></param>
+        /// <param name="confirmButtonText"></param>
+        /// <param name="cancelButtonText"></param>
+        /// <returns></returns>
         public static async Task<bool> ShowConfirmAlertAsync(this SweetAlertService Swal, 
             string title, 
             string text,
@@ -40,6 +58,14 @@ namespace OneLine.Blazor.Extensions
             });
             return !string.IsNullOrWhiteSpace(result.Value);
         }
+        /// <summary>
+        /// Shows sweet alert loader dialog
+        /// </summary>
+        /// <param name="Swal"></param>
+        /// <param name="sweetAlertCallback"></param>
+        /// <param name="title"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static async Task ShowLoaderAsync(this SweetAlertService Swal, SweetAlertCallback sweetAlertCallback, string title = null, string text = null)
         {
             await Swal.FireAsync(new SweetAlertOptions()
@@ -53,10 +79,21 @@ namespace OneLine.Blazor.Extensions
                 OnOpen = sweetAlertCallback
             });
         }
+        /// <summary>
+        /// Hides the sweet alert loader dialog
+        /// </summary>
+        /// <param name="Swal"></param>
+        /// <returns></returns>
         public static async Task HideLoaderAsync(this SweetAlertService Swal)
         {
             await Swal.CloseAsync();
         }
+        /// <summary>
+        /// Hides the sweet aler loader dialog and fires a chained callback
+        /// </summary>
+        /// <param name="Swal"></param>
+        /// <param name="sweetAlertCallback"></param>
+        /// <returns></returns>
         public static async Task HideLoaderAsync(this SweetAlertService Swal, SweetAlertCallback sweetAlertCallback)
         {
             await Swal.CloseAsync();

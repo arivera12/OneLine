@@ -2,6 +2,9 @@
 
 namespace OneLine.Models
 {
+    /// <summary>
+    /// Defines a stucture for saving exceptions
+    /// </summary>
     public interface IExceptionLogs
     {
         /// <summary>

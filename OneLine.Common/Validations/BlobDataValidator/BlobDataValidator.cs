@@ -10,8 +10,14 @@ using System.Threading.Tasks;
 
 namespace OneLine.Validations
 {
+    /// <summary>
+    /// Blob data validation rules
+    /// </summary>
     public class BlobDataValidator : AbstractValidator<BlobData>
     {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public BlobDataValidator()
         {
             RuleFor(x => x.Data).NotNull().WithMessage("TheBlobDataIsRequired");
@@ -70,8 +76,14 @@ namespace OneLine.Validations
             return new ValidationResult(validationFailures);
         }
     }
+    /// <summary>
+    /// Blob data collection validation rules
+    /// </summary>
     public class BlobDataCollectionValidator : AbstractValidator<IEnumerable<BlobData>>
     {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public BlobDataCollectionValidator()
         {
             RuleForEach(x => x).SetValidator(new BlobDataValidator());
@@ -102,11 +114,11 @@ namespace OneLine.Validations
                 throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
             }
             var validationFailures = new List<ValidationFailure>();
-            if (!formFileRules.IsRequired && blobDatas.IsNullOrEmpty())
+            if (!formFileRules.IsRequired && blobDatas.IsNull() || !blobDatas.Any())
             {
                 return new ValidationResult(Enumerable.Empty<ValidationFailure>());
             }
-            if(formFileRules.IsRequired && blobDatas.IsNullOrEmpty())
+            if(formFileRules.IsRequired && blobDatas.IsNull() || !blobDatas.Any())
             {
                 validationFailures.Add(new ValidationFailure(nameof(blobDatas), "FileUploadRequired", blobDatas));
                 return new ValidationResult(validationFailures);

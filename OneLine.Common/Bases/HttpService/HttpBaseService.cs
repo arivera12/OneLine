@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OneLine.Extensions;
+using System;
 using System.Net.Http;
 
 namespace OneLine.Bases
@@ -8,7 +9,9 @@ namespace OneLine.Bases
     /// </summary>
     public abstract class HttpBaseService : IHttpService
     {
+        /// <inheritdoc/>
         public virtual string Api { get; set; } = "api";
+        /// <inheritdoc/>
         public virtual HttpClient HttpClient { get; set; }
         public HttpBaseService()
         {
@@ -66,9 +69,13 @@ namespace OneLine.Bases
                 HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"{(AddBearerScheme ? "Bearer" : null)} {AuthorizationToken}");
             }
         }
+        /// <summary>
+        /// Gets the api path. Example "/Api"
+        /// </summary>
+        /// <returns></returns>
         public virtual string GetApi()
         {
-            return string.IsNullOrWhiteSpace(Api) ? "" : $"/{Api}";
+            return Api.IsNullOrWhiteSpace() ? "" : $"/{Api}";
         }
     }
 }

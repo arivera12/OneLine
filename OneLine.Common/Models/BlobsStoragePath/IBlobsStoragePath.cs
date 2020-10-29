@@ -1,5 +1,8 @@
 ﻿namespace OneLine.Models
 {
+    /// <summary>
+    /// Defines a basic blob storage path
+    /// </summary>
     public interface IBlobsStoragePath
     {
         /// <summary>

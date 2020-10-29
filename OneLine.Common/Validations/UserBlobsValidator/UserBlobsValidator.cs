@@ -4,8 +4,14 @@ using System.Collections.Generic;
 
 namespace OneLine.Validations
 {
+    /// <summary>
+    /// User blobs validator rules
+    /// </summary>
     public class UserBlobsValidator : AbstractValidator<UserBlobs>
     {
+        /// <summary>
+        /// Default constructor with the user blobs validator rules
+        /// </summary>
         public UserBlobsValidator()
         {
             //RuleFor(x => x.UserBlobId).NotEmpty().WithMessage("UserBlobsUserBlobIdIsRequired").MaximumLength(128).WithMessage("UserBlobsUserBlobIdCanNotBeGreaterThan");
@@ -19,8 +25,14 @@ namespace OneLine.Validations
             RuleFor(x => x.IsDeleted).NotNull().WithMessage("UserBlobsIsDeletedIsRequired");
         }
     }
+    /// <summary>
+    /// User blobs collection validator rules
+    /// </summary>
     public class UserBlobsCollectionValidator : AbstractValidator<IEnumerable<UserBlobs>>
     {
+        /// <summary>
+        /// Default constructor with the user blobs validator rules
+        /// </summary>
         public UserBlobsCollectionValidator()
         {
             RuleForEach(x => x).SetValidator(new UserBlobsValidator());

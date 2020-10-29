@@ -1,36 +1,25 @@
-﻿
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
 
 namespace OneLine.Models
 {
     [NotMapped]
+    /// <summary>
+    /// Implements a structure to hold binary data
+    /// </summary>
     public class BlobData : IBlobData
     {
-        /// <summary>
-        /// Last modified
-        /// </summary>
+        /// <inheritdoc/>
         public virtual DateTime LastModified { get; set; }
-        /// <summary>
-        /// The File Name
-        /// </summary>
+        /// <inheritdoc/>
         public virtual string Name { get; set; }
-        /// <summary>
-        /// The File Input Name
-        /// </summary>
+        /// <inheritdoc/>
         public virtual string InputName { get; set; }
-        /// <summary>
-        /// The file size
-        /// </summary>
+        /// <inheritdoc/>
         public virtual long Size { get; set; }
-        /// <summary>
-        /// The file type
-        /// </summary>
+        /// <inheritdoc/>
         public virtual string Type { get; set; }
-        /// <summary>
-        /// The file stream data
-        /// </summary>
+        /// <inheritdoc/>
         public virtual byte[] Data { get; set; }
     }
 }

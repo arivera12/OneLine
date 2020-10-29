@@ -12,12 +12,20 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
+    /// <summary>
+    /// Base core view implementation
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TIdentifier"></typeparam>
+    /// <typeparam name="TId"></typeparam>
+    /// <typeparam name="THttpService"></typeparam>
     public abstract partial class CoreViewBase<T, TIdentifier, TId, THttpService> :
         ICoreView<T, TIdentifier, THttpService>
         where T : class, new()
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
     {
+        /// <inheritdoc/>
         public virtual async Task Load()
         {
             if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
@@ -67,6 +75,7 @@ namespace OneLine.Bases
                 OnAfterLoad?.Invoke();
             }
         }
+        /// <inheritdoc/>
         public virtual async Task Search()
         {
             ResponsePaged = await HttpService.SearchAsync<T>(SearchPaging, SearchExtraParams);
@@ -93,6 +102,7 @@ namespace OneLine.Bases
             }
             OnAfterSearch?.Invoke();
         }
+        /// <inheritdoc/>
         public virtual Task SelectRecord(T selectedRecord)
         {
             if (RecordsSelectionMode.IsSingle())
@@ -119,6 +129,7 @@ namespace OneLine.Bases
             AfterSelectedRecord?.Invoke();
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task SelectRecords(IEnumerable<T> selectedRecords)
         {
             if (MaximumRecordsSelections <= 0 || (MaximumRecordsSelections > 0 && selectedRecords.Count() < MaximumRecordsSelections))
@@ -133,6 +144,7 @@ namespace OneLine.Bases
             AfterSelectedRecord?.Invoke();
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual async Task Validate()
         {
             if (FormMode.IsSingle())
@@ -155,6 +167,7 @@ namespace OneLine.Bases
             IsValidModelStateChanged?.Invoke(IsValidModelState);
             OnAfterValidate?.Invoke();
         }
+        /// <inheritdoc/>
         public virtual async Task Save()
         {
             if (FormState.IsCreate() || FormState.IsEdit() || FormState.IsCopy())
@@ -212,6 +225,7 @@ namespace OneLine.Bases
                 OnAfterSave?.Invoke();
             }
         }
+        /// <inheritdoc/>
         public virtual async Task Delete()
         {
             if (FormState.IsDelete())
@@ -253,6 +267,7 @@ namespace OneLine.Bases
                 OnAfterDelete?.Invoke();
             }
         }
+        /// <inheritdoc/>
         public virtual IEnumerable<PropertyInfo> GetMutableBlobDatasWithRulesProperties()
         {
             if (FormMode.IsSingle())
@@ -276,6 +291,7 @@ namespace OneLine.Bases
                 return Enumerable.Empty<PropertyInfo>();
             }
         }
+        /// <inheritdoc/>
         public virtual void ClearMutableBlobDatasWithRules()
         {
             foreach (var blobDataProperty in GetMutableBlobDatasWithRulesProperties())
@@ -295,6 +311,7 @@ namespace OneLine.Bases
                 }
             }
         }
+        /// <inheritdoc/>
         public virtual async Task ValidateMutableBlobDatas()
         {
             foreach (var blobDataProperty in GetMutableBlobDatasWithRulesProperties())
@@ -427,6 +444,7 @@ namespace OneLine.Bases
                 }
             }
         }
+        /// <inheritdoc/>
         public virtual Task Reset()
         {
             FormState = FormState.Create;
@@ -439,18 +457,21 @@ namespace OneLine.Bases
             IdentifierChanged?.Invoke(Identifier);
             Identifiers = new List<TIdentifier>();
             IdentifiersChanged?.Invoke(Identifiers);
-            if (GetMutableBlobDatasWithRulesProperties().IsNotNull() && GetMutableBlobDatasWithRulesProperties().Any())
+            var mutableBlobDatasWithRulesProperties = GetMutableBlobDatasWithRulesProperties();
+            if (mutableBlobDatasWithRulesProperties.IsNotNull() && mutableBlobDatasWithRulesProperties.Any())
             {
                 ClearMutableBlobDatasWithRules();
             }
             OnAfterReset?.Invoke();
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task Cancel()
         {
             OnAfterCancel?.Invoke();
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task FilterAndSort(string sortBy, bool descending)
         {
             FilterSortBy = sortBy;
@@ -459,6 +480,7 @@ namespace OneLine.Bases
             FilterDescendingChanged?.Invoke(FilterDescending);
             return FilterAndSort();
         }
+        /// <inheritdoc/>
         public virtual Task FilterAndSort(string sortBy, bool descending, Func<T, bool> filterPredicate)
         {
             FilterSortBy = sortBy;
@@ -469,6 +491,7 @@ namespace OneLine.Bases
             FilterPredicateChanged?.Invoke(FilterPredicate);
             return FilterAndSort();
         }
+        /// <inheritdoc/>
         public virtual Task FilterAndSort()
         {
             if (Records.IsNotNull() && Records.Any())
@@ -499,6 +522,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoPreviousPage()
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
@@ -508,6 +532,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoPreviousPage(int pageSize)
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
@@ -518,6 +543,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoPreviousPage(string sortBy)
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
@@ -528,6 +554,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoPreviousPage(int pageSize, string sortBy)
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasPreviousPage)
@@ -539,6 +566,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoNextPage()
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
@@ -548,6 +576,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoNextPage(int pageSize)
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
@@ -558,6 +587,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoNextPage(string sortBy)
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
@@ -568,6 +598,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoNextPage(int pageSize, string sortBy)
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.HasNextPage)
@@ -579,6 +610,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoToPage(int pageIndex, int pageSize)
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.LastPage <= pageIndex)
@@ -589,6 +621,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoToPage(int pageIndex, string sortBy)
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.LastPage <= pageIndex)
@@ -599,6 +632,7 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task GoToPage(int pageIndex, int pageSize, string sortBy)
         {
             if (ResponsePaged.IsNotNull() && ResponsePaged.Response.Data.LastPage <= pageIndex)
@@ -610,30 +644,35 @@ namespace OneLine.Bases
             }
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task Sort()
         {
             SearchPaging.Descending = !SearchPaging.Descending;
             SearchPagingChanged?.Invoke(SearchPaging);
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task Sort(bool descending)
         {
             SearchPaging.Descending = descending;
             SearchPagingChanged?.Invoke(SearchPaging);
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task SortAscending()
         {
             SearchPaging.Descending = false;
             SearchPagingChanged?.Invoke(SearchPaging);
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task SortDescending()
         {
             SearchPaging.Descending = true;
             SearchPagingChanged?.Invoke(SearchPaging);
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task SortBy(string sortBy)
         {
             if (SearchPaging.SortBy.Equals(sortBy))
@@ -647,6 +686,7 @@ namespace OneLine.Bases
             SearchPagingChanged?.Invoke(SearchPaging);
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task SortBy(string sortBy, bool descending)
         {
             SearchPaging.SortBy = sortBy;
@@ -654,6 +694,7 @@ namespace OneLine.Bases
             SearchPagingChanged?.Invoke(SearchPaging);
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task SortByAscending(string sortBy)
         {
             SearchPaging.SortBy = sortBy;
@@ -661,6 +702,7 @@ namespace OneLine.Bases
             SearchPagingChanged?.Invoke(SearchPaging);
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task SortByDescending(string sortBy)
         {
             SearchPaging.SortBy = sortBy;

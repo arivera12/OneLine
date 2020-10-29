@@ -2,10 +2,14 @@
 
 namespace OneLine.Models
 {
+    /// <summary>
+    /// Defines a structure to set rules to a form file
+    /// </summary>
     public interface IFormFileRules
     {
         /// <summary>
-        /// Specify what file types the user can pick from the device file system. This property may be used for browser application only.
+        /// Specify what file types the user can pick from the device file system. 
+        /// This property may be used for browser application only has the accept attribute value of a input of file type.
         /// </summary>
         string Accept { get; set; }
         /// <summary>
@@ -41,7 +45,8 @@ namespace OneLine.Models
         /// </summary>
         IEnumerable<string> AllowedContentDispositions { get; set; }
         /// <summary>
-        /// Forces a file upload. Overrides IsRequired property rule.
+        /// Forces a file upload. Overrides IsRequired property rule. 
+        /// This property should be used for example: when a file state is expired, incorrect, wrong, etc and needs to be forced to be update.
         /// </summary>
         bool ForceUpload { get; set; }
     }

@@ -1,33 +1,45 @@
-﻿
-using OneLine.Extensions;
+﻿using OneLine.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 
 namespace OneLine.Models
 {
+    /// <summary>
+    /// This class implements a holder and evaluator of a response result of a <see cref="HttpClient"/> and the <see cref="System.Net.Http.HttpResponseMessage"/>
+    /// </summary>
+    /// <typeparam name="T">The type of the response data</typeparam>
     public class ResponseResult<T> : IResponseResult<T>
     {
         /// <summary>
-        /// The response from the server
+        /// <inheritdoc/>
         /// </summary>
         public virtual T Response { get; set; }
         /// <summary>
-        /// Determines where the server response succeed 
+        /// <inheritdoc/>
         /// </summary>
         public virtual bool Succeed { get; set; }
         /// <summary>
-        /// Determines when the request was successfully or not
+        /// <inheritdoc/>
         /// </summary>
         public virtual bool HasException { get; set; }
         /// <summary>
-        /// The exception when an error ocurred on the request
+        /// <inheritdoc/>
         /// </summary>
         public Exception Exception { get; set; }
         /// <summary>
-        /// The HTTP response message including the status code and data. 
+        /// <inheritdoc/>
         /// </summary>
         public HttpResponseMessage HttpResponseMessage { get; set; }
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ResponseResult() { }
+        /// <summary>
+        /// The response result main constructor
+        /// </summary>
+        /// <param name="response">The response</param>
+        /// <param name="exception">The exception</param>
+        /// <param name="httpResponseMessage">The httpResponseMessage</param>
         public ResponseResult(T response = default, Exception exception = null, HttpResponseMessage httpResponseMessage = null)
         {
             Response = response;

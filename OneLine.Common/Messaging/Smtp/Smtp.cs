@@ -10,15 +10,29 @@ namespace OneLine.Messaging
 {
     public class Smtp : ISmtp
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public ISmtpSettings SmtpSettings { get; set; }
+        /// <summary>
+        /// Constructor using DI
+        /// </summary>
+        /// <param name="options"></param>
         public Smtp(IOptions<SmtpSettings> options)
         {
             SmtpSettings = options.Value;
         }
+        /// <summary>
+        /// Constructor using DI
+        /// </summary>
+        /// <param name="options"></param>
         public Smtp(ISmtpSettings smtpSettings)
         {
             SmtpSettings = smtpSettings;
         }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void SendEmail(
             MailAddress from,
             IList<MailAddress> toMailAddresses,
@@ -107,7 +121,9 @@ namespace OneLine.Messaging
                 smtpClient.Send(mailMessage);
             }
         }
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void SendEmail(
             IList<MailAddress> toMailAddresses,
             string subject,
@@ -203,6 +219,9 @@ namespace OneLine.Messaging
                 smtpClient.Send(mailMessage);
             }
         }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public async Task SendEmailAsync(
             MailAddress from,
             IList<MailAddress> toMailAddresses,
@@ -291,7 +310,9 @@ namespace OneLine.Messaging
                 await smtpClient.SendMailAsync(mailMessage);
             }
         }
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public async Task SendEmailAsync(
             IList<MailAddress> toMailAddresses,
             string subject,

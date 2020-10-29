@@ -1,5 +1,4 @@
 using OneLine.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,18 +8,22 @@ namespace OneLine.Extensions
 {
     public static class EnumerableExtensions
     {
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
-        {
-            return source == null || !source.Any();
-        }
-        public static bool IsNotNullAndNotEmpty<T>(this IEnumerable<T> source)
-        {
-            return source != null && source.Any();
-        }
+        /// <summary>
+        /// Method that checks wether IsDeleted is true
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static IEnumerable<T> WhereIsDeleted<T>(this IEnumerable<T> source) where T : ISoftDeletable
         {
             return source.Where(e => e.IsDeleted);
         }
+        /// <summary>
+        /// Method that checks wether IsDeleted is false
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static IEnumerable<T> WhereNotDeleted<T>(this IEnumerable<T> source) where T : ISoftDeletable
         {
             return source.Where(e => !e.IsDeleted);
@@ -30,13 +33,18 @@ namespace OneLine.Extensions
                                     .GetMethods()
                                     .Single(method => method.Name == "OrderBy" &&
                                                         method.GetParameters().Length == 2);
-
         private static readonly MethodInfo OrderByDescendingMethod =
                                 typeof(Queryable)
                                 .GetMethods()
                                 .Single(method => method.Name == "OrderByDescending" &&
                                                     method.GetParameters().Length == 2);
-
+        /// <summary>
+        /// Sorts ascending the collection by a property name
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public static IEnumerable<T> OrderByProperty<T>(this IEnumerable<T> source, string propertyName)
         {
             if (typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
@@ -52,7 +60,13 @@ namespace OneLine.Extensions
             object ret = genericMethod.Invoke(null, new object[] { source, lambda });
             return (IEnumerable<T>)ret;
         }
-
+        /// <summary>
+        /// Sorts descending the collection by a property name
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public static IEnumerable<T> OrderByPropertyDescending<T>(this IEnumerable<T> source, string propertyName)
         {
             if (typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |

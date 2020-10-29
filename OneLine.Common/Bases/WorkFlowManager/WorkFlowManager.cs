@@ -9,12 +9,16 @@ namespace OneLine.Bases
 {
     public class WorkFlowManager<T, TState> : IWorkFlowManager<T, TState>
     {
+        /// <inheritdoc/>
         public virtual Func<T, string> StatePropertyName { get; set; }
+        /// <inheritdoc/>
         public virtual T Record { get; set; }
+        /// <inheritdoc/>
         public virtual IEnumerable<IWorkFlowStateProcess<T, TState>> WorkFlowStateProcesses { get; set; }
+        /// <inheritdoc/>
         public async ValueTask<IApiResponse<T>> RunWorkFlowProcessAsync()
         {
-            if (WorkFlowStateProcesses.IsNullOrEmpty())
+            if (WorkFlowStateProcesses.IsNull() || !WorkFlowStateProcesses.Any())
                 throw new ArgumentNullException(nameof(WorkFlowStateProcesses));
             if(Record.IsNull())
                 throw new ArgumentNullException(nameof(Record));

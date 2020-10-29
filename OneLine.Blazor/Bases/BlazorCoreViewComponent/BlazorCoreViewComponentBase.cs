@@ -29,72 +29,139 @@ namespace OneLine.Blazor.Bases
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
     {
+        /// <inheritdoc/>
         [Inject] public override IConfiguration Configuration { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual IJSRuntime JSRuntime { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual NavigationManager NavigationManager { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual IBlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual IJsonLanguageLocalizerService LanguageLocalizer { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual IJsonLanguageLocalizerSupportedCulturesService LanguageLocalizerSupportedCultures { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual HttpClient HttpClient { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual IApplicationState ApplicationState { get; set; }
+        /// <inheritdoc/>
         [Inject] public override THttpService HttpService { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override TIdentifier Identifier { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override IEnumerable<TIdentifier> Identifiers { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override T Record { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override ObservableRangeCollection<T> Records { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override IValidator Validator { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override ValidationResult ValidationResult { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override bool IsValidModelState { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override FormState FormState { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override FormMode FormMode { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override bool AutoLoad { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override bool AllowDuplicates { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override bool InitialAutoSearch { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override object SearchExtraParams { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Func<T, bool> FilterPredicate { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override string FilterSortBy { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override bool FilterDescending { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override IResponseResult<ApiResponse<T>> Response { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override IResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override IResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override IPaging Paging { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override ISearchPaging SearchPaging { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override RecordsSelectionMode RecordsSelectionMode { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override T SelectedRecord { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override ObservableRangeCollection<T> SelectedRecords { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override long MinimumRecordsSelections { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override long MaximumRecordsSelections { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override bool MinimumRecordsSelectionsReached { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override bool MaximumRecordsSelectionsReached { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual int DebounceInterval { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool HideCancelOrBackButton { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool HideResetButton { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool HideSaveButton { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool HideDeleteButton { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool HideCreateOrNewButton { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual string RecordId { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual string RedirectUrlAfterSave { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool ShowOptionsDialog { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool HideDetailsDialogOption { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool HideCopyDialogOption { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool HideEditDialogOption { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool HideDeleteDialogOption { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool ShowForm { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool Hide { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool Hidden { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool ReadOnly { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool Disabled { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool EnableConfirmOnSave { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool EnableConfirmOnReset { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool EnableConfirmOnDelete { get; set; } = true;
+        /// <inheritdoc/>
         [Parameter] public virtual bool EnableConfirmOnCancel { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool CloseFormAfterSaveOrDelete { get; set; } = true;
+        /// <inheritdoc/>
         [Parameter] public virtual bool AutoSearchAfterFormClose { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual bool TriggerSearchMethod { get; set; }
+        /// <inheritdoc/>
         [Parameter]
         public virtual bool TriggerSearch
         {
@@ -108,52 +175,98 @@ namespace OneLine.Blazor.Bases
             }
             get { return false; }
         }
+        /// <inheritdoc/>
         [Parameter] public override Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnBeforeSearch { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnAfterSearch { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<TIdentifier> IdentifierChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<T> RecordChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<T> SelectedRecordChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action BeforeSelectedRecord { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action AfterSelectedRecord { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<ObservableRangeCollection<T>> SelectedRecordsChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<bool> MinimumRecordsSelectionsReachedChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<IPaging> PagingChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<ISearchPaging> SearchPagingChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<Func<T, bool>> FilterPredicateChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<string> FilterSortByChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<bool> FilterDescendingChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<ValidationResult> ValidationResultChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<bool> IsValidModelStateChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<FormState> FormStateChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action<FormMode> FormModeChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnBeforeLoad { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnAfterLoad { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnBeforeReset { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnAfterReset { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnBeforeCancel { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnAfterCancel { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnBeforeSave { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnAfterSave { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnBeforeDelete { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnAfterDelete { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnBeforeValidate { get; set; }
+        /// <inheritdoc/>
         [Parameter] public override Action OnAfterValidate { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual Action<bool> ShowOptionsDialogChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual Action<bool> ShowFormChanged { get; set; }
+        /// <inheritdoc/>
         [Parameter] public virtual Action<bool> TriggerSearchChanged { get; set; }
+        /// <inheritdoc/>
         public bool ShowActivityIndicator { get; set; }
+        /// <inheritdoc/>
         public bool IsDesktop { get; set; }
+        /// <inheritdoc/>
         public bool IsTablet { get; set; }
+        /// <inheritdoc/>
         public bool IsMobile { get; set; }
+        /// <inheritdoc/>
         public virtual Task OnAfterFirstRenderAsync()
             => Task.CompletedTask;
+        /// <inheritdoc/>
         public virtual async Task BeforeSearch()
         {
             if (IsDesktop)
@@ -167,6 +280,7 @@ namespace OneLine.Blazor.Bases
                 await Search();
             }
         }
+        /// <inheritdoc/>
         public virtual async Task AfterSearch()
         {
             CollectionAppendReplaceMode = CollectionAppendReplaceMode.Replace;
@@ -205,23 +319,27 @@ namespace OneLine.Blazor.Bases
                 await SweetAlertService.FireAsync(null, LanguageLocalizer[ResponsePaged.Response.Message], SweetAlertIcon.Error);
             }
         }
+        /// <inheritdoc/>
         public virtual async Task<IEnumerable<T>> TypeaheadSearch(string searchTerm)
         {
             SearchPaging.SearchTerm = searchTerm;
             await Search();
             return Records;
         }
+        /// <inheritdoc/>
         public virtual async Task LoadMore()
         {
             CollectionAppendReplaceMode = CollectionAppendReplaceMode.Add;
             await GoNextPage();
             await BeforeSearch();
         }
+        /// <inheritdoc/>
         public virtual async Task PagingChange(IPaging paging)
         {
             SearchPaging.AutoMap(paging);
             await BeforeSearch();
         }
+        /// <inheritdoc/>
         public virtual void SearchTermChanged(string searchTerm)
         {
             SearchPaging.SearchTerm = searchTerm;
@@ -230,6 +348,7 @@ namespace OneLine.Blazor.Bases
                 await BeforeSearch();
             });
         }
+        /// <inheritdoc/>
         public virtual string FormStateTitle()
         {
             if (FormState.IsCreate() || FormState.IsCopy())
@@ -241,10 +360,12 @@ namespace OneLine.Blazor.Bases
             else
                 return "Create";
         }
+        /// <inheritdoc/>
         public virtual bool IsReadOnlyOrPlainText()
         {
             return FormState.IsDetails() || FormState.IsDelete() || FormState.IsDeleted();
         }
+        /// <inheritdoc/>
         public virtual async Task BeforeSave()
         {
             if (GetMutableBlobDatasWithRulesProperties().IsNotNull() && GetMutableBlobDatasWithRulesProperties().Any())
@@ -271,11 +392,13 @@ namespace OneLine.Blazor.Bases
                 await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult, LanguageLocalizer);
             }
         }
+        /// <inheritdoc/>
         public virtual async Task InvalidSubmit()
         {
             await Validate();
             await SweetAlertService.ShowFluentValidationsAlertMessageAsync(ValidationResult, LanguageLocalizer);
         }
+        /// <inheritdoc/>
         public virtual async Task AfterSave()
         {
             await SweetAlertService.HideLoaderAsync();
@@ -321,6 +444,7 @@ namespace OneLine.Blazor.Bases
                 await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response?.Message], SweetAlertIcon.Error);
             }
         }
+        /// <inheritdoc/>
         public virtual async Task BeforeDelete()
         {
             if (EnableConfirmOnDelete && Identifier.IsNotNull() && Identifier.Model.IsNotNull() && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToDeleteTheRecord"],
@@ -333,6 +457,7 @@ namespace OneLine.Blazor.Bases
                 await SweetAlertService.ShowLoaderAsync(new SweetAlertCallback(async () => await Delete()), LanguageLocalizer["ProcessingRequest"], LanguageLocalizer["PleaseWait"]);
             }
         }
+        /// <inheritdoc/>
         public virtual async Task AfterDelete()
         {
             await SweetAlertService.HideLoaderAsync();
@@ -371,6 +496,7 @@ namespace OneLine.Blazor.Bases
                 await SweetAlertService.FireAsync(null, LanguageLocalizer[Response.Response?.Message], SweetAlertIcon.Error);
             }
         }
+        /// <inheritdoc/>
         public virtual async Task BeforeCancel()
         {
             var text = !string.IsNullOrWhiteSpace(RedirectUrlAfterSave) ? "AreYouSureYouWantToGoBack" : "AreYouSureYouWantToCancel";
@@ -384,11 +510,13 @@ namespace OneLine.Blazor.Bases
                 await Cancel();
             }
         }
+        /// <inheritdoc/>
         public virtual async Task AfterCancel()
         {
             await Reset();
             await JSRuntime.InvokeVoidAsync("window.history.back");
         }
+        /// <inheritdoc/>
         public virtual async Task BeforeReset()
         {
             if (EnableConfirmOnReset && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToReset"],
@@ -401,11 +529,13 @@ namespace OneLine.Blazor.Bases
                 await Reset();
             }
         }
+        /// <inheritdoc/>
         public virtual Task AfterReset()
         {
             StateHasChanged();
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual Task ShowFormChangeFormState(FormState formState)
         {
             ShowForm = true;
@@ -414,6 +544,7 @@ namespace OneLine.Blazor.Bases
             FormStateChanged?.Invoke(FormState);
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual void HideFormAfterFormCancel()
         {
             ShowForm = false;
@@ -435,12 +566,14 @@ namespace OneLine.Blazor.Bases
                 StateHasChanged();
             }
         }
+        /// <inheritdoc/>
         public virtual Task HideOptionsDialog()
         {
             ShowOptionsDialog = false;
             ShowOptionsDialogChanged?.Invoke(ShowOptionsDialog);
             return Task.CompletedTask;
         }
+        /// <inheritdoc/>
         public virtual async Task ShowFormChangeFormStateHideOptionsDialog(FormState formState)
         {
             await ShowFormChangeFormState(formState);

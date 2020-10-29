@@ -1,6 +1,5 @@
 using FluentValidation;
 using Newtonsoft.Json;
-using OneLine.Attributes;
 using OneLine.Enums;
 using OneLine.Models;
 using System;
@@ -14,70 +13,88 @@ namespace OneLine.Extensions
 {
     public static class BasicExtensions
     {
+        /// <summary>
+        /// Converts <typeparamref name="T"/> to a <see cref="ApiResponse{T}" /> with succeeded status 
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="objType">The object type</param>
+        /// <returns></returns>
         public static ApiResponse<T> ToApiResponse<T>(this T objType) where T : class
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Succeeded, Data = objType };
         }
-
+        /// <summary>
+        /// Converts <typeparamref name="T"/> to a <see cref="ApiResponse{T}" /> with failed status 
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="objType">The object type</param>
+        /// <returns></returns>
         public static ApiResponse<T> ToApiResponseFailed<T>(this T objType) where T : class
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Failed, Data = objType };
         }
-
+        /// <summary>
+        /// Converts <typeparamref name="T"/> to a <see cref="ApiResponse{T}" />
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="status">The api response status</param>
+        /// <returns></returns>
         public static ApiResponse<T> ToApiResponse<T>(this T objType, ApiResponseStatus status) where T : class
         {
             return new ApiResponse<T> { Status = status, Data = objType };
         }
-
+        /// <summary>
+        /// Converts <typeparamref name="T"/> to a <see cref="ApiResponse{T}" /> with succeeded status 
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="message">The message</param>
+        /// <returns></returns>
         public static ApiResponse<T> ToApiResponse<T>(this T objType, string message) where T : class
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Succeeded, Data = objType, Message = message };
         }
-
+        /// <summary>
+        /// Converts <typeparamref name="T"/> to a <see cref="ApiResponse{T}" /> with failed status 
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="message">The message</param>
+        /// <returns></returns>
         public static ApiResponse<T> ToApiResponseFailed<T>(this T objType, string message) where T : class
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Failed, Data = objType, Message = message };
         }
-
+        /// <summary>
+        /// Converts <typeparamref name="T"/> to a <see cref="ApiResponse{T}" />
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="status">The status</param>
+        /// <param name="message">The message</param>
+        /// <returns></returns>
         public static ApiResponse<T> ToApiResponse<T>(this T objType, ApiResponseStatus status, string message) where T : class
         {
             return new ApiResponse<T> { Status = status, Data = objType, Message = message };
         }
-
+        /// <summary>
+        /// Converts <typeparamref name="T"/> to a <see cref="ApiResponse{T}" /> with failed status 
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="message">The message</param>
+        /// <param name="errorMessages">The error messags</param>
+        /// <returns></returns>
         public static ApiResponse<T> ToApiResponse<T>(this T objType, string message, IEnumerable<string> errorMessages) where T : class
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Failed, Data = objType, Message = message, ErrorMessages = errorMessages };
         }
-
-        public static ApiResponse<T> ToApiResponse<T>(this T objType, IList<string> decryptFieldsOnRead, string encryptionKey) where T : class
-        {
-            if (decryptFieldsOnRead.Any() && string.IsNullOrWhiteSpace(encryptionKey))
-            {
-                throw new ArgumentNullException("The EncryptionKey is null, empty or whitespace.");
-            }
-            foreach (var prop in decryptFieldsOnRead)
-            {
-                var value = objType.GetType().GetProperty(prop).GetValue(objType).ToString();
-                objType.GetType().GetProperty(prop).SetValue(objType, value.DecryptData(encryptionKey));
-            }
-            return new ApiResponse<T> { Status = ApiResponseStatus.Succeeded, Data = objType };
-        }
-
-        public static ApiResponse<T> ToApiResponse<T>(this T objType, IList<string> decryptFieldsOnRead, string encryptionKey, string message) where T : class
-        {
-            if (decryptFieldsOnRead.Any() && string.IsNullOrWhiteSpace(encryptionKey))
-            {
-                throw new ArgumentNullException("The EncryptionKey is null, empty or whitespace.");
-            }
-            foreach (var prop in decryptFieldsOnRead)
-            {
-                var value = objType.GetType().GetProperty(prop).GetValue(objType).ToString();
-                objType.GetType().GetProperty(prop).SetValue(objType, value.DecryptData(encryptionKey));
-            }
-            return new ApiResponse<T> { Status = ApiResponseStatus.Succeeded, Data = objType, Message = message };
-        }
-
-        public static IEnumerable<ToT> AutoMap<FromT, ToT>(this IEnumerable<FromT> collection, bool trimStrings = true, bool autoCapitalizeStrings = false)
+        /// <summary>
+        /// Maps from <typeparamref name="FromT"/> to <typeparamref name="ToT"/>. Take note that field names, types and accessfiers must be equal.
+        /// </summary>
+        /// <typeparam name="FromT">The from type that will be converted</typeparam>
+        /// <typeparam name="ToT">The to type that will be converted</typeparam>
+        /// <param name="collection">The collection</param>
+        /// <param name="trimStrings">whether to perform trim operation on <see cref="string"/></param>
+        /// <param name="autoUpperCaseStrings">whether to uppercase the <see cref="string"/> values</param>
+        /// <returns></returns>
+        public static IEnumerable<ToT> AutoMap<FromT, ToT>(this IEnumerable<FromT> collection, bool trimStrings = true, bool autoUpperCaseStrings = false)
             where FromT : class
             where ToT : class
         {
@@ -85,17 +102,25 @@ namespace OneLine.Extensions
             foreach (var item in collection)
             {
                 ToT toTModel = Activator.CreateInstance<ToT>();
-                toTModels.Add(toTModel.AutoMap(item, trimStrings, autoCapitalizeStrings));
+                toTModels.Add(toTModel.AutoMap(item, trimStrings, autoUpperCaseStrings));
             }
             return toTModels.AsEnumerable();
         }
-
-        public static T AutoMap<T>(this T Destination, object Source, bool trimStrings = true, bool autoCapitalizeStrings = false)
-            where T : class
+        /// <summary>
+        /// Maps the <paramref name="source"/> object to <typeparamref name="ToT"/>. Take note that field names, types and accessfiers must be equal.
+        /// </summary>
+        /// <typeparam name="ToT">The destination type that will be converted</typeparam>
+        /// <param name="source">The source type that will be converted to <typeparamref name="ToT"/></param>
+        /// <param name="destination">The destination type that will be converted</param>
+        /// <param name="trimStrings">whether to perform trim operation on <see cref="string"/></param>
+        /// <param name="autoUpperCaseStrings">whether to uppercase the <see cref="string"/> values</param>
+        /// <returns></returns>
+        public static ToT AutoMap<ToT>(this ToT destination, object source, bool trimStrings = true, bool autoUpperCaseStrings = false)
+            where ToT : class
         {
-            foreach (PropertyInfo SourceProp in Source.GetType().GetProperties())
+            foreach (PropertyInfo SourceProp in source.GetType().GetProperties())
             {
-                var DestinationProp = Destination.GetType().GetProperty(SourceProp.Name);
+                var DestinationProp = destination.GetType().GetProperty(SourceProp.Name);
                 if (DestinationProp != null &&
                     DestinationProp.SetMethod.IsPublic &&
                     DestinationProp.CanWrite &&
@@ -105,209 +130,25 @@ namespace OneLine.Extensions
                     DestinationProp.GetType().IsAssignableFrom(SourceProp.GetType())
                     )
                 {
-                    var value = SourceProp.GetValue(Source);
+                    var value = SourceProp.GetValue(source);
                     if (value != null && SourceProp.PropertyType == typeof(string))
                     {
                         if (trimStrings)
                             value = value.ToString().Trim();
-                        if (autoCapitalizeStrings)
+                        if (autoUpperCaseStrings)
                             value = value.ToString().ToUpper();
                     }
-                    DestinationProp.SetValue(Destination, value);
+                    DestinationProp.SetValue(destination, value);
                 }
             }
-            return Destination;
-        }
-
-        /// <summary>
-        /// This method cast an object properties into a new object casting enums with their Enum Field Nae Attribue if exists and to string
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objType"></param>
-        /// <returns></returns>
-        public static object CastObjectEnumsAndFieldsToString<T>(this T objType) where T : class
-        {
-            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            foreach (PropertyInfo prop in objType.GetType().GetProperties())
-            {
-                string key = prop.Name;
-                object value = null;
-                if (prop.PropertyType.IsEnum)
-                {
-                    var enumFieldNameAttributes = prop.PropertyType.GetCustomAttributes(false).ToList();
-                    var propValue = prop.GetValue(objType);
-                    if (propValue != null)
-                    {
-                        if (enumFieldNameAttributes.Count > 0)
-                        {
-                            foreach (var item in enumFieldNameAttributes)
-                            {
-                                if (item.GetType() == typeof(EnumFieldNameAttribute))
-                                {
-                                    value = propValue.ToString();
-                                    break;
-                                }
-                                else
-                                {
-                                    value = (int)propValue;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            value = (int)propValue;
-                        }
-                    }
-                }
-                else
-                {
-                    value = prop.GetValue(objType)?.ToString();
-                }
-                keyValuePairs.Add(key, value);
-            }
-            return keyValuePairs;
-        }
-
-        /// <summary>
-        /// This method encrypt an object fields with the secure attribute using the provided encryption key
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objType"></param>
-        /// <param name="encryptionKey"></param>
-        /// <returns></returns>
-        public static T Seal<T>(this T objType, string encryptionKey) where T : class
-        {
-            if (string.IsNullOrWhiteSpace(encryptionKey))
-            {
-                throw new ArgumentNullException("The encryptionKey is null, empty or whitespace.");
-            }
-            foreach (PropertyInfo prop in objType.GetType().GetProperties())
-            {
-                var enumFieldNameAttributes = prop.PropertyType.GetCustomAttributes(false).ToList();
-                var propValue = prop.GetValue(objType);
-                if (propValue != null)
-                {
-                    if (enumFieldNameAttributes.Count > 0)
-                    {
-                        foreach (var item in enumFieldNameAttributes)
-                        {
-                            if (item.GetType() == typeof(SecureAttribute))
-                            {
-                                prop.SetValue(objType, propValue.ToString().EncryptData(encryptionKey));
-                            }
-                        }
-                    }
-                }
-            }
-            return objType;
-        }
-
-        /// <summary>
-        /// This method decrypts an object fields with the secure attribute using the provided encryption key
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objType"></param>
-        /// <param name="encryptionKey"></param>
-        /// <returns></returns>
-        public static T UnSeal<T>(this T objType, string encryptionKey) where T : class
-        {
-            if (string.IsNullOrWhiteSpace(encryptionKey))
-            {
-                throw new ArgumentNullException("The encryptionKey is null, empty or whitespace.");
-            }
-            foreach (PropertyInfo prop in objType.GetType().GetProperties())
-            {
-                var enumFieldNameAttributes = prop.PropertyType.GetCustomAttributes(false).ToList();
-                var propValue = prop.GetValue(objType);
-                if (propValue != null)
-                {
-                    if (enumFieldNameAttributes.Count > 0)
-                    {
-                        foreach (var item in enumFieldNameAttributes)
-                        {
-                            if (item.GetType() == typeof(SecureAttribute))
-                            {
-                                prop.SetValue(objType, propValue.ToString().DecryptData(encryptionKey));
-                            }
-                        }
-                    }
-                }
-            }
-            return objType;
-        }
-
-        /// <summary>
-        /// This method encrypt an enumerable of objects fields with the secure attribute using the provided encryption key
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objType"></param>
-        /// <param name="encryptionKey"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> Seal<T>(this IEnumerable<T> objTypes, string encryptionKey) where T : class
-        {
-            if (string.IsNullOrWhiteSpace(encryptionKey))
-            {
-                throw new ArgumentNullException("The encryptionKey is null, empty or whitespace.");
-            }
-            foreach (var objType in objTypes)
-            {
-                foreach (PropertyInfo prop in objType.GetType().GetProperties())
-                {
-                    var enumFieldNameAttributes = prop.PropertyType.GetCustomAttributes(false).ToList();
-                    var propValue = prop.GetValue(objType);
-                    if (propValue != null)
-                    {
-                        if (enumFieldNameAttributes.Count > 0)
-                        {
-                            foreach (var item in enumFieldNameAttributes)
-                            {
-                                if (item.GetType() == typeof(SecureAttribute))
-                                {
-                                    prop.SetValue(objType, propValue.ToString().EncryptData(encryptionKey));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return objTypes;
+            return destination;
         }
         /// <summary>
-        /// This method decrypt an enumerable object fields with the secure attribute using the provided encryption key
+        /// Converts <typeparamref name="T"/> to a url query string
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="objType"></param>
-        /// <param name="encryptionKey"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public static IEnumerable<T> UnSeal<T>(this IEnumerable<T> objTypes, string encryptionKey) where T : class
-        {
-            if (string.IsNullOrWhiteSpace(encryptionKey))
-            {
-                throw new ArgumentNullException("The encryptionKey is null, empty or whitespace.");
-            }
-            foreach (var objType in objTypes)
-            {
-                foreach (PropertyInfo prop in objType.GetType().GetProperties())
-                {
-                    var enumFieldNameAttributes = prop.PropertyType.GetCustomAttributes(false).ToList();
-                    var propValue = prop.GetValue(objType);
-                    if (propValue != null)
-                    {
-                        if (enumFieldNameAttributes.Count > 0)
-                        {
-                            foreach (var item in enumFieldNameAttributes)
-                            {
-                                if (item.GetType() == typeof(SecureAttribute))
-                                {
-                                    prop.SetValue(objType, propValue.ToString().DecryptData(encryptionKey));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return objTypes;
-        }
         public static string ToUrlQueryString<T>(this T obj) where T : class
         {
             if (obj is IEnumerable || obj.GetType().IsAssignableFrom(typeof(IEnumerable)))
@@ -322,14 +163,27 @@ namespace OneLine.Extensions
                 return string.Join("&", queryString);
             }
         }
-        public static IDictionary<string, object> ToDictionary(this object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+        /// <summary>
+        /// Converts <typeparamref name="T"/> to a <see cref="IDictionary{string, object}"/>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="bindingAttr"></param>
+        /// <returns></returns>
+        public static IDictionary<string, object> ToDictionary<T>(this T source, BindingFlags bindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+            where T : class
         {
-            return source.GetType().GetProperties(bindingAttr).ToDictionary
+            return source.GetType().GetProperties(bindingFlags).ToDictionary
             (
                 propInfo => propInfo.Name,
                 propInfo => propInfo.GetValue(source, null)
             );
         }
+        /// <summary>
+        /// Converts <see cref="IDictionary{string, object}"/> to <typeparamref name="T"/> 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static T ToType<T>(this IDictionary<string, object> source) where T : class, new()
         {
             var objectType = new T();
@@ -345,42 +199,39 @@ namespace OneLine.Extensions
             }
             return objectType;
         }
-        public static IEnumerable<T> ToEnumerable<T>(this T input)
-        {
-            yield return input;
-        }
-        public static bool IsNotNull<T>(this T source)
-        {
-            return source != null;
-        }
+        /// <summary>
+        /// Checks whether <typeparamref name="T"/> is null
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static bool IsNull<T>(this T source)
         {
             return source == null;
         }
-        public static void ThrowIfNull<T>(this T source, string parameterName) where T : class
+        /// <summary>
+        /// Checks whether <typeparamref name="T"/> is not null
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="source">The sources</param>
+        /// <returns></returns>
+        public static bool IsNotNull<T>(this T source)
         {
-            source.ThrowIfNull(parameterName, string.Empty);
+            return !source.IsNull();
         }
-        public static void ThrowIfNull<T>(this T source, string parameterName, string message) where T : class
-        {
-            if (source == null)
-            {
-                if (string.IsNullOrEmpty(message))
-                {
-                    throw new ArgumentNullException(parameterName);
-                }
-                else
-                {
-                    throw new ArgumentNullException(parameterName, message);
-                }
-            }
-        }
+        /// <summary>
+        /// Checks whether the type is a simple type
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <returns></returns>
         public static bool IsSimpleType(this Type type)
         {
             return
                 type.IsValueType ||
                 type.IsPrimitive ||
                 new Type[] {
+                typeof(short),
+                typeof(float),
                 typeof(string),
                 typeof(decimal),
                 typeof(DateTime),
@@ -390,94 +241,97 @@ namespace OneLine.Extensions
                 }.Contains(type) ||
                 Convert.GetTypeCode(type) != TypeCode.Object;
         }
+        /// <summary>
+        /// Checks whether the type is a complex type 
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <returns></returns>
         public static bool IsComplextType(this Type type)
         {
             return !type.IsSimpleType();
         }
-        public static bool PropertyExists<T>(string propertyName)
+        /// <summary>
+        /// Checks whether the <paramref name="propertyName"/> exists in <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="propertyName">The property name</param>
+        /// <param name="bindingFlags">The binding flags</param>
+        /// <returns></returns>
+        public static bool PropertyExists<T>(string propertyName, BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)
         {
-            return typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
-                BindingFlags.Public | BindingFlags.Instance) != null;
+            return typeof(T).GetProperty(propertyName, bindingFlags) != null;
         }
-        public static async Task<IApiResponse<T>> ValidateAsync<T>(this T record, IValidator validator)
+        /// <summary>
+        /// Validates <typeparamref name="T"/> using the <paramref name="validator"/>
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="source">The source</param>
+        /// <param name="validator">The validator</param>
+        /// <returns></returns>
+        public static async Task<IApiResponse<T>> ValidateAsync<T>(this T source, IValidator validator)
             where T : class
         {
-            if (record == null)
+            if (source == null)
             {
-                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "RecordIsNull");
+                return new ApiResponse<T>(ApiResponseStatus.Failed, source, "RecordIsNull");
             }
             if (validator == null)
             {
-                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "ValidatorIsNull");
+                return new ApiResponse<T>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
             }
-            var validationResult = await validator.ValidateAsync(record);
+            var validationResult = await validator.ValidateAsync(source);
             if (!validationResult.IsValid)
             {
-                return new ApiResponse<T>(ApiResponseStatus.Failed, record, validationResult.Errors.Select(x => x.ErrorMessage));
+                return new ApiResponse<T>(ApiResponseStatus.Failed, source, validationResult.Errors.Select(x => x.ErrorMessage));
             }
-            return new ApiResponse<T>(ApiResponseStatus.Succeeded, record);
+            return new ApiResponse<T>(ApiResponseStatus.Succeeded, source);
         }
-        public static async Task<IApiResponse<T>> ValidateAsync<T>(this T record, IValidator validator, string userId)
+        /// <summary>
+        /// Validates <paramref name="source"/> <typeparamref name="T"/> using the <paramref name="validator"/>
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="source">The source collection</param>
+        /// <param name="validator">The validator</param>
+        /// <returns></returns>
+        public static async Task<IApiResponse<IEnumerable<T>>> ValidateRangeAsync<T>(this IEnumerable<T> source, IValidator validator)
             where T : class
         {
-            if (record == null)
+            if (source == null || !source.Any())
             {
-                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "RecordIsNull");
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, "RecordIsNull");
             }
             if (validator == null)
             {
-                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "ValidatorIsNull");
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
             }
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                return new ApiResponse<T>(ApiResponseStatus.Failed, record, "UserIdIsNullOrEmpty");
-            }
-            var validationResult = await validator.ValidateAsync(record);
+            var validationResult = await validator.ValidateAsync(source);
             if (!validationResult.IsValid)
             {
-                return new ApiResponse<T>(ApiResponseStatus.Failed, record, validationResult.Errors.Select(x => x.ErrorMessage));
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, validationResult.Errors.Select(x => x.ErrorMessage));
             }
-            return new ApiResponse<T>(ApiResponseStatus.Succeeded, record);
+            return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Succeeded, source);
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> ValidateRangeAsync<T>(this IEnumerable<T> records, IValidator validator)
-            where T : class
+        /// <summary>
+        /// Creates a void context of <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="context">The context</param>
+        /// <param name="action">The action</param>
+        public static void ToContextVoid<T>(this T context, Action<T> action)
         {
-            if (records == null || !records.Any())
-            {
-                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "RecordIsNull");
-            }
-            if (validator == null)
-            {
-                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "ValidatorIsNull");
-            }
-            var validationResult = await validator.ValidateAsync(records);
-            if (!validationResult.IsValid)
-            {
-                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, validationResult.Errors.Select(x => x.ErrorMessage));
-            }
-            return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Succeeded, records);
+            action(context);
         }
-        public static async Task<IApiResponse<IEnumerable<T>>> ValidateRangeAsync<T>(this IEnumerable<T> records, IValidator validator, string userId)
-            where T : class
+        /// <summary>
+        /// Creates a context of <typeparamref name="T"/> and return a <typeparamref name="TResult"/>
+        /// </summary>
+        /// <typeparam name="T">The context type</typeparam>
+        /// <typeparam name="TResult">The returning type of the context type</typeparam>
+        /// <param name="context">The context</param>
+        /// <param name="func">The function with returning value</param>
+        /// <returns></returns>
+        public static TResult ToContext<T, TResult>(this T context, Func<T, TResult> func)
         {
-            if (records == null || !records.Any())
-            {
-                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "RecordIsNull");
-            }
-            if (validator == null)
-            {
-                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "ValidatorIsNull");
-            }
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "UserIdIsNullOrEmpty");
-            }
-            var validationResult = await validator.ValidateAsync(records);
-            if (!validationResult.IsValid)
-            {
-                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, validationResult.Errors.Select(x => x.ErrorMessage));
-            }
-            return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Succeeded, records);
+            return func(context);
         }
     }
 }

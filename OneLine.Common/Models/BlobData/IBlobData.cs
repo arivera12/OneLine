@@ -1,8 +1,10 @@
 ﻿using System;
-using System.IO;
 
 namespace OneLine.Models
 {
+    /// <summary>
+    /// Defines a structure to hold binary data
+    /// </summary>
     public interface IBlobData
     {
         /// <summary>

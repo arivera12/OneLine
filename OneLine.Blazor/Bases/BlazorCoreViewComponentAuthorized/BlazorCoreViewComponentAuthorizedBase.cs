@@ -17,8 +17,11 @@ namespace OneLine.Blazor.Bases
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
         where TUser : class, new()
     {
+        /// <inheritdoc/>
         [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
+        /// <inheritdoc/>
         public virtual TUser User { get; set; }
+        /// <inheritdoc/>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)

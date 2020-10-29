@@ -1,12 +1,11 @@
-﻿
-
-namespace OneLine.Models
+﻿namespace OneLine.Models
 {
+    /// <summary>
+    /// Implements a structure with a search term
+    /// </summary>
     public class Search : ISearch
     {
-        /// <summary>
-        /// Sets a search term to be used in the query
-        /// </summary>
+        /// <inheritdoc/>
         public virtual string SearchTerm { get; set; }
     }
 }

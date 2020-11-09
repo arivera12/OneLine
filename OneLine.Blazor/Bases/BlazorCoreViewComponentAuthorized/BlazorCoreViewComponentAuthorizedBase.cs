@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using DeviceDetectorNET;
+using Microsoft.AspNetCore.Components;
 using OneLine.Bases;
 using OneLine.Extensions;
 using OneLine.Models;
@@ -45,9 +46,11 @@ namespace OneLine.Blazor.Bases
                 {
                     var token = User.GetType().GetProperty("Token").GetValue(User)?.ToString();
                     HttpService.HttpClient.AddJwtAuthorizationBearerHeader(token, true);
-                    IsMobile = await BlazorCurrentDeviceService.Mobile();
-                    IsTablet = await BlazorCurrentDeviceService.Tablet();
-                    IsDesktop = await BlazorCurrentDeviceService.Desktop();
+                    DeviceDetector = new DeviceDetector(await JSRuntime.InvokeAsync<string>("eval", new[] { "window.navigator.userAgent" }));
+                    DeviceDetector.Parse();
+                    IsMobile = DeviceDetector.IsMobile();
+                    IsTablet = DeviceDetector.IsTablet();
+                    IsDesktop = DeviceDetector.IsDesktop();
                     OnBeforeSearch ??= new Action(async () => await BeforeSearch());
                     OnAfterSearch ??= new Action(async () => await AfterSearch());
                     OnBeforeSave ??= new Action(async () => await BeforeSave());

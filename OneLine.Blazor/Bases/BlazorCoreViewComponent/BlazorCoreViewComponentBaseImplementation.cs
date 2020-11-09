@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using DeviceDetectorNET;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using OneLine.Bases;
 using OneLine.Extensions;
@@ -152,9 +153,11 @@ namespace OneLine.Blazor.Bases
         {
             if (firstRender)
             {
-                IsMobile = await BlazorCurrentDeviceService.Mobile();
-                IsTablet = await BlazorCurrentDeviceService.Tablet();
-                IsDesktop = await BlazorCurrentDeviceService.Desktop();
+                DeviceDetector = new DeviceDetector(await JSRuntime.InvokeAsync<string>("eval", new[] { "window.navigator.userAgent" }));
+                DeviceDetector.Parse();
+                IsMobile = DeviceDetector.IsMobile();
+                IsTablet = DeviceDetector.IsTablet();
+                IsDesktop = DeviceDetector.IsDesktop();
                 OnBeforeSearch ??= new Action(async () => await BeforeSearch());
                 OnAfterSearch ??= new Action(async () => await AfterSearch());
                 OnBeforeSave ??= new Action(async () => await BeforeSave());

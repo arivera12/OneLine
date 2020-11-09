@@ -1,5 +1,4 @@
 ﻿using Tewr.Blazor.FileReader;
-using BlazorDownloadFile;
 using CurrieTechnologies.Razor.SweetAlert2;
 using JsonLanguageLocalizerNet;
 using Microsoft.AspNetCore.Components;
@@ -16,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace OneLine.Blazor.Components
 {
@@ -168,9 +168,13 @@ namespace OneLine.Blazor.Components
         /// Adds an informative label that is required.
         /// </summary>
         [Parameter] public bool ForceUpload { get; set; }
+        /// <summary>
+        /// The path to save a file on native platform. This property has no effect on web platform.
+        /// </summary>
+        [Parameter] public string SavePath { get; set; }
         [Inject] public virtual IFileReaderService FileReaderService { get; set; }
         [Inject] public virtual IJSRuntime JSRuntime { get; set; }
-        [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        [Inject] public virtual ISaveFile SaveFile { get; set; }
         [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
         [Inject] public virtual HttpClient HttpClient { get; set; }
         [Inject] public virtual IApplicationState ApplicationState { get; set; }
@@ -276,7 +280,7 @@ namespace OneLine.Blazor.Components
             if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: LanguageLocalizer["Confirm"], text: LanguageLocalizer["AreYouSureYouWantToDownloadTheFile"],
                                                                 confirmButtonText: LanguageLocalizer["Yes"], cancelButtonText: LanguageLocalizer["Cancel"]))
             {
-                await BlazorDownloadFileService.DownloadFile(blobData.Name, blobData.Data, "application/octect-stream");
+                await SaveFile.SaveFileAsync(blobData.Data, Path.Combine(SavePath ?? "", blobData.Name));
             }
         }
         public virtual async Task Remove(UserBlobs userBlob)
@@ -318,7 +322,8 @@ namespace OneLine.Blazor.Components
                             Response.HttpResponseMessage.IsNotNull() &&
                             Response.HttpResponseMessage.IsSuccessStatusCode)
                     {
-                        await BlazorDownloadFileService.DownloadFile(userBlobs.FileName, await Response.Response.Content.ReadAsStreamAsync(), "application/octect-stream");
+                        var stream = await Response.Response.Content.ReadAsStreamAsync();
+                        await SaveFile.SaveFileAsync(stream, Path.Combine(SavePath ?? "", userBlobs.FileName), BufferSize > 0 ? BufferSize : (int) stream.Length);
                     }
                     else if (Response.IsNotNull() &&
                             Response.HasException)

@@ -1,6 +1,5 @@
-﻿using BlazorCurrentDevice;
-using BlazorDownloadFile;
-using CurrieTechnologies.Razor.SweetAlert2;
+﻿using CurrieTechnologies.Razor.SweetAlert2;
+using DeviceDetectorNET;
 using FluentValidation;
 using FluentValidation.Results;
 using JsonLanguageLocalizerNet;
@@ -36,9 +35,7 @@ namespace OneLine.Blazor.Bases
         /// <inheritdoc/>
         [Inject] public virtual NavigationManager NavigationManager { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual IBlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
-        /// <inheritdoc/>
-        [Inject] public virtual IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        [Inject] public virtual ISaveFile SaveFile { get; set; }
         /// <inheritdoc/>
         [Inject] public virtual IJsonLanguageLocalizerService LanguageLocalizer { get; set; }
         /// <inheritdoc/>
@@ -255,6 +252,8 @@ namespace OneLine.Blazor.Bases
         [Parameter] public virtual Action<bool> ShowFormChanged { get; set; }
         /// <inheritdoc/>
         [Parameter] public virtual Action<bool> TriggerSearchChanged { get; set; }
+        /// <inheritdoc/>
+        public virtual DeviceDetector DeviceDetector { get; set; }
         /// <inheritdoc/>
         public bool ShowActivityIndicator { get; set; }
         /// <inheritdoc/>

@@ -1,6 +1,5 @@
-﻿using BlazorCurrentDevice;
-using BlazorDownloadFile;
-using CurrieTechnologies.Razor.SweetAlert2;
+﻿using CurrieTechnologies.Razor.SweetAlert2;
+using DeviceDetectorNET;
 using JsonLanguageLocalizerNet;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -26,13 +25,13 @@ namespace OneLine.Blazor.Bases
         /// </summary>
         NavigationManager NavigationManager { get; set; }
         /// <summary>
-        /// The blazor current device
+        /// The blazor current device detector by using the browser user agent
         /// </summary>
-        IBlazorCurrentDeviceService BlazorCurrentDeviceService { get; set; }
+        DeviceDetector DeviceDetector { get; set; }
         /// <summary>
-        /// The blazor download file service
+        /// The save file service
         /// </summary>
-        IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        ISaveFile SaveFile { get; set; }
         /// <summary>
         /// The sweet alert service
         /// </summary>

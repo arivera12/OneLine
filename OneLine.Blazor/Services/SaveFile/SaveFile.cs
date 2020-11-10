@@ -1,4 +1,5 @@
 ﻿using BlazorDownloadFile;
+using Microsoft.Extensions.DependencyInjection;
 using OneLine.Extensions;
 using OneLine.Helpers;
 using System;
@@ -60,6 +61,13 @@ namespace OneLine.Blazor.Services
             {
                 new PlatformNotSupportedException("Saving a file seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
             }
+        }
+    }
+    public static partial class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddSaveFile(this IServiceCollection services)
+        {
+            return services.AddScoped<ISaveFile, SaveFile>();
         }
     }
 }

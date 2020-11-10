@@ -13,10 +13,10 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageReleaseNotes>Blazor Fixes.</PackageReleaseNotes>
-    <Version>2.1.28</Version>
-    <AssemblyVersion>2.1.28.0</AssemblyVersion>
-    <FileVersion>2.1.28.0</FileVersion>
+    <PackageReleaseNotes>Added preliminary documentation to the source code for oneline.common and oneline.blazor. Removed obsoleted/unused code. Added cross platform device detection, added cross platform save file, application state and translator.</PackageReleaseNotes>
+    <Version>2.1.29</Version>
+    <AssemblyVersion>2.1.29.0</AssemblyVersion>
+    <FileVersion>2.1.29.0</FileVersion>
   </PropertyGroup>
 
 

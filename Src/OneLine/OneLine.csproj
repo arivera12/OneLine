@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added preliminary documentation to the source code for oneline.common and oneline.blazor. Removed obsoleted/unused code. Added cross platform device detection, added cross platform save file, application state and translator.</PackageReleaseNotes>
-    <Version>2.1.29</Version>
+    <PackageReleaseNotes>Merged OneLine.Common and OneLine.Blazor into OneLine. OneLine now is OneLine.Server.</PackageReleaseNotes>
+    <Version>3.0.0</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.1.29.0</AssemblyVersion>
-    <FileVersion>2.1.29.0</FileVersion>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

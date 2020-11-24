@@ -215,7 +215,7 @@ namespace OneLine.Services
     {
         public static IServiceCollection AddApplicationState(this IServiceCollection services)
         {
-            return services.AddSingleton<IApplicationState, ApplicationState>();
+            return services.AddScoped<IApplicationState, ApplicationState>();
         }
     }
 }

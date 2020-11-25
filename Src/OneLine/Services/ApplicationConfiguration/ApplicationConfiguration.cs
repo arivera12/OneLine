@@ -8,9 +8,9 @@ namespace OneLine.Services
 {
     public class ApplicationConfiguration : IApplicationConfiguration
     {
-        public ApplicationConfiguration(string manifestResourceName)
+        public ApplicationConfiguration(IApplicationConfigurationSource applicationConfigurationSource)
         {
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(manifestResourceName);
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(applicationConfigurationSource.ConfigurationFilePath);
             Configuration = new ConfigurationBuilder().AddJsonStream(stream).Build();
         }
         private protected IConfiguration Configuration { get; set; }
@@ -32,7 +32,7 @@ namespace OneLine.Services
     {
         public static IServiceCollection AddApplicationConfiguration(this IServiceCollection services)
         {
-            return services.AddSingleton<IApplicationConfiguration, ApplicationConfiguration>();
+            return services.AddScoped<IApplicationConfiguration, ApplicationConfiguration>();
         }
     }
 }

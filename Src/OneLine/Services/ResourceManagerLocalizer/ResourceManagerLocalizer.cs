@@ -13,27 +13,27 @@ namespace OneLine.Services
 {
     public class ResourceManagerLocalizer : IResourceManagerLocalizer
     {
-        public IApplicationConfiguration ApplicationConfiguration { get; set; }
+        public IApplicationConfigurationSource ApplicationConfigurationSource { get; set; }
         public IDevice Device { get; set; }
         public IJSRuntime JSRuntime { get; set; }
         public ResourceManager ResourceManager { get; set; }
         public string this[string key] { get => ResourceManager.GetString(key); }
-        public ResourceManagerLocalizer(IApplicationConfiguration applicationConfiguration, IDevice device)
+        public ResourceManagerLocalizer(IApplicationConfigurationSource applicationConfigurationSource, IDevice device)
         {
-            ApplicationConfiguration = applicationConfiguration;
+            ApplicationConfigurationSource = applicationConfigurationSource;
             Device = device;
             InitializeCurrentCulture();
         }
-        public ResourceManagerLocalizer(IApplicationConfiguration applicationConfiguration, IDevice device, IJSRuntime jSRuntime)
+        public ResourceManagerLocalizer(IApplicationConfigurationSource applicationConfigurationSource, IDevice device, IJSRuntime jSRuntime)
         {
-            ApplicationConfiguration = applicationConfiguration;
+            ApplicationConfigurationSource = applicationConfigurationSource;
             Device = device;
             JSRuntime = jSRuntime;
             InitializeCurrentCulture();
         }
         private void InitializeCurrentCulture()
         {
-            ResourceManager = new ResourceManager(ApplicationConfiguration.GetSection("Resources").GetSection("NameSpace")["Path"], Assembly.GetExecutingAssembly());
+            ResourceManager = new ResourceManager(ApplicationConfigurationSource.ResourceFilesBasePath, Assembly.GetExecutingAssembly());
         }
         public async Task<string> GetApplicationLocale()
         {

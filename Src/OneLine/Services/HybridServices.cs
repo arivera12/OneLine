@@ -4,12 +4,20 @@ namespace OneLine.Services
 {
     public static class HybridServices
     {
-        public static IServiceCollection AddOneLineHybridServices(this IServiceCollection services)
+        /// <summary>
+        /// Adds the current services <see cref="IApplicationConfigurationSource"/>, <see cref="IApplicationConfiguration"/>, <see cref="IResourceManagerLocalizer"/>, <see cref="IApplicationState"/>, <see cref="IDevice"/> and <see cref="ISaveFile"/>
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddOneLineHybridServices(this IServiceCollection services, ApplicationConfigurationSource applicationConfigurationSource)
         {
-            return services.AddApplicationState()
+            return services
+                .AddApplicationConfigurationSource(applicationConfigurationSource)
+                .AddApplicationConfiguration()
+                .AddResourceManagerLocalizer()
+                .AddApplicationState()
                 .AddDevice()
-                .AddSaveFile()
-                .AddResourceManagerLocalizer();
+                .AddSaveFile();
         }
     }
 }

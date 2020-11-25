@@ -147,7 +147,7 @@ namespace OneLine.Blazor.Contracts
         /// </summary>
         bool TriggerSearch { get; set; }
         /// <summary>
-        /// Initialize the blazor core view service. Call this method on after render async method.
+        /// Initialize the blazor core view service. Call this method on <see cref="ComponentBase.OnAfterRenderAsync(bool)"/> method.
         /// </summary>
         /// <returns></returns>
         Task InitializeComponentAsync();

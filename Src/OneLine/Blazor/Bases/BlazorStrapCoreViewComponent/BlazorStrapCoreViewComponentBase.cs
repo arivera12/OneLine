@@ -1,14 +1,8 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Configuration;
-using Microsoft.JSInterop;
-using OneLine.Blazor.Contracts;
+﻿using OneLine.Blazor.Contracts;
 using OneLine.Contracts;
 using OneLine.Extensions;
 using OneLine.Models;
-using OneLine.Services;
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
@@ -20,45 +14,13 @@ namespace OneLine.Blazor.Bases
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
     {
-        public BlazorStrapCoreViewComponentBase(
-           IApplicationConfiguration applicationConfiguration,
-           IJSRuntime jSRuntime,
-           NavigationManager navigationManager,
-           ISaveFile saveFile,
-           IDevice device,
-           IResourceManagerLocalizer resourceManagerLocalizer,
-           SweetAlertService sweetAlertService,
-           HttpClient httpClient,
-           IApplicationState applicationState,
-           THttpService httpService) :
-           base(applicationConfiguration,
-               jSRuntime,
-               navigationManager,
-               saveFile,
-               device,
-               resourceManagerLocalizer,
-               sweetAlertService,
-               httpClient,
-               applicationState,
-               httpService)
+        /// <inheritdoc/>
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-        }
-        public BlazorStrapCoreViewComponentBase(
-            IApplicationConfiguration applicationConfiguration,
-            ISaveFile saveFile,
-            IDevice device,
-            IResourceManagerLocalizer resourceManagerLocalizer,
-            HttpClient httpClient,
-            IApplicationState applicationState,
-            THttpService httpService) :
-            base(applicationConfiguration,
-                saveFile,
-                device,
-                resourceManagerLocalizer,
-                httpClient,
-                applicationState,
-                httpService)
-        {
+            if (firstRender)
+            {
+                await InitializeComponentAsync();
+            }
         }
         /// <inheritdoc/>
         public override async Task InitializeComponentAsync()
@@ -103,6 +65,7 @@ namespace OneLine.Blazor.Bases
                     await Search();
                 }
             }
+            StateHasChanged();
         }
         public virtual TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor)
         {

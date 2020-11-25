@@ -1,13 +1,10 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
-using DeviceDetectorNET;
+﻿using DeviceDetectorNET;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
-using Microsoft.JSInterop;
 using OneLine.Blazor.Contracts;
 using OneLine.Contracts;
 using OneLine.Extensions;
 using OneLine.Models;
-using OneLine.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,50 +21,18 @@ namespace OneLine.Blazor.Bases
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
         where TUser : class, new()
     {
-        public BlazorCoreViewComponentAuthorizedBase(
-            IApplicationConfiguration applicationConfiguration,
-            IJSRuntime jSRuntime,
-            NavigationManager navigationManager,
-            ISaveFile saveFile,
-            IDevice device,
-            IResourceManagerLocalizer resourceManagerLocalizer,
-            SweetAlertService sweetAlertService,
-            HttpClient httpClient,
-            IApplicationState applicationState,
-            THttpService httpService) : 
-            base(applicationConfiguration, 
-                jSRuntime, 
-                navigationManager, 
-                saveFile, 
-                device, 
-                resourceManagerLocalizer,  
-                sweetAlertService,
-                httpClient,
-                applicationState,
-                httpService)
-        {
-        }
-        public BlazorCoreViewComponentAuthorizedBase(
-            IApplicationConfiguration applicationConfiguration,
-            ISaveFile saveFile,
-            IDevice device,
-            IResourceManagerLocalizer resourceManagerLocalizer,
-            HttpClient httpClient,
-            IApplicationState applicationState,
-            THttpService httpService) :
-            base(applicationConfiguration,
-                saveFile,
-                device,
-                resourceManagerLocalizer,
-                httpClient,
-                applicationState,
-                httpService)
-        {
-        }
         /// <inheritdoc/>
         [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
         /// <inheritdoc/>
         public virtual TUser User { get; set; }
+        /// <inheritdoc/>
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await InitializeComponentAsync();
+            }
+        }
         /// <inheritdoc/>
         public override async Task InitializeComponentAsync()
         {
@@ -131,6 +96,7 @@ namespace OneLine.Blazor.Bases
                     }
                 }
             }
+            StateHasChanged();
         }
     }
 }

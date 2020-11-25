@@ -1,13 +1,10 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
-using DeviceDetectorNET;
+﻿using DeviceDetectorNET;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
-using Microsoft.JSInterop;
 using OneLine.Blazor.Contracts;
 using OneLine.Contracts;
 using OneLine.Extensions;
 using OneLine.Models;
-using OneLine.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace OneLine.Blazor.Bases
 {
-    public abstract partial class BlazorStrapCoreViewComponentAuthorizedBase<T, TIdentifier, TId, THttpService, TUser> :
+    public class BlazorStrapCoreViewComponentAuthorizedBase<T, TIdentifier, TId, THttpService, TUser> :
         BlazorCoreViewComponentAuthorizedBase<T, TIdentifier, TId, THttpService, TUser>,
         IBlazorCoreViewComponentAuthorized<T, TIdentifier, THttpService, TUser>
         where T : class, new()
@@ -24,45 +21,13 @@ namespace OneLine.Blazor.Bases
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
         where TUser : class, new()
     {
-        public BlazorStrapCoreViewComponentAuthorizedBase(
-          IApplicationConfiguration applicationConfiguration,
-          IJSRuntime jSRuntime,
-          NavigationManager navigationManager,
-          ISaveFile saveFile,
-          IDevice device,
-          IResourceManagerLocalizer resourceManagerLocalizer,
-          SweetAlertService sweetAlertService,
-          HttpClient httpClient,
-          IApplicationState applicationState,
-          THttpService httpService) :
-          base(applicationConfiguration,
-              jSRuntime,
-              navigationManager,
-              saveFile,
-              device,
-              resourceManagerLocalizer,
-              sweetAlertService,
-              httpClient,
-              applicationState,
-              httpService)
+        /// <inheritdoc/>
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-        }
-        public BlazorStrapCoreViewComponentAuthorizedBase(
-            IApplicationConfiguration applicationConfiguration,
-            ISaveFile saveFile,
-            IDevice device,
-            IResourceManagerLocalizer resourceManagerLocalizer,
-            HttpClient httpClient,
-            IApplicationState applicationState,
-            THttpService httpService) :
-            base(applicationConfiguration,
-                saveFile,
-                device,
-                resourceManagerLocalizer,
-                httpClient,
-                applicationState,
-                httpService)
-        {
+            if (firstRender)
+            {
+                await InitializeComponentAsync();
+            }
         }
         /// <inheritdoc/>
         public override async Task InitializeComponentAsync()
@@ -129,6 +94,7 @@ namespace OneLine.Blazor.Bases
                     }
                 }
             }
+            StateHasChanged();
         }
         /// <summary>
         /// Highlights the selected record/s

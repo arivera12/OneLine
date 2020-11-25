@@ -13,7 +13,7 @@ namespace OneLine.Extensions
             string Action = transactionType.TransactionTypeMessage<TEntity>();
             return new AuditTrails()
             {
-                AuditTrailId = Guid.NewGuid().GenerateGuid(),
+                AuditTrailId = Guid.NewGuid().ToString(),
                 Action = Action,
                 ActionName = actionName,
                 ControllerName = controllerName,
@@ -29,7 +29,7 @@ namespace OneLine.Extensions
         {
             return new AuditTrails()
             {
-                AuditTrailId = Guid.NewGuid().GenerateGuid(),
+                AuditTrailId = Guid.NewGuid().ToString(),
                 Action = transactionMessage,
                 ActionName = actionName,
                 ControllerName = controllerName,

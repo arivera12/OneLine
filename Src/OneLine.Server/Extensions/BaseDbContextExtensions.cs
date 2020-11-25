@@ -104,7 +104,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> SaveRangeValidatedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, SaveOperation saveOperation, Action beforeSaveRange = null, Action afterSaveRange = null)
             where T : class, new()
         {
-            var apiResponse = records.IsNullOrEmpty() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
+            var apiResponse = records.IsNull() || !records.Any() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
             if (apiResponse.Status.Failed())
             {
                 return apiResponse;
@@ -172,7 +172,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> SaveOrReplaceRangeReferenceValidatedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, IEnumerable<T> records, IValidator validator, Action<Action<Expression<Func<T, bool>>>> onDeletePredicate, Action beforeDeleteRange = null, Action afterDeleteRange = null)
             where T : class, new()
         {
-            var apiResponse = records.IsNullOrEmpty() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
+            var apiResponse = records.IsNull() || !records.Any() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
             if (apiResponse.Status.Failed())
             {
                 return apiResponse;
@@ -208,7 +208,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> SaveOrReplaceRangeReferenceValidatedAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IIdentifier<string> identifier, IEnumerable<T> records, IValidator validator, Action<Action<Expression<Func<T, bool>>>> onDeletePredicate, string userId, Action beforeDeleteRange = null, Action afterDeleteRange = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
-            var apiResponse = records.IsNullOrEmpty() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
+            var apiResponse = records.IsNull() || !records.Any() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
             if (apiResponse.Status.Failed())
             {
                 return apiResponse;
@@ -408,7 +408,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> ImportCsvUploadAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IUploadBlobData uploadBlobDatas, SaveOperation saveOperation, Action beforeSaveRange = null, Action afterSaveRange = null)
             where T : class, new()
         {
-            var any = uploadBlobDatas.IsNotNull() && uploadBlobDatas.BlobDatas.IsNotNullAndNotEmpty();
+            var any = uploadBlobDatas.IsNotNull() && uploadBlobDatas.BlobDatas.IsNotNull() && uploadBlobDatas.BlobDatas.Any();
             if (!any)
             {
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, "FileIsNullOrEmpty");
@@ -431,7 +431,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> ImportCsvUploadAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IUploadBlobData uploadBlobDatas, SaveOperation saveOperation, string userId, Action beforeSaveRange = null, Action afterSaveRange = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
-            var any = uploadBlobDatas.IsNotNull() && uploadBlobDatas.BlobDatas.IsNotNullAndNotEmpty();
+            var any = uploadBlobDatas.IsNotNull() && uploadBlobDatas.BlobDatas.IsNotNull() && uploadBlobDatas.BlobDatas.Any();
             if (!any)
             {
                 await dbContext.CreateAuditrailsAsync(new UserBlobs(), "No file uploaded", userId, controllerName, actionName, remoteIpAddress);
@@ -576,7 +576,7 @@ namespace OneLine.Extensions
         public static IApiResponse<IEnumerable<T>> GetRange<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, Action<Action<IList<T>>> onGetRange)
             where T : class, new()
         {
-            if (identifiers.IsNullOrEmpty())
+            if (identifiers.IsNull() || !identifiers.Any())
             {
                 return Enumerable.Empty<T>().ToApiResponseFailed("IdentifierIsNullOrEmpty");
             }
@@ -589,7 +589,7 @@ namespace OneLine.Extensions
             }
             IList<T> records = default;
             onGetRange.Invoke(result => records = result);
-            if (records.IsNullOrEmpty())
+            if (records.IsNull() || !records.Any())
             {
                 return records.AsEnumerable().ToApiResponseFailed("RecordNotFound");
             }
@@ -598,7 +598,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> GetRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, string userId, Action<Action<IList<T>>> onGetRange, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
-            if (identifiers.IsNullOrEmpty())
+            if (identifiers.IsNull() || !identifiers.Any())
             {
                 await dbContext.CreateAuditrailsAsync(identifiers, "Record identifiers was null or empty on delete operation", userId, controllerName, actionName, remoteIpAddress);
                 return Enumerable.Empty<T>().ToApiResponseFailed("IdentifierIsNullOrEmpty");
@@ -613,7 +613,7 @@ namespace OneLine.Extensions
             }
             IList<T> records = default;
             onGetRange.Invoke(result => records = result);
-            if (records.IsNullOrEmpty())
+            if (records.IsNull() || !records.Any())
             {
                 await dbContext.CreateAuditrailsAsync(records, "Records not found on select in operation", userId, controllerName, actionName, remoteIpAddress);
                 return records.AsEnumerable().ToApiResponseFailed("RecordNotFound");
@@ -637,7 +637,7 @@ namespace OneLine.Extensions
             {
                 records = await Task.Run(() => dbContext.Set<T>().Where(predicate).ToList());
             }
-            if (records.IsNullOrEmpty())
+            if (records.IsNull() || !records.Any())
             {
                 return records.AsEnumerable().ToApiResponseFailed("RecordNotFound");
             }
@@ -660,7 +660,7 @@ namespace OneLine.Extensions
             {
                 records = await Task.Run(() => dbContext.Set<T>().Where(predicate).ToList());
             }
-            if (records.IsNullOrEmpty())
+            if (records.IsNull() || !records.Any())
             {
                 await dbContext.CreateAuditrailsAsync(records, "Records not found on select in operation", userId, controllerName, actionName, remoteIpAddress);
                 return records.AsEnumerable().ToApiResponseFailed("RecordNotFound");
@@ -744,7 +744,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> DeleteRangeValidatedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, Action beforeDelete = null, Action afterDelete = null)
             where T : class, new()
         {
-            var apiResponse = records.IsNullOrEmpty() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
+            var apiResponse = records.IsNull() || !records.Any() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
             if (apiResponse.Status.Failed())
             {
                 return apiResponse;
@@ -828,7 +828,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> DeleteRangeAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, Action<Action<IList<T>>> onGetRange, Action beforeDelete = null, Action afterDelete = null)
             where T : class, new()
         {
-            if (identifiers.IsNullOrEmpty())
+            if (identifiers.IsNull() || !identifiers.Any())
             {
                 return Enumerable.Empty<T>().ToApiResponseFailed("IdentifierIsNullOrEmpty");
             }
@@ -853,7 +853,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> DeleteRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, string userId, Action<Action<IList<T>>> onGetRange, string controllerName = null, string actionName = null, string remoteIpAddress = null, Action beforeDelete = null, Action afterDelete = null)
             where T : class, new()
         {
-            if (identifiers.IsNullOrEmpty())
+            if (identifiers.IsNull() || !identifiers.Any())
             {
                 await dbContext.CreateAuditrailsAsync(identifiers, "Record indentifier or model was null on select one operation", userId, controllerName, actionName, remoteIpAddress);
                 return Enumerable.Empty<T>().ToApiResponseFailed("IdentifierIsNullOrEmpty");
@@ -1383,7 +1383,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> ValidateRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
-            if (records.IsNullOrEmpty())
+            if (records.IsNull() || !records.Any())
             {
                 await dbContext.CreateAuditrailsAsync(records, "Records collection was null or empty on validation operation", null, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "InvalidModelState");
@@ -1404,7 +1404,7 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> ValidateRangeAuditedAsync<T>(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<T> records, IValidator validator, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
             where T : class, new()
         {
-            if (records.IsNullOrEmpty())
+            if (records.IsNull() || !records.Any())
             {
                 await dbContext.CreateAuditrailsAsync(records, "Records collection was null or empty on validation operation", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, records, "InvalidModelState");

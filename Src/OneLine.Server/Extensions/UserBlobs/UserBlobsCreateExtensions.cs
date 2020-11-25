@@ -71,7 +71,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IEnumerable<UserBlobs>> AddUserBlobsRangeAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            var any = blobDatas.IsNotNullAndNotEmpty();
+            var any = blobDatas.IsNotNull() && blobDatas.Any();
             if (!any)
             {
                 await dbContext.CreateAuditrailsAsync(new UserBlobs(), "No file/s uploaded", userId, controllerName, actionName, remoteIpAddress);
@@ -127,7 +127,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IApiResponse<IEnumerable<UserBlobs>>> CreateUserBlobsRangeAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<BlobData> blobDatas, FormFileRules formFileRules, IBlobStorage blobStorage, string userId, string tableName, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            var any = blobDatas.IsNotNullAndNotEmpty();
+            var any = blobDatas.IsNotNull() && blobDatas.Any();
             if (!any)
             {
                 await dbContext.CreateAuditrailsAsync(new UserBlobs(), "No file/s uploaded", userId, controllerName, actionName, remoteIpAddress);

@@ -256,6 +256,9 @@ namespace OneLine.Blazor.Bases
         [Parameter] public virtual Action OnBeforeCancel { get; set; }
         /// <inheritdoc/>
         [Parameter] public virtual Action OnAfterCancel { get; set; }
+        public BlazorCoreViewComponentBase() : base()
+        {
+        }
         /// <inheritdoc/>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

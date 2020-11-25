@@ -71,7 +71,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IEnumerable<IApiResponse<Stream>>> ReadBlobRangeAsStreamApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            if (identifiers.IsNullOrEmpty())
+            if (identifiers.IsNull() || !identifiers.Any())
             {
                 await dbContext.CreateAuditrailsAsync(identifiers, "Identifier is null or empty on method ReadBlobAsStreamApiResponse", userId, controllerName, actionName, remoteIpAddress);
                 return Enumerable.Empty<IApiResponse<Stream>>();
@@ -91,7 +91,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<Stream> ReadBlobRangeIntoZipFolderStreamAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            if (identifiers.IsNullOrEmpty())
+            if (identifiers.IsNull() || !identifiers.Any())
             {
                 await dbContext.CreateAuditrailsAsync(identifiers, "Identifier is null or empty on method ReadBlobRangeIntoZipFolderStreamAsync", userId, controllerName, actionName, remoteIpAddress);
                 return null;
@@ -127,7 +127,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IApiResponse<Stream>> ReadBlobRangeIntoZipFolderStreamApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            if (identifiers.IsNullOrEmpty())
+            if (identifiers.IsNull() || !identifiers.Any())
             {
                 await dbContext.CreateAuditrailsAsync(identifiers, "Identifier is null or empty on method ReadBlobsIntoZipFolderStreamApiResponseAsync", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<Stream>(ApiResponseStatus.Failed, "FileIsNullOrEmpty");

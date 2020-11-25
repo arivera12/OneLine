@@ -11,7 +11,7 @@ namespace OneLine.Extensions
     {
         public static bool BlobDataExists(this IEnumerable<BlobData> blobDatas, Func<BlobData, bool> predicate)
         {
-            return blobDatas.IsNotNullAndNotEmpty() && blobDatas.Any(predicate);
+            return blobDatas.IsNotNull() && blobDatas.Any() && blobDatas.Any(predicate);
         }
         public static bool IsValidBlobData(this IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
         {
@@ -40,11 +40,11 @@ namespace OneLine.Extensions
                 throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
             }
             var blobs = predicate == null ? blobDatas : blobDatas.Where(predicate);
-            if (blobs.IsNullOrEmpty() && formFileRules.IsRequired)
+            if ((blobs.IsNull() || !blobDatas.Any()) && formFileRules.IsRequired)
             {
                 return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired" };
             }
-            else if (blobs.IsNotNullAndNotEmpty())
+            else if (blobs.IsNotNull() && blobs.Any())
             {
                 if (blobs.Count() < formFileRules.AllowedMinimunFiles)
                 {

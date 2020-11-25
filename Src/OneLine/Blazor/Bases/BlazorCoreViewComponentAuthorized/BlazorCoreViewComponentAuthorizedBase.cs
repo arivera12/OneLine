@@ -21,6 +21,9 @@ namespace OneLine.Blazor.Bases
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
         where TUser : class, new()
     {
+        public BlazorCoreViewComponentAuthorizedBase() : base()
+        {   
+        }
         /// <inheritdoc/>
         [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
         /// <inheritdoc/>

@@ -27,7 +27,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IEnumerable<string>> ReadBlobRangeAsBase64Async(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            if (identifiers.IsNullOrEmpty())
+            if (identifiers.IsNull() || !identifiers.Any())
             {
                 await dbContext.CreateAuditrailsAsync(identifiers, "Identifiers is null or empty on method ReadBlobAsBase64Async", userId, controllerName, actionName, remoteIpAddress);
                 return Enumerable.Empty<string>();
@@ -63,7 +63,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IEnumerable<IApiResponse<string>>> ReadBlobRangeAsBase64ApiResponseAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<IIdentifier<string>> identifiers, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            if (identifiers.IsNullOrEmpty())
+            if (identifiers.IsNull() || !identifiers.Any())
             {
                 await dbContext.CreateAuditrailsAsync(identifiers, "Identifiers is null or empty on method ReadBlobAsBase64ApiResponseAsync", userId, controllerName, actionName, remoteIpAddress);
                 return Enumerable.Empty<IApiResponse<string>>();

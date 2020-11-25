@@ -49,7 +49,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IApiResponse<IEnumerable<UserBlobs>>> DeleteRangeUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, bool ignoreBlobOwner = false, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            if (userBlobs.IsNullOrEmpty())
+            if (userBlobs.IsNull() || !userBlobs.Any())
             {
                 await dbContext.CreateAuditrailsAsync(userBlobs, "UserBlobs is null or empty on method DeleteRange", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Succeeded, Enumerable.Empty<UserBlobs>());
@@ -78,7 +78,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static async Task<IApiResponse<IEnumerable<UserBlobs>>> DeleteRangeForcedUserBlobsAsync(this BaseDbContext<AuditTrails, ExceptionLogs, UserBlobs> dbContext, IEnumerable<UserBlobs> userBlobs, IBlobStorage blobStorage, string userId, string controllerName = null, string actionName = null, string remoteIpAddress = null)
         {
-            if (userBlobs.IsNullOrEmpty())
+            if (userBlobs.IsNull() || !userBlobs.Any())
             {
                 await dbContext.CreateAuditrailsAsync(userBlobs, "UserBlobs is null or empty on method DeleteRange", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<IEnumerable<UserBlobs>>(ApiResponseStatus.Failed, "FileNotFound");

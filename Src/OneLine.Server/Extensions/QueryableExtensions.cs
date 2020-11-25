@@ -128,7 +128,7 @@ namespace OneLine.Extensions
                     foreach (var prop in decryptFieldsOnRead)
                     {
                         var value = record.GetType().GetProperty(prop).GetValue(record).ToString();
-                        record.GetType().GetProperty(prop).SetValue(record, value.DecryptData(encryptionKey));
+                        record.GetType().GetProperty(prop).SetValue(record, value.Decrypt(encryptionKey));
                     }
                 }
             }

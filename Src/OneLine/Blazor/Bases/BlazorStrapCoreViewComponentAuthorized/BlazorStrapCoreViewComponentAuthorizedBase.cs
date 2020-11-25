@@ -21,6 +21,9 @@ namespace OneLine.Blazor.Bases
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
         where TUser : class, new()
     {
+        public BlazorStrapCoreViewComponentAuthorizedBase() : base()
+        {
+        }
         /// <inheritdoc/>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

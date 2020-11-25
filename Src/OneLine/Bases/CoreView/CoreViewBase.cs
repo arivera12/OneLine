@@ -27,6 +27,8 @@ namespace OneLine.Bases
         where TIdentifier : IIdentifier<TId>, new()
         where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
     {
+        public CoreViewBase()
+        { }
         public CoreViewBase(IApplicationConfiguration applicationConfiguration,
             IResourceManagerLocalizer resourceManagerLocalizer,
             IApplicationState applicationState,

@@ -24,13 +24,13 @@ namespace OneLine.Services
         }
         public async Task SaveFileAsync(Stream stream, string path, int bufferSize)
         {
-            if (Device.IsXamarinPlatform)
-            {
-                await stream.WriteStreamToFileSystemAsync(path, bufferSize);
-            }
-            else if (Device.IsWebPlatform)
+            if (Device.IsWebPlatform)
             {
                 await BlazorDownloadFileService.DownloadFile(path, stream, bufferSize);
+            }
+            else if (Device.IsXamarinPlatform)
+            {
+                await stream.WriteStreamToFileSystemAsync(path, bufferSize);
             }
             else
             {
@@ -39,13 +39,13 @@ namespace OneLine.Services
         }
         public async Task SaveFileAsync(byte[] byteArray, string path)
         {
-            if (Device.IsXamarinPlatform)
-            {
-                await File.WriteAllBytesAsync(path, byteArray);
-            }
-            else if (Device.IsWebPlatform)
+            if (Device.IsWebPlatform)
             {
                 await BlazorDownloadFileService.DownloadFile(path, byteArray, "application/octet-stream");
+            }
+            else if (Device.IsXamarinPlatform)
+            {
+                await File.WriteAllBytesAsync(path, byteArray);
             }
             else
             {
@@ -54,13 +54,13 @@ namespace OneLine.Services
         }
         public async Task SaveFileAsync(Stream stream, string path)
         {
-            if (Device.IsXamarinPlatform)
-            {
-                await File.WriteAllBytesAsync(path, await stream.ToByteArrayAsync());
-            }
-            else if (Device.IsWebPlatform)
+            if (Device.IsWebPlatform)
             {
                 await BlazorDownloadFileService.DownloadFile(path, stream, "application/octet-stream");
+            }
+            else if (Device.IsXamarinPlatform)
+            {
+                await File.WriteAllBytesAsync(path, await stream.ToByteArrayAsync());
             }
             else
             {

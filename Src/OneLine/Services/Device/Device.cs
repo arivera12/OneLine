@@ -23,67 +23,271 @@ namespace OneLine.Services
                 DeviceDetector.Parse();
             }).Invoke();
         }
-        public bool IsDesktop => Xamarin.Forms.Device.Idiom == Xamarin.Forms.TargetIdiom.Desktop || DeviceDetector.IsDesktop();
+        public bool IsDesktop
+        {
+            get
+            {
+                try
+                {
+                    return DeviceDetector?.IsDesktop() ?? Xamarin.Forms.Device.Idiom == Xamarin.Forms.TargetIdiom.Desktop;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsTablet => Xamarin.Forms.Device.Idiom == Xamarin.Forms.TargetIdiom.Tablet || DeviceDetector.IsTablet();
+        public bool IsTablet
+        {
+            get
+            {
+                try
+                {
+                    return DeviceDetector?.IsTablet() ?? Xamarin.Forms.Device.Idiom == Xamarin.Forms.TargetIdiom.Tablet;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsMobile => Xamarin.Forms.Device.Idiom == Xamarin.Forms.TargetIdiom.Phone || DeviceDetector.IsMobile();
-        
-        public bool IsXamarinPlatform => Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Android) ||
+        public bool IsMobile
+        {
+            get
+            {
+                try
+                {
+                    return DeviceDetector?.IsMobile() ?? Xamarin.Forms.Device.Idiom == Xamarin.Forms.TargetIdiom.Phone;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool IsXamarinPlatform
+        {
+            get
+            {
+                try
+                {
+                    return Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Android) ||
                   Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.GTK) ||
                   Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.iOS) ||
                   Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.macOS) ||
                   Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Tizen) ||
                   Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.WPF);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsAndroidDevice => Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Android) || 
-            DeviceDetector.GetOs().Match.Platform.Equals("Android");
+        public bool IsAndroidDevice
+        {
+            get
+            {
+                try
+                {
+                    return DeviceDetector?.GetOs().Match.Platform.Equals("Android") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Android);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsGTKDevice => Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.GTK);
+        public bool IsGTKDevice
+        {
+            get
+            {
+                try
+                {
+                    return Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.GTK);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsiOSDevice => Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.iOS) ||
-            DeviceDetector.GetOs().Match.Platform.Equals("iOS");
+        public bool IsiOSDevice
+        {
+            get
+            {
+                try
+                {
+                    return DeviceDetector?.GetOs().Match.Platform.Equals("iOS") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.iOS);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsMacOsDevice => Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.macOS) ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Mac");
+        public bool IsMacOsDevice
+        {
+            get
+            {
+                try
+                {
+                    return DeviceDetector?.GetOs().Match.Platform.Equals("Mac") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.macOS);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsTizenDevice => Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Tizen) ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Tizen");
+        public bool IsTizenDevice
+        {
+            get
+            {
+                try
+                {
+                    return DeviceDetector?.GetOs().Match.Platform.Equals("Tizen") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Tizen);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsWPFDevice => Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.WPF);
+        public bool IsWPFDevice
+        {
+            get
+            {
+                try
+                {
+                    return Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.WPF);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsWindowsOSPlatform => RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Windows") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Windows CE") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Windows IoT") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Windows Mobile") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Windows Phone") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Windows RT");
+        public bool IsWindowsOSPlatform
+        {
+            get
+            {
+                try
+                {
+                    return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Windows") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Windows CE") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Windows IoT") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Windows Mobile") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Windows Phone") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Windows RT");
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsLinuxOSPlatform => RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Arch Linux") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("CentOS") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Debian") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Fedora") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Kubuntu") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("GNU/Linux") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Lubuntu") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("VectorLinux") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("OpenBSD") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Red Hat") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("SUSE") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Ubuntu") ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Xubuntu");
+        public bool IsLinuxOSPlatform
+        {
+            get
+            {
+                try
+                {
+                    return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Arch Linux") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("CentOS") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Debian") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Fedora") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Kubuntu") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("GNU/Linux") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Lubuntu") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("VectorLinux") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("OpenBSD") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Red Hat") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("SUSE") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Ubuntu") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Xubuntu");
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsOSXOSPlatform => RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
-            DeviceDetector.GetOs().Match.Platform.Equals("Mac")||
-            DeviceDetector.GetOs().Match.Platform.Equals("iOS");
+        public bool IsOSXOSPlatform
+        {
+            get
+            {
+                try
+                {
+                    return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("Mac") ||
+                        DeviceDetector.GetOs().Match.Platform.Equals("iOS");
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsWebPlatform => RuntimeInformation.OSDescription.Equals("web") || JSRuntime.IsNotNull();
+        public bool IsWebPlatform
+        {
+            get
+            {
+                try
+                {
+                    return RuntimeInformation.OSDescription.Equals("web") || JSRuntime.IsNotNull();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsWebBlazorWAsmPlatform => IsWebPlatform && !Type.GetType("Mono.Runtime").Equals(null) || JSRuntime.IsNotNull();
+        public bool IsWebBlazorWAsmPlatform
+        {
+            get
+            {
+                try
+                {
+                    return IsWebPlatform && !Type.GetType("Mono.Runtime").Equals(null) || JSRuntime.IsNotNull();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
-        public bool IsWebBlazorServerPlatform => IsWebPlatform && Type.GetType("Mono.Runtime").Equals(null) || JSRuntime.IsNotNull();
+        public bool IsWebBlazorServerPlatform
+        {
+            get
+            {
+                try
+                {
+                    return IsWebPlatform && Type.GetType("Mono.Runtime").Equals(null) || JSRuntime.IsNotNull();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
         public bool Is32BitsArmOSArquitecture => RuntimeInformation.OSArchitecture.Equals(Architecture.Arm);
 

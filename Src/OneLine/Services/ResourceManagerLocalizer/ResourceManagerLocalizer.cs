@@ -2,7 +2,6 @@
 using Microsoft.JSInterop;
 using System;
 using System.Globalization;
-using System.Reflection;
 using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,17 +31,17 @@ namespace OneLine.Services
         }
         private void InitializeCurrentCulture()
         {
-            ResourceManager = new ResourceManager(ApplicationConfigurationSource.ResourceFilesBasePath, Assembly.GetExecutingAssembly());
+            ResourceManager = new ResourceManager(ApplicationConfigurationSource.ResourceFilesBasePath, ApplicationConfigurationSource.ResourceFilesAssemblyFile);
         }
         public async Task<string> GetApplicationLocale()
         {
-            if (Device.IsXamarinPlatform)
-            {
-                return await SecureStorage.GetAsync("ApplicationLocale");
-            }
-            else if (Device.IsWebPlatform)
+            if (Device.IsWebPlatform)
             {
                 return await JSRuntime.InvokeAsync<string>("window.localStorage.getItem", "ApplicationLocale");
+            }
+            else if (Device.IsXamarinPlatform)
+            {
+                return await SecureStorage.GetAsync("ApplicationLocale");
             }
             else
             {
@@ -55,13 +54,13 @@ namespace OneLine.Services
             var currentCulture = new CultureInfo(applicationLocale);
             Thread.CurrentThread.CurrentCulture = currentCulture;
             Thread.CurrentThread.CurrentUICulture = currentCulture;
-            if (Device.IsXamarinPlatform)
-            {
-                await SecureStorage.SetAsync("ApplicationLocale", applicationLocale);
-            }
-            else if (Device.IsWebPlatform)
+            if (Device.IsWebPlatform)
             {
                 await JSRuntime.InvokeVoidAsync("window.localStorage.setItem", "ApplicationLocale", applicationLocale);
+            }
+            else if (Device.IsXamarinPlatform)
+            {
+                await SecureStorage.SetAsync("ApplicationLocale", applicationLocale);
             }
             else
             {

@@ -43,16 +43,7 @@ namespace OneLine.Services
             {
                 string SUser, key;
                 var applicationSession = await GetApplicationSession();
-                if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
-                {
-                    SUser = await SecureStorage.GetAsync("SUser");
-                    return JsonConvert.DeserializeObject<TUser>(SUser);
-                }
-                else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.SessionStorage))
-                {
-                    return JsonConvert.DeserializeObject<TUser>(SessionSecureUser.Decrypt(SessionKey));
-                }
-                else if (Device.IsWebPlatform)
+                if (Device.IsWebPlatform)
                 {
                     if (applicationSession == ApplicationSession.LocalStorage)
                     {
@@ -65,6 +56,15 @@ namespace OneLine.Services
                         SUser = await SessionStorage.GetItem<string>("SUser");
                     }
                     return JsonConvert.DeserializeObject<TUser>(SUser.Decrypt(key));
+                }
+                else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
+                {
+                    SUser = await SecureStorage.GetAsync("SUser");
+                    return JsonConvert.DeserializeObject<TUser>(SUser);
+                }
+                else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.SessionStorage))
+                {
+                    return JsonConvert.DeserializeObject<TUser>(SessionSecureUser.Decrypt(SessionKey));
                 }
                 else
                 {
@@ -81,17 +81,7 @@ namespace OneLine.Services
         {
             var jsonUser = JsonConvert.SerializeObject(user);
             var applicationSession = await GetApplicationSession();
-            if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
-            {
-                await SecureStorage.SetAsync("SUser", jsonUser);
-            }
-            else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.SessionStorage))
-            {
-                SessionKey = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
-                SessionKey = SessionKey.Encrypt(SessionKey);
-                SessionSecureUser = jsonUser.Encrypt(SessionKey);
-            }
-            else if (Device.IsWebPlatform)
+            if (Device.IsWebPlatform)
             {
                 var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
                 key = key.Encrypt(key);
@@ -107,6 +97,16 @@ namespace OneLine.Services
                     await SessionStorage.SetItem("SUser", jsonUser.Encrypt(key));
                 }
             }
+            else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
+            {
+                await SecureStorage.SetAsync("SUser", jsonUser);
+            }
+            else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.SessionStorage))
+            {
+                SessionKey = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
+                SessionKey = SessionKey.Encrypt(SessionKey);
+                SessionSecureUser = jsonUser.Encrypt(SessionKey);
+            }
             else
             {
                 new PlatformNotSupportedException("Application state seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
@@ -115,18 +115,7 @@ namespace OneLine.Services
         public async ValueTask SetApplicationUserSecure<TUser>(TUser user, ApplicationSession applicationSession)
         {
             var jsonUser = JsonConvert.SerializeObject(user);
-            if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
-            {
-                await SecureStorage.SetAsync("SUser", jsonUser);
-            }
-            else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.SessionStorage))
-            {
-                await SecureStorage.SetAsync("SUser", jsonUser);
-                SessionKey = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
-                SessionKey = SessionKey.Encrypt(SessionKey);
-                SessionSecureUser = jsonUser.Encrypt(SessionKey);
-            }
-            else if (Device.IsWebPlatform)
+            if (Device.IsWebPlatform)
             {
                 var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
                 key = key.Encrypt(key);
@@ -141,6 +130,17 @@ namespace OneLine.Services
                     await SessionStorage.SetItem("SUser", jsonUser.Encrypt(key));
                 }
             }
+            else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
+            {
+                await SecureStorage.SetAsync("SUser", jsonUser);
+            }
+            else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.SessionStorage))
+            {
+                await SecureStorage.SetAsync("SUser", jsonUser);
+                SessionKey = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
+                SessionKey = SessionKey.Encrypt(SessionKey);
+                SessionSecureUser = jsonUser.Encrypt(SessionKey);
+            }
             else
             {
                 new PlatformNotSupportedException("Application state seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
@@ -148,20 +148,20 @@ namespace OneLine.Services
         }
         public async ValueTask Logout()
         {
-            if (Device.IsXamarinPlatform)
-            {
-                SecureStorage.Remove("SUser");
-                SecureStorage.Remove("DUEK");
-                SessionKey = null;
-                SessionSecureUser = null;
-            }
-            else if (Device.IsWebPlatform)
+            if (Device.IsWebPlatform)
             {
                 await LocalStorage.RemoveItem("SUser");
                 await SessionStorage.RemoveItem("SUser");
                 await LocalStorage.RemoveItem("DUEK");
                 await SessionStorage.RemoveItem("DUEK");
             }
+            else if (Device.IsXamarinPlatform)
+            {
+                SecureStorage.Remove("SUser");
+                SecureStorage.Remove("DUEK");
+                SessionKey = null;
+                SessionSecureUser = null;
+            } 
             else
             {
                 new PlatformNotSupportedException("Application state seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
@@ -176,13 +176,13 @@ namespace OneLine.Services
         {
             try
             {
-                if (Device.IsXamarinPlatform)
-                {
-                    return Enum.Parse<ApplicationSession>(await SecureStorage.GetAsync("ApplicationSession"));
-                }
-                else if (Device.IsWebPlatform)
+                if (Device.IsWebPlatform)
                 {
                     return await LocalStorage.GetItem<ApplicationSession>("ApplicationSession");
+                }
+                else if (Device.IsXamarinPlatform)
+                {
+                    return Enum.Parse<ApplicationSession>(await SecureStorage.GetAsync("ApplicationSession"));
                 }
                 else
                 {
@@ -197,13 +197,13 @@ namespace OneLine.Services
         }
         public async ValueTask SetApplicationSession(ApplicationSession applicationSession)
         {
-            if (Device.IsXamarinPlatform)
-            {
-                await SecureStorage.SetAsync("ApplicationSession", applicationSession.ToString());
-            }
-            else if (Device.IsWebPlatform)
+            if (Device.IsWebPlatform)
             {
                 await LocalStorage.SetItem("ApplicationSession", applicationSession);
+            }
+            else if (Device.IsXamarinPlatform)
+            {
+                await SecureStorage.SetAsync("ApplicationSession", applicationSession.ToString());
             }
             else
             {

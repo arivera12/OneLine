@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace OneLine.Services
 {
@@ -10,7 +9,7 @@ namespace OneLine.Services
     {
         public ApplicationConfiguration(IApplicationConfigurationSource applicationConfigurationSource)
         {
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(applicationConfigurationSource.ConfigurationFilePath);
+            var stream = applicationConfigurationSource.ConfigurationFileAssemblyFile.GetManifestResourceStream(applicationConfigurationSource.ConfigurationFilePath);
             Configuration = new ConfigurationBuilder().AddJsonStream(stream).Build();
         }
         private protected IConfiguration Configuration { get; set; }

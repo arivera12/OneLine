@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added supported cultures service.</PackageReleaseNotes>
-    <Version>3.0.5</Version>
+    <PackageReleaseNotes>Added assembly specification to load configuration and resource files from specific assemblies. Added thread safety to platforms verifications on Device service.</PackageReleaseNotes>
+    <Version>3.0.6</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.5.0</AssemblyVersion>
-    <FileVersion>3.0.5.0</FileVersion>
+    <AssemblyVersion>3.0.6.0</AssemblyVersion>
+    <FileVersion>3.0.6.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

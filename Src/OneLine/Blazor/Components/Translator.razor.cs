@@ -9,13 +9,12 @@ namespace OneLine.Blazor
     public class TranslatorComponentModel : ComponentBase
     {
         [Parameter] public virtual bool ReloadOnLanguageChange { get; set; }
-        [Parameter] public virtual bool AutoSetDefaultThreadCurrentCultureOnLanguageChange { get; set; }
         public static Action<IResourceManagerLocalizer> OnLanguageChanged { get; set; }
         [Parameter] public Action<IResourceManagerLocalizer> OnChanged { get; set; }
         [Parameter] public virtual string ApplicationLocale { get; set; }
         [Inject] public virtual IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
+        [Inject] public virtual ISupportedCultures SupportedCultures { get; set; }
         [Inject] public virtual NavigationManager NavigationManager { get; set; }
-        [Inject] public virtual IJSRuntime JSRuntime { get; set; }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)

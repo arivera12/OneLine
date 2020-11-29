@@ -6,9 +6,8 @@ namespace OneLine.Services
     {
         public string ConfigurationFilePath { get; set; }
         public string ResourceFilesBasePath { get; set; }
-        public ApplicationConfigurationSource(string configurationFilePath)
+        public ApplicationConfigurationSource()
         {
-            ConfigurationFilePath = configurationFilePath;
         }
     }
     public static partial class ServiceCollectionExtensions

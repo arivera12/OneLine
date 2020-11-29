@@ -5,14 +5,15 @@ namespace OneLine.Services
     public static class HybridServices
     {
         /// <summary>
-        /// Adds the current services <see cref="IApplicationConfigurationSource"/>, <see cref="IApplicationConfiguration"/>, <see cref="IResourceManagerLocalizer"/>, <see cref="IApplicationState"/>, <see cref="IDevice"/> and <see cref="ISaveFile"/>
+        /// Adds the current services <see cref="IApplicationConfigurationSource"/>, <see cref="ISupportedCultures"/>, <see cref="IApplicationConfiguration"/>, <see cref="IResourceManagerLocalizer"/>, <see cref="IApplicationState"/>, <see cref="IDevice"/> and <see cref="ISaveFile"/>
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddOneLineHybridServices(this IServiceCollection services, ApplicationConfigurationSource applicationConfigurationSource)
+        public static IServiceCollection AddOneLineHybridServices(this IServiceCollection services, ApplicationConfigurationSource applicationConfigurationSource, SupportedCultures supportedCultures)
         {
             return services
                 .AddApplicationConfigurationSource(applicationConfigurationSource)
+                .AddSupportedCultures(supportedCultures)
                 .AddApplicationConfiguration()
                 .AddResourceManagerLocalizer()
                 .AddApplicationState()

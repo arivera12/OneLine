@@ -105,13 +105,30 @@ namespace OneLine.Bases
             {
                 if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Replace)
                 {
-                    Records.ReplaceRange(ResponsePaged.Response.Data.Data);
-                    RecordsFilteredSorted.ReplaceRange(Records);
+                    if (Records.IsNull() || RecordsFilteredSorted.IsNull())
+                    {
+                        Records = new ObservableRangeCollection<T>(ResponsePaged.Response.Data.Data);
+                        RecordsFilteredSorted = new ObservableRangeCollection<T>(ResponsePaged.Response.Data.Data);
+                    }
+                    else
+                    {
+                        Records.ReplaceRange(ResponsePaged.Response.Data.Data);
+                        RecordsFilteredSorted.ReplaceRange(Records);
+                    }
+
                 }
                 else if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
                 {
-                    Records.AddRange(ResponsePaged.Response.Data.Data);
-                    RecordsFilteredSorted.AddRange(Records);
+                    if (Records.IsNull() || RecordsFilteredSorted.IsNull())
+                    {
+                        Records = new ObservableRangeCollection<T>(ResponsePaged.Response.Data.Data);
+                        RecordsFilteredSorted = new ObservableRangeCollection<T>(ResponsePaged.Response.Data.Data);
+                    }
+                    else
+                    {
+                        Records.AddRange(ResponsePaged.Response.Data.Data);
+                        RecordsFilteredSorted.AddRange(Records);
+                    }
                 }
                 RecordsChanged?.Invoke(Records);
                 RecordsFilteredSortedChanged?.Invoke(RecordsFilteredSorted);

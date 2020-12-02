@@ -12,8 +12,8 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added assembly specification to load configuration and resource files from specific assemblies. Added thread safety to platforms verifications on Device service.</PackageReleaseNotes>
-    <Version>3.0.6</Version>
+    <PackageReleaseNotes>Added null check for observable collection for records and records filtered. Fixed reset and back buttons.</PackageReleaseNotes>
+    <Version>3.0.7</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyVersion>3.0.6.0</AssemblyVersion>

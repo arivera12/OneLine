@@ -129,11 +129,11 @@ namespace OneLine.Blazor.Bases
         /// <inheritdoc/>
         [Parameter] public virtual Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
         /// <inheritdoc/>
-        [Parameter] public virtual T Record { get; set; }
+        [Parameter] public virtual T Record { get; set; } = new T();
         /// <inheritdoc/>
         [Parameter] public virtual Action<T> RecordChanged { get; set; }
         /// <inheritdoc/>
-        [Parameter] public virtual ObservableRangeCollection<T> Records { get; set; }
+        [Parameter] public virtual ObservableRangeCollection<T> Records { get; set; } = new ObservableRangeCollection<T>();
         /// <inheritdoc/>
         [Parameter] public virtual Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
         /// <inheritdoc/>
@@ -161,7 +161,7 @@ namespace OneLine.Blazor.Bases
         /// <inheritdoc/>
         [Parameter] public virtual Action<bool> FilterDescendingChanged { get; set; }
         /// <inheritdoc/>
-        [Parameter] public virtual ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
+        [Parameter] public virtual ObservableRangeCollection<T> RecordsFilteredSorted { get; set; } = new ObservableRangeCollection<T>();
         /// <inheritdoc/>
         [Parameter] public virtual Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
         /// <inheritdoc/>

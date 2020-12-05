@@ -5,6 +5,6 @@ namespace OneLine.Services
 {
     public interface ISupportedCultures
     {
-        IEnumerable<CultureInfo> Cultures { get; set; }
+        IEnumerable<CultureInfo> Cultures { get; }
     }
 }

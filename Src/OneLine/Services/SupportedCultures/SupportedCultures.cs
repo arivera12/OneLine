@@ -6,20 +6,17 @@ namespace OneLine.Services
 {
     public class SupportedCultures : ISupportedCultures
     {
-        public IEnumerable<CultureInfo> Cultures { get; set; }
+        public IEnumerable<CultureInfo> Cultures { get { return cultures; } }
+        public static IEnumerable<CultureInfo> cultures;
         public SupportedCultures()
         {
-        }
-        public SupportedCultures(IEnumerable<CultureInfo> cultures)
-        {
-            Cultures = cultures;
         }
     }
     public static partial class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddSupportedCultures(this IServiceCollection services, SupportedCultures supportedCultures)
+        public static IServiceCollection AddSupportedCultures(this IServiceCollection services)
         {
-            return services.AddSingleton<ISupportedCultures, SupportedCultures>(sp => supportedCultures);
+            return services.AddScoped<ISupportedCultures, SupportedCultures>();
         }
     }
 }

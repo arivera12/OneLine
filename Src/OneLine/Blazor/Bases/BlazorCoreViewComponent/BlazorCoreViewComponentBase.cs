@@ -699,7 +699,6 @@ namespace OneLine.Blazor.Bases
                         Records.ReplaceRange(ResponsePaged.Response.Data.Data);
                         RecordsFilteredSorted.ReplaceRange(Records);
                     }
-
                 }
                 else if (CollectionAppendReplaceMode == CollectionAppendReplaceMode.Add)
                 {

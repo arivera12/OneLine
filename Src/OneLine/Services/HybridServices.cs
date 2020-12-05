@@ -9,11 +9,11 @@ namespace OneLine.Services
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddOneLineHybridServices(this IServiceCollection services, ApplicationConfigurationSource applicationConfigurationSource, SupportedCultures supportedCultures)
+        public static IServiceCollection AddOneLineHybridServices(this IServiceCollection services)
         {
             return services
-                .AddApplicationConfigurationSource(applicationConfigurationSource)
-                .AddSupportedCultures(supportedCultures)
+                .AddApplicationConfigurationSource()
+                .AddSupportedCultures()
                 .AddApplicationConfiguration()
                 .AddResourceManagerLocalizer()
                 .AddApplicationState()

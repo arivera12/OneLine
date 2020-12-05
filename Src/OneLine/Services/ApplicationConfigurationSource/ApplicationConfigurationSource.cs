@@ -5,19 +5,23 @@ namespace OneLine.Services
 {
     public class ApplicationConfigurationSource : IApplicationConfigurationSource
     {
-        public string ConfigurationFilePath { get; set; }
-        public Assembly ConfigurationFileAssemblyFile { get; set; }
-        public string ResourceFilesBasePath { get; set; }
-        public Assembly ResourceFilesAssemblyFile { get; set; }
+        public string ConfigurationFilePath { get { return configurationFilePath; } }
+        public Assembly ConfigurationFileAssemblyFile { get { return configurationFileAssemblyFile; } }
+        public string ResourceFilesBasePath { get { return resourceFilesBasePath; } }
+        public Assembly ResourceFilesAssemblyFile { get { return resourceFilesAssemblyFile; } }
+        public static string configurationFilePath;
+        public static Assembly configurationFileAssemblyFile;
+        public static string resourceFilesBasePath;
+        public static Assembly resourceFilesAssemblyFile;
         public ApplicationConfigurationSource()
         {
         }
     }
     public static partial class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddApplicationConfigurationSource(this IServiceCollection services, ApplicationConfigurationSource applicationConfigurationSource)
+        public static IServiceCollection AddApplicationConfigurationSource(this IServiceCollection services)
         {
-            return services.AddSingleton<IApplicationConfigurationSource, ApplicationConfigurationSource>(sp => applicationConfigurationSource);
+            return services.AddScoped<IApplicationConfigurationSource, ApplicationConfigurationSource>();
         }
     }
 }

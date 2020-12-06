@@ -193,11 +193,11 @@ namespace OneLine.Blazor.Bases
         /// <inheritdoc/>
         [Parameter] public virtual Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
         /// <inheritdoc/>
-        [Parameter] public virtual IPaging Paging { get; set; }
+        [Parameter] public virtual IPaging Paging { get; set; } = new Paging();
         /// <inheritdoc/>
         [Parameter] public virtual Action<IPaging> PagingChanged { get; set; }
         /// <inheritdoc/>
-        [Parameter] public virtual ISearchPaging SearchPaging { get; set; }
+        [Parameter] public virtual ISearchPaging SearchPaging { get; set; } = new SearchPaging();
         /// <inheritdoc/>
         [Parameter] public virtual Action<ISearchPaging> SearchPagingChanged { get; set; }
         /// <inheritdoc/>

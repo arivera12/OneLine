@@ -143,7 +143,7 @@ namespace OneLine.Bases
         /// <inheritdoc/>
         public virtual Task<IResponseResult<ApiResponse<IEnumerable<TResponse>>>> GetRangeAsync<TResponse>(IEnumerable<TIdentifier> identifiers, IValidator validator)
         {
-            return HttpClient.SendJsonRangeResponseResultAsync<IEnumerable<TResponse>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{GetRangeMethod}", identifiers, validator); ;
+            return HttpClient.SendJsonRangeResponseResultAsync<IEnumerable<TResponse>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{GetRangeMethod}", identifiers, validator);
         }
         /*Search method*/
         /// <inheritdoc/>

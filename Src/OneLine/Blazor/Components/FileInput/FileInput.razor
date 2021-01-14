@@ -1,0 +1,58 @@
+﻿@inherits FileInputBase
+@namespace OneLine.Blazor.Components
+@using OneLine.Models
+@using OneLine.Extensions
+@if (!Hidden)
+{
+    <CascadingValue Value="this">
+        @DropZoneInlineStyle
+        <div class="@(PreventAdding || !CanAddMoreFiles() ? "m-0" : $"{DropClass} m-0")" style="@(PreventAdding || !CanAddMoreFiles() ? "" : "cursor: pointer")" @onclick=OpenDeviceFileSystem @ref=DropTarget @ondragenter=OnDragEnter @ondrop=OnDrop @ondragleave=OnDragLeave>
+            @if (!PreventAdding && CanAddMoreFiles())
+            {
+                @DropZoneText
+            }
+            @if (((BlobDatas.IsNotNull() && BlobDatas.Any()) || (UserBlobs.IsNotNull() && UserBlobs.Any())) && CanAddMoreFiles())
+            {
+                <br class="p-0" />
+            }
+            @foreach (var BlobData in BlobDatas ?? Enumerable.Empty<BlobData>())
+            {
+                var localBlobData = BlobData;
+                <BSButton Color="Color.Link">
+                    <span @onclick:stopPropagation @onclick=@(async () => await Download(localBlobData)) title="@ResourceManagerLocalizer["Download"]">@localBlobData.Name</span>
+                    <span class="text-danger" @onclick:stopPropagation @onclick=@(() => Remove(localBlobData)) style="cursor: pointer" title="@ResourceManagerLocalizer["Delete"]">&times;</span>
+                </BSButton>
+            }
+            @foreach (var UserBlob in UserBlobs ?? Enumerable.Empty<UserBlobs>())
+            {
+                var localUserBlob = UserBlob;
+                <BSButton Color="Color.Link">
+                    <span @onclick:stopPropagation @onclick=@(async () => await Download(localUserBlob)) title="@ResourceManagerLocalizer["Download"]">@localUserBlob.Name</span>
+                    @if (!HideDeleteButton)
+                    {
+                        <span class="text-danger" @onclick:stopPropagation @onclick=@(() => Remove(localUserBlob)) style="cursor: pointer" title="@ResourceManagerLocalizer["Delete"]">&times;</span>
+                    }
+                </BSButton>
+            }
+        </div>
+        @if (!HideInformativeLabelText)
+        {
+            @InformativeLabelText()
+        }
+        @if (!HideResetButton)
+        {
+            <BSButton OnClick=Clear Color=Color.Primary>@ResetButtonText @(MaximumAllowedFiles == 1 ? ResourceManagerLocalizer["File"] : ResourceManagerLocalizer["Files"])</BSButton>
+        }
+        @if (CanAddMoreFiles())
+        {
+            @if (AllowMultiple)
+            {
+                <input type="file" class="d-none" @ref=DropTargetInput @attributes=UnknownParameters @onchange=OnInputChange multiple />
+            }
+            else
+            {
+                <input type="file" class="d-none" @ref=DropTargetInput @attributes=UnknownParameters @onchange=OnInputChange />
+            }
+        }
+    </CascadingValue>
+}

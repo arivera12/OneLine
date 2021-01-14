@@ -9,23 +9,23 @@ namespace OneLine.Extensions
 {
     public static class BlobDataCollectionExtensions
     {
-        public static bool BlobDataExists(this IEnumerable<BlobData> blobDatas, Func<BlobData, bool> predicate)
+        public static bool BlobDataExists(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate)
         {
-            return blobDatas.IsNotNullAndNotEmpty() && blobDatas.Any(predicate);
+            return blobDatas != null && blobDatas.Any() && blobDatas.Any(predicate);
         }
-        public static bool IsValidBlobData(this IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
+        public static bool IsValidBlobData(this IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
         {
             return IsValidBlobData(blobDatas, null, formFileRules);
         }
-        public static bool IsValidBlobData(this IEnumerable<BlobData> blobDatas, Func<BlobData, bool> predicate, FormFileRules formFileRules)
+        public static bool IsValidBlobData(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate, IFormFileRules formFileRules)
         {
             return IsValidBlobDataApiResponse(blobDatas, predicate, formFileRules).Status == ApiResponseStatus.Succeeded;
         }
-        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
+        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
         {
             return IsValidBlobDataApiResponse(blobDatas, null, formFileRules);
         }
-        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<BlobData> blobDatas, Func<BlobData, bool> predicate, FormFileRules formFileRules)
+        public static ApiResponse<string> IsValidBlobDataApiResponse(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate, IFormFileRules formFileRules)
         {
             if (formFileRules.AllowedBlobMaxLength <= 0)
             {
@@ -40,11 +40,11 @@ namespace OneLine.Extensions
                 throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
             }
             var blobs = predicate == null ? blobDatas : blobDatas.Where(predicate);
-            if (blobs.IsNullOrEmpty() && formFileRules.IsRequired)
+            if (blobs.IsNull() || !blobs.Any() && formFileRules.IsRequired)
             {
                 return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired" };
             }
-            else if (blobs.IsNotNullAndNotEmpty())
+            else if (blobs.IsNotNull() && blobs.Any())
             {
                 if (blobs.Count() < formFileRules.AllowedMinimunFiles)
                 {

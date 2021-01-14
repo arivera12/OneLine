@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using OneLine.Enums;
 using OneLine.Models;
 using System;
@@ -8,56 +9,104 @@ namespace OneLine.Extensions
 {
     public static class AuditTrailsExtensions
     {
-        public static AuditTrails CreateAuditTrails<TEntity>(this TEntity entity, TransactionType transactionType, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        /// <summary>
+        /// Creates a new <typeparamref name="TAuditTrails"/> object saving the <typeparamref name="T"/> state and returns it binding the <paramref name="httpContextAccessor"/> values
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TAuditTrails"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="transactionType"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <returns></returns>
+        public static TAuditTrails CreateAuditTrails<T, TAuditTrails>(this T entity, TransactionType transactionType, IHttpContextAccessor httpContextAccessor)
+            where T : class
+            where TAuditTrails : class, IAuditTrails, new()
         {
-            string Action = transactionType.TransactionTypeMessage<TEntity>();
-            return new AuditTrails()
+            string Action = transactionType.TransactionTypeMessage<T>();
+            return new TAuditTrails()
             {
-                AuditTrailId = Guid.NewGuid().GenerateGuid(),
+                AuditTrailId = Guid.NewGuid().ToString(),
                 Action = Action,
-                ActionName = actionName,
-                ControllerName = controllerName,
-                TableName = typeof(TEntity).Name,
+                ActionName = httpContextAccessor?.HttpContext?.CurrentControllerActionName(),
+                ControllerName = httpContextAccessor?.HttpContext?.CurrentControllerName(),
+                TableName = typeof(T).Name,
                 Record = JsonConvert.SerializeObject(entity, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
                 Hostname = Environment.MachineName,
-                RemoteIpAddress = remoteIpAddress,
-                CreatedBy = createdBy,
+                RemoteIpAddress = httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress.ToString(),
+                CreatedBy = httpContextAccessor?.HttpContext?.User.UserId(),
                 CreatedOn = DateTime.Now
             };
         }
-        public static AuditTrails CreateAuditTrails<TEntity>(this TEntity entity, string transactionMessage, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        /// <summary>
+        /// Creates a new <typeparamref name="TAuditTrails"/> object saving the <typeparamref name="T"/> state and returns it binding the <paramref name="httpContextAccessor"/> values
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TAuditTrails"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="transactionMessage"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <returns></returns>
+        public static TAuditTrails CreateAuditTrails<T, TAuditTrails>(this T entity, string transactionMessage, IHttpContextAccessor httpContextAccessor)
+            where T : class
+            where TAuditTrails : class, IAuditTrails, new()
         {
-            return new AuditTrails()
+            return new TAuditTrails()
             {
-                AuditTrailId = Guid.NewGuid().GenerateGuid(),
+                AuditTrailId = Guid.NewGuid().ToString(),
                 Action = transactionMessage,
-                ActionName = actionName,
-                ControllerName = controllerName,
-                TableName = typeof(TEntity).Name,
+                ActionName = httpContextAccessor?.HttpContext?.CurrentControllerActionName(),
+                ControllerName = httpContextAccessor?.HttpContext?.CurrentControllerName(),
+                TableName = typeof(T).Name,
                 Record = JsonConvert.SerializeObject(entity, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
                 Hostname = Environment.MachineName,
-                RemoteIpAddress = remoteIpAddress,
-                CreatedBy = createdBy,
+                RemoteIpAddress = httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress.ToString(),
+                CreatedBy = httpContextAccessor?.HttpContext?.User.UserId(),
                 CreatedOn = DateTime.Now
             };
         }
-        public static IEnumerable<AuditTrails> CreateRangeAuditTrails<TEntity>(this IEnumerable<TEntity> entities, TransactionType transactionType, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        /// <summary>
+        /// Creates a range of new <typeparamref name="TAuditTrails"/> object saving the <typeparamref name="T"/> state and returns it binding the <paramref name="httpContextAccessor"/> values
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TAuditTrails"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="transactionMessage"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <returns></returns>
+        public static IEnumerable<TAuditTrails> CreateRangeAuditTrails<T, TAuditTrails>(this IEnumerable<T> entities, TransactionType transactionType, IHttpContextAccessor httpContextAccessor)
+            where T : class
+            where TAuditTrails : class, IAuditTrails, new()
         {
-            var AudiTrails = new List<AuditTrails>();
+            var AudiTrails = new List<TAuditTrails>();
             foreach (var item in entities)
             {
-                AudiTrails.Add(item.CreateAuditTrails(transactionType, createdBy, controllerName, actionName, remoteIpAddress));
+                AudiTrails.Add(item.CreateAuditTrails<T, TAuditTrails>(transactionType, httpContextAccessor));
             }
             return AudiTrails;
         }
-        public static IEnumerable<AuditTrails> CreateRangeAuditTrails<TEntity>(this IEnumerable<TEntity> entities, string transactionMessage, string createdBy = null, string controllerName = null, string actionName = null, string remoteIpAddress = null)
+        /// <summary>
+        /// Creates a range of new <typeparamref name="TAuditTrails"/> object saving the <typeparamref name="T"/> state and returns it binding the <paramref name="httpContextAccessor"/> values
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TAuditTrails"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="transactionMessage"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <returns></returns>
+        public static IEnumerable<TAuditTrails> CreateRangeAuditTrails<T, TAuditTrails>(this IEnumerable<T> entities, string transactionMessage, IHttpContextAccessor httpContextAccessor)
+            where T : class
+            where TAuditTrails : class, IAuditTrails, new()
         {
-            var AudiTrails = new List<AuditTrails>();
+            var AudiTrails = new List<TAuditTrails>();
             foreach (var item in entities)
             {
-                AudiTrails.Add(item.CreateAuditTrails(transactionMessage, createdBy, controllerName, actionName, remoteIpAddress));
+                AudiTrails.Add(item.CreateAuditTrails<T, TAuditTrails>(transactionMessage, httpContextAccessor));
             }
             return AudiTrails;
         }
+
+
+
+
     }
 }

@@ -16,7 +16,7 @@ namespace OneLine.Attributes
         {
             if (!filterContext.ModelState.IsValid)
             {
-                filterContext.Result = new ApiResponse<string[]>() { Status = ApiResponseStatus.Failed, Message = "InvalidModelState", Data = filterContext.ModelState.Values.SelectMany(s => s.Errors).Select(e => e.ErrorMessage).ToArray() }.ToJsonActionResult();
+                filterContext.Result = new ApiResponse<string[]>(ApiResponseStatus.Failed, filterContext.ModelState.Values.SelectMany(s => s.Errors).Select(e => e.ErrorMessage).ToArray(), "InvalidModelState").ToJsonActionResult();
             }
             base.OnActionExecuting(filterContext);
         }

@@ -16,6 +16,10 @@ namespace SouceCodeModelReader
         {
             ClassesInformation = new ClassesInformation();
         }
+        public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
+        {
+            base.VisitMethodDeclaration(node);  
+        }
         public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
         {
             var classnode = node.Parent as ClassDeclarationSyntax;
@@ -62,7 +66,8 @@ namespace SouceCodeModelReader
                     {
                         public string MyProperty {get;set;}
                         public int MyProperty1 {get;set;}
-                        public myClass MyProperty2 {get;set;} 
+                        public myClass MyProperty2 {get;set;}
+                        public void MyMethod() {}
                     }
                     public class MyAwesomeViewModel
                     {
@@ -79,7 +84,7 @@ namespace SouceCodeModelReader
             var classModelsCollector = new ClassModelsCollector();
             classModelsCollector.Visit(root);
 
-            Console.WriteLine(JsonSerializer.Serialize(classModelsCollector.ClassesInformation.Classes));
+            Console.WriteLine(JsonSerializer.Serialize(classModelsCollector.ClassesInformation.Classes, new JsonSerializerOptions() { WriteIndented = true }));
         }
     }
 }

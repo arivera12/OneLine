@@ -7,27 +7,62 @@ namespace OneLine.Bases
 {
     public class MessageHub : Hub<IReceiveMessageHub>, ISendMessageHub
     {
-        public override async Task OnConnectedAsync()
+        public Task AddConnectionToGroup(string connectionId, string groupName)
+        {
+            return Groups.AddToGroupAsync(connectionId, groupName);
+        }
+        public Task AddUserToGroup(string connectionId, string groupName)
+        {
+            return Groups.AddToGroupAsync(connectionId, groupName);
+        }
+        public override Task OnConnectedAsync()
         {
             //TODO: Poner online el usuario
-            await base.OnConnectedAsync();
+            return base.OnConnectedAsync();
         }
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public override Task OnDisconnectedAsync(Exception exception)
         {
             //TODO: Poner offline el usuario
-            await base.OnDisconnectedAsync(exception);
+            return base.OnDisconnectedAsync(exception);
         }
-        public async Task SendMessageToAllUsers<TMessage>(string senderUser, TMessage message)
+        public Task RemoveConnectionFromGroup(string connectionId, string userId)
         {
-            await Clients.All.ReceiveMessageToAllUsers(senderUser, message);
+            throw new NotImplementedException();
         }
-        public async Task SendMessageToAllUsersAnonymously<TMessage>(TMessage message)
+
+        public Task RemoveUserFromAllGroups(string userId)
         {
-            await Clients.All.ReceiveMessageToAllUsersAnonymously(message);
+            throw new NotImplementedException();
         }
-        public async Task SendMessageToUser<TMessage>(string senderUser, TMessage message)
+
+        public Task RemoveUserFromGroup(string userId, string groupName)
         {
-            await Clients.User(senderUser).ReceiveMessage(message);
+            throw new NotImplementedException();
+        }
+
+        public Task SendMessageToAllUsers<TMessage>(string senderUser, TMessage message)
+        {
+            return Clients.All.ReceiveMessageToAllUsers(senderUser, message);
+        }
+
+        public Task SendMessageToAllUsersWithinGroup<TMessage>(string groupName, string senderUser, TMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendMessageToConnection<TMessage>(string connectionId, TMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendMessageToUser<TMessage>(string senderUser, TMessage message)
+        {
+            return Clients.User(senderUser).ReceiveMessage(message);
+        }
+
+        public Task UserExistsInGroup(string userId, string groupName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

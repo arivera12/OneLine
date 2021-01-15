@@ -55,15 +55,12 @@ namespace OneLine.Extensions
                 Status = apiResponseStatus
             };
         }
-<<<<<<< HEAD:OneLine/Extensions/QueryableExtensions.cs
         /// <summary>
         /// Checks if <see cref="ISoftDeletable.IsDeleted"/> is <see cref="true"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-=======
-
         public static IApiResponse<IPaged<IEnumerable<T>>> ToPagedApiResponse<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count, IEnumerable<string> decryptFieldsOnRead, string encryptionKey, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
         {
             source = source.Paged(Page, PageSize, out Count);
@@ -88,82 +85,6 @@ namespace OneLine.Extensions
                 Status = apiResponseStatus
             };
         }
-
-        public static IQueryable FlattenMapping<T>(this IQueryable<T> source, bool RemoveAuditableFields, params Expression<Func<T, object>>[] PropertiesToFlatten)
-        {
-            string DynamicSelect = "new (";
-            foreach (Expression<Func<T, object>> Property in PropertiesToFlatten)
-            {
-                Type PropertyType = Property.Body.Type;
-                MemberExpression memberExpression = Property.Body as MemberExpression;
-                string[] NavigationProperties = GetNavigationsProperties<object>(Activator.CreateInstance(PropertyType));
-                foreach (PropertyInfo prop in PropertyType.GetProperties())
-                {
-                    //remove navigations properties that exists in the current object for the flatten mapping
-                    if (!NavigationProperties.Contains(prop.Name))
-                    {
-                        if (!RemoveAuditableFields)
-                        {
-                            DynamicSelect += memberExpression.Member.Name + "." + prop.Name + " AS " + PropertyType.Name + prop.Name + ",";
-                        }
-                        else if (IsAuditableField(prop.Name))
-                        {
-                            DynamicSelect += memberExpression.Member.Name + "." + prop.Name + " AS " + PropertyType.Name + prop.Name + ",";
-                        }
-                    }
-                }
-            }
-            DynamicSelect = DynamicSelect.Remove(DynamicSelect.Length - 1);
-            DynamicSelect += ")";
-            return source.Select(DynamicSelect);
-        }
-
-        private static string[] GetNavigationsProperties<T>(object entityType)
-        {
-            return entityType.GetType()
-                                .GetProperties()
-                                .Where(p => (typeof(IEnumerable<T>).IsAssignableFrom(p.PropertyType) && p.PropertyType != typeof(string)) ||
-                                        (typeof(ICollection<T>).IsAssignableFrom(p.PropertyType) && p.PropertyType != typeof(string)) ||
-                                        p.PropertyType.Namespace == entityType.GetType().Namespace)
-                                .Select(p => p.Name)
-                                .ToArray();
-        }
-
-        private static bool IsAuditableField(string PropertyName)
-        {
-            return PropertyName != "CreatedOn" &&
-                    PropertyName != "CreatedBy" &&
-                    PropertyName != "ModifiedOn" &&
-                    PropertyName != "ModifiedBy";
-        }
-
-        public static IQueryable<T> IncludeNavigationProperties<T>(this IQueryable<T> source, params Expression<Func<T, object>>[] includeProperties) where T : class
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException("queryable");
-            }
-            foreach (Expression<Func<T, object>> includeProperty in includeProperties)
-            {
-                source = source.Include(includeProperty);
-            }
-            return source;
-        }
-
-        public static IQueryable<T> IncludeNavigationProperties<T>(this IQueryable<T> source, params string[] includeProperties) where T : class
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException("queryable");
-            }
-            foreach (string includeProperty in includeProperties)
-            {
-                source = source.Include(includeProperty);
-            }
-            return source;
-        }
-
->>>>>>> 98bc3b600e36b06a1909b67d7dfdaaf659019e16:Src/OneLine.Server/Extensions/QueryableExtensions.cs
         public static IQueryable<T> WhereIsDeleted<T>(this IQueryable<T> source) where T : ISoftDeletable
         {
             return source.Where(e => e.IsDeleted);

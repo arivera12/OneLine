@@ -11,11 +11,7 @@ namespace OneLine.Extensions
     {
         public static bool BlobDataExists(this IEnumerable<IBlobData> blobDatas, Func<IBlobData, bool> predicate)
         {
-<<<<<<< HEAD:OneLine/Extensions/BlobDataCollectionExtensions.cs
-            return blobDatas != null && blobDatas.Any() && blobDatas.Any(predicate);
-=======
             return blobDatas.IsNotNull() && blobDatas.Any() && blobDatas.Any(predicate);
->>>>>>> 98bc3b600e36b06a1909b67d7dfdaaf659019e16:Src/OneLine.Server/Extensions/BlobDataCollectionExtensions.cs
         }
         public static bool IsValidBlobData(this IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
         {
@@ -44,11 +40,7 @@ namespace OneLine.Extensions
                 throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
             }
             var blobs = predicate == null ? blobDatas : blobDatas.Where(predicate);
-<<<<<<< HEAD:OneLine/Extensions/BlobDataCollectionExtensions.cs
-            if (blobs.IsNull() || !blobs.Any() && formFileRules.IsRequired)
-=======
             if ((blobs.IsNull() || !blobDatas.Any()) && formFileRules.IsRequired)
->>>>>>> 98bc3b600e36b06a1909b67d7dfdaaf659019e16:Src/OneLine.Server/Extensions/BlobDataCollectionExtensions.cs
             {
                 return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired" };
             }

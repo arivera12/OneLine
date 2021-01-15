@@ -7,6 +7,5 @@ namespace OneLine.Contracts
         Task ReceiveMessage<TMessage>(TMessage message);
         Task ReceiveMessageToUser<TMessage>(string senderUser, TMessage message);
         Task ReceiveMessageToAllUsers<TMessage>(string senderUser, TMessage message);
-        Task ReceiveMessageToAllUsersAnonymously<TMessage>(TMessage message);
     }
 }

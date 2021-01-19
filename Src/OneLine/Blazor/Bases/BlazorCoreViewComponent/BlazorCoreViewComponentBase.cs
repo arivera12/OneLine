@@ -1133,7 +1133,7 @@ namespace OneLine.Blazor.Bases
                     }
                 }
                 //Creates a deep copy prevent deleting the original collection.
-                RecordsFilteredSorted.ReplaceRange(recordsFilteredSorted.AutoMap<T, T>());
+                RecordsFilteredSorted.ReplaceRange(recordsFilteredSorted.AutoMap<T>());
                 RecordsFilteredSortedChanged?.Invoke(RecordsFilteredSorted);
             }
             return Task.CompletedTask;

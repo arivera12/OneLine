@@ -86,37 +86,33 @@ namespace OneLine.Extensions
             return new ApiResponse<T> { Status = ApiResponseStatus.Failed, Data = objType, Message = message, ErrorMessages = errorMessages };
         }
         /// <summary>
-        /// Maps from <typeparamref name="FromT"/> to <typeparamref name="ToT"/>. Take note that field names, types and accessfiers must be equal.
+        /// Maps to <typeparamref name="T"/>. Take note that field names, types and accessfiers must be equal.
         /// </summary>
-        /// <typeparam name="FromT">The from type that will be converted</typeparam>
-        /// <typeparam name="ToT">The to type that will be converted</typeparam>
+        /// <typeparam name="T">The to type that will be converted</typeparam>
         /// <param name="collection">The collection</param>
         /// <param name="trimStrings">whether to perform trim operation on <see cref="string"/></param>
         /// <param name="autoUpperCaseStrings">whether to uppercase the <see cref="string"/> values</param>
         /// <returns></returns>
-        public static IEnumerable<ToT> AutoMap<FromT, ToT>(this IEnumerable<FromT> collection, bool trimStrings = true, bool autoUpperCaseStrings = false)
-            where FromT : class
-            where ToT : class
+        public static IEnumerable<T> AutoMap<T>(this IEnumerable<object> collection, bool trimStrings = true, bool autoUpperCaseStrings = false)
         {
-            IList<ToT> toTModels = Activator.CreateInstance<List<ToT>>();
+            IList<T> toTModels = Activator.CreateInstance<List<T>>();
             foreach (var item in collection)
             {
-                ToT toTModel = Activator.CreateInstance<ToT>();
+                T toTModel = Activator.CreateInstance<T>();
                 toTModels.Add(toTModel.AutoMap(item, trimStrings, autoUpperCaseStrings));
             }
             return toTModels.AsEnumerable();
         }
         /// <summary>
-        /// Maps the <paramref name="source"/> object to <typeparamref name="ToT"/>. Take note that field names, types and accessfiers must be equal.
+        /// Maps the <paramref name="source"/> object to <typeparamref name="T"/>. Take note that field names, types and accessfiers must be equal.
         /// </summary>
-        /// <typeparam name="ToT">The destination type that will be converted</typeparam>
-        /// <param name="source">The source type that will be converted to <typeparamref name="ToT"/></param>
+        /// <typeparam name="T">The destination type that will be converted</typeparam>
+        /// <param name="source">The source type that will be converted to <typeparamref name="T"/></param>
         /// <param name="destination">The destination type that will be converted</param>
         /// <param name="trimStrings">whether to perform trim operation on <see cref="string"/></param>
         /// <param name="autoUpperCaseStrings">whether to uppercase the <see cref="string"/> values</param>
         /// <returns></returns>
-        public static ToT AutoMap<ToT>(this ToT destination, object source, bool trimStrings = true, bool autoUpperCaseStrings = false)
-            where ToT : class
+        public static T AutoMap<T>(this T destination, object source, bool trimStrings = true, bool autoUpperCaseStrings = false)
         {
             foreach (PropertyInfo SourceProp in source.GetType().GetProperties())
             {
@@ -153,7 +149,7 @@ namespace OneLine.Extensions
         {
             if (obj is IEnumerable || obj.GetType().IsAssignableFrom(typeof(IEnumerable)))
             {
-                return string.Join("&", (obj as IEnumerable<object>).Select(s => s == null ? "" : s.ToUrlQueryString()));
+                return string.Join("&", (obj as IEnumerable<object>).Select(s => s.IsNull() ? "" : s.ToUrlQueryString()));
             }
             else
             {
@@ -167,7 +163,7 @@ namespace OneLine.Extensions
         /// Converts <typeparamref name="T"/> to a <see cref="IDictionary{string, object}"/>
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="bindingAttr"></param>
+        /// <param name="bindingFlags"></param>
         /// <returns></returns>
         public static IDictionary<string, object> ToDictionary<T>(this T source, BindingFlags bindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
             where T : class
@@ -190,7 +186,7 @@ namespace OneLine.Extensions
             var someObjectType = objectType.GetType();
             foreach (var item in source)
             {
-                if (item.Value != null)
+                if (item.Value.IsNotNull())
                 {
                     someObjectType
                      .GetProperty(item.Key)
@@ -198,6 +194,17 @@ namespace OneLine.Extensions
                 }
             }
             return objectType;
+        }
+        /// <summary>
+        /// Converts to <typeparamref name="T"/>
+        /// </summary>
+        /// <exception cref="InvalidCastException"></exception>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static T ToType<T>(this object source)
+        {
+            return (T)source;
         }
         /// <summary>
         /// Checks whether <typeparamref name="T"/> is null
@@ -259,7 +266,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static bool PropertyExists<T>(string propertyName, BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)
         {
-            return typeof(T).GetProperty(propertyName, bindingFlags) != null;
+            return typeof(T).GetProperty(propertyName, bindingFlags).IsNotNull();
         }
         /// <summary>
         /// Validates <typeparamref name="T"/> using the <paramref name="validator"/>
@@ -271,11 +278,11 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<T>> ValidateAsync<T>(this T source, IValidator validator)
             where T : class
         {
-            if (source == null)
+            if (source.IsNull())
             {
                 return new ApiResponse<T>(ApiResponseStatus.Failed, source, "RecordIsNull");
             }
-            if (validator == null)
+            if (validator.IsNull())
             {
                 return new ApiResponse<T>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
             }
@@ -296,11 +303,11 @@ namespace OneLine.Extensions
         public static async Task<IApiResponse<IEnumerable<T>>> ValidateRangeAsync<T>(this IEnumerable<T> source, IValidator validator)
             where T : class
         {
-            if (source == null || !source.Any())
+            if (source.IsNull() || !source.Any())
             {
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, "RecordIsNull");
             }
-            if (validator == null)
+            if (validator.IsNull())
             {
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
             }

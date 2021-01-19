@@ -1,0 +1,12 @@
+﻿@using OneLine.Extensions;
+@typeparam TItem
+@inherits RepeaterModel<TItem>
+@(HeaderTemplate ?? null)
+@if (ItemTemplate.IsNotNull() && Items.IsNotNull() && Items.Any())
+{
+    @foreach (var item in Items)
+    {
+        @ItemTemplate(item)
+    }
+}
+@(FooterTemplate ?? null)

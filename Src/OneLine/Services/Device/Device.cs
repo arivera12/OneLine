@@ -31,7 +31,7 @@ namespace OneLine.Services
                 {
                     return DeviceDetector?.IsDesktop() ?? Xamarin.Forms.Device.Idiom == Xamarin.Forms.TargetIdiom.Desktop;
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -46,7 +46,7 @@ namespace OneLine.Services
                 {
                     return DeviceDetector?.IsTablet() ?? Xamarin.Forms.Device.Idiom == Xamarin.Forms.TargetIdiom.Tablet;
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -61,7 +61,7 @@ namespace OneLine.Services
                 {
                     return DeviceDetector?.IsMobile() ?? Xamarin.Forms.Device.Idiom == Xamarin.Forms.TargetIdiom.Phone;
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -81,7 +81,7 @@ namespace OneLine.Services
                   Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Tizen) ||
                   Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.WPF);
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -96,7 +96,7 @@ namespace OneLine.Services
                 {
                     return DeviceDetector?.GetOs().Match.Platform.Equals("Android") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Android);
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -111,7 +111,7 @@ namespace OneLine.Services
                 {
                     return Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.GTK);
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -126,7 +126,7 @@ namespace OneLine.Services
                 {
                     return DeviceDetector?.GetOs().Match.Platform.Equals("iOS") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.iOS);
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -141,7 +141,7 @@ namespace OneLine.Services
                 {
                     return DeviceDetector?.GetOs().Match.Platform.Equals("Mac") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.macOS);
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -156,7 +156,7 @@ namespace OneLine.Services
                 {
                     return DeviceDetector?.GetOs().Match.Platform.Equals("Tizen") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Tizen);
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -171,7 +171,7 @@ namespace OneLine.Services
                 {
                     return Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.WPF);
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -192,7 +192,7 @@ namespace OneLine.Services
                         DeviceDetector.GetOs().Match.Platform.Equals("Windows Phone") ||
                         DeviceDetector.GetOs().Match.Platform.Equals("Windows RT");
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -220,7 +220,7 @@ namespace OneLine.Services
                         DeviceDetector.GetOs().Match.Platform.Equals("Ubuntu") ||
                         DeviceDetector.GetOs().Match.Platform.Equals("Xubuntu");
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -237,7 +237,7 @@ namespace OneLine.Services
                         DeviceDetector.GetOs().Match.Platform.Equals("Mac") ||
                         DeviceDetector.GetOs().Match.Platform.Equals("iOS");
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -252,7 +252,7 @@ namespace OneLine.Services
                 {
                     return RuntimeInformation.OSDescription.Equals("web") || JSRuntime.IsNotNull();
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -267,7 +267,7 @@ namespace OneLine.Services
                 {
                     return IsWebPlatform && !Type.GetType("Mono.Runtime").Equals(null) || JSRuntime.IsNotNull();
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
@@ -282,7 +282,22 @@ namespace OneLine.Services
                 {
                     return IsWebPlatform && Type.GetType("Mono.Runtime").Equals(null) || JSRuntime.IsNotNull();
                 }
-                catch (Exception)
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool IsHybridPlatform
+        {
+            get
+            {
+                try
+                {
+                    return IsWebPlatform && IsXamarinPlatform;
+                }
+                catch
                 {
                     return false;
                 }

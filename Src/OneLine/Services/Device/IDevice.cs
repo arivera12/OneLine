@@ -21,6 +21,7 @@
         bool IsWebPlatform { get; }
         bool IsWebBlazorWAsmPlatform { get; }
         bool IsWebBlazorServerPlatform { get; }
+        bool IsHybridPlatform { get; }
         bool Is32BitsArmOSArquitecture { get; }
         bool Is64BitsArmOSArquitecture { get; }
         bool Is32BitsOSArquitecture { get; }

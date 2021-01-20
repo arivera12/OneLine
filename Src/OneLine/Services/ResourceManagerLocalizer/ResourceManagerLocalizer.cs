@@ -35,13 +35,13 @@ namespace OneLine.Services
         }
         public async Task<string> GetApplicationLocale()
         {
-            if (Device.IsWebPlatform)
-            {
-                return await JSRuntime.InvokeAsync<string>("window.localStorage.getItem", "ApplicationLocale");
-            }
-            else if (Device.IsXamarinPlatform)
+            if (Device.IsXamarinPlatform)
             {
                 return await SecureStorage.GetAsync("ApplicationLocale");
+            }
+            else if (Device.IsWebPlatform)
+            {
+                return await JSRuntime.InvokeAsync<string>("window.localStorage.getItem", "ApplicationLocale");
             }
             else
             {
@@ -54,13 +54,13 @@ namespace OneLine.Services
             var currentCulture = new CultureInfo(applicationLocale);
             Thread.CurrentThread.CurrentCulture = currentCulture;
             Thread.CurrentThread.CurrentUICulture = currentCulture;
-            if (Device.IsWebPlatform)
-            {
-                await JSRuntime.InvokeVoidAsync("window.localStorage.setItem", "ApplicationLocale", applicationLocale);
-            }
-            else if (Device.IsXamarinPlatform)
+            if (Device.IsXamarinPlatform)
             {
                 await SecureStorage.SetAsync("ApplicationLocale", applicationLocale);
+            }
+            else if (Device.IsWebPlatform)
+            {
+                await JSRuntime.InvokeVoidAsync("window.localStorage.setItem", "ApplicationLocale", applicationLocale);
             }
             else
             {

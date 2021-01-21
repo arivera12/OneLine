@@ -57,12 +57,21 @@ namespace OneLine.Services
                 if (useDevicePersistentStorageProvider)
                 {
                     var stringValue = await Xamarin.Essentials.SecureStorage.GetAsync(key);
-                    return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);
+                    if (!string.IsNullOrWhiteSpace(stringValue))
+                    {
+                        return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);
+                    }
                 }
                 else
                 {
-                    var stringValue = SessionStorageDictionary[key];
-                    return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);
+                    if (SessionStorageDictionary.ContainsKey(key))
+                    {
+                        var stringValue = SessionStorageDictionary[key];
+                        if (!string.IsNullOrWhiteSpace(stringValue))
+                        {
+                            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);
+                        }
+                    }
                 }
             }
             else if (Device.IsWebPlatform)

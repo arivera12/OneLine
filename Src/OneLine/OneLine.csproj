@@ -13,11 +13,11 @@
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
     <PackageReleaseNotes>Added new service DeviceStorage to core views.</PackageReleaseNotes>
-    <Version>3.0.14</Version>
+    <Version>3.0.15</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.14.0</AssemblyVersion>
-    <FileVersion>3.0.14.0</FileVersion>
+    <AssemblyVersion>3.0.15.0</AssemblyVersion>
+    <FileVersion>3.0.15.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

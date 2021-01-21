@@ -33,12 +33,14 @@ namespace OneLine.Bases
             IResourceManagerLocalizer resourceManagerLocalizer,
             IApplicationState applicationState,
             IDevice device,
+            IDeviceStorage deviceStorage,
             ISaveFile saveFile)
         {
             ApplicationConfiguration = applicationConfiguration;
             ResourceManagerLocalizer = resourceManagerLocalizer;
             ApplicationState = applicationState;
             Device = device;
+            DeviceStorage = deviceStorage;
             SaveFile = saveFile; 
         }
         /// <inheritdoc/>

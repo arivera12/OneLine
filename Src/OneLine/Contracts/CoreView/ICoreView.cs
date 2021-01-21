@@ -44,5 +44,7 @@ namespace OneLine.Contracts
         public IApplicationState ApplicationState { get; set; }
         /// <inheritdoc/>
         public IApplicationConfiguration ApplicationConfiguration { get; set; }
+        /// <inheritdoc/>
+        public IDeviceStorage DeviceStorage { get; set; }
     }
 }

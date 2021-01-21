@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added new service DeviceStorage which supports xamarin and blazor enviroments.</PackageReleaseNotes>
-    <Version>3.0.13</Version>
+    <PackageReleaseNotes>Added new service DeviceStorage to core views.</PackageReleaseNotes>
+    <Version>3.0.14</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.13.0</AssemblyVersion>
-    <FileVersion>3.0.13.0</FileVersion>
+    <AssemblyVersion>3.0.14.0</AssemblyVersion>
+    <FileVersion>3.0.14.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

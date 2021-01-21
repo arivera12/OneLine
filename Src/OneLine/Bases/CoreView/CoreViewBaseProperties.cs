@@ -27,6 +27,7 @@ namespace OneLine.Bases
         public virtual ISaveFile SaveFile { get; set; }
         /// <inheritdoc/>
         public virtual IDevice Device { get; set; }
+        public virtual IDeviceStorage DeviceStorage { get; set; }
         /// <inheritdoc/>
         public virtual IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
         /// <inheritdoc/>

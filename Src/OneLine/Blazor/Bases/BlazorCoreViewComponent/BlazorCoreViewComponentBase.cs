@@ -112,6 +112,7 @@ namespace OneLine.Blazor.Bases
         public virtual bool ShowActivityIndicator { get; set; }
         /// <inheritdoc/>
         [Inject] public virtual IDevice Device { get; set; }
+        [Inject] public virtual IDeviceStorage DeviceStorage { get; set; }
         /// <inheritdoc/>
         [Inject] public virtual ISaveFile SaveFile { get; set; }
         /// <inheritdoc/>

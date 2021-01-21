@@ -18,6 +18,7 @@ namespace OneLine.Services
                 .AddResourceManagerLocalizer()
                 .AddApplicationState()
                 .AddDevice()
+                .AddDeviceStorage()
                 .AddSaveFile();
         }
     }

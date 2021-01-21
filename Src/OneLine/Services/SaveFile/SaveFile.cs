@@ -9,8 +9,8 @@ namespace OneLine.Services
 {
     public class SaveFile : ISaveFile
     {
-        public IDevice Device { get; set; }
-        public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
+        private IDevice Device { get; set; }
+        private IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
         public SaveFile()
         { }
         public SaveFile(IDevice device)

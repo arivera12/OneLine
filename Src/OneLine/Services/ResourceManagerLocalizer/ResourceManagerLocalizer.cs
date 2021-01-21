@@ -11,9 +11,9 @@ namespace OneLine.Services
 {
     public class ResourceManagerLocalizer : IResourceManagerLocalizer
     {
-        public IApplicationConfigurationSource ApplicationConfigurationSource { get; set; }
-        public IDevice Device { get; set; }
-        public IJSRuntime JSRuntime { get; set; }
+        private IApplicationConfigurationSource ApplicationConfigurationSource { get; set; }
+        private IDevice Device { get; set; }
+        private IJSRuntime JSRuntime { get; set; }
         public ResourceManager ResourceManager { get; set; }
         public string this[string key] { get => ResourceManager.GetString(key); }
         public ResourceManagerLocalizer(IApplicationConfigurationSource applicationConfigurationSource, IDevice device)

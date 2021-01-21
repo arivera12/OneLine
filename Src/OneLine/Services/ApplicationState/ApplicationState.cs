@@ -14,10 +14,10 @@ namespace OneLine.Services
     {
         private string SessionSecureUser { get; set; }
         private string SessionKey { get; set; }
-        public NavigationManager NavigationManager { get; set; }
-        public ISessionStorage SessionStorage { get; set; }
-        public ILocalStorage LocalStorage { get; set; }
-        public IDevice Device { get; set; } 
+        private NavigationManager NavigationManager { get; set; }
+        private ISessionStorage SessionStorage { get; set; }
+        private ILocalStorage LocalStorage { get; set; }
+        private IDevice Device { get; set; } 
         public ApplicationState()
         {
         }

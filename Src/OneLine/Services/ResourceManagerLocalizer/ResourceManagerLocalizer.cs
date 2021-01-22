@@ -9,7 +9,7 @@ using Xamarin.Essentials;
 
 namespace OneLine.Services
 {
-    public class ResourceManagerLocalizer : IResourceManagerLocalizer
+    public class ResourceManagerLocalizer : IResourceManagerLocalizer 
     {
         private IApplicationConfigurationSource ApplicationConfigurationSource { get; set; }
         private IDevice Device { get; set; }
@@ -20,19 +20,18 @@ namespace OneLine.Services
         {
             ApplicationConfigurationSource = applicationConfigurationSource;
             Device = device;
-            InitializeCurrentCulture();
+            ResourceManager = new ResourceManager(ApplicationConfigurationSource.ResourceFilesBasePath, ApplicationConfigurationSource.ResourceFilesAssemblyFile);
+            new Action(async () => await SetCurrentThreadCulture()).Invoke();
         }
         public ResourceManagerLocalizer(IApplicationConfigurationSource applicationConfigurationSource, IDevice device, IJSRuntime jSRuntime)
         {
             ApplicationConfigurationSource = applicationConfigurationSource;
             Device = device;
             JSRuntime = jSRuntime;
-            InitializeCurrentCulture();
-        }
-        private void InitializeCurrentCulture()
-        {
             ResourceManager = new ResourceManager(ApplicationConfigurationSource.ResourceFilesBasePath, ApplicationConfigurationSource.ResourceFilesAssemblyFile);
+            new Action(async () => await SetCurrentThreadCulture()).Invoke();
         }
+        /// <inheritdoc/>
         public async Task<string> GetApplicationLocale()
         {
             if (Device.IsXamarinPlatform)
@@ -49,11 +48,9 @@ namespace OneLine.Services
             }
             return default;
         }
+        /// <inheritdoc/>
         public async Task SetApplicationLocale(string applicationLocale)
         {
-            var currentCulture = new CultureInfo(applicationLocale);
-            Thread.CurrentThread.CurrentCulture = currentCulture;
-            Thread.CurrentThread.CurrentUICulture = currentCulture;
             if (Device.IsXamarinPlatform)
             {
                 await SecureStorage.SetAsync("ApplicationLocale", applicationLocale);
@@ -66,6 +63,25 @@ namespace OneLine.Services
             {
                 new PlatformNotSupportedException("Translator seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
             }
+        }
+        /// <inheritdoc/>
+        public async Task SetCurrentThreadCulture()
+        {
+            var applicationLocale = await GetApplicationLocale();
+            if(!string.IsNullOrWhiteSpace(applicationLocale))
+            {
+                var currentCulture = new CultureInfo(applicationLocale);
+                Thread.CurrentThread.CurrentCulture = currentCulture;
+                Thread.CurrentThread.CurrentUICulture = currentCulture;
+            }
+        }
+        /// <inheritdoc/>
+        public Task SetCurrentThreadCulture(string applicationLocale)
+        {
+            var currentCulture = new CultureInfo(applicationLocale);
+            Thread.CurrentThread.CurrentCulture = currentCulture;
+            Thread.CurrentThread.CurrentUICulture = currentCulture;
+            return Task.CompletedTask;
         }
     }
     public static partial class ServiceCollectionExtensions

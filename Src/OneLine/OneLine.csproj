@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed device service os Detection.</PackageReleaseNotes>
-    <Version>3.0.17</Version>
+    <PackageReleaseNotes>Added to force SetCurrentThreadCulture when ever the resource manager localizer is requested from the service container.</PackageReleaseNotes>
+    <Version>3.0.18</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.17.0</AssemblyVersion>
-    <FileVersion>3.0.17.0</FileVersion>
+    <AssemblyVersion>3.0.18.0</AssemblyVersion>
+    <FileVersion>3.0.18.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

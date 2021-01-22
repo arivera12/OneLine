@@ -94,7 +94,7 @@ namespace OneLine.Services
             {
                 try
                 {
-                    return DeviceDetector?.GetOs().Match.Platform.Equals("Android") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Android);
+                    return DeviceDetector?.GetOs().Match.Name.Equals("Android") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Android);
                 }
                 catch
                 {
@@ -124,7 +124,7 @@ namespace OneLine.Services
             {
                 try
                 {
-                    return DeviceDetector?.GetOs().Match.Platform.Equals("iOS") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.iOS);
+                    return DeviceDetector?.GetOs().Match.Name.Equals("iOS") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.iOS);
                 }
                 catch
                 {
@@ -139,7 +139,7 @@ namespace OneLine.Services
             {
                 try
                 {
-                    return DeviceDetector?.GetOs().Match.Platform.Equals("Mac") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.macOS);
+                    return DeviceDetector?.GetOs().Match.Name.Equals("Mac") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.macOS);
                 }
                 catch
                 {
@@ -154,7 +154,7 @@ namespace OneLine.Services
             {
                 try
                 {
-                    return DeviceDetector?.GetOs().Match.Platform.Equals("Tizen") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Tizen);
+                    return DeviceDetector?.GetOs().Match.Name.Equals("Tizen") ?? Xamarin.Forms.Device.RuntimePlatform.Equals(Xamarin.Forms.Device.Tizen);
                 }
                 catch
                 {
@@ -185,12 +185,12 @@ namespace OneLine.Services
                 try
                 {
                     return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Windows") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Windows CE") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Windows IoT") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Windows Mobile") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Windows Phone") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Windows RT");
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows CE") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows IoT") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows Mobile") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows Phone") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows RT");
                 }
                 catch
                 {
@@ -206,19 +206,19 @@ namespace OneLine.Services
                 try
                 {
                     return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Arch Linux") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("CentOS") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Debian") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Fedora") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Kubuntu") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("GNU/Linux") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Lubuntu") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("VectorLinux") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("OpenBSD") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Red Hat") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("SUSE") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Ubuntu") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Xubuntu");
+                        DeviceDetector.GetOs().Match.Name.Equals("Arch Linux") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("CentOS") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Debian") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Fedora") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Kubuntu") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("GNU/Linux") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Lubuntu") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("VectorLinux") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("OpenBSD") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Red Hat") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("SUSE") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Ubuntu") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Xubuntu");
                 }
                 catch
                 {
@@ -234,8 +234,8 @@ namespace OneLine.Services
                 try
                 {
                     return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("Mac") ||
-                        DeviceDetector.GetOs().Match.Platform.Equals("iOS");
+                        DeviceDetector.GetOs().Match.Name.Equals("Mac") ||
+                        DeviceDetector.GetOs().Match.Name.Equals("iOS");
                 }
                 catch
                 {

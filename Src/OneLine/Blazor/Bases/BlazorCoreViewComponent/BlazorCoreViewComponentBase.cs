@@ -112,6 +112,7 @@ namespace OneLine.Blazor.Bases
         public virtual bool ShowActivityIndicator { get; set; }
         /// <inheritdoc/>
         [Inject] public virtual IDevice Device { get; set; }
+        /// <inheritdoc/>
         [Inject] public virtual IDeviceStorage DeviceStorage { get; set; }
         /// <inheritdoc/>
         [Inject] public virtual ISaveFile SaveFile { get; set; }
@@ -281,7 +282,7 @@ namespace OneLine.Blazor.Bases
             OnAfterCancel ??= new Action(async () => await AfterCancel());
             OnBeforeReset ??= new Action(async () => await BeforeReset());
             OnAfterReset ??= new Action(async () => await AfterReset());
-            if (!string.IsNullOrWhiteSpace(RecordId))
+            if (!string.IsNullOrWhiteSpace(RecordId) && Identifier.IsNotNull() && Identifier.Model.IsNotNull())
             {
                 Identifier = new TIdentifier
                 {

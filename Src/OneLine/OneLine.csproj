@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed DeviceStorage.GetItem method adding null check for values before serializing.</PackageReleaseNotes>
-    <Version>3.0.15</Version>
+    <PackageReleaseNotes>Updated some dependencies.</PackageReleaseNotes>
+    <Version>3.0.16</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.15.0</AssemblyVersion>
-    <FileVersion>3.0.15.0</FileVersion>
+    <AssemblyVersion>3.0.16.0</AssemblyVersion>
+    <FileVersion>3.0.16.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>
@@ -42,8 +42,8 @@
     <PackageReference Include="FluentValidation" Version="9.0.0-preview4" />
     <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.2" />
-    <PackageReference Include="BlazorBrowserStorage" Version="1.0.0" />
-    <PackageReference Include="BlazorDownloadFile" Version="2.1.2" />
+    <PackageReference Include="BlazorBrowserStorage" Version="1.0.1" />
+    <PackageReference Include="BlazorDownloadFile" Version="2.1.6" />
     <PackageReference Include="Blazored.Typeahead" Version="4.3.0" />
     <PackageReference Include="BlazorStrap" Version="1.3.2-Preview1-04" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="2.6.6" />

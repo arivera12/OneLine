@@ -39,7 +39,7 @@ namespace OneLine.Blazor.Bases
             OnAfterCancel ??= new Action(async () => await AfterCancel());
             OnBeforeReset ??= new Action(async () => await BeforeReset());
             OnAfterReset ??= new Action(async () => await AfterReset());
-            if (!string.IsNullOrWhiteSpace(RecordId))
+            if (!string.IsNullOrWhiteSpace(RecordId) && Identifier.IsNotNull() && Identifier.Model.IsNotNull())
             {
                 Identifier = new TIdentifier
                 {

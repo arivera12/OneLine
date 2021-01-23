@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using OneLine.Services;
 using System;
 using System.Threading.Tasks;
@@ -26,6 +25,7 @@ namespace OneLine.Blazor
         protected async Task OnValueChanged(string applicationLocale)
         {
             await ResourceManagerLocalizer.SetApplicationLocale(applicationLocale);
+            await ResourceManagerLocalizer.SetCurrentThreadCulture(applicationLocale);
             if (ReloadOnLanguageChange)
             {
                 NavigationManager.NavigateTo(NavigationManager.Uri);

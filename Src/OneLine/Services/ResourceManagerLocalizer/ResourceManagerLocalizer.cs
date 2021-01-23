@@ -14,8 +14,11 @@ namespace OneLine.Services
         private IApplicationConfigurationSource ApplicationConfigurationSource { get; set; }
         private IDevice Device { get; set; }
         private IJSRuntime JSRuntime { get; set; }
+        private string CurrentApplicationLocale { get; set; }
         public ResourceManager ResourceManager { get; set; }
-        public string this[string key] { get => ResourceManager.GetString(key); }
+        public string this[string key] { get => string.IsNullOrWhiteSpace(CurrentApplicationLocale) ? 
+                ResourceManager.GetString(key) : 
+                ResourceManager.GetString(key, new CultureInfo(CurrentApplicationLocale)); }
         public ResourceManagerLocalizer(IApplicationConfigurationSource applicationConfigurationSource, IDevice device)
         {
             ApplicationConfigurationSource = applicationConfigurationSource;
@@ -70,7 +73,12 @@ namespace OneLine.Services
             var applicationLocale = await GetApplicationLocale();
             if(!string.IsNullOrWhiteSpace(applicationLocale))
             {
+                CurrentApplicationLocale = applicationLocale;
                 var currentCulture = new CultureInfo(applicationLocale);
+                CultureInfo.CurrentCulture = currentCulture;
+                CultureInfo.CurrentUICulture = currentCulture;
+                CultureInfo.DefaultThreadCurrentCulture = currentCulture;
+                CultureInfo.DefaultThreadCurrentUICulture = currentCulture;
                 Thread.CurrentThread.CurrentCulture = currentCulture;
                 Thread.CurrentThread.CurrentUICulture = currentCulture;
             }
@@ -78,7 +86,12 @@ namespace OneLine.Services
         /// <inheritdoc/>
         public Task SetCurrentThreadCulture(string applicationLocale)
         {
+            CurrentApplicationLocale = applicationLocale;
             var currentCulture = new CultureInfo(applicationLocale);
+            CultureInfo.CurrentCulture = currentCulture;
+            CultureInfo.CurrentUICulture = currentCulture;
+            CultureInfo.DefaultThreadCurrentCulture = currentCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = currentCulture;
             Thread.CurrentThread.CurrentCulture = currentCulture;
             Thread.CurrentThread.CurrentUICulture = currentCulture;
             return Task.CompletedTask;

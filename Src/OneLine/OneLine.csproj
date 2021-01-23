@@ -13,11 +13,11 @@
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
     <PackageReleaseNotes>Added to force SetCurrentThreadCulture when ever the resource manager localizer is requested from the service container.</PackageReleaseNotes>
-    <Version>3.0.18</Version>
+    <Version>3.0.22</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.18.0</AssemblyVersion>
-    <FileVersion>3.0.18.0</FileVersion>
+    <AssemblyVersion>3.0.22.0</AssemblyVersion>
+    <FileVersion>3.0.22.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

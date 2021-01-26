@@ -160,6 +160,10 @@ namespace OneLine.Blazor.Contracts
         /// </summary>
         int DebounceInterval { get; set; }
         /// <summary>
+        /// Let's know when the component it's first render ocurred and UI should be visible already
+        /// </summary>
+        public bool FirstRenderOcurred { get; set; }
+        /// <summary>
         /// Show the form with the specified <see cref="Enums.FormState"/>
         /// </summary>
         /// <param name="formState"></param>

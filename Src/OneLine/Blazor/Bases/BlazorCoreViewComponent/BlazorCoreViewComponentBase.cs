@@ -258,6 +258,8 @@ namespace OneLine.Blazor.Bases
         [Parameter] public virtual Action OnBeforeCancel { get; set; }
         /// <inheritdoc/>
         [Parameter] public virtual Action OnAfterCancel { get; set; }
+        /// <inheritdoc/>
+        public bool FirstRenderOcurred { get; set; }
         public BlazorCoreViewComponentBase() : base()
         {
         }
@@ -266,6 +268,7 @@ namespace OneLine.Blazor.Bases
         {
             if (firstRender)
             {
+                FirstRenderOcurred = firstRender;
                 await InitializeComponentAsync();
             }
         }
@@ -282,7 +285,7 @@ namespace OneLine.Blazor.Bases
             OnAfterCancel ??= new Action(async () => await AfterCancel());
             OnBeforeReset ??= new Action(async () => await BeforeReset());
             OnAfterReset ??= new Action(async () => await AfterReset());
-            if (!string.IsNullOrWhiteSpace(RecordId) && Identifier.IsNotNull() && Identifier.Model.IsNotNull())
+            if (!string.IsNullOrWhiteSpace(RecordId) && (Identifier.IsNull() || Identifier.Model.IsNull()))
             {
                 Identifier = new TIdentifier
                 {

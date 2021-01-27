@@ -37,7 +37,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsTablet
         {
             get
@@ -52,7 +51,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsMobile
         {
             get
@@ -67,7 +65,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsXamarinPlatform
         {
             get
@@ -87,7 +84,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsAndroidDevice
         {
             get
@@ -102,7 +98,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsGTKDevice
         {
             get
@@ -117,7 +112,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsiOSDevice
         {
             get
@@ -132,7 +126,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsMacOsDevice
         {
             get
@@ -147,7 +140,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsTizenDevice
         {
             get
@@ -162,7 +154,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsWPFDevice
         {
             get
@@ -177,7 +168,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsWindowsOSPlatform
         {
             get
@@ -198,7 +188,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsLinuxOSPlatform
         {
             get
@@ -226,7 +215,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsOSXOSPlatform
         {
             get
@@ -243,7 +231,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsWebPlatform
         {
             get
@@ -258,7 +245,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsWebBlazorWAsmPlatform
         {
             get
@@ -273,7 +259,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsWebBlazorServerPlatform
         {
             get
@@ -288,7 +273,6 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool IsHybridPlatform
         {
             get
@@ -303,21 +287,13 @@ namespace OneLine.Services
                 }
             }
         }
-
         public bool Is32BitsArmOSArquitecture => RuntimeInformation.OSArchitecture.Equals(Architecture.Arm);
-
         public bool Is64BitsArmOSArquitecture => RuntimeInformation.OSArchitecture.Equals(Architecture.Arm64);
-
         public bool Is32BitsOSArquitecture => RuntimeInformation.OSArchitecture.Equals(Architecture.X86);
-
         public bool Is64BitsOSArquitecture => RuntimeInformation.OSArchitecture.Equals(Architecture.X64);
-
         public bool Is32BitsArmProcessArquitecture => RuntimeInformation.ProcessArchitecture.Equals(Architecture.Arm);
-
         public bool Is64BitsArmProcessArquitecture => RuntimeInformation.ProcessArchitecture.Equals(Architecture.Arm64);
-
         public bool Is32BitsProcessArquitecture => RuntimeInformation.ProcessArchitecture.Equals(Architecture.X86);
-
         public bool Is64BitsProcessArquitecture => RuntimeInformation.ProcessArchitecture.Equals(Architecture.X64);
     }
     public static class IServiceCollectionExtensions

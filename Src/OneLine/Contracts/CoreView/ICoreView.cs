@@ -34,17 +34,29 @@ namespace OneLine.Contracts
         IResettableEventable,
         ICancelableEventable
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// A save file service
+        /// </summary>
         public ISaveFile SaveFile { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// A service which identifies the current device
+        /// </summary>
         public IDevice Device { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// A translator service using the resource manager
+        /// </summary>
         public IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// A base application state
+        /// </summary>
         public IApplicationState ApplicationState { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// A service which manage the configuration file
+        /// </summary>
         public IApplicationConfiguration ApplicationConfiguration { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// A service which manage the storage of a device
+        /// </summary>
         public IDeviceStorage DeviceStorage { get; set; }
     }
 }

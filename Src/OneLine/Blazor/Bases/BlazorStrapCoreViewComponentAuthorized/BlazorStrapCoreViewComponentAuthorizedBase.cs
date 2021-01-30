@@ -29,6 +29,7 @@ namespace OneLine.Blazor.Bases
         {
             if (firstRender)
             {
+                FirstRenderOcurred = firstRender;
                 await InitializeComponentAsync();
             }
         }

@@ -2,6 +2,9 @@
 
 namespace OneLine.Services
 {
+    /// <summary>
+    /// A service which manage the storage of a device
+    /// </summary>
     public interface IDeviceStorage
     {
         /// <summary>

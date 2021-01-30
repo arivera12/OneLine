@@ -27,13 +27,14 @@ namespace OneLine.Bases
         public virtual ISaveFile SaveFile { get; set; }
         /// <inheritdoc/>
         public virtual IDevice Device { get; set; }
+        /// <inheritdoc/>
         public virtual IDeviceStorage DeviceStorage { get; set; }
         /// <inheritdoc/>
         public virtual IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
         /// <inheritdoc/>
         public virtual IApplicationState ApplicationState { get; set; }
         /// <inheritdoc/>
-        public IApplicationConfiguration ApplicationConfiguration { get; set; }
+        public virtual IApplicationConfiguration ApplicationConfiguration { get; set; }
         /// <inheritdoc/>
         public virtual TIdentifier Identifier { get; set; }
         /// <inheritdoc/>

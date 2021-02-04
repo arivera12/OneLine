@@ -29,13 +29,13 @@ namespace OneLine.Blazor.Bases
         where THttpService : class, IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         /// <inheritdoc/>
-        [Inject] public virtual IJSRuntime JSRuntime { get; set; }
+        [Inject] public IJSRuntime JSRuntime { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual NavigationManager NavigationManager { get; set; }
+        [Inject] public NavigationManager NavigationManager { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
+        [Inject] public SweetAlertService SweetAlertService { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual HttpClient HttpClient { get; set; }
+        [Inject] public HttpClient HttpClient { get; set; }
         /// <inheritdoc/>
         [Parameter] public virtual int DebounceInterval { get; set; }
         /// <inheritdoc/>
@@ -111,17 +111,17 @@ namespace OneLine.Blazor.Bases
         /// <inheritdoc/>
         public virtual bool ShowActivityIndicator { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual IDevice Device { get; set; }
+        [Inject] public IDevice Device { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual IDeviceStorage DeviceStorage { get; set; }
+        [Inject] public IDeviceStorage DeviceStorage { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual ISaveFile SaveFile { get; set; }
+        [Inject] public ISaveFile SaveFile { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual IApplicationState ApplicationState { get; set; }
+        [Inject] public IApplicationState ApplicationState { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
+        [Inject] public IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual IApplicationConfiguration ApplicationConfiguration { get; set; }
+        [Inject] public IApplicationConfiguration ApplicationConfiguration { get; set; }
         /// <inheritdoc/>
         [Parameter] public virtual TIdentifier Identifier { get; set; }
         /// <inheritdoc/>
@@ -141,7 +141,7 @@ namespace OneLine.Blazor.Bases
         /// <inheritdoc/>
         [Parameter] public virtual bool AllowDuplicates { get; set; }
         /// <inheritdoc/>
-        [Inject] public virtual THttpService HttpService { get; set; }
+        [Inject] public THttpService HttpService { get; set; }
         /// <inheritdoc/>
         [Parameter] public virtual object SearchExtraParams { get; set; }
         /// <inheritdoc/>

@@ -7,13 +7,13 @@ namespace OneLine.Blazor
 {
     public class TranslatorComponentModel : ComponentBase
     {
-        [Parameter] public virtual bool ReloadOnLanguageChange { get; set; }
+        [Parameter] public bool ReloadOnLanguageChange { get; set; }
         public static Action<IResourceManagerLocalizer> OnLanguageChanged { get; set; }
         [Parameter] public Action<IResourceManagerLocalizer> OnChanged { get; set; }
-        [Parameter] public virtual string ApplicationLocale { get; set; }
-        [Inject] public virtual IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
-        [Inject] public virtual ISupportedCultures SupportedCultures { get; set; }
-        [Inject] public virtual NavigationManager NavigationManager { get; set; }
+        [Parameter] public string ApplicationLocale { get; set; }
+        [Inject] public IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
+        [Inject] public ISupportedCultures SupportedCultures { get; set; }
+        [Inject] public NavigationManager NavigationManager { get; set; }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)

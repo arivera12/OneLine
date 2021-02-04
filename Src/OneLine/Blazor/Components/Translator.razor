@@ -4,7 +4,7 @@
 <BSBasicInput T="string" id="translator" name="translator" InputType="InputType.Select" ValueChanged=@((v) => OnValueChanged(v)) Value="ApplicationLocale">
     @foreach (var culture in SupportedCultures.Cultures ?? Enumerable.Empty<System.Globalization.CultureInfo>())
     {
-        if (culture.Name == ApplicationLocale)
+        if (culture.Name.Equals(ApplicationLocale))
         {
             <option value="@culture.Name" selected>@culture.EnglishName</option>
         }

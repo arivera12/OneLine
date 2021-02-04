@@ -171,13 +171,13 @@ namespace OneLine.Blazor.Components
         /// The path to save a file on native platform. This property has no effect on web platform.
         /// </summary>
         [Parameter] public string SavePath { get; set; }
-        [Inject] public virtual IFileReaderService FileReaderService { get; set; }
-        [Inject] public virtual IJSRuntime JSRuntime { get; set; }
-        [Inject] public virtual ISaveFile SaveFile { get; set; }
-        [Inject] public virtual SweetAlertService SweetAlertService { get; set; }
-        [Inject] public virtual HttpClient HttpClient { get; set; }
-        [Inject] public virtual IApplicationState ApplicationState { get; set; }
-        [Inject] public virtual IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
+        [Inject] public IFileReaderService FileReaderService { get; set; }
+        [Inject] public IJSRuntime JSRuntime { get; set; }
+        [Inject] public ISaveFile SaveFile { get; set; }
+        [Inject] public SweetAlertService SweetAlertService { get; set; }
+        [Inject] public HttpClient HttpClient { get; set; }
+        [Inject] public IApplicationState ApplicationState { get; set; }
+        [Inject] public IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
         public HttpBaseUserBlobsService<UserBlobsViewModel, Identifier<string>, string> HttpBaseUserBlobsService { get; set; }
         public ElementReference DropTarget { get; set; }
         public ElementReference DropTargetInput { get; set; }

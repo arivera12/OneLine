@@ -9,8 +9,8 @@ namespace OneLine.Services
 {
     public class Device : IDevice
     {
-        public IJSRuntime JSRuntime { get; set; }
-        public DeviceDetector DeviceDetector { get; set; }
+        private IJSRuntime JSRuntime { get; set; }
+        private DeviceDetector DeviceDetector { get; set; }
         public Device()
         {
         }

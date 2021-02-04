@@ -7,9 +7,9 @@ namespace OneLine.Services
     /// </summary>
     public interface IApplicationConfigurationSource
     {
-        public string ConfigurationFilePath { get; }
-        public Assembly ConfigurationFileAssemblyFile { get; }
-        public string ResourceFilesBasePath { get; }
-        public Assembly ResourceFilesAssemblyFile { get; }
+        public string ConfigurationFilePath { get; set; }
+        public Assembly ConfigurationFileAssemblyFile { get; set; }
+        public string ResourceFilesBasePath { get; set; }
+        public Assembly ResourceFilesAssemblyFile { get; set; }
     }
 }

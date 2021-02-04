@@ -9,11 +9,16 @@ namespace OneLine.Services
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddOneLineHybridServices(this IServiceCollection services)
+        public static IServiceCollection AddOneLineHybridServices<
+            TApplicationConfigurationSourceImplementation, 
+            TSupportedCulturesImplementation>
+            (this IServiceCollection services)
+            where TApplicationConfigurationSourceImplementation : class, IApplicationConfigurationSource
+            where TSupportedCulturesImplementation : class, ISupportedCultures
         {
             return services
-                .AddApplicationConfigurationSource()
-                .AddSupportedCultures()
+                .AddApplicationConfigurationSource< TApplicationConfigurationSourceImplementation>()
+                .AddSupportedCultures<TSupportedCulturesImplementation>()
                 .AddApplicationConfiguration()
                 .AddResourceManagerLocalizer()
                 .AddApplicationState()

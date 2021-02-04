@@ -2,7 +2,7 @@
 @inherits TranslatorComponentModel
 
 <BSBasicInput T="string" id="translator" name="translator" InputType="InputType.Select" ValueChanged=@((v) => OnValueChanged(v)) Value="ApplicationLocale">
-    @foreach (var culture in SupportedCultures.Cultures)
+    @foreach (var culture in SupportedCultures.Cultures ?? Enumerable.Empty<System.Globalization.CultureInfo>())
     {
         if (culture.Name == ApplicationLocale)
         {

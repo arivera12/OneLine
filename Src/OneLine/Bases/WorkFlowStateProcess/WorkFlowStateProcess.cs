@@ -12,11 +12,11 @@ namespace OneLine.Bases
     public class WorkFlowStateProcess<T, TState> : IWorkFlowStateProcess<T, TState>
     {
         /// <inheritdoc/>
-        public virtual T Record { get; set; }
+        public T Record { get; set; }
         /// <inheritdoc/>
-        public virtual TState CurrentState { get; set; }
+        public TState CurrentState { get; set; }
         /// <inheritdoc/>
-        public virtual TState NextState { get; set; }
+        public TState NextState { get; set; }
         /// <inheritdoc/>
         public virtual Task<bool> ProceedNextStateProcessWhen()
         {

@@ -10,16 +10,16 @@ namespace OneLine.Models
     public class BlobData : IBlobData
     {
         /// <inheritdoc/>
-        public virtual DateTime LastModified { get; set; }
+        public DateTime LastModified { get; set; }
         /// <inheritdoc/>
-        public virtual string Name { get; set; }
+        public string Name { get; set; }
         /// <inheritdoc/>
-        public virtual string InputName { get; set; }
+        public string InputName { get; set; }
         /// <inheritdoc/>
-        public virtual long Size { get; set; }
+        public long Size { get; set; }
         /// <inheritdoc/>
-        public virtual string Type { get; set; }
+        public string Type { get; set; }
         /// <inheritdoc/>
-        public virtual byte[] Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

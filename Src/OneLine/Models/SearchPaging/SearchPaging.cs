@@ -6,15 +6,15 @@
     public class SearchPaging : ISearchPaging
     {
         /// <inheritdoc/>
-        public virtual string SearchTerm { get; set; }
+        public string SearchTerm { get; set; }
         /// <inheritdoc/>
-        public virtual bool? Descending { get; set; }
+        public bool? Descending { get; set; }
         /// <inheritdoc/>
-        public virtual int? PageIndex { get; set; }
+        public int? PageIndex { get; set; }
         /// <inheritdoc/>
-        public virtual int? PageSize { get; set; }
+        public int? PageSize { get; set; }
         /// <inheritdoc/>
-        public virtual string SortBy { get; set; }
+        public string SortBy { get; set; }
         /// <summary>
         /// Default constructor
         /// </summary>

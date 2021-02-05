@@ -8,25 +8,25 @@ namespace OneLine.Models
     public class FormFileRules : IFormFileRules
     {
         /// <inheritdoc/>
-        public virtual string Accept { get; set; }
+        public string Accept { get; set; }
         /// <inheritdoc/>
-        public virtual bool IsRequired { get; set; }
+        public bool IsRequired { get; set; }
         /// <inheritdoc/>
-        public virtual string PropertyName { get; set; }
+        public string PropertyName { get; set; }
         /// <inheritdoc/>
-        public virtual short AllowedMaximunFiles { get; set; }
+        public short AllowedMaximunFiles { get; set; }
         /// <inheritdoc/>
-        public virtual short AllowedMinimunFiles { get; set; }
+        public short AllowedMinimunFiles { get; set; }
         /// <inheritdoc/>
-        public virtual long AllowedBlobMaxLength { get; set; }
+        public long AllowedBlobMaxLength { get; set; }
         /// <inheritdoc/>
-        public virtual IEnumerable<string> AllowedContentTypes { get; set; }
+        public IEnumerable<string> AllowedContentTypes { get; set; }
         /// <inheritdoc/>
-        public virtual IEnumerable<string> AllowedExtensions { get; set; }
+        public IEnumerable<string> AllowedExtensions { get; set; }
         /// <inheritdoc/>
-        public virtual IEnumerable<string> AllowedContentDispositions { get; set; }
+        public IEnumerable<string> AllowedContentDispositions { get; set; }
         /// <inheritdoc/>
-        public virtual bool ForceUpload { get; set; }
+        public bool ForceUpload { get; set; }
         /// <summary>
         /// Default constructor
         /// </summary>

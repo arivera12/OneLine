@@ -136,14 +136,14 @@ namespace OneLine.Models
             ValidationFailed = validationFailed;
         }
         /// <inheritdoc/>
-        public virtual ApiResponseStatus Status { get; set; }
+        public ApiResponseStatus Status { get; set; }
         /// <inheritdoc/>
-        public virtual T Data { get; set; }
+        public T Data { get; set; }
         /// <inheritdoc/>
-        public virtual string Message { get; set; }
+        public string Message { get; set; }
         /// <inheritdoc/>
-        public virtual bool ValidationFailed { get; set; }
+        public bool ValidationFailed { get; set; }
         /// <inheritdoc/>
-        public virtual IEnumerable<string> ErrorMessages { get; set; }
+        public IEnumerable<string> ErrorMessages { get; set; }
     }
 }

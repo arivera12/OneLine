@@ -7,7 +7,7 @@
     public class Identifier<T> : IIdentifier<T>
     {
         /// <inheritdoc/>
-        public virtual T Model { get; set; }
+        public T Model { get; set; }
         /// <summary>
         /// Default constructor
         /// </summary>

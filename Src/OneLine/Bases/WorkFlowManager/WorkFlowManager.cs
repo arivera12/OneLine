@@ -11,11 +11,11 @@ namespace OneLine.Bases
     public class WorkFlowManager<T, TState> : IWorkFlowManager<T, TState>
     {
         /// <inheritdoc/>
-        public virtual Func<T, string> StatePropertyName { get; set; }
+        public Func<T, string> StatePropertyName { get; set; }
         /// <inheritdoc/>
-        public virtual T Record { get; set; }
+        public T Record { get; set; }
         /// <inheritdoc/>
-        public virtual IEnumerable<IWorkFlowStateProcess<T, TState>> WorkFlowStateProcesses { get; set; }
+        public IEnumerable<IWorkFlowStateProcess<T, TState>> WorkFlowStateProcesses { get; set; }
         /// <inheritdoc/>
         public async ValueTask<IApiResponse<T>> RunWorkFlowProcessAsync()
         {

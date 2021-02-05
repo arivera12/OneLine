@@ -8,23 +8,23 @@ namespace OneLine.Models
     public class ExceptionLogs : IExceptionLogs
     {
         /// <inheritdoc/>
-        public virtual string ExceptionLogId { get; set; }
+        public string ExceptionLogId { get; set; }
         /// <inheritdoc/>
-        public virtual int? HResult { get; set; }
+        public int? HResult { get; set; }
         /// <inheritdoc/>
-        public virtual string HelpLink { get; set; }
+        public string HelpLink { get; set; }
         /// <inheritdoc/>
-        public virtual string InnerException { get; set; }
+        public string InnerException { get; set; }
         /// <inheritdoc/>
-        public virtual string Message { get; set; }
+        public string Message { get; set; }
         /// <inheritdoc/>
-        public virtual string Source { get; set; }
+        public string Source { get; set; }
         /// <inheritdoc/>
-        public virtual string StackTrace { get; set; }
+        public string StackTrace { get; set; }
         /// <inheritdoc/>
-        public virtual DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         /// <inheritdoc/>
-        public virtual string CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
     }
     /// <summary>
     /// This class implements a structure for savings exceptions
@@ -32,22 +32,22 @@ namespace OneLine.Models
     public class ExceptionLogsViewModel : IExceptionLogs
     {
         /// <inheritdoc/>
-        public virtual string ExceptionLogId { get; set; }
+        public string ExceptionLogId { get; set; }
         /// <inheritdoc/>
-        public virtual int? HResult { get; set; }
+        public int? HResult { get; set; }
         /// <inheritdoc/>
-        public virtual string HelpLink { get; set; }
+        public string HelpLink { get; set; }
         /// <inheritdoc/>
-        public virtual string InnerException { get; set; }
+        public string InnerException { get; set; }
         /// <inheritdoc/>
-        public virtual string Message { get; set; }
+        public string Message { get; set; }
         /// <inheritdoc/>
-        public virtual string Source { get; set; }
+        public string Source { get; set; }
         /// <inheritdoc/>
-        public virtual string StackTrace { get; set; }
+        public string StackTrace { get; set; }
         /// <inheritdoc/>
-        public virtual DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         /// <inheritdoc/>
-        public virtual string CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

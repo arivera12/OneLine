@@ -8,10 +8,10 @@
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual string PublicUploadFilePath { get; set; }
+        public string PublicUploadFilePath { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual string PrivateUploadFilePath { get; set; }
+        public string PrivateUploadFilePath { get; set; }
     }
 }

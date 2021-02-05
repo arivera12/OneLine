@@ -52,7 +52,7 @@ namespace OneLine.Bases
             return HttpClient.SendJsonDownloadAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }
         /// <inheritdoc/>
-        public Task<IResponseResult<HttpResponseMessage>> DownloadCsvAsHttpResponseMessageAsync(ISearchPaging SearchPaging, object searchExtraParams)
+        public virtual Task<IResponseResult<HttpResponseMessage>> DownloadCsvAsHttpResponseMessageAsync(ISearchPaging SearchPaging, object searchExtraParams)
         {
             return HttpClient.SendJsonRequestHttpResponseMessageResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvMethod}"), new { SearchPaging, searchExtraParams });
         }

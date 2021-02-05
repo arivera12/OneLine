@@ -7,29 +7,29 @@ namespace OneLine.Models
     public class UserBlobs : IUserBlobs
     {
         /// <inheritdoc/>
-        public virtual string UserBlobId { get; set; }
+        public string UserBlobId { get; set; }
         /// <inheritdoc/>
-        public virtual string UserIdentifier { get; set; }
+        public string UserIdentifier { get; set; }
         /// <inheritdoc/>
-        public virtual string ContentDisposition { get; set; }
+        public string ContentDisposition { get; set; }
         /// <inheritdoc/>
-        public virtual string ContentType { get; set; }
+        public string ContentType { get; set; }
         /// <inheritdoc/>
-        public virtual string FileName { get; set; }
+        public string FileName { get; set; }
         /// <inheritdoc/>
-        public virtual string Name { get; set; }
+        public string Name { get; set; }
         /// <inheritdoc/>
-        public virtual long Length { get; set; }
+        public long Length { get; set; }
         /// <inheritdoc/>
-        public virtual string FilePath { get; set; }
+        public string FilePath { get; set; }
         /// <inheritdoc/>
-        public virtual string TableName { get; set; }
+        public string TableName { get; set; }
         /// <inheritdoc/>
-        public virtual bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
         /// <inheritdoc/>
-        public virtual DateTime? CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
         /// <inheritdoc/>
-        public virtual string CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
     }
     /// <summary>
     /// Implements a structure for user blobs
@@ -37,28 +37,28 @@ namespace OneLine.Models
     public class UserBlobsViewModel : IUserBlobs
     {
         /// <inheritdoc/>
-        public virtual string UserBlobId { get; set; }
+        public string UserBlobId { get; set; }
         /// <inheritdoc/>
-        public virtual string UserIdentifier { get; set; }
+        public string UserIdentifier { get; set; }
         /// <inheritdoc/>
-        public virtual string ContentDisposition { get; set; }
+        public string ContentDisposition { get; set; }
         /// <inheritdoc/>
-        public virtual string ContentType { get; set; }
+        public string ContentType { get; set; }
         /// <inheritdoc/>
-        public virtual string FileName { get; set; }
+        public string FileName { get; set; }
         /// <inheritdoc/>
-        public virtual string Name { get; set; }
+        public string Name { get; set; }
         /// <inheritdoc/>
-        public virtual long Length { get; set; }
+        public long Length { get; set; }
         /// <inheritdoc/>
-        public virtual string FilePath { get; set; }
+        public string FilePath { get; set; }
         /// <inheritdoc/>
-        public virtual string TableName { get; set; }
+        public string TableName { get; set; }
         /// <inheritdoc/>
-        public virtual bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
         /// <inheritdoc/>
-        public virtual DateTime? CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
         /// <inheritdoc/>
-        public virtual string CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

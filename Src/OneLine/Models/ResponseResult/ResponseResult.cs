@@ -13,15 +13,15 @@ namespace OneLine.Models
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual T Response { get; set; }
+        public T Response { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual bool Succeed { get; set; }
+        public bool Succeed { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual bool HasException { get; set; }
+        public bool HasException { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

@@ -9,21 +9,21 @@ namespace OneLine.Models
     public class Paged<T> : IPaged<T>
     {
         /// <inheritdoc/>
-        public virtual int PageIndex { get; set; }
+        public int PageIndex { get; set; }
         /// <inheritdoc/>
-        public virtual int PageSize { get; set; }
+        public int PageSize { get; set; }
         /// <inheritdoc/>
-        public virtual int TotalCount { get; set; }
+        public int TotalCount { get; set; }
         /// <inheritdoc/>
-        public virtual int LastPage { get; set; }
+        public int LastPage { get; set; }
         /// <inheritdoc/>
-        public virtual int TotalPages { get; set; }
+        public int TotalPages { get; set; }
         /// <inheritdoc/>
-        public virtual bool HasPreviousPage { get; set; }
+        public bool HasPreviousPage { get; set; }
         /// <inheritdoc/>
-        public virtual bool HasNextPage { get; set; }
+        public bool HasNextPage { get; set; }
         /// <inheritdoc/>
-        public virtual T Data { get; set; }
+        public T Data { get; set; }
         /// <summary>
         /// The paged main constructors
         /// </summary>

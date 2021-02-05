@@ -4,6 +4,6 @@ namespace OneLine.Bases
 {
     public class BaseContext<TContext> : IContextable<TContext>
     {
-        public virtual TContext Context { get; set; }
+        public TContext Context { get; set; }
     }
 }

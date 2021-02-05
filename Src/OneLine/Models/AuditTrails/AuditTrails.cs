@@ -8,25 +8,25 @@ namespace OneLine.Models
     public class AuditTrails : IAuditTrails
     {
         /// <inheritdoc/>
-        public virtual string AuditTrailId { get; set; }
+        public string AuditTrailId { get; set; }
         /// <inheritdoc/>
-        public virtual string Action { get; set; }
+        public string Action { get; set; }
         /// <inheritdoc/>
-        public virtual string ActionName { get; set; }
+        public string ActionName { get; set; }
         /// <inheritdoc/>
-        public virtual string ControllerName { get; set; }
+        public string ControllerName { get; set; }
         /// <inheritdoc/>
-        public virtual string RemoteIpAddress { get; set; }
+        public string RemoteIpAddress { get; set; }
         /// <inheritdoc/>
-        public virtual string TableName { get; set; }
+        public string TableName { get; set; }
         /// <inheritdoc/>
-        public virtual string Record { get; set; }
+        public string Record { get; set; }
         /// <inheritdoc/>
-        public virtual string Hostname { get; set; }
+        public string Hostname { get; set; }
         /// <inheritdoc/>
-        public virtual string CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
         /// <inheritdoc/>
-        public virtual DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
     /// <summary>
     /// Implements a structure to save audit trails
@@ -34,24 +34,24 @@ namespace OneLine.Models
     public class AuditTrailsViewModel : IAuditTrails
     {
         /// <inheritdoc/>
-        public virtual string AuditTrailId { get; set; }
+        public string AuditTrailId { get; set; }
         /// <inheritdoc/>
-        public virtual string Action { get; set; }
+        public string Action { get; set; }
         /// <inheritdoc/>
-        public virtual string ActionName { get; set; }
+        public string ActionName { get; set; }
         /// <inheritdoc/>
-        public virtual string ControllerName { get; set; }
+        public string ControllerName { get; set; }
         /// <inheritdoc/>
-        public virtual string RemoteIpAddress { get; set; }
+        public string RemoteIpAddress { get; set; }
         /// <inheritdoc/>
-        public virtual string TableName { get; set; }
+        public string TableName { get; set; }
         /// <inheritdoc/>
-        public virtual string Record { get; set; }
+        public string Record { get; set; }
         /// <inheritdoc/>
-        public virtual string Hostname { get; set; }
+        public string Hostname { get; set; }
         /// <inheritdoc/>
-        public virtual string CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
         /// <inheritdoc/>
-        public virtual DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

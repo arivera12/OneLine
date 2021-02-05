@@ -141,7 +141,7 @@ namespace OneLine.Blazor.Bases
         /// <inheritdoc/>
         [Parameter] public virtual bool AllowDuplicates { get; set; }
         /// <inheritdoc/>
-        [Inject] public THttpService HttpService { get; set; }
+        [Inject] public virtual THttpService HttpService { get; set; }
         /// <inheritdoc/>
         [Parameter] public virtual object SearchExtraParams { get; set; }
         /// <inheritdoc/>

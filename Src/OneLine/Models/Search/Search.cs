@@ -6,6 +6,6 @@
     public class Search : ISearch
     {
         /// <inheritdoc/>
-        public virtual string SearchTerm { get; set; }
+        public string SearchTerm { get; set; }
     }
 }

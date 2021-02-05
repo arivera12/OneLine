@@ -8,7 +8,7 @@
         /// <summary>
         /// The model is a string type
         /// </summary>
-        public virtual string Model { get; set; }
+        public string Model { get; set; }
         /// <summary>
         /// Default constructor
         /// </summary>

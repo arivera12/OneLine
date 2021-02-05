@@ -7,7 +7,7 @@ namespace OneLine.Blazor
 {
     public class TranslatorComponentModel : ComponentBase
     {
-        [Parameter] public bool ReloadOnLanguageChange { get; set; }
+        [Parameter] public string CssClass { get; set; } = "custom-select";
         public static Action<IResourceManagerLocalizer> OnLanguageChanged { get; set; }
         [Parameter] public Action<IResourceManagerLocalizer> OnChanged { get; set; }
         [Parameter] public string ApplicationLocale { get; set; }
@@ -24,17 +24,11 @@ namespace OneLine.Blazor
         }
         protected async Task OnValueChanged(string applicationLocale)
         {
+            ApplicationLocale = applicationLocale;
             await ResourceManagerLocalizer.SetApplicationLocale(applicationLocale);
             await ResourceManagerLocalizer.SetCurrentThreadCulture(applicationLocale);
-            if (ReloadOnLanguageChange)
-            {
-                NavigationManager.NavigateTo(NavigationManager.Uri);
-            }
-            else
-            {
-                OnLanguageChanged?.Invoke(ResourceManagerLocalizer);
-                OnChanged?.Invoke(ResourceManagerLocalizer);
-            }
+            OnLanguageChanged?.Invoke(ResourceManagerLocalizer);
+            OnChanged?.Invoke(ResourceManagerLocalizer);
             StateHasChanged();
         }
     }

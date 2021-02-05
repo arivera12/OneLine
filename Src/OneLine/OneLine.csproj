@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Removed virtual on translator properties.</PackageReleaseNotes>
-    <Version>3.0.28</Version>
+    <PackageReleaseNotes>Fixed translator.</PackageReleaseNotes>
+    <Version>3.0.29</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.28.0</AssemblyVersion>
-    <FileVersion>3.0.28.0</FileVersion>
+    <AssemblyVersion>3.0.29.0</AssemblyVersion>
+    <FileVersion>3.0.29.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

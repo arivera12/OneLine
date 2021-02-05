@@ -22,14 +22,14 @@ namespace OneLine.Services
         /// <summary>
         /// Gets the current application resource manager
         /// </summary>
-        public ResourceManager ResourceManager { get; set; }
+        ResourceManager ResourceManager { get; set; }
         /// <summary>
         /// Gets the current application locale from storage
         /// </summary>
         /// <returns></returns>
         Task<string> GetApplicationLocale();
         /// <summary>
-        /// Sets the current application locale in th sotrage and sets current thread culture
+        /// Sets the current application locale in the storage and sets current thread culture
         /// </summary>
         /// <returns></returns>
         Task SetApplicationLocale(string applicationLocale);

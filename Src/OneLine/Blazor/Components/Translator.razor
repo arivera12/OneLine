@@ -1,7 +1,7 @@
 ﻿@namespace OneLine.Blazor
 @inherits TranslatorComponentModel
 
-<BSBasicInput T="string" id="translator" name="translator" InputType="InputType.Select" ValueChanged=@((v) => OnValueChanged(v)) Value="ApplicationLocale">
+<select class="@CssClass" id="translator" name="translator" @onchange=@(async (v) => await OnValueChanged(v.Value.ToString())) value="@ApplicationLocale">
     @foreach (var culture in SupportedCultures.Cultures ?? Enumerable.Empty<System.Globalization.CultureInfo>())
     {
         if (culture.Name.Equals(ApplicationLocale))
@@ -13,4 +13,4 @@
             <option value="@culture.Name">@culture.EnglishName</option>
         }
     }
-</BSBasicInput>
+</select>

@@ -71,7 +71,7 @@ namespace OneLine.Blazor.Bases
             }
             StateHasChanged();
         }
-        public virtual TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor)
+        public TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor)
         {
             if (RecordsSelectionMode.IsSingle())
             {

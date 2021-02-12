@@ -550,7 +550,7 @@ namespace System.Collections.ObjectModel
         /// <summary>
         /// Raise CollectionChanged event to any listeners.
         /// Properties/methods modifying this ObservableCollection will raise
-        /// a collection changed event through this virtual method.
+        /// a collection changed event through this method.
         /// </summary>
         /// <remarks>
         /// When overriding this method, either call its base implementation
@@ -566,7 +566,7 @@ namespace System.Collections.ObjectModel
             base.OnCollectionChanged(e);
         }
 
-        protected virtual IDisposable DeferEvents() => new DeferredEventsCollection(this);
+        protected IDisposable DeferEvents() => new DeferredEventsCollection(this);
 
         #endregion Protected Methods
 

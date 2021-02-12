@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>OneLine BlazorStrap Card View</Title>
+      <Author>Anthony G. Rivera Cosme</Author>
+      <Description>Generates a startup blazorstrap card data view using OneLine framework.</Description>
+      <Shortcut>OneLineBlazorStrapTypeAheadView</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[@using $RootNameSpace$.Models
+@using $RootNameSpace$.Validations
+@using BlazorStrap
+@using OneLine.Extensions
+@inherits $DataViewComponentModel$
+
+@if(!Hide)
+{
+    @if (RecordsSelectionMode.IsSingle())
+    {
+        <BSForm Model=@(new $ViewModel$()) Context="formContext" Class=@(!Hidden ? "" : "d-none")>
+            <FluentValidator TValidator="$ViewModelValidator$"></FluentValidator>
+            <BlazoredTypeahead SearchMethod=TypeaheadSearch
+                                TItem=$ViewModel$
+                                TValue=$ViewModel$
+                                Value=SelectedRecord
+                                ValueChanged=SelectRecord
+                                ValueExpression=@(() => SelectedRecord)
+                                FieldCssClasses="rounded text-center"
+                                style="border-radius:25px;text-align:center!important;"
+                                placeholder="@ResourceManagerLocalizer["$PlaceHolderText$"]"
+                                EnableDropDown=true
+                                ShowDropDownOnFocus=true
+                                Debounce=500
+                                MaximumSuggestions=@(ResponsePaged.IsNull() ? 5 : ResponsePaged.Response.Data.PageSize)
+                                Disabled=Disabled>
+                <SelectedTemplate>
+                    @context.AccessStatusDescription
+                </SelectedTemplate>
+                <ResultTemplate>
+                    @context.AccessStatusDescription
+                </ResultTemplate>
+                <NotFoundTemplate>
+                    <BSAlert Class="text-center font-weight-bold" Color=@BlazorStrap.Color.Info>
+                        @ResourceManagerLocalizer["NoDataAvailableToDisplay"]
+                    </BSAlert>
+                </NotFoundTemplate>
+            </BlazoredTypeahead>
+        </BSForm>
+       
+    }
+    else
+    {
+        <BSForm Model=@(new List<$ViewModel$>()) Context="formContext" Class=@(!Hidden ? "" : "d-none")>
+            <FluentValidator TValidator="$ViewModelCollectionValidator$"></FluentValidator>
+            <BlazoredTypeahead SearchMethod=TypeaheadSearch
+                                TItem=$ViewModel$
+                                TValue=$ViewModel$
+                                Values=SelectedRecords
+                                ValuesChanged=SelectRecords
+                                ValuesExpression=@(() => SelectedRecords)
+                                FieldCssClasses="rounded text-center"
+                                style="border-radius:25px;text-align:center!important;"
+                                placeholder="@ResourceManagerLocalizer["$PlaceHolderText$"]"
+                                EnableDropDown=true
+                                ShowDropDownOnFocus=true
+                                Debounce=500
+                                MaximumSuggestions=@(ResponsePaged.IsNull() ? 5 : ResponsePaged.Response.Data.PageSize)
+                                Disabled=Disabled>
+                <SelectedTemplate>
+                    @context.AccessStatusDescription
+                </SelectedTemplate>
+                <ResultTemplate>
+                    @context.AccessStatusDescription
+                </ResultTemplate>
+                <NotFoundTemplate>
+                    <BSAlert Class="text-center font-weight-bold" Color=@BlazorStrap.Color.Info>
+                        @ResourceManagerLocalizer["NoDataAvailableToDisplay"]
+                    </BSAlert>
+                </NotFoundTemplate>
+            </BlazoredTypeahead>
+        </BSForm>
+    }
+}
+]]>
+      </Code>
+      <Declarations>
+        <Literal>
+          <ID>RootNameSpace</ID>
+          <ToolTip>Enter the application root namespace.</ToolTip>
+          <Default>MyRootNameSpace</Default>
+        </Literal>
+        <Literal>
+          <ID>DataViewComponentModel</ID>
+          <ToolTip>Enter the view model to inherit in the component.</ToolTip>
+          <Default>MyDataViewComponentModel</Default>
+        </Literal>
+        <Literal>
+          <ID>ViewModel</ID>
+          <ToolTip>Enter the name of the view model.</ToolTip>
+          <Default>MyViewModel</Default>
+        </Literal>
+        <Literal>
+          <ID>ViewModelValidator</ID>
+          <ToolTip>Enter the name of the view model validator.</ToolTip>
+          <Default>MyViewModelValidator</Default>
+        </Literal>
+        <Literal>
+          <ID>ViewModelCollectionValidator</ID>
+          <ToolTip>Enter the name of the view model collection validator.</ToolTip>
+          <Default>MyViewModelCollectionValidator</Default>
+        </Literal>
+        <Literal>
+          <ID>PlaceHolderText</ID>
+          <ToolTip>Enter the name of the localized placeholder text.</ToolTip>
+          <Default>MyViewModel</Default>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

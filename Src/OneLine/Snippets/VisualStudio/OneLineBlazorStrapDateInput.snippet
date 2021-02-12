@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>OneLine BlazorStrap Form Input</Title>
+      <Author>Anthony G. Rivera Cosme</Author>
+      <Description>Generates a startup blazorstrap form date input.</Description>
+      <Shortcut>OneLineBlazorStrapDateInput</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[<BSFormGroup>
+    <BSLabel Class="" For=@nameof(Record.$PropertyName$)>@ResourceManagerLocalizer["$InputLabel$"]</BSLabel>
+    <input id="@nameof(Record.$PropertyName$)"
+            class="form-control @(IsReadOnlyOrPlainText() ? "form-control-plaintext" : "")"
+            value="@Record.$PropertyName$"
+            @onmousedown=@(() => { Show$PropertyName$Picker = !Show$PropertyName$Picker; context?.NotifyFieldChanged(FieldIdentifier.Create(() => Record.$PropertyName$)); }) />
+    @if (!IsReadOnlyOrPlainText())
+    {
+        <NodaTimePicker.DatePicker ShowClose=@false ShowClear=@false ShowToday=@false Visible=@Show$PropertyName$Picker
+                                    OnSelected=@((localDate) => { Record.$PropertyName$ = localDate.ToDateTimeUnspecified(); Show$PropertyName$Picker = false; }) />
+    }
+    <BSFormFeedback For=@(() => Record.$PropertyName$) />
+</BSFormGroup>
+]]>
+      </Code>
+      <Declarations>
+        <Literal>
+          <ID>PropertyName</ID>
+          <ToolTip>Enter the property name.</ToolTip>
+          <Default>MyPropertyName</Default>
+        </Literal>
+        <Literal>
+          <ID>InputLabel</ID>
+          <ToolTip>Enter the localized input label text.</ToolTip>
+          <Default>InputLabel</Default>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

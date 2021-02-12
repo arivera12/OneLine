@@ -5,39 +5,39 @@ namespace OneLine.Messaging
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual string Email { get; set; }
+        public string Email { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual string DisplayName { get; set; }
+        public string DisplayName { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual bool UseDefaultCredentials { get; set; }
+        public bool UseDefaultCredentials { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual string Host { get; set; }
+        public string Host { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual int Port { get; set; }
+        public int Port { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual bool EnableSsl { get; set; }
+        public bool EnableSsl { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual int Timeout { get; set; }
+        public int Timeout { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual string UserName { get; set; }
+        public string UserName { get; set; }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public virtual string Password { get; set; }
+        public string Password { get; set; }
     }
 }
 

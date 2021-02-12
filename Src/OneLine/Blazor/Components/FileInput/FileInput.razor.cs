@@ -245,7 +245,7 @@ namespace OneLine.Blazor.Components
                 StateHasChanged();
             }
         }
-        public virtual async Task Clear()
+        public async Task Clear()
         {
             await DropReference.ClearValue();
             await DropInputReference.ClearValue();
@@ -254,14 +254,14 @@ namespace OneLine.Blazor.Components
             await BlobDatasChanged.InvokeAsync(blobDatas);
             StateHasChanged();
         }
-        public virtual async Task OpenDeviceFileSystem()
+        public async Task OpenDeviceFileSystem()
         {
             if (!PreventAdding && CanAddMoreFiles())
             {
                 await JSRuntime.InvokeVoidAsync("eval", $"document.querySelector('[_bl_{DropTargetInput.Id}]').click()");
             }
         }
-        public virtual async Task Remove(BlobData blobData)
+        public async Task Remove(BlobData blobData)
         {
             if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: ResourceManagerLocalizer["Confirm"], text: ResourceManagerLocalizer["AreYouSureYouWantToDeleteTheFile"],
                                                                 confirmButtonText: ResourceManagerLocalizer["Yes"], cancelButtonText: ResourceManagerLocalizer["Cancel"]))
@@ -274,7 +274,7 @@ namespace OneLine.Blazor.Components
             await UpdateMaximunMinimunReachedFiles();
             StateHasChanged();
         }
-        public virtual async Task Download(BlobData blobData)
+        public async Task Download(BlobData blobData)
         {
             if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: ResourceManagerLocalizer["Confirm"], text: ResourceManagerLocalizer["AreYouSureYouWantToDownloadTheFile"],
                                                                 confirmButtonText: ResourceManagerLocalizer["Yes"], cancelButtonText: ResourceManagerLocalizer["Cancel"]))
@@ -282,7 +282,7 @@ namespace OneLine.Blazor.Components
                 await SaveFile.SaveFileAsync(blobData.Data, Path.Combine(SavePath ?? "", blobData.Name));
             }
         }
-        public virtual async Task Remove(UserBlobs userBlob)
+        public async Task Remove(UserBlobs userBlob)
         {
             if (!HideDeleteButton && await SweetAlertService.ShowConfirmAlertAsync(title: ResourceManagerLocalizer["Confirm"], text: ResourceManagerLocalizer["AreYouSureYouWantToDeleteTheFile"],
                                                                 confirmButtonText: ResourceManagerLocalizer["Yes"], cancelButtonText: ResourceManagerLocalizer["Cancel"]))
@@ -295,7 +295,7 @@ namespace OneLine.Blazor.Components
             await UpdateMaximunMinimunReachedFiles();
             StateHasChanged();
         }
-        public virtual async Task Download(UserBlobs userBlobs)
+        public async Task Download(UserBlobs userBlobs)
         {
             if (!PreventDownload && await SweetAlertService.ShowConfirmAlertAsync(title: ResourceManagerLocalizer["Confirm"], text: ResourceManagerLocalizer["AreYouSureYouWantToDownloadTheFile"],
                                                                 confirmButtonText: ResourceManagerLocalizer["Yes"], cancelButtonText: ResourceManagerLocalizer["Cancel"]))
@@ -337,24 +337,24 @@ namespace OneLine.Blazor.Components
                 StateHasChanged();
             }
         }
-        public virtual void OnDragEnter(EventArgs e)
+        public void OnDragEnter(EventArgs e)
         {
             DropClass = $"{DropTargetClass} {DropTargetDragClass}";
             StateHasChanged();
         }
-        public virtual async Task OnDrop(EventArgs e)
+        public async Task OnDrop(EventArgs e)
         {
             if (!PreventAdding && CanAddMoreFiles())
             {
                 await ReadFiles();
             }
         }
-        public virtual void OnDragLeave(EventArgs e)
+        public void OnDragLeave(EventArgs e)
         {
             DropClass = DropTargetClass;
             StateHasChanged();
         }
-        public virtual bool CanAddMoreFiles()
+        public bool CanAddMoreFiles()
         {
             if (MaximumAllowedFiles <= 0)
             {
@@ -362,19 +362,19 @@ namespace OneLine.Blazor.Components
             }
             return MaximumAllowedFiles > FilesCount();
         }
-        public virtual MarkupString AllowsUpToFilesText()
+        public MarkupString AllowsUpToFilesText()
         {
             return (MarkupString)(MaximumAllowedFiles <= 0 ? "" : $@"{ResourceManagerLocalizer["AllowsUpTo"]} {MaximumAllowedFiles} {(MaximumAllowedFiles == 1 ? ResourceManagerLocalizer["File"] : ResourceManagerLocalizer["Files"])}");
         }
-        public virtual MarkupString RequiredText()
+        public MarkupString RequiredText()
         {
             return (MarkupString)(Required ? ResourceManagerLocalizer["FileUploadRequired"] + ", " : "");
         }
-        public virtual MarkupString ForceUploadText()
+        public MarkupString ForceUploadText()
         {
             return (MarkupString)(ForceUpload ? ResourceManagerLocalizer["UploadingANewFileIsRequired"] + ", " : "");
         }
-        public virtual MarkupString InformativeLabelText()
+        public MarkupString InformativeLabelText()
         {
             if (!MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
             {
@@ -401,14 +401,14 @@ namespace OneLine.Blazor.Components
                 return (MarkupString)"";
             }
         }
-        public virtual int FilesCount()
+        public int FilesCount()
         {
             var currentBlobsCount = 0;
             currentBlobsCount += BlobDatas.IsNull() || !BlobDatas.Any() ? 0 : BlobDatas.Count();
             currentBlobsCount += UserBlobs.IsNull() || !UserBlobs.Any() ? 0 : UserBlobs.Count();
             return currentBlobsCount;
         }
-        public virtual async Task UpdateMaximunMinimunReachedFiles()
+        public async Task UpdateMaximunMinimunReachedFiles()
         {
             var filesCount = FilesCount();
             MinimumAllowedFilesReached = filesCount >= MinimumAllowedFiles;
@@ -417,14 +417,14 @@ namespace OneLine.Blazor.Components
             await MaximumAllowedFilesReachedChanged.InvokeAsync(MaximumAllowedFilesReached);
             DropInputReference = FileReaderService.CreateReference(DropTargetInput);
         }
-        public virtual async Task OnInputChange(EventArgs e)
+        public async Task OnInputChange(EventArgs e)
         {
             if (!PreventAdding && CanAddMoreFiles())
             {
                 await ReadFiles();
             }
         }
-        public virtual async Task ReadFiles()
+        public async Task ReadFiles()
         {
             DropClass = DropTargetClass;
             StateHasChanged();

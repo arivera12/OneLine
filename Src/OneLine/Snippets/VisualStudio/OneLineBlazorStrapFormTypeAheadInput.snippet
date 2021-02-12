@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Type ahead Form Input</Title>
+      <Author>Anthony G. Rivera Cosme</Author>
+      <Description>Generates a startup type ahead form input.</Description>
+      <Shortcut>OneLineBlazorStrapTypeAheadInput</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[<BSFormGroup>
+    <BSLabel Class="" For=@nameof(Record.$PropertyName$)>@ResourceManagerLocalizer["$InputLabel$"]</BSLabel>
+    <$RootNamespace$.WebUI.Pages.$MyComponentNamespace$ Identifier=@(new Identifier<string>(Record.$PropertyName$))
+                                                                AutoLoad=true
+                                                                Disabled=@IsReadOnlyOrPlainText()
+                                                                SelectedRecord=$SelectedRecordRefVariable$
+                                                                SelectedRecordChanged=@((selectedRecord) => { $SelectedRecordRefVariable$ = selectedRecord; Record.$PropertyName$ = selectedRecord?.$PropertyName$; context?.NotifyFieldChanged(FieldIdentifier.Create(() => Record.$PropertyName$)); }) />
+    <BSInput Class="d-none" @bind-Value=@Record.$PropertyName$ />
+    <BSFormFeedback For=@(() => Record.$PropertyName$) />
+</BSFormGroup>
+]]>
+      </Code>
+      <Declarations>
+        <Literal>
+          <ID>PropertyName</ID>
+          <ToolTip>Enter the property name.</ToolTip>
+          <Default>MyPropertyName</Default>
+        </Literal>
+        <Literal>
+          <ID>InputLabel</ID>
+          <ToolTip>Enter the localized input label text.</ToolTip>
+          <Default>InputLabel</Default>
+        </Literal>
+        <Literal>
+          <ID>RootNamespace</ID>
+          <ToolTip>Enter the application root namespace.</ToolTip>
+          <Default>MyNameSpace</Default>
+        </Literal>
+        <Literal>
+          <ID>ComponentNamespace</ID>
+          <ToolTip>Enter the component namespace.</ToolTip>
+          <Default>MyComponentNamespace</Default>
+        </Literal>
+        <Literal>
+          <ID>SelectedRecordRefVariable</ID>
+          <ToolTip>Enter the selected record reference variable value holder.</ToolTip>
+          <Default>SelectedRecordReferenceVariable</Default>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

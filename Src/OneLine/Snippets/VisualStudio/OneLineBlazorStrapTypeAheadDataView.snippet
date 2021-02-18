@@ -14,7 +14,13 @@
 @using BlazorStrap
 @using OneLine.Extensions
 @inherits $DataViewComponentModel$
-
+@code{      
+    protected override void OnInitialized()
+    {
+        ComponentType = OneLine.Enums.ComponentType.DataView;
+        base.OnInitialized();
+    }
+}
 @if(!Hide)
 {
     @if (RecordsSelectionMode.IsSingle())

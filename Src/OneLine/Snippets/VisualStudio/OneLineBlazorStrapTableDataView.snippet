@@ -12,7 +12,13 @@
         <![CDATA[@using $RootNameSpace$.Models
 @using OneLine.Extensions
 @inherits $DataViewComponentModel$
-
+@code{      
+    protected override void OnInitialized()
+    {
+        ComponentType = OneLine.Enums.ComponentType.DataView;
+        base.OnInitialized();
+    }
+}
 <BSForm UserValidation="true" IsInline="true" Model=@SearchPaging Class=@(!Hidden ? "d-flex justify-content-between mb-4" : "d-none")>
     <div class="input-group">
         <BSInput Class="text-center" style="border-bottom-left-radius:25px;border-top-left-radius:25px;" placeholder="@ResourceManagerLocalizer["Search"]" @bind-Value=@SearchPaging.SearchTerm />

@@ -10,7 +10,13 @@
     <Snippet>
       <Code Language="CSharp">
         <![CDATA[@inherits $DataViewComponentModel$
-
+@code{      
+    protected override void OnInitialized()
+    {
+        ComponentType = OneLine.Enums.ComponentType.DataView;
+        base.OnInitialized();
+    }
+}
 @if (!Hide)
 {
     <BSForm UserValidation="true" IsInline="true" Model=@SearchPaging Class=@(!Hidden ? "d-flex justify-content-between mb-4" : "d-none")>

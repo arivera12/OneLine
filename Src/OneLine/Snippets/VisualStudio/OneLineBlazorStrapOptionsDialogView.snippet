@@ -10,7 +10,13 @@
     <Snippet>
       <Code Language="CSharp">
         <![CDATA[@inherits $DataViewComponentModel$
-        
+@code{      
+    protected override void OnInitialized()
+    {
+        ComponentType = OneLine.Enums.ComponentType.OptionsDialogView;
+        base.OnInitialized();
+    }
+}        
 @if(!Hide)
 {
     <BSModal Class=@(!Hidden ? "" : "d-none") IsOpen=@ShowOptionsDialog IgnoreClickOnBackdrop=@true IsFullWidth=@(!Device.IsDesktop) IsBottom=@(!Device.IsDesktop) IsCentered=@Device.IsDesktop>

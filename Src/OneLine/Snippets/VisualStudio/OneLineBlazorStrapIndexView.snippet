@@ -18,7 +18,13 @@
 @inherits $DataViewComponentModel$
 @page "/$ComponentRouteUrl$"
 @page "/$ComponentRouteUrl$/{RecordId}"
-
+@code{      
+    protected override void OnInitialized()
+    {
+        ComponentType = OneLine.Enums.ComponentType.Custom;
+        base.OnInitialized();
+    }
+}
 @if (User.IsAuthorized() && !Hide)
 {
     @if (!ShowForm)

@@ -11,7 +11,7 @@ namespace OneLine.Bases
     public abstract class HttpBaseService : IHttpService
     {
         /// <inheritdoc/>
-        public string Api { get; set; } = "api";
+        public virtual string Api { get; set; } = "api";
         /// <inheritdoc/>
         public HttpClient HttpClient { get; set; }
         public HttpBaseService()

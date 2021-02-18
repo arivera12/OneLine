@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Cleanup and added virtual to THttpService for override on inherited class.</PackageReleaseNotes>
-    <Version>3.0.30</Version>
+    <PackageReleaseNotes>Compatibilities fixes.</PackageReleaseNotes>
+    <Version>3.0.31</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.30.0</AssemblyVersion>
-    <FileVersion>3.0.30.0</FileVersion>
+    <AssemblyVersion>3.0.31.0</AssemblyVersion>
+    <FileVersion>3.0.31.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

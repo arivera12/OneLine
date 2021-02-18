@@ -23,7 +23,7 @@ namespace OneLine.Bases
         /// <inheritdoc/>
         public override string Api { get; set; } = "api";
         /// <inheritdoc/>
-        public string ControllerName { get; set; }
+        public virtual string ControllerName { get; set; }
         /// <inheritdoc/>
         public string AddMethod { get; set; } = "add";
         /// <inheritdoc/>

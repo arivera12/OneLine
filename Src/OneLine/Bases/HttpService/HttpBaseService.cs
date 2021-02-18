@@ -11,7 +11,7 @@ namespace OneLine.Bases
     public abstract class HttpBaseService : IHttpService
     {
         /// <inheritdoc/>
-        public virtual string Api { get; set; } = "api";
+        public string Api { get; set; } = "api";
         /// <inheritdoc/>
         public HttpClient HttpClient { get; set; }
         public HttpBaseService()
@@ -74,7 +74,7 @@ namespace OneLine.Bases
         /// Gets the api path. Example "/Api"
         /// </summary>
         /// <returns></returns>
-        public virtual string GetApi()
+        public string GetApi()
         {
             return Api.IsNullOrWhiteSpace() ? "" : $"/{Api}";
         }

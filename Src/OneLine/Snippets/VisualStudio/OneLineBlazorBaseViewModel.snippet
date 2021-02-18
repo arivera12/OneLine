@@ -15,6 +15,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using $RootNamespace$.Models;
 using $RootNamespace$.Services.Http;
+using $RootNamespace$.Validations;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using OneLine.Blazor.Extensions;
@@ -560,7 +561,7 @@ namespace $RootNamespace$.WebUI.Pages
         {
             if (Identifier.IsNotNull() && Identifier.Model.IsNotNull())
             {
-                Response = await HttpService.GetOneAsync<$ViewModel$>(Identifier, new EmptyValidator());
+                Response = await $HttpService$.GetOneAsync<$ViewModel$>(Identifier, new EmptyValidator());
                 ResponseChanged?.Invoke(Response);
                 if (Response.IsNotNull() &&
                     Response.Succeed &&

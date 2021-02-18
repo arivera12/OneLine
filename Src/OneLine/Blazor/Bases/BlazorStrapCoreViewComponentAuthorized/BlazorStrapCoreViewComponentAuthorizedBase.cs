@@ -108,7 +108,7 @@ namespace OneLine.Blazor.Bases
         /// <param name="selectedColor"></param>
         /// <param name="unSelectedColor"></param>
         /// <returns></returns>
-        public virtual TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor)
+        public TColor HighlightItem<TColor>(T record, TColor selectedColor, TColor unSelectedColor)
         {
             if (RecordsSelectionMode.IsSingle())
             {

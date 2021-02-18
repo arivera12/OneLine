@@ -25,9 +25,9 @@ namespace OneLine.Blazor.Bases
         {   
         }
         /// <inheritdoc/>
-        [Parameter] public virtual IEnumerable<string> AuthorizedRoles { get; set; }
+        [Parameter] public IEnumerable<string> AuthorizedRoles { get; set; }
         /// <inheritdoc/>
-        public virtual TUser User { get; set; }
+        public TUser User { get; set; }
         /// <inheritdoc/>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

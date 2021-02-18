@@ -24,152 +24,152 @@ namespace OneLine.Bases
         where THttpService : IHttpCrudExtendedService<T, TIdentifier>, new()
     {
         /// <inheritdoc/>
-        public virtual ISaveFile SaveFile { get; set; }
+        public ISaveFile SaveFile { get; set; }
         /// <inheritdoc/>
-        public virtual IDevice Device { get; set; }
+        public IDevice Device { get; set; }
         /// <inheritdoc/>
-        public virtual IDeviceStorage DeviceStorage { get; set; }
+        public IDeviceStorage DeviceStorage { get; set; }
         /// <inheritdoc/>
-        public virtual IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
+        public IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
         /// <inheritdoc/>
-        public virtual IApplicationState ApplicationState { get; set; }
+        public IApplicationState ApplicationState { get; set; }
         /// <inheritdoc/>
-        public virtual IApplicationConfiguration ApplicationConfiguration { get; set; }
+        public IApplicationConfiguration ApplicationConfiguration { get; set; }
         /// <inheritdoc/>
-        public virtual TIdentifier Identifier { get; set; }
+        public TIdentifier Identifier { get; set; }
         /// <inheritdoc/>
-        public virtual IEnumerable<TIdentifier> Identifiers { get; set; }
+        public IEnumerable<TIdentifier> Identifiers { get; set; }
         /// <inheritdoc/>
-        public virtual T Record { get; set; }
+        public T Record { get; set; }
         /// <inheritdoc/>
-        public virtual ObservableRangeCollection<T> Records { get; set; }
+        public ObservableRangeCollection<T> Records { get; set; }
         /// <inheritdoc/>
-        public virtual IValidator Validator { get; set; }
+        public IValidator Validator { get; set; }
         /// <inheritdoc/>
-        public virtual ValidationResult ValidationResult { get; set; }
+        public ValidationResult ValidationResult { get; set; }
         /// <inheritdoc/>
-        public virtual bool IsValidModelState { get; set; }
+        public bool IsValidModelState { get; set; }
         /// <inheritdoc/>
-        public virtual FormState FormState { get; set; }
+        public FormState FormState { get; set; }
         /// <inheritdoc/>
-        public virtual FormMode FormMode { get; set; }
+        public FormMode FormMode { get; set; }
         /// <inheritdoc/>
-        public virtual bool AutoLoad { get; set; }
+        public bool AutoLoad { get; set; }
         /// <inheritdoc/>
-        public virtual bool AllowDuplicates { get; set; }
+        public bool AllowDuplicates { get; set; }
         /// <inheritdoc/>
-        public virtual bool InitialAutoSearch { get; set; }
+        public bool InitialAutoSearch { get; set; }
         /// <inheritdoc/>
-        public virtual object SearchExtraParams { get; set; }
+        public object SearchExtraParams { get; set; }
         /// <inheritdoc/>
-        public virtual Func<T, bool> FilterPredicate { get; set; }
+        public Func<T, bool> FilterPredicate { get; set; }
         /// <inheritdoc/>
-        public virtual string FilterSortBy { get; set; }
+        public string FilterSortBy { get; set; }
         /// <inheritdoc/>
-        public virtual bool FilterDescending { get; set; }
+        public bool FilterDescending { get; set; }
         /// <inheritdoc/>
-        public virtual ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
+        public ObservableRangeCollection<T> RecordsFilteredSorted { get; set; }
         /// <inheritdoc/>
-        public virtual IResponseResult<ApiResponse<T>> Response { get; set; }
+        public IResponseResult<ApiResponse<T>> Response { get; set; }
         /// <inheritdoc/>
-        public virtual IResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
+        public IResponseResult<ApiResponse<IEnumerable<T>>> ResponseCollection { get; set; }
         /// <inheritdoc/>
-        public virtual IResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
+        public IResponseResult<ApiResponse<Paged<IEnumerable<T>>>> ResponsePaged { get; set; }
         /// <inheritdoc/>
-        public virtual THttpService HttpService { get; set; }
+        public THttpService HttpService { get; set; }
         /// <inheritdoc/>
-        public virtual IPaging Paging { get; set; }
+        public IPaging Paging { get; set; }
         /// <inheritdoc/>
-        public virtual ISearchPaging SearchPaging { get; set; }
+        public ISearchPaging SearchPaging { get; set; }
         /// <inheritdoc/>
-        public virtual RecordsSelectionMode RecordsSelectionMode { get; set; }
+        public RecordsSelectionMode RecordsSelectionMode { get; set; }
         /// <inheritdoc/>
-        public virtual CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
+        public CollectionAppendReplaceMode CollectionAppendReplaceMode { get; set; }
         /// <inheritdoc/>
-        public virtual T SelectedRecord { get; set; }
+        public T SelectedRecord { get; set; }
         /// <inheritdoc/>
-        public virtual ObservableRangeCollection<T> SelectedRecords { get; set; }
+        public ObservableRangeCollection<T> SelectedRecords { get; set; }
         /// <inheritdoc/>
-        public virtual long MinimumRecordsSelections { get; set; }
+        public long MinimumRecordsSelections { get; set; }
         /// <inheritdoc/>
-        public virtual long MaximumRecordsSelections { get; set; }
+        public long MaximumRecordsSelections { get; set; }
         /// <inheritdoc/>
-        public virtual bool MinimumRecordsSelectionsReached { get; set; }
+        public bool MinimumRecordsSelectionsReached { get; set; }
         /// <inheritdoc/>
-        public virtual bool MaximumRecordsSelectionsReached { get; set; }
+        public bool MaximumRecordsSelectionsReached { get; set; }
         /// <inheritdoc/>
-        public virtual Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
+        public Action<IResponseResult<ApiResponse<T>>> ResponseChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
+        public Action<IResponseResult<ApiResponse<IEnumerable<T>>>> ResponseCollectionChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
+        public Action<IResponseResult<ApiResponse<Paged<IEnumerable<T>>>>> ResponsePagedChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnBeforeSearch { get; set; }
+        public Action OnBeforeSearch { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnAfterSearch { get; set; }
+        public Action OnAfterSearch { get; set; }
         /// <inheritdoc/>
-        public virtual Action<TIdentifier> IdentifierChanged { get; set; }
+        public Action<TIdentifier> IdentifierChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
+        public Action<IEnumerable<TIdentifier>> IdentifiersChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<T> RecordChanged { get; set; }
+        public Action<T> RecordChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
+        public Action<ObservableRangeCollection<T>> RecordsChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
+        public Action<ObservableRangeCollection<T>> RecordsFilteredSortedChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<T> SelectedRecordChanged { get; set; }
+        public Action<T> SelectedRecordChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action BeforeSelectedRecord { get; set; }
+        public Action BeforeSelectedRecord { get; set; }
         /// <inheritdoc/>
-        public virtual Action AfterSelectedRecord { get; set; }
+        public Action AfterSelectedRecord { get; set; }
         /// <inheritdoc/>
-        public virtual Action<ObservableRangeCollection<T>> SelectedRecordsChanged { get; set; }
+        public Action<ObservableRangeCollection<T>> SelectedRecordsChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<bool> MinimumRecordsSelectionsReachedChanged { get; set; }
+        public Action<bool> MinimumRecordsSelectionsReachedChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
+        public Action<bool> MaximumRecordsSelectionsReachedChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<IPaging> PagingChanged { get; set; }
+        public Action<IPaging> PagingChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<ISearchPaging> SearchPagingChanged { get; set; }
+        public Action<ISearchPaging> SearchPagingChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<Func<T, bool>> FilterPredicateChanged { get; set; }
+        public Action<Func<T, bool>> FilterPredicateChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<string> FilterSortByChanged { get; set; }
+        public Action<string> FilterSortByChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<bool> FilterDescendingChanged { get; set; }
+        public Action<bool> FilterDescendingChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<ValidationResult> ValidationResultChanged { get; set; }
+        public Action<ValidationResult> ValidationResultChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<bool> IsValidModelStateChanged { get; set; }
+        public Action<bool> IsValidModelStateChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<FormState> FormStateChanged { get; set; }
+        public Action<FormState> FormStateChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action<FormMode> FormModeChanged { get; set; }
+        public Action<FormMode> FormModeChanged { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnBeforeLoad { get; set; }
+        public Action OnBeforeLoad { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnAfterLoad { get; set; }
+        public Action OnAfterLoad { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnBeforeReset { get; set; }
+        public Action OnBeforeReset { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnAfterReset { get; set; }
+        public Action OnAfterReset { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnBeforeCancel { get; set; }
+        public Action OnBeforeCancel { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnAfterCancel { get; set; }
+        public Action OnAfterCancel { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnBeforeSave { get; set; }
+        public Action OnBeforeSave { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnAfterSave { get; set; }
+        public Action OnAfterSave { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnBeforeDelete { get; set; }
+        public Action OnBeforeDelete { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnAfterDelete { get; set; }
+        public Action OnAfterDelete { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnBeforeValidate { get; set; }
+        public Action OnBeforeValidate { get; set; }
         /// <inheritdoc/>
-        public virtual Action OnAfterValidate { get; set; }
+        public Action OnAfterValidate { get; set; }
     }
 }

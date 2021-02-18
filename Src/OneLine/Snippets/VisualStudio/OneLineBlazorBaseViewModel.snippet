@@ -55,7 +55,6 @@ namespace $RootNamespace$.WebUI.Pages
         [Parameter] public bool HideCreateOrNewButton { get; set; }
         [Parameter] public string RecordId { get; set; }
         [Parameter] public string RedirectUrlAfterSave { get; set; }
-        [Parameter] public ComponentType ComponentType { get; set; }
         [Parameter] public bool ShowOptionsDialog { get; set; }
         [Parameter] public bool HideDetailsDialogOption { get; set; }
         [Parameter] public bool HideCopyDialogOption { get; set; }
@@ -174,14 +173,6 @@ namespace $RootNamespace$.WebUI.Pages
         }
         public async Task InitializeComponentAsync()
         {
-            if(ComponentType == ComponentType.Custom)
-            {
-                AuthorizedRoles = new[] { };
-            }
-            else if (ComponentType == ComponentType.FormView)
-            {
-                AuthorizedRoles = new[] { };
-            }
             User = await ApplicationState.GetApplicationUserSecure<AspNetUsersViewModel>();
             IEnumerable<string> roles = default;
             var rolesObject = User.GetType().GetProperty("Roles").GetValue(User);

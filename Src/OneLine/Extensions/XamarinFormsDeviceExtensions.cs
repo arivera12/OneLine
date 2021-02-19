@@ -198,7 +198,9 @@ namespace OneLine.Extensions
             {
                 try
                 {
-                    return RuntimeInformation.OSDescription.Equals("web");
+                    //browser >= NET5 < web
+                    return RuntimeInformation.OSDescription.Equals("web", StringComparison.InvariantCultureIgnoreCase) || 
+                        RuntimeInformation.OSDescription.Equals("browser", StringComparison.InvariantCultureIgnoreCase);
                 }
                 catch
                 {

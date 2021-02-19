@@ -237,7 +237,10 @@ namespace OneLine.Services
             {
                 try
                 {
-                    return RuntimeInformation.OSDescription.Equals("web") || JSRuntime.IsNotNull();
+                    //browser >= NET5 < web
+                    return RuntimeInformation.OSDescription.Equals("web", StringComparison.InvariantCultureIgnoreCase) ||
+                        RuntimeInformation.OSDescription.Equals("browser", StringComparison.InvariantCultureIgnoreCase) || 
+                        JSRuntime.IsNotNull();
                 }
                 catch
                 {

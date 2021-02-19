@@ -197,7 +197,7 @@ namespace $RootNamespace$.WebUI.Pages
                 else
                 {
                     var token = User.GetType().GetProperty("Token").GetValue(User)?.ToString();
-                    AccessLogsHttpService.HttpClient.AddJwtAuthorizationBearerHeader(token, true);
+                    $HttpService$.HttpClient.AddJwtAuthorizationBearerHeader(token, true);
                     HttpClient.AddJwtAuthorizationBearerHeader(token, true);
 
                     //This null check allows to prevent override the listeners from parent if it's listening to any of this events

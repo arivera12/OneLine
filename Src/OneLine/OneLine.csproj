@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added some default constructor to some DI services.</PackageReleaseNotes>
-    <Version>3.0.35</Version>
+    <PackageReleaseNotes>Removed not implemented hub methods. Refactored send and receive method names and parameters name with more descriptive names. And implemented base method like send message to all users and send message to a specific user.</PackageReleaseNotes>
+    <Version>3.0.38</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.35.0</AssemblyVersion>
-    <FileVersion>3.0.35.0</FileVersion>
+    <AssemblyVersion>3.0.38.0</AssemblyVersion>
+    <FileVersion>3.0.38.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

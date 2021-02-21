@@ -386,7 +386,7 @@ namespace OneLine.Blazor.Components
             }
             else if (MaximumAllowedFilesReached && MaxFileSize > 0 && !string.IsNullOrWhiteSpace(MaxFileSizeMeasuredText))
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {ResourceManagerLocalizer["MaximumSizePerFile"]} {MaxFileSizeMeasuredText}, {ResourceManagerLocalizer["MaximunReached"]}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {ResourceManagerLocalizer["MaximumSizePerFile"]} {MaxFileSizeMeasuredText}, {ResourceManagerLocalizer["MaximumReached"]}</small></div>";
             }
             else if (MinimumAllowedFilesReached && !MaximumAllowedFilesReached && MaxFileSize <= 0)
             {
@@ -394,7 +394,7 @@ namespace OneLine.Blazor.Components
             }
             else if (MaximumAllowedFilesReached && MaxFileSize <= 0)
             {
-                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {ResourceManagerLocalizer["MaximunReached"]}</small></div>";
+                return (MarkupString)$@"<div class=""text-muted""><small>{ForceUploadText()}{RequiredText()}{AllowsUpToFilesText()}, {ResourceManagerLocalizer["MaximumReached"]}</small></div>";
             }
             else
             {

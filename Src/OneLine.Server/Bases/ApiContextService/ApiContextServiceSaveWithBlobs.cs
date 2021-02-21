@@ -18,7 +18,7 @@ namespace OneLine.Bases
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
-        where TMessageHub : class, ISendMessageHub, new()
+        where TMessageHub : MessageHub, new()
     {
         /// <inheritdoc/>
         public async Task<IApiResponse<T>> SaveValidatedAuditedWithBlobsAsync(T record, T originalRecord, IValidator validator, SaveOperation saveOperation, IEnumerable<IUploadBlobData> uploadBlobDatas, bool ignoreBlobOwner = false, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")

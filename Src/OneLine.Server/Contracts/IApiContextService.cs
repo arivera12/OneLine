@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OneLine.Bases;
 using OneLine.Messaging;
@@ -35,7 +36,7 @@ namespace OneLine.Contracts
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
-        where TMessageHub : class, ISendMessageHub, new()
+        where TMessageHub : MessageHub, new()
     {
         /// <summary>
         /// The api http context
@@ -56,6 +57,6 @@ namespace OneLine.Contracts
         /// <summary>
         /// The api Signal R hub message sender context
         /// </summary>
-        TMessageHub SendMessageHub { get; set; }
+        IHubContext<TMessageHub> SendMessageHub { get; set; }
     }
 }

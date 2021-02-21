@@ -19,7 +19,7 @@ namespace OneLine.Bases
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
-        where TMessageHub : class, ISendMessageHub, new()
+        where TMessageHub : MessageHub, new()
     {
         /// <inheritdoc/>
         public async Task<IApiResponse<T>> SaveAsync(T record, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")

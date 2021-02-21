@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -9,10 +10,6 @@ namespace OneLine.Messaging
     /// </summary>
     public interface ISmtp
     {
-        /// <summary>
-        /// The Smtp settings
-        /// </summary>
-        ISmtpSettings SmtpSettings { get; set; }
         /// <summary>
         /// Send mail using smtp client
         /// </summary>

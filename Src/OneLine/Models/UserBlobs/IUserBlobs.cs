@@ -50,7 +50,7 @@ namespace OneLine.Models
         /// <summary>
         /// Created on
         /// </summary>
-        DateTime? CreatedOn { get; set; }
+        DateTime CreatedOn { get; set; }
         /// <summary>
         /// Created by
         /// </summary>

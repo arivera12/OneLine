@@ -17,7 +17,7 @@ namespace OneLine.Bases
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
-        where TMessageHub : class, ISendMessageHub, new()
+        where TMessageHub : MessageHub, new()
     {
         /// <inheritdoc/>
         public void AddAuditrails<TAudit>(TAudit entity, TransactionType transactionType) where TAudit : class

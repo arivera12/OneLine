@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OneLine.Contracts;
 using OneLine.Messaging;
@@ -14,18 +15,18 @@ namespace OneLine.Bases
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
-        where TMessageHub : class, ISendMessageHub, new()
+        where TMessageHub : MessageHub, new()
     {
         /// <inheritdoc/>
-        public virtual IHttpContextAccessor HttpContextAccessor { get; set; }
+        public IHttpContextAccessor HttpContextAccessor { get; set; }
         /// <inheritdoc/>
-        public virtual TDbContext DbContext { get; set; }
+        public TDbContext DbContext { get; set; }
         /// <inheritdoc/>
-        public virtual TBlobStorage BlobStorageService { get; set; }
+        public TBlobStorage BlobStorageService { get; set; }
         /// <inheritdoc/>
-        public virtual TSmtp Smtp { get; set; }
+        public TSmtp Smtp { get; set; }
         /// <inheritdoc/>
-        public virtual TMessageHub SendMessageHub { get; set; }
+        public IHubContext<TMessageHub> SendMessageHub { get; set; }
         /// <summary>
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
         /// </summary>
@@ -50,7 +51,7 @@ namespace OneLine.Bases
         /// <param name="httpContextAccessor"></param>
         /// <param name="dbContext"></param>
         /// <param name="sendMessageHub"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TMessageHub sendMessageHub)
+        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, IHubContext<TMessageHub> sendMessageHub)
         {
             HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;
@@ -75,7 +76,7 @@ namespace OneLine.Bases
         /// <param name="dbContext"></param>
         /// <param name="blobStorage"></param>
         /// <param name="sendMessageHub"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TBlobStorage blobStorage, TMessageHub sendMessageHub)
+        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TBlobStorage blobStorage, IHubContext<TMessageHub> sendMessageHub)
         {
             HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;
@@ -101,7 +102,7 @@ namespace OneLine.Bases
         /// <param name="dbContext"></param>
         /// <param name="smtp"></param>
         /// <param name="sendMessageHub"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TSmtp smtp, TMessageHub sendMessageHub)
+        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TSmtp smtp, IHubContext<TMessageHub> sendMessageHub)
         {
             HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;
@@ -130,7 +131,7 @@ namespace OneLine.Bases
         /// <param name="smtp"></param>
         /// <param name="blobStorage"></param>
         /// <param name="sendMessageHub"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TSmtp smtp, TBlobStorage blobStorage, TMessageHub sendMessageHub)
+        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TSmtp smtp, TBlobStorage blobStorage, IHubContext<TMessageHub> sendMessageHub)
         {
             HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;

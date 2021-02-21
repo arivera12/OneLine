@@ -4,8 +4,7 @@ namespace OneLine.Contracts
 {
     public interface IReceiveMessageHub
     {
-        Task ReceiveMessage<TMessage>(TMessage message);
-        Task ReceiveMessageToUser<TMessage>(string senderUser, TMessage message);
-        Task ReceiveMessageToAllUsers<TMessage>(string senderUser, TMessage message);
+        Task ReceivePrivateMessage<TMessage>(TMessage message);
+        Task ReceiveMessageForAllUsers<TMessage>(TMessage message);
     }
 }

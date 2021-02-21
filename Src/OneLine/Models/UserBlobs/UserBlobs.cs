@@ -27,7 +27,7 @@ namespace OneLine.Models
         /// <inheritdoc/>
         public bool IsDeleted { get; set; }
         /// <inheritdoc/>
-        public DateTime? CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         /// <inheritdoc/>
         public string CreatedBy { get; set; }
     }
@@ -57,7 +57,7 @@ namespace OneLine.Models
         /// <inheritdoc/>
         public bool IsDeleted { get; set; }
         /// <inheritdoc/>
-        public DateTime? CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         /// <inheritdoc/>
         public string CreatedBy { get; set; }
     }

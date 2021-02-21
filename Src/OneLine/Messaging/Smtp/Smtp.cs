@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,8 @@ namespace OneLine.Messaging
 {
     public class Smtp : ISmtp
     {
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public ISmtpSettings SmtpSettings { get; set; }
+        public readonly ISmtpSettings SmtpSettings;
+        public readonly IConfiguration Configuration;
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -36,6 +35,24 @@ namespace OneLine.Messaging
         public Smtp(ISmtpSettings smtpSettings)
         {
             SmtpSettings = smtpSettings;
+        }
+        /// <summary>
+        /// Constructor using DI
+        /// </summary>
+        /// <param name="options"></param>
+        public Smtp(IOptions<SmtpSettings> options, IConfiguration configuration)
+        {
+            SmtpSettings = options.Value;
+            Configuration = configuration;
+        }
+        /// <summary>
+        /// Constructor using DI
+        /// </summary>
+        /// <param name="options"></param>
+        public Smtp(ISmtpSettings smtpSettings, IConfiguration configuration)
+        {
+            SmtpSettings = smtpSettings;
+            Configuration = configuration;
         }
         /// <summary>
         /// <inheritdoc/>

@@ -32,7 +32,8 @@ namespace OneLine.Extensions
                 TableName = typeof(T).Name,
                 Record = JsonConvert.SerializeObject(entity, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
                 Hostname = Environment.MachineName,
-                RemoteIpAddress = httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress.ToString(),
+                RemoteIpAddress = httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress.ToString() + ":" +
+                httpContextAccessor?.HttpContext?.Connection.RemotePort.ToString(),
                 CreatedBy = httpContextAccessor?.HttpContext?.User.UserId(),
                 CreatedOn = DateTime.Now
             };
@@ -59,7 +60,8 @@ namespace OneLine.Extensions
                 TableName = typeof(T).Name,
                 Record = JsonConvert.SerializeObject(entity, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
                 Hostname = Environment.MachineName,
-                RemoteIpAddress = httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress.ToString(),
+                RemoteIpAddress = httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress.ToString() + ":" +
+                httpContextAccessor?.HttpContext?.Connection.RemotePort.ToString(),
                 CreatedBy = httpContextAccessor?.HttpContext?.User.UserId(),
                 CreatedOn = DateTime.Now
             };

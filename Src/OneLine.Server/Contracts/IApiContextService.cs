@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using OneLine.Bases;
 using OneLine.Messaging;
 using OneLine.Models;
 using Storage.Net.Blobs;
@@ -32,7 +33,7 @@ namespace OneLine.Contracts
         where T : class, new()
         where TAuditTrails : class, IAuditTrails, new()
         where TUserBlobs : class, IUserBlobs, new()
-        where TBlobStorage : class, IBlobStorage, new()
+        where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
         where TMessageHub : class, ISendMessageHub, new()
     {
@@ -47,7 +48,7 @@ namespace OneLine.Contracts
         /// <summary>
         /// The api blob storage context
         /// </summary>
-        TBlobStorage BlobStorage { get; set; }
+        TBlobStorage BlobStorageService { get; set; }
         /// <summary>
         /// The api simple mail transfer protocol client context
         /// </summary>

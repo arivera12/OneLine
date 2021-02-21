@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using OneLine.Contracts;
 using OneLine.Messaging;
 using OneLine.Models;
-using Storage.Net.Blobs;
 
 namespace OneLine.Bases
 {
@@ -13,7 +12,7 @@ namespace OneLine.Bases
         where T : class, new()
         where TAuditTrails : class, IAuditTrails, new()
         where TUserBlobs : class, IUserBlobs, new()
-        where TBlobStorage : class, IBlobStorage, new()
+        where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
         where TMessageHub : class, ISendMessageHub, new()
     {
@@ -22,7 +21,7 @@ namespace OneLine.Bases
         /// <inheritdoc/>
         public virtual TDbContext DbContext { get; set; }
         /// <inheritdoc/>
-        public virtual TBlobStorage BlobStorage { get; set; }
+        public virtual TBlobStorage BlobStorageService { get; set; }
         /// <inheritdoc/>
         public virtual TSmtp Smtp { get; set; }
         /// <inheritdoc/>
@@ -67,7 +66,7 @@ namespace OneLine.Bases
         {
             HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;
-            BlobStorage = blobStorage;
+            BlobStorageService = blobStorage;
         }
         /// <summary>
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
@@ -80,7 +79,7 @@ namespace OneLine.Bases
         {
             HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;
-            BlobStorage = blobStorage;
+            BlobStorageService = blobStorage;
             SendMessageHub = sendMessageHub;
         }
         /// <summary>
@@ -121,7 +120,7 @@ namespace OneLine.Bases
             HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;
             Smtp = smtp;
-            BlobStorage = blobStorage;
+            BlobStorageService = blobStorage;
         }
         /// <summary>
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
@@ -136,7 +135,7 @@ namespace OneLine.Bases
             HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;
             Smtp = smtp;
-            BlobStorage = blobStorage;
+            BlobStorageService = blobStorage;
             SendMessageHub = sendMessageHub;
         }
     }

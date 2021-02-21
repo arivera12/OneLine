@@ -24,7 +24,7 @@ namespace OneLine.Bases
         where T : class, new()
         where TAuditTrails : class, IAuditTrails, new()
         where TUserBlobs : class, IUserBlobs, new()
-        where TBlobStorage : class, IBlobStorage, new()
+        where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
         where TMessageHub : class, ISendMessageHub, new()
     {
@@ -58,7 +58,7 @@ namespace OneLine.Bases
                     var fileExtension = Path.GetExtension(file.Name);
                     var uniqueFileName = Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier().ToString();
                     var filename = $"{(string.IsNullOrWhiteSpace(path) ? "" : path)}{uniqueFileName}{fileExtension}";
-                    await BlobStorage.WriteAsync(filename, file.Data);
+                    await BlobStorageService.BlobStorage.WriteAsync(filename, file.Data);
                     var userBlob = new TUserBlobs().AutoMap(file);
                     userBlob.UserBlobId = Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier().ToString();
                     userBlob.FileName = file.Name;
@@ -113,14 +113,14 @@ namespace OneLine.Bases
         /// <inheritdoc/>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> UpdateUserBlobsRangeAsync(IEnumerable<TUserBlobs> userBlobs, IEnumerable<IUploadBlobData> uploadBlobDatas, string path = "", bool ignoreBlobOwner = false)
         {
-            if(userBlobs.IsNull() || !userBlobs.Any())
+            if (userBlobs.IsNull() || !userBlobs.Any())
             {
                 //await CreateAuditrailsAsync(new T(), "No userblobs to update. The userBlobs parameter is null or empty.");
                 return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("RecordsIsNullOrEmpty");
             }
             var uploadedUserBlobsList = new List<TUserBlobs>();
             var uploadedUserBlobs = await AddUserBlobsRangeAsync(uploadBlobDatas, path);
-            if(uploadedUserBlobs.Status.Failed())
+            if (uploadedUserBlobs.Status.Failed())
             {
                 return new ApiResponse<IEnumerable<TUserBlobs>>(uploadedUserBlobs.Status, uploadedUserBlobs.Data, uploadedUserBlobs.ErrorMessages);
             }
@@ -194,7 +194,7 @@ namespace OneLine.Bases
             {
                 return new ApiResponse<TUserBlobs>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
-            await BlobStorage.DeleteAsync(userBlob.FilePath);
+            await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
             DbContext.Remove(userBlob);
             return userBlob.ToApiResponse();
         }
@@ -206,7 +206,7 @@ namespace OneLine.Bases
             {
                 return new ApiResponse<TUserBlobs>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
-            await BlobStorage.DeleteAsync(userBlob.FilePath);
+            await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
             DbContext.Remove(userBlob);
             await DbContext.AddAsync(userBlob.CreateAuditTrails<TUserBlobs, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
             return userBlob.ToApiResponse();
@@ -214,14 +214,14 @@ namespace OneLine.Bases
         /// <inheritdoc/>
         public async Task<IApiResponse<TUserBlobs>> RemoveForcedUserBlobAsync(TUserBlobs userBlob)
         {
-            await BlobStorage.DeleteAsync(userBlob.FilePath);
+            await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
             DbContext.Remove(userBlob);
             return userBlob.ToApiResponse();
         }
         /// <inheritdoc/>
         public async Task<IApiResponse<TUserBlobs>> RemoveForcedUserBlobAuditedAsync(TUserBlobs userBlob)
         {
-            await BlobStorage.DeleteAsync(userBlob.FilePath);
+            await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
             DbContext.Remove(userBlob);
             await DbContext.AddAsync(userBlob.CreateAuditTrails<TUserBlobs, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
             return userBlob.ToApiResponse();
@@ -245,7 +245,7 @@ namespace OneLine.Bases
                 {
                     return new ApiResponse<IEnumerable<TUserBlobs>>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
                 }
-                await BlobStorage.DeleteAsync(userBlob.FilePath);
+                await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
                 DbContext.Remove(userBlob);
                 deletedUserBlobs.Add(userBlob);
             }
@@ -271,7 +271,7 @@ namespace OneLine.Bases
                 {
                     return new ApiResponse<IEnumerable<TUserBlobs>>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
                 }
-                await BlobStorage.DeleteAsync(userBlob.FilePath);
+                await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
                 DbContext.Remove(userBlob);
                 await DbContext.AddAsync(userBlob.CreateAuditTrails<TUserBlobs, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
                 deletedUserBlobs.Add(userBlob);
@@ -287,7 +287,7 @@ namespace OneLine.Bases
             }
             foreach (var userBlob in userBlobs)
             {
-                await BlobStorage.DeleteAsync(userBlob.FilePath);
+                await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
                 DbContext.Remove(userBlob);
             }
             return userBlobs.AsEnumerable().ToApiResponse();
@@ -302,7 +302,7 @@ namespace OneLine.Bases
             }
             foreach (var userBlob in userBlobs)
             {
-                await BlobStorage.DeleteAsync(userBlob.FilePath);
+                await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
                 DbContext.Remove(userBlob);
                 await DbContext.AddAsync(userBlob.CreateAuditTrails<TUserBlobs, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
             }
@@ -328,7 +328,7 @@ namespace OneLine.Bases
         /// <inheritdoc/>
         public async Task<IApiResponse<IEnumerable<IApiResponse<IEnumerable<TUserBlobs>>>>> RemoveUserBlobsFromObjectAsync(object model)
         {
-            if(model.IsNull())
+            if (model.IsNull())
             {
                 return new ApiResponse<IEnumerable<IApiResponse<IEnumerable<TUserBlobs>>>>(ApiResponseStatus.Failed, "RecordIsNull");
             }
@@ -467,7 +467,7 @@ namespace OneLine.Bases
             {
                 return new ApiResponse<TUserBlobs>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
-            await BlobStorage.DeleteAsync(userBlob.FilePath);
+            await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
             await AddAuditrailsAsync(userBlob, "Removed user blob from database and blob storage");
             DbContext.Remove(userBlob);
             var result = await DbContext.SaveChangesAsync();
@@ -476,7 +476,7 @@ namespace OneLine.Bases
         /// <inheritdoc/>
         public async Task<IApiResponse<TUserBlobs>> DeleteForcedUserBlobsAsync(TUserBlobs userBlob)
         {
-            await BlobStorage.DeleteAsync(userBlob.FilePath);
+            await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
             await AddAuditrailsAsync(userBlob, "Removed user blob from database and blob storage");
             DbContext.Remove(userBlob);
             var result = await DbContext.SaveChangesAsync();
@@ -501,7 +501,7 @@ namespace OneLine.Bases
                 {
                     return new ApiResponse<IEnumerable<TUserBlobs>>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
                 }
-                await BlobStorage.DeleteAsync(userBlob.FilePath);
+                await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
                 await AddAuditrailsAsync(userBlob, "Removed user blob from database and blob storage");
                 DbContext.Remove(userBlob);
             }
@@ -518,7 +518,7 @@ namespace OneLine.Bases
             }
             foreach (var userBlob in userBlobs)
             {
-                await BlobStorage.DeleteAsync(userBlob.FilePath);
+                await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
                 await AddAuditrailsAsync(userBlob, "Removed user blob from database and blob storage");
                 DbContext.Remove(userBlob);
             }
@@ -818,7 +818,7 @@ namespace OneLine.Bases
                 return new TUserBlobs().ToApiResponseFailed("RecordNotFound");
             }
             var record = await DbContext.Set<TUserBlobs>().FindAsync(identifier.Model);
-            return record.IsNull()? record.ToApiResponseFailed("RecordNotFound") : record.ToApiResponse();
+            return record.IsNull() ? record.ToApiResponseFailed("RecordNotFound") : record.ToApiResponse();
         }
         /// <inheritdoc/>
         public async Task<IApiResponse<TUserBlobs>> GetOneOwnsUserBlobsAsync(IIdentifier<string> identifier)
@@ -1222,7 +1222,7 @@ namespace OneLine.Bases
             }
             var userBlobsApiResponse = await GetOneUserBlobsAsync(identifier);
             await DbContext.Set<TAuditTrails>().AddAsync(userBlobsApiResponse.Data.CreateAuditTrails<TUserBlobs, TAuditTrails>("File was downloaded", HttpContextAccessor));
-            return await BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
+            return await BlobStorageService.BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
         }
         /// <inheritdoc/>
         public async Task<IEnumerable<Stream>> ReadBlobRangeAsStreamAsync(IEnumerable<IIdentifier<string>> identifiers, bool ignoreBlobOwner = false)
@@ -1251,7 +1251,7 @@ namespace OneLine.Bases
             var userBlobsApiResponse = await GetOneUserBlobsAsync(identifier);
             //await CreateAuditrailsAsync(new T(), "UserBlob was readed as api response");
             //await dbContext.CreateAuditrailsAsync<TUserBlobs, TAuditTrails>(userBlobsApiResponse.Data, "UserBlob was readed as api response", httpContextAccesor);
-            var stream = await BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
+            var stream = await BlobStorageService.BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
             return new ApiResponse<Stream>(ApiResponseStatus.Succeeded, stream);
         }
         /// <inheritdoc/>
@@ -1290,7 +1290,7 @@ namespace OneLine.Bases
                     }
                     var userBlobsApiResponse = await GetOneUserBlobsAsync(identifier);
                     userBlobs.Add(userBlobsApiResponse.Data);
-                    var stream = await BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
+                    var stream = await BlobStorageService.BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
                     var entry = zip.CreateEntry(userBlobsApiResponse.Data.FileName);
                     using var entryStream = entry.Open();
                     await stream.CopyToAsync(entryStream);
@@ -1321,7 +1321,7 @@ namespace OneLine.Bases
                     }
                     var userBlobsApiResponse = await GetOneUserBlobsAsync(identifier);
                     userBlobs.Add(userBlobsApiResponse.Data);
-                    var stream = await BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
+                    var stream = await BlobStorageService.BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
                     var entry = zip.CreateEntry(userBlobsApiResponse.Data.FileName);
                     using var entryStream = entry.Open();
                     await stream.CopyToAsync(entryStream);
@@ -1340,7 +1340,7 @@ namespace OneLine.Bases
                 return null;
             }
             //await dbContext.CreateAuditrailsAsync<TUserBlobs, TAuditTrails>(userBlobs, "File was found and read as stream", httpContextAccessor);
-            return await BlobStorage.OpenReadAsync(userBlobs.FilePath);
+            return await BlobStorageService.BlobStorage.OpenReadAsync(userBlobs.FilePath);
         }
         /// <inheritdoc/>
         public async Task<IEnumerable<Stream>> ReadBlobRangeAsStreamAsync(IEnumerable<TUserBlobs> userBlobs, bool ignoreBlobOwner = false)
@@ -1366,7 +1366,7 @@ namespace OneLine.Bases
                 return new ApiResponse<Stream>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
             //await dbContext.CreateAuditrailsAsync<TUserBlobs, TAuditTrails>(userBlobs, "UserBlob was readed as api response", httpContextAccessor);
-            var stream = await BlobStorage.OpenReadAsync(userBlobs.FilePath);
+            var stream = await BlobStorageService.BlobStorage.OpenReadAsync(userBlobs.FilePath);
             return new ApiResponse<Stream>(ApiResponseStatus.Succeeded, stream);
         }
         /// <inheritdoc/>
@@ -1397,7 +1397,7 @@ namespace OneLine.Bases
                     {
                         return null;
                     }
-                    var stream = await BlobStorage.OpenReadAsync(userBlob.FilePath);
+                    var stream = await BlobStorageService.BlobStorage.OpenReadAsync(userBlob.FilePath);
                     var entry = zip.CreateEntry(userBlob.FileName);
                     using var entryStream = entry.Open();
                     await stream.CopyToAsync(entryStream);
@@ -1425,7 +1425,7 @@ namespace OneLine.Bases
                     {
                         return new ApiResponse<Stream>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
                     }
-                    var stream = await BlobStorage.OpenReadAsync(userBlob.FilePath);
+                    var stream = await BlobStorageService.BlobStorage.OpenReadAsync(userBlob.FilePath);
                     var entry = zip.CreateEntry(userBlob.FileName);
                     using var entryStream = entry.Open();
                     await stream.CopyToAsync(entryStream);
@@ -1465,7 +1465,7 @@ namespace OneLine.Bases
                     return new ApiResponse<bool>(ApiResponseStatus.Failed, isBlobOwner.Message);
                 }
             }
-            var fileExist = await BlobStorage.ExistsAsync(userBlobs.FilePath);
+            var fileExist = await BlobStorageService.BlobStorage.ExistsAsync(userBlobs.FilePath);
             if (!fileExist)
             {
                 return new ApiResponse<bool>(ApiResponseStatus.Failed, fileExist, "FileNotFound");
@@ -1513,14 +1513,14 @@ namespace OneLine.Bases
             {
                 return new ApiResponse<bool>(userBlobsApiResponse.Status, false, userBlobsApiResponse.Message);
             }
-            var fileExist = await BlobStorage.ExistsAsync(userBlobsApiResponse.Data.FilePath);
+            var fileExist = await BlobStorageService.BlobStorage.ExistsAsync(userBlobsApiResponse.Data.FilePath);
             if (!fileExist)
             {
                 return new ApiResponse<bool>(ApiResponseStatus.Failed, fileExist, "FileNotFound");
             }
             return new ApiResponse<bool>(ApiResponseStatus.Succeeded, true);
         }
-        
+
         #endregion
     }
 }

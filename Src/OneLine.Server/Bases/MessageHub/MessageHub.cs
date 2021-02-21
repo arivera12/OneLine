@@ -7,6 +7,10 @@ namespace OneLine.Bases
 {
     public class MessageHub : Hub<IReceiveMessageHub>, ISendMessageHub
     {
+        public MessageHub()
+        {
+
+        }
         public Task AddConnectionToGroup(string connectionId, string groupName)
         {
             return Groups.AddToGroupAsync(connectionId, groupName);

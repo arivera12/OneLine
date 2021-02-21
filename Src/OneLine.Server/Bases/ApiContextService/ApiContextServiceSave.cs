@@ -5,12 +5,8 @@ using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Messaging;
 using OneLine.Models;
-using Storage.Net.Blobs;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
@@ -21,7 +17,7 @@ namespace OneLine.Bases
         where T : class, new()
         where TAuditTrails : class, IAuditTrails, new()
         where TUserBlobs : class, IUserBlobs, new()
-        where TBlobStorage : class, IBlobStorage, new()
+        where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
         where TMessageHub : class, ISendMessageHub, new()
     {

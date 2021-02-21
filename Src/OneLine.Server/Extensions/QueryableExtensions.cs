@@ -87,7 +87,7 @@ namespace OneLine.Extensions
         }
         public static IQueryable<T> WhereIsDeleted<T>(this IQueryable<T> source) where T : ISoftDeletable
         {
-            return source.Where(e => e.IsDeleted);
+            return source.Where(x => x.IsDeleted);
         }
         /// <summary>
         /// Checks if <see cref="ISoftDeletable.IsDeleted"/> is <see cref="false"/>
@@ -97,7 +97,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static IQueryable<T> WhereNotIsDeleted<T>(this IQueryable<T> source) where T : ISoftDeletable
         {
-            return source.Where(e => !e.IsDeleted);
+            return source.Where(x => !x.IsDeleted);
         }
         /// <summary>
         /// Check whether a property exist in <typeparamref name="T"/>

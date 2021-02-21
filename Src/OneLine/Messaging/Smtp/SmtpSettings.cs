@@ -38,6 +38,13 @@ namespace OneLine.Messaging
         /// <inheritdoc/>
         /// </summary>
         public string Password { get; set; }
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public SmtpSettings()
+        {
+
+        }
     }
 }
 

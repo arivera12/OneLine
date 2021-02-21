@@ -15,6 +15,13 @@ namespace OneLine.Messaging
         /// </summary>
         public ISmtpSettings SmtpSettings { get; set; }
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public Smtp()
+        {
+
+        }
+        /// <summary>
         /// Constructor using DI
         /// </summary>
         /// <param name="options"></param>

@@ -19,8 +19,13 @@ namespace OneLine.Services
             JSRuntime = jSRuntime;
             new Action(async () =>
             {
-                DeviceDetector = new DeviceDetector(await JSRuntime.InvokeAsync<string>("eval", new[] { "window.navigator.userAgent" }));
-                DeviceDetector.Parse();
+                try
+                {
+                    DeviceDetector = new DeviceDetector(await JSRuntime.InvokeAsync<string>("eval", new[] { "window.navigator.userAgent" }));
+                    DeviceDetector.Parse();
+                }
+                catch(Exception)
+                { }
             }).Invoke();
         }
         public bool IsDesktop
@@ -238,9 +243,9 @@ namespace OneLine.Services
                 try
                 {
                     //browser >= NET5 < web
-                    return RuntimeInformation.OSDescription.Equals("web", StringComparison.InvariantCultureIgnoreCase) ||
-                        RuntimeInformation.OSDescription.Equals("browser", StringComparison.InvariantCultureIgnoreCase) || 
-                        JSRuntime.IsNotNull();
+                    return JSRuntime.IsNotNull() ||
+                        RuntimeInformation.OSDescription.Equals("web", StringComparison.InvariantCultureIgnoreCase) ||
+                        RuntimeInformation.OSDescription.Equals("browser", StringComparison.InvariantCultureIgnoreCase);
                 }
                 catch
                 {
@@ -254,7 +259,7 @@ namespace OneLine.Services
             {
                 try
                 {
-                    return IsWebPlatform && !Type.GetType("Mono.Runtime").Equals(null) || JSRuntime.IsNotNull();
+                    return JSRuntime.IsNotNull() && JSRuntime is JSInProcessRuntime;
                 }
                 catch
                 {
@@ -268,7 +273,7 @@ namespace OneLine.Services
             {
                 try
                 {
-                    return IsWebPlatform && Type.GetType("Mono.Runtime").Equals(null) || JSRuntime.IsNotNull();
+                    return JSRuntime.IsNotNull() && !(JSRuntime is JSInProcessRuntime);
                 }
                 catch
                 {

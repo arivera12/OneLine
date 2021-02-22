@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.39</Version>
+    <Version>3.0.42</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine.Server is a project that can be used on a server backend. This package already includes OneLine.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,12 +12,12 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added notification model and remove TMessage since signal r doesn't work with typeparams methods.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed unstable detection.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.39.0</AssemblyVersion>
-    <FileVersion>3.0.39.0</FileVersion>
+    <AssemblyVersion>3.0.42.0</AssemblyVersion>
+    <FileVersion>3.0.42.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using OneLine.Models;
+using System.Threading.Tasks;
 
 namespace OneLine.Contracts
 {
@@ -7,8 +8,8 @@ namespace OneLine.Contracts
     /// </summary>
     public interface ISendMessageHub
     {
-        Task SendMessageToAllUsers<TMessage>(TMessage message);
-        Task SendMessageToUser<TMessage>(string receiverUserIdentifier, TMessage message);
+        Task SendMessageToAllUsers(Notification<object> message);
+        Task SendMessageToUser(string receiverUserIdentifier, Notification<object> message);
         //Task SendMessageToConnection<TMessage>(string connectionId, TMessage message);
         //Task ConnectionExists(string connectionId);
         //Task CloseConnection(string connectionId);

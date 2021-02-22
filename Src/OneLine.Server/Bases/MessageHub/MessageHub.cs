@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using OneLine.Contracts;
+using OneLine.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -44,7 +45,7 @@ namespace OneLine.Bases
         //    throw new NotImplementedException();
         //}
 
-        public Task SendMessageToAllUsers<TMessage>(TMessage message)
+        public Task SendMessageToAllUsers(Notification<object> message)
         {
             return Clients.All.ReceiveMessageForAllUsers(message);
         }
@@ -59,7 +60,7 @@ namespace OneLine.Bases
         //    throw new NotImplementedException();
         //}
 
-        public Task SendMessageToUser<TMessage>(string receiverUserIdentifier, TMessage message)
+        public Task SendMessageToUser(string receiverUserIdentifier, Notification<object> message)
         {
             return Clients.User(receiverUserIdentifier).ReceivePrivateMessage(message);
         }

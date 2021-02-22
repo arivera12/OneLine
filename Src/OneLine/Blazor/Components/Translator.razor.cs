@@ -8,7 +8,6 @@ namespace OneLine.Blazor
     public class TranslatorComponentModel : ComponentBase
     {
         [Parameter] public string CssClass { get; set; } = "custom-select";
-        public static Action<IResourceManagerLocalizer> OnLanguageChanged { get; set; }
         [Parameter] public Action<IResourceManagerLocalizer> OnChanged { get; set; }
         [Parameter] public string ApplicationLocale { get; set; }
         [Inject] public IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
@@ -27,7 +26,6 @@ namespace OneLine.Blazor
             ApplicationLocale = applicationLocale;
             await ResourceManagerLocalizer.SetApplicationLocale(applicationLocale);
             await ResourceManagerLocalizer.SetCurrentThreadCulture(applicationLocale);
-            OnLanguageChanged?.Invoke(ResourceManagerLocalizer);
             OnChanged?.Invoke(ResourceManagerLocalizer);
             StateHasChanged();
         }

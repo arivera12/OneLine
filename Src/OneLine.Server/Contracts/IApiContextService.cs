@@ -23,7 +23,6 @@ namespace OneLine.Contracts
         ISaveableImportableApiContext<T>,
         ISaveableReplaceableApiContext<T>,
         ISaveableWithBlobsApiContext<T>,
-        ISearchableApiContext<T>,
         IApiContextUserBlobsService<T, TUserBlobs>,
         IDeletableApiContext<T>,
         IDeletableWithBlobsApiContext<T>,

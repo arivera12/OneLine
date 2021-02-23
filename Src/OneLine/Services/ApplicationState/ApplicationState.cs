@@ -1,6 +1,7 @@
 ﻿using BlazorBrowserStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using OneLine.Enums;
 using OneLine.Extensions;
@@ -17,7 +18,8 @@ namespace OneLine.Services
         private NavigationManager NavigationManager { get; set; }
         private ISessionStorage SessionStorage { get; set; }
         private ILocalStorage LocalStorage { get; set; }
-        private IDevice Device { get; set; } 
+        private IDevice Device { get; set; }
+        private IJSRuntime JsRuntime { get; set; }
         public ApplicationState()
         {
         }
@@ -30,18 +32,26 @@ namespace OneLine.Services
             NavigationManager = navigationManager;
             Device = device;
         }
-        public ApplicationState(NavigationManager navigationManager, IDevice device, ISessionStorage sessionStorage, ILocalStorage localStorage)
+        public ApplicationState(NavigationManager navigationManager, IDevice device, IJSRuntime jsRuntime)
+        {
+            NavigationManager = navigationManager;
+            Device = device;
+            JsRuntime = jsRuntime;
+        }
+        public ApplicationState(NavigationManager navigationManager, IDevice device, ISessionStorage sessionStorage, ILocalStorage localStorage, IJSRuntime jsRuntime)
         {
             NavigationManager = navigationManager;
             Device = device;
             SessionStorage = sessionStorage;
             LocalStorage = localStorage;
+            JsRuntime = jsRuntime;
         }
+        /// <inheritdoc/>
         public async ValueTask<TUser> GetApplicationUserSecure<TUser>()
         {
             try
             {
-                string SUser, key;
+                string SUser, key, decryptedUser = null;
                 var applicationSession = await GetApplicationSession();
                 if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
                 {
@@ -64,7 +74,15 @@ namespace OneLine.Services
                         key = await SessionStorage.GetItem<string>("DUEK");
                         SUser = await SessionStorage.GetItem<string>("SUser");
                     }
-                    return JsonConvert.DeserializeObject<TUser>(SUser.Decrypt(key));
+                    if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
+                    {
+                        decryptedUser = SUser.Decrypt(key);
+                    }
+                    else if (Device.IsWebBlazorWAsmPlatform)
+                    {
+                        decryptedUser = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.decrypt('{SUser}', '{key}').toString(CryptoJS.enc.Utf8)" });
+                    }
+                    return JsonConvert.DeserializeObject<TUser>(decryptedUser);
                 }
                 else
                 {
@@ -77,6 +95,7 @@ namespace OneLine.Services
             }
             return default;
         }
+        /// <inheritdoc/>
         public async ValueTask SetApplicationUserSecure<TUser>(TUser user)
         {
             var jsonUser = JsonConvert.SerializeObject(user);
@@ -94,17 +113,26 @@ namespace OneLine.Services
             else if (Device.IsWebPlatform)
             {
                 var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
-                key = key.Encrypt(key);
+                string jsonUserEncrypted = null;
+                if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
+                {
+                    key = key.Encrypt(key);
+                    jsonUserEncrypted = jsonUser.Encrypt(key);
+                }
+                else if (Device.IsWebBlazorWAsmPlatform)
+                {
+                    key = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{key}', '{key}').toString()" });
+                    jsonUserEncrypted = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{jsonUser}', '{key}').toString()" });
+                }
                 if (applicationSession == ApplicationSession.LocalStorage)
                 {
-
                     await LocalStorage.SetItem("DUEK", key);
-                    await LocalStorage.SetItem("SUser", jsonUser.Encrypt(key));
+                    await LocalStorage.SetItem("SUser", jsonUserEncrypted);
                 }
                 else
                 {
                     await SessionStorage.SetItem("DUEK", key);
-                    await SessionStorage.SetItem("SUser", jsonUser.Encrypt(key));
+                    await SessionStorage.SetItem("SUser", jsonUserEncrypted);
                 }
             }
             else
@@ -112,6 +140,7 @@ namespace OneLine.Services
                 new PlatformNotSupportedException("Application state seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
             }
         }
+        /// <inheritdoc/>
         public async ValueTask SetApplicationUserSecure<TUser>(TUser user, ApplicationSession applicationSession)
         {
             var jsonUser = JsonConvert.SerializeObject(user);
@@ -129,16 +158,26 @@ namespace OneLine.Services
             else if (Device.IsWebPlatform)
             {
                 var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
-                key = key.Encrypt(key);
+                string jsonUserEncrypted = null;
+                if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
+                {
+                    key = key.Encrypt(key);
+                    jsonUserEncrypted = jsonUser.Encrypt(key);
+                }
+                else if (Device.IsWebBlazorWAsmPlatform)
+                {
+                    key = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{key}', '{key}').toString()" });
+                    jsonUserEncrypted = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{jsonUser}', '{key}').toString()" });
+                }
                 if (applicationSession == ApplicationSession.LocalStorage)
                 {
                     await LocalStorage.SetItem("DUEK", key);
-                    await LocalStorage.SetItem("SUser", jsonUser.Encrypt(key));
+                    await LocalStorage.SetItem("SUser", jsonUserEncrypted);
                 }
                 else
                 {
                     await SessionStorage.SetItem("DUEK", key);
-                    await SessionStorage.SetItem("SUser", jsonUser.Encrypt(key));
+                    await SessionStorage.SetItem("SUser", jsonUserEncrypted);
                 }
             }
             else
@@ -146,6 +185,7 @@ namespace OneLine.Services
                 new PlatformNotSupportedException("Application state seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
             }
         }
+        /// <inheritdoc/>
         public async ValueTask Logout()
         {
             if (Device.IsXamarinPlatform)
@@ -167,11 +207,13 @@ namespace OneLine.Services
                 new PlatformNotSupportedException("Application state seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
             }
         }
-        public async ValueTask LogoutAndNavigateTo(string uri, bool forceReload = false)
+        /// <inheritdoc/>
+        public async ValueTask LogoutAndNavigateTo(string uri, bool forceLoad = false)
         {
             await Logout();
-            NavigationManager.NavigateTo(uri, forceReload);
+            NavigationManager.NavigateTo(uri, forceLoad);
         }
+        /// <inheritdoc/>
         public async ValueTask<ApplicationSession> GetApplicationSession()
         {
             try
@@ -195,6 +237,7 @@ namespace OneLine.Services
             }
             return ApplicationSession.LocalStorage;
         }
+        /// <inheritdoc/>
         public async ValueTask SetApplicationSession(ApplicationSession applicationSession)
         {
             if (Device.IsXamarinPlatform)

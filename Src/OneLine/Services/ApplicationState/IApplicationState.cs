@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace OneLine.Services
 {
     /// <summary>
-    /// A base application state
+    /// A base application state to manage the user state.
     /// </summary>
     public interface IApplicationState
     {
@@ -38,9 +38,9 @@ namespace OneLine.Services
         /// Logs out the current user from the application and navigates to the specified uri
         /// </summary>
         /// <param name="uri"></param>
-        /// <param name="forceReload"></param>
+        /// <param name="forceLoad"></param>
         /// <returns></returns>
-        ValueTask LogoutAndNavigateTo(string uri, bool forceReload = false);
+        ValueTask LogoutAndNavigateTo(string uri, bool forceLoad = false);
         /// <summary>
         /// Gets the <see cref="ApplicationSession"/>
         /// </summary>

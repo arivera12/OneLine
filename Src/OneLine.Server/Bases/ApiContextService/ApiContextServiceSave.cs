@@ -1,28 +1,34 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using OneLine.Contracts;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Messaging;
 using OneLine.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public partial class ApiContextService<TDbContext, T, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub> :
-        IApiContextService<TDbContext, T, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub>
+    public partial class ApiContextService<TDbContext, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub>
         where TDbContext : DbContext
-        where T : class, new()
         where TAuditTrails : class, IAuditTrails, new()
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
         where TMessageHub : MessageHub, new()
     {
-        /// <inheritdoc/>
-        public async Task<IApiResponse<T>> SaveAsync(T record, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
+        /// <summary>
+        /// Saves a record
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="record"></param>
+        /// <param name="saveOperation"></param>
+        /// <param name="transactionSuccessMessage"></param>
+        /// <param name="transactionErrorMessage"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<T>> SaveAsync<T>(T record, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
         {
             if (record.IsNull())
             {
@@ -39,22 +45,38 @@ namespace OneLine.Bases
             var result = await DbContext.SaveChangesAsync();
             return result.TransactionResultApiResponse(record, transactionSuccessMessage, transactionErrorMessage);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<T>> SaveValidatedAsync(T record, IValidator validator, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
+        /// <summary>
+        /// Saves a record
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="record"></param>
+        /// <param name="validator"></param>
+        /// <param name="saveOperation"></param>
+        /// <param name="transactionSuccessMessage"></param>
+        /// <param name="transactionErrorMessage"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<T>> SaveValidatedAsync<T>(T record, IValidator validator, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
         {
-            var apiResponse = record.IsNull() ? await new T().ValidateAsync(validator) : await record.ValidateAsync(validator);
+            var apiResponse = record.IsNull() ? await Activator.CreateInstance<T>().ValidateAsync(validator) : await record.ValidateAsync(validator);
             if (apiResponse.Status.Failed())
             {
                 return apiResponse;
             }
             return await SaveAsync(record, saveOperation, transactionSuccessMessage, transactionErrorMessage);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<T>> SaveAuditedAsync(T record, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
+        /// <summary>
+        /// Saves a record
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="record"></param>
+        /// <param name="saveOperation"></param>
+        /// <param name="transactionSuccessMessage"></param>
+        /// <param name="transactionErrorMessage"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<T>> SaveAuditedAsync<T>(T record, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
         {
             if (record.IsNull())
             {
-                //await CreateAuditrailsAsync(record, $"Record was null on method {MethodBase.GetCurrentMethod().Name}");
                 return new ApiResponse<T>(ApiResponseStatus.Failed, "RecordIsNull");
             }
             if (saveOperation.IsAdd())
@@ -68,18 +90,35 @@ namespace OneLine.Bases
             var result = await DbContext.SaveChangesAsync();
             return result.TransactionResultApiResponse(record, transactionSuccessMessage, transactionErrorMessage);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<T>> SaveValidatedAuditedAsync(T record, IValidator validator, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
+        /// <summary>
+        /// Saves a record
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="record"></param>
+        /// <param name="validator"></param>
+        /// <param name="saveOperation"></param>
+        /// <param name="transactionSuccessMessage"></param>
+        /// <param name="transactionErrorMessage"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<T>> SaveValidatedAuditedAsync<T>(T record, IValidator validator, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
         {
-            var apiResponse = await ValidateAsync(record, validator);
+            var apiResponse = await record.ValidateAsync(validator);
             if (apiResponse.Status.Failed())
             {
                 return apiResponse;
             }
             return await SaveAuditedAsync(record, saveOperation, transactionSuccessMessage, transactionErrorMessage);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<T>>> SaveRangeAsync(IEnumerable<T> records, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
+        /// <summary>
+        /// Saves a range of records
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="records"></param>
+        /// <param name="saveOperation"></param>
+        /// <param name="transactionSuccessMessage"></param>
+        /// <param name="transactionErrorMessage"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<IEnumerable<T>>> SaveRangeAsync<T>(IEnumerable<T> records, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
         {
             if (records.IsNull() || !records.Any())
             {
@@ -96,8 +135,17 @@ namespace OneLine.Bases
             var result = await DbContext.SaveChangesAsync();
             return result.TransactionResultApiResponse(records, transactionSuccessMessage, transactionErrorMessage);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<T>>> SaveRangeValidatedAsync(IEnumerable<T> records, IValidator validator, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
+        /// <summary>
+        /// Saves a range of records
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="records"></param>
+        /// <param name="validator"></param>
+        /// <param name="saveOperation"></param>
+        /// <param name="transactionSuccessMessage"></param>
+        /// <param name="transactionErrorMessage"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<IEnumerable<T>>> SaveRangeValidatedAsync<T>(IEnumerable<T> records, IValidator validator, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
         {
             var apiResponse = records.IsNull() || !records.Any() ? await Enumerable.Empty<T>().ValidateAsync(validator) : await records.ValidateAsync(validator);
             if (apiResponse.Status.Failed())
@@ -106,12 +154,19 @@ namespace OneLine.Bases
             }
             return await SaveRangeAsync(records, saveOperation, transactionSuccessMessage, transactionErrorMessage);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<T>>> SaveRangeAuditedAsync(IEnumerable<T> records, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
+        /// <summary>
+        /// Saves a range of records
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="records"></param>
+        /// <param name="saveOperation"></param>
+        /// <param name="transactionSuccessMessage"></param>
+        /// <param name="transactionErrorMessage"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<IEnumerable<T>>> SaveRangeAuditedAsync<T>(IEnumerable<T> records, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
         {
             if (records.IsNull() || !records.Any())
             {
-                //await CreateAuditrailsAsync(records, $"Records was null or empty on method {MethodBase.GetCurrentMethod().Name}");
                 return Enumerable.Empty<T>().ToApiResponseFailed("RecordsIsNullOrEmpty");
             }
             if (saveOperation.IsAdd())
@@ -125,10 +180,19 @@ namespace OneLine.Bases
             var result = await DbContext.SaveChangesAsync();
             return result.TransactionResultApiResponse(records, transactionSuccessMessage, transactionErrorMessage);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<T>>> SaveRangeValidatedAuditedAsync(IEnumerable<T> records, IValidator validator, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
+        /// <summary>
+        /// Saves a range of records
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="records"></param>
+        /// <param name="validator"></param>
+        /// <param name="saveOperation"></param>
+        /// <param name="transactionSuccessMessage"></param>
+        /// <param name="transactionErrorMessage"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<IEnumerable<T>>> SaveRangeValidatedAuditedAsync<T>(IEnumerable<T> records, IValidator validator, SaveOperation saveOperation, string transactionSuccessMessage = "TransactionCompletedSuccessfully", string transactionErrorMessage = "TransactionFailed")
         {
-            var apiResponse = await ValidateRangeAsync(records, validator);
+            var apiResponse = await records.ValidateRangeAsync(validator);
             if (apiResponse.Status.Failed())
             {
                 return apiResponse;

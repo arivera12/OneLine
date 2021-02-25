@@ -16,7 +16,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The type to return</typeparam>
         /// <param name="stream">The stream</param>
         /// <returns></returns>
-        public static IEnumerable<T> ReadCsv<T>(this Stream stream) where T : class
+        public static IEnumerable<T> ReadCsv<T>(this Stream stream)
         {
             using (var reader = new StreamReader(stream))
             {
@@ -32,7 +32,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The type to retun</typeparam>
         /// <param name="byteArray">The byte array</param>
         /// <returns></returns>
-        public static IEnumerable<T> ReadCsv<T>(this byte[] byteArray) where T : class
+        public static IEnumerable<T> ReadCsv<T>(this byte[] byteArray)
         {
             MemoryStream memoryStream = new MemoryStream(byteArray);
             using (var reader = new StreamReader(memoryStream))
@@ -49,7 +49,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The type to return</typeparam>
         /// <param name="path">The souce path to the csv file</param>
         /// <returns></returns>
-        public static IEnumerable<T> ReadCsv<T>(string path) where T : class
+        public static IEnumerable<T> ReadCsv<T>(string path)
         {
             using (var reader = new StreamReader(path))
             {
@@ -65,7 +65,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The type of the collection</typeparam>
         /// <param name="enumerable">The collection</param>
         /// <param name="path">The source path to write the csv file</param>
-        public static void WriteToCsv<T>(this IEnumerable<T> enumerable, string path) where T : class
+        public static void WriteToCsv<T>(this IEnumerable<T> enumerable, string path)
         {
             if (enumerable.IsNull() || !enumerable.Any())
             {
@@ -85,7 +85,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The collection type</typeparam>
         /// <param name="enumerable">The collection</param>
         /// <returns></returns>
-        public static byte[] ToCsvByteArray<T>(this IEnumerable<T> enumerable) where T : class
+        public static byte[] ToCsvByteArray<T>(this IEnumerable<T> enumerable)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -105,7 +105,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The collection type</typeparam>
         /// <param name="enumerable">The collection</param>
         /// <returns></returns>
-        public static async Task<byte[]> ToCsvByteArrayAsync<T>(this IEnumerable<T> enumerable) where T : class
+        public static async Task<byte[]> ToCsvByteArrayAsync<T>(this IEnumerable<T> enumerable)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -125,7 +125,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The collection type</typeparam>
         /// <param name="enumerable">The collection</param>
         /// <returns></returns>
-        public static MemoryStream ToCsvMemoryStream<T>(this IEnumerable<T> enumerable) where T : class
+        public static MemoryStream ToCsvMemoryStream<T>(this IEnumerable<T> enumerable)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -145,7 +145,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The collection type</typeparam>
         /// <param name="enumerable">The collection</param>
         /// <returns></returns>
-        public static Stream ToCsvStream<T>(this IEnumerable<T> enumerable) where T : class
+        public static Stream ToCsvStream<T>(this IEnumerable<T> enumerable)
         {
             using (var memoryStream = new MemoryStream())
             {

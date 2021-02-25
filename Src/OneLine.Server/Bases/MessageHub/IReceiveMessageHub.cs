@@ -1,7 +1,7 @@
 ﻿using OneLine.Models;
 using System.Threading.Tasks;
 
-namespace OneLine.Contracts
+namespace OneLine.Bases
 {
     public interface IReceiveMessageHub
     {

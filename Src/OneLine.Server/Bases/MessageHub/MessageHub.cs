@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using OneLine.Contracts;
 using OneLine.Models;
 using System;
 using System.Threading.Tasks;

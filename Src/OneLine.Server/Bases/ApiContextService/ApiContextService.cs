@@ -1,31 +1,38 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using OneLine.Contracts;
 using OneLine.Messaging;
 using OneLine.Models;
 
 namespace OneLine.Bases
 {
-    public partial class ApiContextService<TDbContext, T, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub> :
-        IApiContextService<TDbContext, T, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub>
+    public partial class ApiContextService<TDbContext, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub>
         where TDbContext : DbContext
-        where T : class, new()
         where TAuditTrails : class, IAuditTrails, new()
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
         where TSmtp : class, ISmtp, new()
         where TMessageHub : MessageHub, new()
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// The Http context accessor
+        /// </summary>
         public IHttpContextAccessor HttpContextAccessor { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// The database conext
+        /// </summary>
         public TDbContext DbContext { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// The blob storage service provider
+        /// </summary>
         public TBlobStorage BlobStorageService { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// The simple mail transfer protocol service provider
+        /// </summary>
         public TSmtp Smtp { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// The Signal R message hub service 
+        /// </summary>
         public IHubContext<TMessageHub> SendMessageHub { get; set; }
         /// <summary>
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider

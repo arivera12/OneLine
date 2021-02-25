@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.MobileBlazorBindings.WebView.Windows" Version="0.5.50-preview" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="System.Text.Json" Version="5.0.1" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
     <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="4.8.0.1687" NoWarn="NU1701" />
   </ItemGroup>

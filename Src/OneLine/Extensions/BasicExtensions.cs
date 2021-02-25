@@ -19,7 +19,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The type</typeparam>
         /// <param name="objType">The object type</param>
         /// <returns></returns>
-        public static ApiResponse<T> ToApiResponse<T>(this T objType) where T : class
+        public static ApiResponse<T> ToApiResponse<T>(this T objType)
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Succeeded, Data = objType };
         }
@@ -29,7 +29,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The type</typeparam>
         /// <param name="objType">The object type</param>
         /// <returns></returns>
-        public static ApiResponse<T> ToApiResponseFailed<T>(this T objType) where T : class
+        public static ApiResponse<T> ToApiResponseFailed<T>(this T objType)
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Failed, Data = objType };
         }
@@ -39,7 +39,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The type</typeparam>
         /// <param name="status">The api response status</param>
         /// <returns></returns>
-        public static ApiResponse<T> ToApiResponse<T>(this T objType, ApiResponseStatus status) where T : class
+        public static ApiResponse<T> ToApiResponse<T>(this T objType, ApiResponseStatus status)
         {
             return new ApiResponse<T> { Status = status, Data = objType };
         }
@@ -49,7 +49,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The type</typeparam>
         /// <param name="message">The message</param>
         /// <returns></returns>
-        public static ApiResponse<T> ToApiResponse<T>(this T objType, string message) where T : class
+        public static ApiResponse<T> ToApiResponse<T>(this T objType, string message)
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Succeeded, Data = objType, Message = message };
         }
@@ -59,7 +59,7 @@ namespace OneLine.Extensions
         /// <typeparam name="T">The type</typeparam>
         /// <param name="message">The message</param>
         /// <returns></returns>
-        public static ApiResponse<T> ToApiResponseFailed<T>(this T objType, string message) where T : class
+        public static ApiResponse<T> ToApiResponseFailed<T>(this T objType, string message)
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Failed, Data = objType, Message = message };
         }
@@ -70,7 +70,7 @@ namespace OneLine.Extensions
         /// <param name="status">The status</param>
         /// <param name="message">The message</param>
         /// <returns></returns>
-        public static ApiResponse<T> ToApiResponse<T>(this T objType, ApiResponseStatus status, string message) where T : class
+        public static ApiResponse<T> ToApiResponse<T>(this T objType, ApiResponseStatus status, string message)
         {
             return new ApiResponse<T> { Status = status, Data = objType, Message = message };
         }
@@ -81,7 +81,7 @@ namespace OneLine.Extensions
         /// <param name="message">The message</param>
         /// <param name="errorMessages">The error messags</param>
         /// <returns></returns>
-        public static ApiResponse<T> ToApiResponse<T>(this T objType, string message, IEnumerable<string> errorMessages) where T : class
+        public static ApiResponse<T> ToApiResponse<T>(this T objType, string message, IEnumerable<string> errorMessages)
         {
             return new ApiResponse<T> { Status = ApiResponseStatus.Failed, Data = objType, Message = message, ErrorMessages = errorMessages };
         }
@@ -276,7 +276,6 @@ namespace OneLine.Extensions
         /// <param name="validator">The validator</param>
         /// <returns></returns>
         public static async Task<IApiResponse<T>> ValidateAsync<T>(this T source, IValidator validator)
-            where T : class
         {
             if (source.IsNull())
             {
@@ -301,7 +300,6 @@ namespace OneLine.Extensions
         /// <param name="validator">The validator</param>
         /// <returns></returns>
         public static async Task<IApiResponse<IEnumerable<T>>> ValidateRangeAsync<T>(this IEnumerable<T> source, IValidator validator)
-            where T : class
         {
             if (source.IsNull() || !source.Any())
             {
@@ -319,26 +317,52 @@ namespace OneLine.Extensions
             return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Succeeded, source);
         }
         /// <summary>
-        /// Creates a void context of <typeparamref name="T"/>
+        /// Validates <typeparamref name="T"/> using the <paramref name="validator"/>
         /// </summary>
         /// <typeparam name="T">The type</typeparam>
-        /// <param name="context">The context</param>
-        /// <param name="action">The Action</param>
-        public static void ToContextVoid<T>(this T context, Action<T> action)
+        /// <param name="source">The source</param>
+        /// <param name="validator">The validator</param>
+        /// <returns></returns>
+        public static IApiResponse<T> Validate<T>(this T source, IValidator validator)
         {
-            action(context);
+            if (source.IsNull())
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, source, "RecordIsNull");
+            }
+            if (validator.IsNull())
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
+            }
+            var validationResult = validator.Validate(source);
+            if (!validationResult.IsValid)
+            {
+                return new ApiResponse<T>(ApiResponseStatus.Failed, source, validationResult.Errors.Select(x => x.ErrorMessage));
+            }
+            return new ApiResponse<T>(ApiResponseStatus.Succeeded, source);
         }
         /// <summary>
-        /// Creates a context of <typeparamref name="T"/> and return a <typeparamref name="TResult"/>
+        /// Validates <paramref name="source"/> <typeparamref name="T"/> using the <paramref name="validator"/>
         /// </summary>
-        /// <typeparam name="T">The context type</typeparam>
-        /// <typeparam name="TResult">The returning type of the context type</typeparam>
-        /// <param name="context">The context</param>
-        /// <param name="func">The function with returning value</param>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="source">The source collection</param>
+        /// <param name="validator">The validator</param>
         /// <returns></returns>
-        public static TResult ToContext<T, TResult>(this T context, Func<T, TResult> func)
+        public static IApiResponse<IEnumerable<T>> ValidateRange<T>(this IEnumerable<T> source, IValidator validator)
         {
-            return func(context);
+            if (source.IsNull() || !source.Any())
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, "RecordIsNull");
+            }
+            if (validator.IsNull())
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
+            }
+            var validationResult = validator.Validate(source);
+            if (!validationResult.IsValid)
+            {
+                return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, validationResult.Errors.Select(x => x.ErrorMessage));
+            }
+            return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Succeeded, source);
         }
     }
 }

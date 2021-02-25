@@ -1,7 +1,7 @@
 ﻿using OneLine.Models;
 using System.Threading.Tasks;
 
-namespace OneLine.Contracts
+namespace OneLine.Bases
 {
     /// <summary>
     /// Defines method to send real time messages to users connected to the hub

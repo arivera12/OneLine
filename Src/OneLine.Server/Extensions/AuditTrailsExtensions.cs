@@ -19,7 +19,6 @@ namespace OneLine.Extensions
         /// <param name="httpContextAccessor"></param>
         /// <returns></returns>
         public static TAuditTrails CreateAuditTrails<T, TAuditTrails>(this T entity, TransactionType transactionType, IHttpContextAccessor httpContextAccessor)
-            where T : class
             where TAuditTrails : class, IAuditTrails, new()
         {
             string Action = transactionType.TransactionTypeMessage<T>();
@@ -48,7 +47,6 @@ namespace OneLine.Extensions
         /// <param name="httpContextAccessor"></param>
         /// <returns></returns>
         public static TAuditTrails CreateAuditTrails<T, TAuditTrails>(this T entity, string transactionMessage, IHttpContextAccessor httpContextAccessor)
-            where T : class
             where TAuditTrails : class, IAuditTrails, new()
         {
             return new TAuditTrails()
@@ -76,7 +74,6 @@ namespace OneLine.Extensions
         /// <param name="httpContextAccessor"></param>
         /// <returns></returns>
         public static IEnumerable<TAuditTrails> CreateRangeAuditTrails<T, TAuditTrails>(this IEnumerable<T> entities, TransactionType transactionType, IHttpContextAccessor httpContextAccessor)
-            where T : class
             where TAuditTrails : class, IAuditTrails, new()
         {
             var AudiTrails = new List<TAuditTrails>();
@@ -96,7 +93,6 @@ namespace OneLine.Extensions
         /// <param name="httpContextAccessor"></param>
         /// <returns></returns>
         public static IEnumerable<TAuditTrails> CreateRangeAuditTrails<T, TAuditTrails>(this IEnumerable<T> entities, string transactionMessage, IHttpContextAccessor httpContextAccessor)
-            where T : class
             where TAuditTrails : class, IAuditTrails, new()
         {
             var AudiTrails = new List<TAuditTrails>();
@@ -106,9 +102,5 @@ namespace OneLine.Extensions
             }
             return AudiTrails;
         }
-
-
-
-
     }
 }

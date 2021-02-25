@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using OneLine.Contracts;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Messaging;
@@ -18,10 +17,8 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public partial class ApiContextService<TDbContext, T, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub> :
-        IApiContextService<TDbContext, T, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub>
+    public partial class ApiContextService<TDbContext, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub>
         where TDbContext : DbContext
-        where T : class, new()
         where TAuditTrails : class, IAuditTrails, new()
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
@@ -29,8 +26,15 @@ namespace OneLine.Bases
         where TMessageHub : MessageHub, new()
     {
         #region Add
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> AddUserBlobsRangeAsync(IEnumerable<IUploadBlobData> uploadBlobDatas, string path = "")
+        
+        /// <summary>
+        /// Adds a range of user blobs
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="uploadBlobDatas"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> AddUserBlobsRangeAsync<T>(IEnumerable<IUploadBlobData> uploadBlobDatas, string path = "")
         {
             var any = uploadBlobDatas.IsNotNull() && uploadBlobDatas.Any();
             if (!any)
@@ -75,8 +79,15 @@ namespace OneLine.Bases
             }
             return uploadedUserBlobs.AsEnumerable().ToApiResponse();
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> AddAndBindUserBlobsRangeAsync(T record, IEnumerable<IUploadBlobData> uploadBlobDatas, string path = "")
+        /// <summary>
+        /// Adds a range of user blobs and binds the result to the <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="record"></param>
+        /// <param name="uploadBlobDatas"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> AddAndBindUserBlobsRangeAsync<T>(T record, IEnumerable<IUploadBlobData> uploadBlobDatas, string path = "")
         {
             if (record.IsNull())
             {
@@ -90,7 +101,7 @@ namespace OneLine.Bases
             //Validate blobs datas with the rules
             foreach (var uploadBlobData in uploadBlobDatas)
             {
-                var isFormFileUploadedApiResponse = await IsValidBlobDataAsync(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules);
+                var isFormFileUploadedApiResponse = await IsValidBlobDataAsync<T>(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules);
                 if (isFormFileUploadedApiResponse.Status.Failed() || !isFormFileUploadedApiResponse.Data)
                 {
                     return new ApiResponse<IEnumerable<TUserBlobs>>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
@@ -100,7 +111,7 @@ namespace OneLine.Bases
             var userBlobsUploadedList = new List<TUserBlobs>();
             foreach (var uploadBlobData in uploadBlobDatas)
             {
-                var userBlobs = await AddUserBlobsRangeAsync(uploadBlobDatas, path);
+                var userBlobs = await AddUserBlobsRangeAsync<T>(uploadBlobDatas, path);
                 userBlobsUploadedList.AddRange(userBlobs.Data);
                 record.GetType().GetProperty(uploadBlobData.PropertyName).SetValue(record, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(userBlobs)));
             }
@@ -110,16 +121,23 @@ namespace OneLine.Bases
         #endregion
 
         #region Update
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> UpdateUserBlobsRangeAsync(IEnumerable<TUserBlobs> userBlobs, IEnumerable<IUploadBlobData> uploadBlobDatas, string path = "", bool ignoreBlobOwner = false)
+        
+        /// <summary>
+        /// Updates a range of user blobs
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="uploadBlobDatas"></param>
+        /// <param name="path"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> UpdateUserBlobsRangeAsync<T>(IEnumerable<TUserBlobs> userBlobs, IEnumerable<IUploadBlobData> uploadBlobDatas, string path = "", bool ignoreBlobOwner = false)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
             {
-                //await CreateAuditrailsAsync(new T(), "No userblobs to update. The userBlobs parameter is null or empty.");
                 return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("RecordsIsNullOrEmpty");
             }
             var uploadedUserBlobsList = new List<TUserBlobs>();
-            var uploadedUserBlobs = await AddUserBlobsRangeAsync(uploadBlobDatas, path);
+            var uploadedUserBlobs = await AddUserBlobsRangeAsync<T>(uploadBlobDatas, path);
             if (uploadedUserBlobs.Status.Failed())
             {
                 return new ApiResponse<IEnumerable<TUserBlobs>>(uploadedUserBlobs.Status, uploadedUserBlobs.Data, uploadedUserBlobs.ErrorMessages);
@@ -132,17 +150,24 @@ namespace OneLine.Bases
             }
             return uploadedUserBlobsList.AsEnumerable().ToApiResponse();
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> UpdateAndBindUserBlobsRangeAsync(T record, T originalRecord, IEnumerable<IUploadBlobData> uploadBlobDatas, bool ignoreBlobOwner = false)
+        /// <summary>
+        /// Updates a range of user blobs and bind to the result <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="record"></param>
+        /// <param name="originalRecord"></param>
+        /// <param name="uploadBlobDatas"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> UpdateAndBindUserBlobsRangeAsync<T>(T record, T originalRecord, IEnumerable<IUploadBlobData> uploadBlobDatas, bool ignoreBlobOwner = false)
         {
             if (record.IsNull() || originalRecord.IsNull())
             {
-                //await CreateAuditrailsAsync(new T(), "No userblobs to update. The userBlobs parameter is null or empty.");
                 return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("RecordIsNull");
             }
             foreach (var uploadBlobData in uploadBlobDatas)
             {
-                var isFormFileUploadedApiResponse = await IsValidBlobDataAsync(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules);
+                var isFormFileUploadedApiResponse = await IsValidBlobDataAsync<T>(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules);
                 if (isFormFileUploadedApiResponse.Status.Failed() || !isFormFileUploadedApiResponse.Data)
                 {
                     return new ApiResponse<IEnumerable<TUserBlobs>>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
@@ -186,7 +211,12 @@ namespace OneLine.Bases
 
         #region Remove
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes userblobs and deletes the file from the blob storage
+        /// </summary>
+        /// <param name="userBlob"></param>
+        /// <param name="IgnoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> RemoveUserBlobAsync(TUserBlobs userBlob, bool IgnoreBlobOwner = false)
         {
             var isBlobOwnerAndFileExists = await IsBlobOwnerAndFileExistsAsync(userBlob, IgnoreBlobOwner);
@@ -198,7 +228,12 @@ namespace OneLine.Bases
             DbContext.Remove(userBlob);
             return userBlob.ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes a userblobs and deletes the file from the blob storage
+        /// </summary>
+        /// <param name="userBlob"></param>
+        /// <param name="IgnoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> RemoveUserBlobAuditedAsync(TUserBlobs userBlob, bool IgnoreBlobOwner = false)
         {
             var isBlobOwnerAndFileExists = await IsBlobOwnerAndFileExistsAsync(userBlob, IgnoreBlobOwner);
@@ -211,14 +246,22 @@ namespace OneLine.Bases
             await DbContext.AddAsync(userBlob.CreateAuditTrails<TUserBlobs, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
             return userBlob.ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes a userblob and deletes the file without any verification from the blob storage
+        /// </summary>
+        /// <param name="userBlob"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> RemoveForcedUserBlobAsync(TUserBlobs userBlob)
         {
             await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
             DbContext.Remove(userBlob);
             return userBlob.ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes a userblob and deletes the file without any verification from the blob storage
+        /// </summary>
+        /// <param name="userBlob"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> RemoveForcedUserBlobAuditedAsync(TUserBlobs userBlob)
         {
             await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
@@ -226,7 +269,12 @@ namespace OneLine.Bases
             await DbContext.AddAsync(userBlob.CreateAuditTrails<TUserBlobs, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
             return userBlob.ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes a range of userblob and deletes the file from the blob storage
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> RemoveRangeUserBlobsAsync(IEnumerable<TUserBlobs> userBlobs, bool ignoreBlobOwner = false)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
@@ -251,12 +299,16 @@ namespace OneLine.Bases
             }
             return deletedUserBlobs.AsEnumerable().ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes a range of userblob and deletes the file from the blob storage
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> RemoveRangeUserBlobsAuditedAsync(IEnumerable<TUserBlobs> userBlobs, bool ignoreBlobOwner = false)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
             {
-                //await CreateAuditrailsAsync(new T(), "UserBlobs is null or empty on method DeleteRange");
                 return new ApiResponse<IEnumerable<TUserBlobs>>(ApiResponseStatus.Succeeded, Enumerable.Empty<TUserBlobs>());
             }
             var deletedUserBlobs = new List<TUserBlobs>();
@@ -278,7 +330,11 @@ namespace OneLine.Bases
             }
             return deletedUserBlobs.AsEnumerable().ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes a range of userblob and deletes the file from the blob storage withoy any verifications
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> RemoveRangeForcedUserBlobsAsync(IEnumerable<TUserBlobs> userBlobs)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
@@ -292,12 +348,15 @@ namespace OneLine.Bases
             }
             return userBlobs.AsEnumerable().ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes a range of userblob and deletes the file from the blob storage without any verifications
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> RemoveRangeForcedUserBlobsAuditedAsync(IEnumerable<TUserBlobs> userBlobs)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
             {
-                //await CreateAuditrailsAsync(new T(), "UserBlobs is null or empty on method DeleteRange");
                 return new ApiResponse<IEnumerable<TUserBlobs>>(ApiResponseStatus.Failed, "FileNotFound");
             }
             foreach (var userBlob in userBlobs)
@@ -308,8 +367,13 @@ namespace OneLine.Bases
             }
             return userBlobs.AsEnumerable().ToApiResponse();
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> RemoveUserBlobsAuditedFromEntityAsync(T entity)
+        /// <summary>
+        /// Removes a a record with it's attached userblobs references and from the blob storage
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> RemoveUserBlobsAuditedFromEntityAsync<T>(T entity)
         {
             if (entity.IsNull())
             {
@@ -325,7 +389,11 @@ namespace OneLine.Bases
             await RemoveAuditedAsync(entity);
             return new ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create(entity, deletedUserBlobs));
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes a a record with it's attached userblobs references and from the blob storage
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<IApiResponse<IEnumerable<TUserBlobs>>>>> RemoveUserBlobsFromObjectAsync(object model)
         {
             if (model.IsNull())
@@ -373,18 +441,29 @@ namespace OneLine.Bases
             apiResponse.Status = apiResponseStatus;
             return apiResponse;
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> RemoveUserBlobAuditedFromEntityAsync(Expression<Func<T, bool>> predicate)
+        /// <summary>
+        /// Removes a a record with it's attached userblobs references and from the blob storage
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> RemoveUserBlobAuditedFromEntityAsync<T>(Expression<Func<T, bool>> predicate)
+            where T : class
         {
             if (predicate.IsNull())
             {
-                return new ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create<T, IEnumerable<TUserBlobs>>(new T(), null), "ErrorDeletingRecord");
+                return new ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>(ApiResponseStatus.Failed, Tuple.Create<T, IEnumerable<TUserBlobs>>(Activator.CreateInstance<T>(), null), "ErrorDeletingRecord");
             }
             var record = DbContext.Set<T>().Where(predicate).FirstOrDefault();
             return await RemoveUserBlobsAuditedFromEntityAsync(record);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> RemoveUserBlobsAuditedFromEntitiesAsync(IEnumerable<T> entities)
+        /// <summary>
+        /// Removes a a record with it's attached userblobs references and from the blob storage
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> RemoveUserBlobsAuditedFromEntitiesAsync<T>(IEnumerable<T> entities)
         {
             if (entities.IsNull() || !entities.Any())
             {
@@ -404,8 +483,13 @@ namespace OneLine.Bases
             }
             return new ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create(entities, deletedUserBlobs.AsEnumerable()));
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> RemoveUserBlobAuditedFromEntitiesAsync(Expression<Func<T, bool>> predicate)
+        /// <summary>
+        /// Removes a a record with it's attached userblobs references and from the blob storage
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> RemoveUserBlobAuditedFromEntitiesAsync<T>(Expression<Func<T, bool>> predicate)
+            where T : class
         {
             if (predicate.IsNull())
             {
@@ -414,52 +498,62 @@ namespace OneLine.Bases
             var records = DbContext.Set<T>().Where(predicate).AsEnumerable();
             return await RemoveUserBlobsAuditedFromEntitiesAsync(records);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<TUserBlobs>> RemoveUserBlobAsync(IIdentifier<string> identifier, bool IgnoreBlobOwner = false)
-        {
-            var record = await GetOneUserBlobsAsync(identifier);
-            if (record.Status.Failed())
-            {
-                return new ApiResponse<TUserBlobs>(record.Status, record.Data, record.Message, record.ErrorMessages);
-            }
-            return await RemoveUserBlobAsync(record.Data, IgnoreBlobOwner);
-        }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<TUserBlobs>> RemoveForcedUserBlobAsync(IIdentifier<string> identifier)
-        {
-            var record = await GetOneUserBlobsAsync(identifier);
-            if (record.Status.Failed())
-            {
-                return new ApiResponse<TUserBlobs>(record.Status, record.Data, record.Message, record.ErrorMessages);
-            }
-            return await RemoveForcedUserBlobAsync(record.Data);
-        }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> RemoveRangeUserBlobsAsync(IEnumerable<IIdentifier<string>> identifiers, bool ignoreBlobOwner = false)
-        {
-            var records = await GetRangeUserBlobsAsync(identifiers);
-            if (records.Status.Failed())
-            {
-                return new ApiResponse<IEnumerable<TUserBlobs>>(records.Status, records.Data, records.Message, records.ErrorMessages);
-            }
-            return await RemoveRangeUserBlobsAsync(records.Data, ignoreBlobOwner);
-        }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<TUserBlobs>>> RemoveRangeForcedUserBlobsAsync(IEnumerable<IIdentifier<string>> identifiers)
-        {
-            var records = await GetRangeUserBlobsAsync(identifiers);
-            if (records.Status.Failed())
-            {
-                return new ApiResponse<IEnumerable<TUserBlobs>>(records.Status, records.Data, records.Message, records.ErrorMessages);
-            }
-            return await RemoveRangeForcedUserBlobsAsync(records.Data);
-        }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="identifier"></param>
+        ///// <param name="IgnoreBlobOwner"></param>
+        ///// <returns></returns>
+        //public async Task<IApiResponse<TUserBlobs>> RemoveUserBlobAsync(IIdentifier<string> identifier, bool IgnoreBlobOwner = false)
+        //{
+        //    var record = await GetOneUserBlobsAsync(identifier);
+        //    if (record.Status.Failed())
+        //    {
+        //        return new ApiResponse<TUserBlobs>(record.Status, record.Data, record.Message, record.ErrorMessages);
+        //    }
+        //    return await RemoveUserBlobAsync(record.Data, IgnoreBlobOwner);
+        //}
+        ///// <inheritdoc/>
+        //public async Task<IApiResponse<TUserBlobs>> RemoveForcedUserBlobAsync(IIdentifier<string> identifier)
+        //{
+        //    var record = await GetOneUserBlobsAsync(identifier);
+        //    if (record.Status.Failed())
+        //    {
+        //        return new ApiResponse<TUserBlobs>(record.Status, record.Data, record.Message, record.ErrorMessages);
+        //    }
+        //    return await RemoveForcedUserBlobAsync(record.Data);
+        //}
+        ///// <inheritdoc/>
+        //public async Task<IApiResponse<IEnumerable<TUserBlobs>>> RemoveRangeUserBlobsAsync(IEnumerable<IIdentifier<string>> identifiers, bool ignoreBlobOwner = false)
+        //{
+        //    var records = await GetRangeUserBlobsAsync(identifiers);
+        //    if (records.Status.Failed())
+        //    {
+        //        return new ApiResponse<IEnumerable<TUserBlobs>>(records.Status, records.Data, records.Message, records.ErrorMessages);
+        //    }
+        //    return await RemoveRangeUserBlobsAsync(records.Data, ignoreBlobOwner);
+        //}
+        ///// <inheritdoc/>
+        //public async Task<IApiResponse<IEnumerable<TUserBlobs>>> RemoveRangeForcedUserBlobsAsync(IEnumerable<IIdentifier<string>> identifiers)
+        //{
+        //    var records = await GetRangeUserBlobsAsync(identifiers);
+        //    if (records.Status.Failed())
+        //    {
+        //        return new ApiResponse<IEnumerable<TUserBlobs>>(records.Status, records.Data, records.Message, records.ErrorMessages);
+        //    }
+        //    return await RemoveRangeForcedUserBlobsAsync(records.Data);
+        //}
 
         #endregion
 
         #region Delete
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Deletes a user blob
+        /// </summary>
+        /// <param name="userBlob"></param>
+        /// <param name="IgnoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> DeleteUserBlobsAsync(TUserBlobs userBlob, bool IgnoreBlobOwner = false)
         {
             var isBlobOwnerAndFileExists = await IsBlobOwnerAndFileExistsAsync(userBlob, IgnoreBlobOwner);
@@ -473,7 +567,11 @@ namespace OneLine.Bases
             var result = await DbContext.SaveChangesAsync();
             return result.TransactionResultApiResponse(userBlob);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// delete a user blob
+        /// </summary>
+        /// <param name="userBlob"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> DeleteForcedUserBlobsAsync(TUserBlobs userBlob)
         {
             await BlobStorageService.BlobStorage.DeleteAsync(userBlob.FilePath);
@@ -482,12 +580,15 @@ namespace OneLine.Bases
             var result = await DbContext.SaveChangesAsync();
             return result.TransactionResultApiResponse(userBlob);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Delete a range of user blobs
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> DeleteRangeUserBlobsAsync(IEnumerable<TUserBlobs> userBlobs)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
             {
-                //await dbContext.CreateAuditrailsAsync(userBlobs, "UserBlobs is null or empty on method DeleteRange", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<IEnumerable<TUserBlobs>>(ApiResponseStatus.Succeeded, Enumerable.Empty<TUserBlobs>(), "FileNotFound");
             }
             foreach (var userBlob in userBlobs)
@@ -508,12 +609,15 @@ namespace OneLine.Bases
             var result = await DbContext.SaveChangesAsync();
             return result.TransactionResultApiResponse(userBlobs);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Deletes a range of user blobs forced
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> DeleteRangeForcedUserBlobsAsync(IEnumerable<TUserBlobs> userBlobs)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
             {
-                //await dbContext.CreateAuditrailsAsync(userBlobs, "UserBlobs is null or empty on method DeleteRange", userId, controllerName, actionName, remoteIpAddress);
                 return new ApiResponse<IEnumerable<TUserBlobs>>(ApiResponseStatus.Failed, "FileNotFound");
             }
             foreach (var userBlob in userBlobs)
@@ -525,7 +629,11 @@ namespace OneLine.Bases
             var result = await DbContext.SaveChangesAsync();
             return result.TransactionResultApiResponse(userBlobs);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Deletes all user blobs from the object
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<IApiResponse<IEnumerable<TUserBlobs>>>>> DeleteUserBlobsFromObjectAsync(object model)
         {
             bool anyError = false;
@@ -570,8 +678,13 @@ namespace OneLine.Bases
             apiResponse.Status = apiResponseStatus;
             return apiResponse;
         }
-        /// <inheritdoc/>
-        public async Task<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> DeleteUserBlobsFromEntityAsync(T entity)
+        /// <summary>
+        /// Deletes all user blobs within the <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> DeleteUserBlobsFromEntityAsync<T>(T entity)
         {
             if (entity.IsNull())
             {
@@ -589,18 +702,27 @@ namespace OneLine.Bases
             var message = result.Succeeded() ? "RecordSavedSuccessfully" : "ErrorSavingRecord";
             return new ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create(entity, deletedUserBlobs), message);
         }
-        /// <inheritdoc/>
-        public async Task<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> DeleteUserBlobsFromEntityAsync(Expression<Func<T, bool>> predicate)
+        /// <summary>
+        /// Deletes all user blobs within the <typeparamref name="T"/>
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task<ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>> DeleteUserBlobsFromEntityAsync<T>(Expression<Func<T, bool>> predicate)
+            where T : class
         {
             if (predicate.IsNull())
             {
-                return new ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create<T, IEnumerable<TUserBlobs>>(new T(), null), "RecordIsNull");
+                return new ApiResponse<Tuple<T, IEnumerable<TUserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create<T, IEnumerable<TUserBlobs>>(Activator.CreateInstance<T>(), null), "RecordIsNull");
             }
             var record = DbContext.Set<T>().Where(predicate).FirstOrDefault();
             return await DeleteUserBlobsFromEntityAsync(record);
         }
-        /// <inheritdoc/>
-        public async Task<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> DeleteUserBlobsFromEntitiesAsync(IEnumerable<T> entities)
+        /// <summary>
+        /// Deletes all user blobs within the <typeparamref name="T"/>
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public async Task<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> DeleteUserBlobsFromEntitiesAsync<T>(IEnumerable<T> entities)
         {
             if (entities.IsNull() || !entities.Any())
             {
@@ -622,8 +744,14 @@ namespace OneLine.Bases
             var message = result.Succeeded() ? "RecordSavedSuccessfully" : "ErrorSavingRecord";
             return new ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>(ApiResponseStatus.Succeeded, Tuple.Create(entities, deletedUserBlobs.AsEnumerable()), message);
         }
-        /// <inheritdoc/>
-        public async Task<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> DeleteUserBlobsFromEntitiesAsync(Expression<Func<T, bool>> predicate)
+        /// <summary>
+        /// Deletes all user blobs within the <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<TUserBlobs>>>> DeleteUserBlobsFromEntitiesAsync<T>(Expression<Func<T, bool>> predicate)
+            where T : class
         {
             if (predicate.IsNull())
             {
@@ -632,7 +760,11 @@ namespace OneLine.Bases
             var records = DbContext.Set<T>().Where(predicate);
             return await DeleteUserBlobsFromEntitiesAsync(records);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Deletes all user blobs
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> DeleteUserBlobsAsync(IIdentifier<string> identifier)
         {
             var record = await GetOneUserBlobsAsync(identifier);
@@ -642,7 +774,11 @@ namespace OneLine.Bases
             }
             return await DeleteUserBlobsAsync(record.Data);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Deletes all user blobs
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> DeleteForcedUserBlobsAsync(IIdentifier<string> identifier)
         {
             var record = await GetOneUserBlobsAsync(identifier);
@@ -652,7 +788,11 @@ namespace OneLine.Bases
             }
             return await DeleteForcedUserBlobsAsync(record.Data);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Deletes all range of user blobs
+        /// </summary>
+        /// <param name="identifiers"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> DeleteRangeUserBlobsAsync(IEnumerable<IIdentifier<string>> identifiers)
         {
             var records = await GetRangeUserBlobsAsync(identifiers);
@@ -662,7 +802,11 @@ namespace OneLine.Bases
             }
             return await DeleteRangeUserBlobsAsync(records.Data);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Deletes all range of user blobs
+        /// </summary>
+        /// <param name="identifiers"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> DeleteRangeForcedUserBlobsAsync(IEnumerable<IIdentifier<string>> identifiers)
         {
             var records = await GetRangeUserBlobsAsync(identifiers);
@@ -809,41 +953,49 @@ namespace OneLine.Bases
 
         #region Get one and get range
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets a user blob by it's id
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> GetOneUserBlobsAsync(IIdentifier<string> identifier)
         {
             if (identifier.IsNull() || string.IsNullOrWhiteSpace(identifier.Model))
             {
-                //await CreateAuditrailsAsync(new T(), "Record not found on GetOneUserBlobsAsync");
                 return new TUserBlobs().ToApiResponseFailed("RecordNotFound");
             }
             var record = await DbContext.Set<TUserBlobs>().FindAsync(identifier.Model);
             return record.IsNull() ? record.ToApiResponseFailed("RecordNotFound") : record.ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets a user blob by it's id and filters by the current user id
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<TUserBlobs>> GetOneOwnsUserBlobsAsync(IIdentifier<string> identifier)
         {
             if (identifier.IsNull() || string.IsNullOrWhiteSpace(identifier.Model))
             {
-                //await CreateAuditrailsAsync(new T(), "Record not found on GetOneUserBlobsAsync");
                 return new TUserBlobs().ToApiResponseFailed("RecordNotFound");
             }
             var record = await DbContext.Set<TUserBlobs>().FirstOrDefaultAsync(x => x.UserBlobId == identifier.Model && x.CreatedBy == HttpContextAccessor.HttpContext.User.UserId());
             return record.IsNull() ? record.ToApiResponseFailed("RecordNotFound") : record.ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets a range of user blobs by it's id
+        /// </summary>
+        /// <param name="identifiers"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> GetRangeUserBlobsAsync(IEnumerable<IIdentifier<string>> identifiers)
         {
             if (identifiers.IsNull() || !identifiers.Any())
             {
-                //await CreateAuditrailsAsync(new T(), "Record identifiers was null or empty on delete operation");
                 return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("RecordNotFound");
             }
             foreach (var identifier in identifiers)
             {
                 if (identifier.IsNull() || string.IsNullOrWhiteSpace(identifier.Model))
                 {
-                    //await CreateAuditrailsAsync(new T(), "Record identifier was null or empty on delete operation");
                     return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("RecordNotFound");
                 }
             }
@@ -851,24 +1003,25 @@ namespace OneLine.Bases
             var records = await DbContext.Set<TUserBlobs>().Where(w => ids.Contains(w.UserBlobId)).ToListAsync();
             if (records.IsNull() || !records.Any())
             {
-                //await CreateAuditrailsAsync(new T(), "Records not found on select in operation");
                 return records.AsEnumerable().ToApiResponseFailed("RecordNotFound");
             }
             return records.AsEnumerable().ToApiResponse();
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets a range of user blobs by it's id and filters by the current user id
+        /// </summary>
+        /// <param name="identifiers"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<TUserBlobs>>> GetRangeOwnsUserBlobsAsync(IEnumerable<IIdentifier<string>> identifiers)
         {
             if (identifiers.IsNull() || !identifiers.Any())
             {
-                //await CreateAuditrailsAsync(new T(), "Record identifiers was null or empty on delete operation");
                 return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("RecordNotFound");
             }
             foreach (var identifier in identifiers)
             {
                 if (identifier.IsNull() || string.IsNullOrWhiteSpace(identifier.Model))
                 {
-                    //await CreateAuditrailsAsync(new T(), "Record identifier was null or empty on delete operation");
                     return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("RecordNotFound");
                 }
             }
@@ -876,7 +1029,6 @@ namespace OneLine.Bases
             var records = await DbContext.Set<TUserBlobs>().Where(w => ids.Contains(w.UserBlobId)).ToListAsync();
             if (records.IsNull() || !records.Any())
             {
-                //await CreateAuditrailsAsync(new T(), "Records not found on select in operation");
                 return records.AsEnumerable().ToApiResponseFailed("RecordNotFound");
             }
             return records.AsEnumerable().ToApiResponse();
@@ -1211,26 +1363,33 @@ namespace OneLine.Bases
 
         #region Read as stream
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<Stream> ReadBlobAsStreamAsync(IIdentifier<string> identifier, bool ignoreBlobOwner = false)
         {
             var isBlobOwnerAndFileExists = await IsBlobOwnerAndFileExistsAsync(identifier, ignoreBlobOwner);
-            if (isBlobOwnerAndFileExists.Status == ApiResponseStatus.Failed || !isBlobOwnerAndFileExists.Data)
+            if (isBlobOwnerAndFileExists.Status.Failed() || !isBlobOwnerAndFileExists.Data)
             {
-                //await DbContext.Set<TAuditTrails>().AddAsync(new T().CreateAuditTrails<T, TAuditTrails>("File was not found or the user is not the file owner", HttpContextAccessor));
                 return null;
             }
             var userBlobsApiResponse = await GetOneUserBlobsAsync(identifier);
             await DbContext.Set<TAuditTrails>().AddAsync(userBlobsApiResponse.Data.CreateAuditTrails<TUserBlobs, TAuditTrails>("File was downloaded", HttpContextAccessor));
             return await BlobStorageService.BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="identifiers"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Stream>> ReadBlobRangeAsStreamAsync(IEnumerable<IIdentifier<string>> identifiers, bool ignoreBlobOwner = false)
         {
             if (identifiers.IsNull() || !identifiers.Any())
             {
-                //await CreateAuditrailsAsync(new T(), "identifiers is null or empty on method ReadBlobAsStream");
-                //await dbContext.CreateAuditrailsAsync<IEnumerable<IIdentifier<string>>, TAuditTrails>(identifiers, "identifiers is null or empty on method ReadBlobAsStream", httpContextAccesor);
                 return null;
             }
             var streams = new List<Stream>();
@@ -1240,7 +1399,12 @@ namespace OneLine.Bases
             }
             return streams;
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<Stream>> ReadBlobAsStreamApiResponseAsync(IIdentifier<string> identifier, bool ignoreBlobOwner = false)
         {
             var isBlobOwnerAndFileExists = await IsBlobOwnerAndFileExistsAsync(identifier, ignoreBlobOwner);
@@ -1249,17 +1413,19 @@ namespace OneLine.Bases
                 return new ApiResponse<Stream>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
             var userBlobsApiResponse = await GetOneUserBlobsAsync(identifier);
-            //await CreateAuditrailsAsync(new T(), "UserBlob was readed as api response");
-            //await dbContext.CreateAuditrailsAsync<TUserBlobs, TAuditTrails>(userBlobsApiResponse.Data, "UserBlob was readed as api response", httpContextAccesor);
             var stream = await BlobStorageService.BlobStorage.OpenReadAsync(userBlobsApiResponse.Data.FilePath);
             return new ApiResponse<Stream>(ApiResponseStatus.Succeeded, stream);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a range of user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="identifiers"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<IApiResponse<Stream>>> ReadBlobRangeAsStreamApiResponseAsync(IEnumerable<IIdentifier<string>> identifiers, bool ignoreBlobOwner = false)
         {
             if (identifiers.IsNull() || !identifiers.Any())
             {
-                //await dbContext.CreateAuditrailsAsync<IEnumerable<IIdentifier<string>>, TAuditTrails>(identifiers, "Identifier is null or empty on method ReadBlobAsStreamApiResponse", httpContextAccesor);
                 return Enumerable.Empty<IApiResponse<Stream>>();
             }
             var streams = new List<IApiResponse<Stream>>();
@@ -1269,12 +1435,16 @@ namespace OneLine.Bases
             }
             return streams;
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage and zip it
+        /// </summary>
+        /// <param name="identifiers"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<Stream> ReadBlobRangeIntoZipFolderStreamAsync(IEnumerable<IIdentifier<string>> identifiers, bool ignoreBlobOwner = false)
         {
             if (identifiers.IsNull() || !identifiers.Any())
             {
-                //await dbContext.CreateAuditrailsAsync<IEnumerable<IIdentifier<string>>, TAuditTrails>(identifiers, "Identifier is null or empty on method ReadBlobRangeIntoZipFolderStreamAsync", httpContextAccesor);
                 return null;
             }
             var userBlobs = new List<TUserBlobs>();
@@ -1297,15 +1467,18 @@ namespace OneLine.Bases
                 }
             }
             zipStream.Position = 0;
-            //await dbContext.CreateAuditrailsAsync<IEnumerable<TUserBlobs>, TAuditTrails>(userBlobs, "A list of UserBlobs were readed into a compressed zip folder as stream result", httpContextAccesor);
             return zipStream;
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage and zip it
+        /// </summary>
+        /// <param name="identifiers"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<Stream>> ReadBlobRangeIntoZipFolderStreamApiResponseAsync(IEnumerable<IIdentifier<string>> identifiers, bool ignoreBlobOwner = false)
         {
             if (identifiers.IsNull() || !identifiers.Any())
             {
-                //await dbContext.CreateAuditrailsAsync<IEnumerable<IIdentifier<string>>, TAuditTrails>(identifiers, "Identifier is null or empty on method ReadBlobsIntoZipFolderStreamApiResponseAsync", httpContextAccesor);
                 return new ApiResponse<Stream>(ApiResponseStatus.Failed, "FileIsNullOrEmpty");
             }
             var userBlobs = new List<TUserBlobs>();
@@ -1328,10 +1501,14 @@ namespace OneLine.Bases
                 }
             }
             zipStream.Position = 0;
-            //await dbContext.CreateAuditrailsAsync<IEnumerable<TUserBlobs>, TAuditTrails>(userBlobs, "A list of UserBlobs were readed into a compressed zip folder as stream result", httpContextAccesor);
             return new ApiResponse<Stream>(ApiResponseStatus.Succeeded, zipStream);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<Stream> ReadBlobAsStreamAsync(TUserBlobs userBlobs, bool ignoreBlobOwner = false)
         {
             var isBlobOwnerAndFileExists = await IsBlobOwnerAndFileExistsAsync(userBlobs, ignoreBlobOwner);
@@ -1339,15 +1516,18 @@ namespace OneLine.Bases
             {
                 return null;
             }
-            //await dbContext.CreateAuditrailsAsync<TUserBlobs, TAuditTrails>(userBlobs, "File was found and read as stream", httpContextAccessor);
             return await BlobStorageService.BlobStorage.OpenReadAsync(userBlobs.FilePath);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Stream>> ReadBlobRangeAsStreamAsync(IEnumerable<TUserBlobs> userBlobs, bool ignoreBlobOwner = false)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
             {
-                //await dbContext.CreateAuditrailsAsync<IEnumerable<TUserBlobs>, TAuditTrails>(userBlobs, "Userblobs is null or empty on method ReadBlobAsStream", httpContextAccessor);
                 return null;
             }
             var streams = new List<Stream>();
@@ -1357,7 +1537,12 @@ namespace OneLine.Bases
             }
             return streams;
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<Stream>> ReadBlobAsStreamApiResponseAsync(TUserBlobs userBlobs, bool ignoreBlobOwner = false)
         {
             var isBlobOwnerAndFileExists = await IsBlobOwnerAndFileExistsAsync(userBlobs, ignoreBlobOwner);
@@ -1365,16 +1550,19 @@ namespace OneLine.Bases
             {
                 return new ApiResponse<Stream>(ApiResponseStatus.Failed, isBlobOwnerAndFileExists.Message);
             }
-            //await dbContext.CreateAuditrailsAsync<TUserBlobs, TAuditTrails>(userBlobs, "UserBlob was readed as api response", httpContextAccessor);
             var stream = await BlobStorageService.BlobStorage.OpenReadAsync(userBlobs.FilePath);
             return new ApiResponse<Stream>(ApiResponseStatus.Succeeded, stream);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<IApiResponse<Stream>>> ReadBlobRangeAsStreamApiResponseAsync(IEnumerable<TUserBlobs> userBlobs, bool ignoreBlobOwner = false)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
             {
-                //await dbContext.CreateAuditrailsAsync<IEnumerable<TUserBlobs>, TAuditTrails>(userBlobs, "Userblobs is null or empty on method ReadBlobAsStreamApiResponse", httpContextAccessor);
                 return Enumerable.Empty<IApiResponse<Stream>>();
             }
             var streams = new List<IApiResponse<Stream>>();
@@ -1384,7 +1572,12 @@ namespace OneLine.Bases
             }
             return streams;
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<Stream> ReadBlobRangeIntoZipFolderStreamAsync(IEnumerable<TUserBlobs> userBlobs, bool ignoreBlobOwner = false)
         {
             using MemoryStream zipStream = new MemoryStream();
@@ -1404,15 +1597,18 @@ namespace OneLine.Bases
                 }
             }
             zipStream.Position = 0;
-            //await dbContext.CreateAuditrailsAsync<IEnumerable<TUserBlobs>, TAuditTrails>(userBlobs, "A list of UserBlobs were readed into a compressed zip folder as stream result", httpContextAccessor);
             return zipStream;
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Reads a user blobs as stream from the blob storage
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<Stream>> ReadBlobRangeIntoZipFolderStreamApiResponseAsync(IEnumerable<TUserBlobs> userBlobs, bool ignoreBlobOwner = false)
         {
             if (userBlobs.IsNull() || !userBlobs.Any())
             {
-                //await dbContext.CreateAuditrailsAsync<IEnumerable<TUserBlobs>, TAuditTrails>(userBlobs, "Userblobs is null or empty on method ReadBlobsIntoZipFolderStreamApiResponseAsync", httpContextAccessor);
                 return new ApiResponse<Stream>(ApiResponseStatus.Failed, "FileIsNullOrEmpty");
             }
             using MemoryStream zipStream = new MemoryStream();
@@ -1432,7 +1628,6 @@ namespace OneLine.Bases
                 }
             }
             zipStream.Position = 0;
-            //await dbContext.CreateAuditrailsAsync<IEnumerable<TUserBlobs>, TAuditTrails>(userBlobs, "A list of UserBlobs were readed into a compressed zip folder as stream result", httpContextAccessor);
             return new ApiResponse<Stream>(ApiResponseStatus.Succeeded, zipStream);
         }
 
@@ -1440,7 +1635,11 @@ namespace OneLine.Bases
 
         #region Helpers
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Checks if current user is the blob owner
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<bool>> IsBlobOwnerAsync(TUserBlobs userBlobs)
         {
             if (userBlobs.IsNull())
@@ -1450,7 +1649,12 @@ namespace OneLine.Bases
             var result = (await DbContext.Set<TUserBlobs>().FirstOrDefaultAsync(x => x.UserBlobId == userBlobs.UserBlobId && x.CreatedBy == HttpContextAccessor.HttpContext.User.UserId())).IsNotNull();
             return new ApiResponse<bool>(ApiResponseStatus.Succeeded, result);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Checks if current user is the blob owner and the file exists in the blob storage
+        /// </summary>
+        /// <param name="userBlobs"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<bool>> IsBlobOwnerAndFileExistsAsync(TUserBlobs userBlobs, bool ignoreBlobOwner = false)
         {
             if (userBlobs.IsNull())
@@ -1472,18 +1676,28 @@ namespace OneLine.Bases
             }
             return new ApiResponse<bool>(ApiResponseStatus.Succeeded, true);
         }
-        /// <inheritdoc/>
-        public async Task<IApiResponse<bool>> IsValidBlobDataAsync(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
+        /// <summary>
+        /// Validates the blob data
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="blobDatas"></param>
+        /// <param name="formFileRules"></param>
+        /// <returns></returns>
+        public async Task<IApiResponse<bool>> IsValidBlobDataAsync<T>(IEnumerable<IBlobData> blobDatas, IFormFileRules formFileRules)
         {
             var isValidFormFileApiResponse = blobDatas.IsValidBlobDataApiResponse(formFileRules);
             if (isValidFormFileApiResponse.Status == ApiResponseStatus.Failed)
             {
-                await CreateAuditrailsAsync(new T(), isValidFormFileApiResponse.Message);
+                await CreateAuditrailsAsync(Activator.CreateInstance<T>(), isValidFormFileApiResponse.Message);
                 return new ApiResponse<bool>(ApiResponseStatus.Failed, isValidFormFileApiResponse.Message, true);
             }
             return new ApiResponse<bool>(ApiResponseStatus.Succeeded, true);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Checks if current user is the blob owner
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<bool>> IsBlobOwnerAsync(IIdentifier<string> identifier)
         {
             if (identifier.IsNull() || identifier.Model.IsNull())
@@ -1493,7 +1707,12 @@ namespace OneLine.Bases
             var result = (await DbContext.Set<TUserBlobs>().AsNoTracking().FirstOrDefaultAsync(x => x.UserBlobId == identifier.Model && x.CreatedBy == HttpContextAccessor.HttpContext.User.UserId())).IsNotNull();
             return new ApiResponse<bool>(ApiResponseStatus.Succeeded, result);
         }
-        /// <inheritdoc/>
+        /// <summary>
+        /// Checks if current user is the blob owner and the file exists in the blob storage
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <param name="ignoreBlobOwner"></param>
+        /// <returns></returns>
         public async Task<IApiResponse<bool>> IsBlobOwnerAndFileExistsAsync(IIdentifier<string> identifier, bool ignoreBlobOwner = false)
         {
             if (identifier.IsNull() || identifier.Model.IsNull())

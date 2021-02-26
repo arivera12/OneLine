@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using OneLine.Contracts;
 using OneLine.Extensions;
 using OneLine.Messaging;
 using OneLine.Models;

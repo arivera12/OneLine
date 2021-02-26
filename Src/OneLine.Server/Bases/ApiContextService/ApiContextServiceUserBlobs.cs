@@ -26,7 +26,7 @@ namespace OneLine.Bases
         where TMessageHub : MessageHub, new()
     {
         #region Add
-        
+
         /// <summary>
         /// Adds a range of user blobs
         /// </summary>
@@ -121,7 +121,7 @@ namespace OneLine.Bases
         #endregion
 
         #region Update
-        
+
         /// <summary>
         /// Updates a range of user blobs
         /// </summary>

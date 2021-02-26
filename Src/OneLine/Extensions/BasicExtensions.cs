@@ -285,7 +285,7 @@ namespace OneLine.Extensions
             {
                 return new ApiResponse<T>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
             }
-            var validationResult = await validator.ValidateAsync(source);
+            var validationResult = await validator.ValidateAsync(new ValidationContext<T>(source));
             if (!validationResult.IsValid)
             {
                 return new ApiResponse<T>(ApiResponseStatus.Failed, source, validationResult.Errors.Select(x => x.ErrorMessage));
@@ -309,7 +309,7 @@ namespace OneLine.Extensions
             {
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
             }
-            var validationResult = await validator.ValidateAsync(source);
+            var validationResult = await validator.ValidateAsync(new ValidationContext<IEnumerable<T>>(source));
             if (!validationResult.IsValid)
             {
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, validationResult.Errors.Select(x => x.ErrorMessage));
@@ -333,7 +333,7 @@ namespace OneLine.Extensions
             {
                 return new ApiResponse<T>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
             }
-            var validationResult = validator.Validate(source);
+            var validationResult = validator.Validate(new ValidationContext<T>(source));
             if (!validationResult.IsValid)
             {
                 return new ApiResponse<T>(ApiResponseStatus.Failed, source, validationResult.Errors.Select(x => x.ErrorMessage));
@@ -357,7 +357,7 @@ namespace OneLine.Extensions
             {
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, "ValidatorIsNull");
             }
-            var validationResult = validator.Validate(source);
+            var validationResult = validator.Validate(new ValidationContext<IEnumerable<T>>(source));
             if (!validationResult.IsValid)
             {
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, validationResult.Errors.Select(x => x.ErrorMessage));

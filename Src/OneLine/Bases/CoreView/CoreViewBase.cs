@@ -1,4 +1,5 @@
-﻿using FluentValidation.Results;
+﻿using FluentValidation;
+using FluentValidation.Results;
 using OneLine.Contracts;
 using OneLine.Enums;
 using OneLine.Extensions;
@@ -41,7 +42,7 @@ namespace OneLine.Bases
             ApplicationState = applicationState;
             Device = device;
             DeviceStorage = deviceStorage;
-            SaveFile = saveFile; 
+            SaveFile = saveFile;
         }
         /// <inheritdoc/>
         public async Task Load()
@@ -184,13 +185,13 @@ namespace OneLine.Bases
         {
             if (FormMode.IsSingle())
             {
-                ValidationResult = await Validator.ValidateAsync(Record);
+                ValidationResult = await Validator.ValidateAsync(new ValidationContext<T>(Record));
             }
             else
             {
                 foreach (var record in Records)
                 {
-                    var result = await Validator.ValidateAsync(record);
+                    var result = await Validator.ValidateAsync(new ValidationContext<T>(record));
                     foreach (var validationFailure in result.Errors)
                     {
                         ValidationResult.Errors.Add(validationFailure);

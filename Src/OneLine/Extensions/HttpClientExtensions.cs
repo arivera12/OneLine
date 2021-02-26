@@ -264,7 +264,7 @@ namespace OneLine.Extensions
         }
         public static async Task<IResponseResult<ApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IValidator validator)
         {
-            var validationResult = await validator.ValidateAsync(content);
+            var validationResult = await validator.ValidateAsync(new ValidationContext<TContent>(content));
             if (!validationResult.IsValid)
             {
                 return new ResponseResult<ApiResponse<TResponse>>
@@ -289,7 +289,7 @@ namespace OneLine.Extensions
             }
             foreach (var content in contents)
             {
-                var validationResult = await validator.ValidateAsync(content);
+                var validationResult = await validator.ValidateAsync(new ValidationContext<IEnumerable<TContent>>(contents));
                 if (!validationResult.IsValid)
                 {
                     return new ResponseResult<ApiResponse<TResponse>>
@@ -353,7 +353,7 @@ namespace OneLine.Extensions
         public static async Task<byte[]> SendJsonDownloadAsByteArrayAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
             where TContent : class
         {
-            var validationResult = await validator.ValidateAsync(content);
+            var validationResult = await validator.ValidateAsync(new ValidationContext<TContent>(content));
             if (!validationResult.IsValid)
             {
                 return null;
@@ -394,7 +394,7 @@ namespace OneLine.Extensions
             }
             foreach (var content in contents)
             {
-                var validationResult = await validator.ValidateAsync(content);
+                var validationResult = await validator.ValidateAsync(new ValidationContext<TContent>(content));
                 if (!validationResult.IsValid)
                 {
                     return null;
@@ -480,7 +480,7 @@ namespace OneLine.Extensions
         public static async Task<Stream> SendJsonDownloadAsStreamAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
             where TContent : class
         {
-            var validationResult = await validator.ValidateAsync(content);
+            var validationResult = await validator.ValidateAsync(new ValidationContext<TContent>(content));
             if (!validationResult.IsValid)
             {
                 return null;
@@ -521,7 +521,7 @@ namespace OneLine.Extensions
             }
             foreach (var content in contents)
             {
-                var validationResult = await validator.ValidateAsync(content);
+                var validationResult = await validator.ValidateAsync(new ValidationContext<TContent>(content));
                 if (!validationResult.IsValid)
                 {
                     return null;
@@ -607,7 +607,7 @@ namespace OneLine.Extensions
         public static async Task<string> SendJsonDownloadAsStringAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
             where TContent : class
         {
-            var validationResult = await validator.ValidateAsync(content);
+            var validationResult = await validator.ValidateAsync(new ValidationContext<TContent>(content));
             if (!validationResult.IsValid)
             {
                 return null;
@@ -648,7 +648,7 @@ namespace OneLine.Extensions
             }
             foreach (var content in contents)
             {
-                var validationResult = await validator.ValidateAsync(content);
+                var validationResult = await validator.ValidateAsync(new ValidationContext<TContent>(content));
                 if (!validationResult.IsValid)
                 {
                     return null;
@@ -724,7 +724,7 @@ namespace OneLine.Extensions
         public static async Task<IResponseResult<HttpResponseMessage>> SendJsonRequestHttpResponseMessageResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
             where TContent : class
         {
-            var validationResult = await validator.ValidateAsync(content);
+            var validationResult = await validator.ValidateAsync(new ValidationContext<TContent>(content));
             if (!validationResult.IsValid)
             {
                 return new ResponseResult<HttpResponseMessage>

@@ -37,7 +37,7 @@ namespace OneLine.Extensions
         /// </summary>
         /// <param name="httpContext"></param>
         /// <returns></returns>
-        public static string HostBaseUrl(this HttpContext httpContext)
+        public static string RequestHostBaseUrl(this HttpContext httpContext)
         {
             var request = httpContext.Request;
             var host = request.Host.ToUriComponent();

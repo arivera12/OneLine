@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed fluent validator missing methods and upgraded to lastest version.</PackageReleaseNotes>
-    <Version>3.0.52</Version>
+    <PackageReleaseNotes>Added new package BlazorLocation</PackageReleaseNotes>
+    <Version>3.0.54</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.52.0</AssemblyVersion>
-    <FileVersion>3.0.52.0</FileVersion>
+    <AssemblyVersion>3.0.54.0</AssemblyVersion>
+    <FileVersion>3.0.54.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>
@@ -31,6 +31,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorLocation" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.MobileBlazorBindings" Version="0.5.50-preview" />
     <PackageReference Include="DeviceDetector.NET" Version="4.2.0" />

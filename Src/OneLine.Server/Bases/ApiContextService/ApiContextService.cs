@@ -1,39 +1,27 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using OneLine.Messaging;
 using OneLine.Models;
 
 namespace OneLine.Bases
 {
-    public partial class ApiContextService<TDbContext, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub>
+    public partial class ApiContextService<TDbContext, TAuditTrails, TUserBlobs, TBlobStorage>
         where TDbContext : DbContext
         where TAuditTrails : class, IAuditTrails, new()
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
-        where TSmtp : class, ISmtp, new()
-        where TMessageHub : MessageHub, new()
     {
-        /// <summary>
-        /// The Http context accessor
-        /// </summary>
-        public IHttpContextAccessor HttpContextAccessor { get; set; }
         /// <summary>
         /// The database conext
         /// </summary>
         public TDbContext DbContext { get; set; }
         /// <summary>
+        /// The Http context accessor
+        /// </summary>
+        public IHttpContextAccessor HttpContextAccessor { get; set; }
+        /// <summary>
         /// The blob storage service provider
         /// </summary>
         public TBlobStorage BlobStorageService { get; set; }
-        /// <summary>
-        /// The simple mail transfer protocol service provider
-        /// </summary>
-        public TSmtp Smtp { get; set; }
-        /// <summary>
-        /// The Signal R message hub service 
-        /// </summary>
-        public IHubContext<TMessageHub> SendMessageHub { get; set; }
         /// <summary>
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
         /// </summary>
@@ -47,22 +35,10 @@ namespace OneLine.Bases
         /// </summary>
         /// <param name="httpContextAccessor"></param>
         /// <param name="dbContext"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext)
+        public ApiContextService(TDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
-            HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;
-        }
-        /// <summary>
-        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="dbContext"></param>
-        /// <param name="sendMessageHub"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, IHubContext<TMessageHub> sendMessageHub)
-        {
             HttpContextAccessor = httpContextAccessor;
-            DbContext = dbContext;
-            SendMessageHub = sendMessageHub;
         }
         /// <summary>
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
@@ -70,81 +46,11 @@ namespace OneLine.Bases
         /// <param name="httpContextAccessor"></param>
         /// <param name="dbContext"></param>
         /// <param name="blobStorage"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TBlobStorage blobStorage)
+        public ApiContextService(TDbContext dbContext, IHttpContextAccessor httpContextAccessor, TBlobStorage blobStorage)
         {
-            HttpContextAccessor = httpContextAccessor;
             DbContext = dbContext;
+            HttpContextAccessor = httpContextAccessor;
             BlobStorageService = blobStorage;
-        }
-        /// <summary>
-        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="dbContext"></param>
-        /// <param name="blobStorage"></param>
-        /// <param name="sendMessageHub"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TBlobStorage blobStorage, IHubContext<TMessageHub> sendMessageHub)
-        {
-            HttpContextAccessor = httpContextAccessor;
-            DbContext = dbContext;
-            BlobStorageService = blobStorage;
-            SendMessageHub = sendMessageHub;
-        }
-        /// <summary>
-        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="dbContext"></param>
-        /// <param name="smtp"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TSmtp smtp)
-        {
-            HttpContextAccessor = httpContextAccessor;
-            DbContext = dbContext;
-            Smtp = smtp;
-        }
-        /// <summary>
-        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="dbContext"></param>
-        /// <param name="smtp"></param>
-        /// <param name="sendMessageHub"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TSmtp smtp, IHubContext<TMessageHub> sendMessageHub)
-        {
-            HttpContextAccessor = httpContextAccessor;
-            DbContext = dbContext;
-            Smtp = smtp;
-            SendMessageHub = sendMessageHub;
-        }
-        /// <summary>
-        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="dbContext"></param>
-        /// <param name="smtp"></param>
-        /// <param name="blobStorage"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TSmtp smtp, TBlobStorage blobStorage)
-        {
-            HttpContextAccessor = httpContextAccessor;
-            DbContext = dbContext;
-            Smtp = smtp;
-            BlobStorageService = blobStorage;
-        }
-        /// <summary>
-        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="dbContext"></param>
-        /// <param name="smtp"></param>
-        /// <param name="blobStorage"></param>
-        /// <param name="sendMessageHub"></param>
-        public ApiContextService(IHttpContextAccessor httpContextAccessor, TDbContext dbContext, TSmtp smtp, TBlobStorage blobStorage, IHubContext<TMessageHub> sendMessageHub)
-        {
-            HttpContextAccessor = httpContextAccessor;
-            DbContext = dbContext;
-            Smtp = smtp;
-            BlobStorageService = blobStorage;
-            SendMessageHub = sendMessageHub;
         }
     }
 }

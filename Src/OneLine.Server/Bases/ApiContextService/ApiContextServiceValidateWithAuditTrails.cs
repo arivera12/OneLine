@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OneLine.Enums;
 using OneLine.Extensions;
-using OneLine.Messaging;
 using OneLine.Models;
 using OneLine.Validations;
 using System;
@@ -13,13 +12,11 @@ using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
-    public partial class ApiContextService<TDbContext, TAuditTrails, TUserBlobs, TBlobStorage, TSmtp, TMessageHub>
+    public partial class ApiContextService<TDbContext, TAuditTrails, TUserBlobs, TBlobStorage>
         where TDbContext : DbContext
         where TAuditTrails : class, IAuditTrails, new()
         where TUserBlobs : class, IUserBlobs, new()
         where TBlobStorage : class, IBlobStorageService, new()
-        where TSmtp : class, ISmtp, new()
-        where TMessageHub : MessageHub, new()
     {
         /// <inheritdoc/>
         public async Task<IApiResponse<T>> ValidatedWithBlobsAsync<T>(T record, IValidator validator, SaveOperation saveOperation, IEnumerable<IUploadBlobData> uploadBlobDatas)

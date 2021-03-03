@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.54</Version>
+    <Version>3.0.55</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine.Server is a project that can be used on a server backend. This package already includes OneLine.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,17 +12,13 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added new package BlazorLocation</PackageReleaseNotes>
+    <PackageReleaseNotes>Dropped smtp and message hub from api context service and moved implementation to the template output folder and the scaffolding.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.54.0</AssemblyVersion>
-    <FileVersion>3.0.54.0</FileVersion>
+    <AssemblyVersion>3.0.55.0</AssemblyVersion>
+    <FileVersion>3.0.55.0</FileVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Bases\ApiContextService\IDbContextRespositoryService.cs~RF1ba2c9a1.TMP" />
-  </ItemGroup>
 
   <ItemGroup>
     <!--<PackageReference Include="EFCore.BulkExtensions" Version="3.2.3" />-->

@@ -18,7 +18,7 @@ using $RootNamespace$.Services.Http;
 using $RootNamespace$.Validations;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using OneLine.Blazor.Extensions;
+using OneLine.Services;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
@@ -30,7 +30,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using UserBlobs = {Model.Namespace}.Models.UserBlobs;
+using {Model.TableName}ViewModel = {Model.Namespace}.Models.{Model.TableName}ViewModel;
 
 namespace $RootNamespace$.WebUI.Pages
 {
@@ -47,6 +50,7 @@ namespace $RootNamespace$.WebUI.Pages
         [Inject] public IResourceManagerLocalizer ResourceManagerLocalizer { get; set; }
         [Inject] public IApplicationConfiguration ApplicationConfiguration { get; set; }
         [Inject] public $HttpService$ $HttpService$ { get; set; }
+        [Inject] public AuthenticationStateProvider AuthenticationStateProvider {{ get; set; }}
         [Parameter] public int DebounceInterval { get; set; }
         [Parameter] public bool HideCancelOrBackButton { get; set; }
         [Parameter] public bool HideResetButton { get; set; }
@@ -156,7 +160,7 @@ namespace $RootNamespace$.WebUI.Pages
         [Parameter] public Action OnBeforeCancel { get; set; }
         [Parameter] public Action OnAfterCancel { get; set; }
         [Parameter] public IEnumerable<string> AuthorizedRoles { get; set; }
-        public AspNetUsersViewModel User { get; set; }
+        public ClaimsPrincipal User { get; set; }
         public DeviceDetector DeviceDetector { get; set; }
         public bool ShowActivityIndicator { get; set; }
         public bool FirstRenderOcurred { get; set; }
@@ -173,72 +177,56 @@ namespace $RootNamespace$.WebUI.Pages
         }
         public async Task InitializeComponentAsync()
         {
-            User = await ApplicationState.GetApplicationUserSecure<AspNetUsersViewModel>();
-            if(User.IsNull())
+            var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            User = authenticationState.User;
+            if(User.IsNull() || !User.Identity.IsAuthenticated)
             {
                 await ApplicationState.Logout();
                 NavigationManager.NavigateTo("/login/" + NavigationManager.Uri.Split("/").Last());
             }
             else
             {
-                IEnumerable<string> roles = default;
-                var rolesObject = User.GetType()?.GetProperty("Roles")?.GetValue(User);
-                if (rolesObject.IsNotNull())
+                var accessToken = User.AccessToken();
+                AspNetRolesHttpService.HttpClient.AddJwtAuthorizationBearerHeader(accessToken, !accessToken.StartsWith("bearer", StringComparison.InvariantCultureIgnoreCase));
+                HttpClient.AddJwtAuthorizationBearerHeader(accessToken, !accessToken.StartsWith("bearer", StringComparison.InvariantCultureIgnoreCase));
+                //This null check allows to prevent override the listeners from parent if it's listening to any of this events
+                OnBeforeSearch ??= new Action(async () => await BeforeSearch());
+                OnAfterSearch ??= new Action(async () => await AfterSearch());
+                OnBeforeSave ??= new Action(async () => await BeforeSave());
+                OnAfterSave ??= new Action(async () => await AfterSave());
+                OnBeforeDelete ??= new Action(async () => await BeforeDelete());
+                OnAfterDelete ??= new Action(async () => await AfterDelete());
+                OnBeforeCancel ??= new Action(async () => await BeforeCancel());
+                OnAfterCancel ??= new Action(async () => await AfterCancel());
+                OnBeforeReset ??= new Action(async () => await BeforeReset());
+                OnAfterReset ??= new Action(async () => await AfterReset());
+                if (!string.IsNullOrWhiteSpace(RecordId))
                 {
-                    roles = (rolesObject as IList<string>).AsEnumerable();
+                    Identifier = new Identifier<string>
+                    {
+                        Model = (string)Convert.ChangeType(RecordId, typeof(string))
+                    };
                 }
-                if ((AuthorizedRoles.IsNotNull() && AuthorizedRoles.Any() &&
-                    roles.IsNotNull() && roles.Any() &&
-                    !AuthorizedRoles.Any(w => roles.Contains(w))))
+                if (AutoLoad)
                 {
-                    await ApplicationState.Logout();
-                    NavigationManager.NavigateTo("/login/" + NavigationManager.Uri.Split("/").Last());
+                    if (OnBeforeLoad.IsNotNull())
+                    {
+                        OnBeforeLoad.Invoke();
+                    }
+                    else
+                    {
+                        await Load();
+                    }
                 }
-                else
+                if (InitialAutoSearch)
                 {
-                    var token = User.GetType().GetProperty("Token").GetValue(User)?.ToString();
-                    $HttpService$.HttpClient.AddJwtAuthorizationBearerHeader(token, true);
-                    HttpClient.AddJwtAuthorizationBearerHeader(token, true);
-
-                    //This null check allows to prevent override the listeners from parent if it's listening to any of this events
-                    OnBeforeSearch ??= new Action(async () => await BeforeSearch());
-                    OnAfterSearch ??= new Action(async () => await AfterSearch());
-                    OnBeforeSave ??= new Action(async () => await BeforeSave());
-                    OnAfterSave ??= new Action(async () => await AfterSave());
-                    OnBeforeDelete ??= new Action(async () => await BeforeDelete());
-                    OnAfterDelete ??= new Action(async () => await AfterDelete());
-                    OnBeforeCancel ??= new Action(async () => await BeforeCancel());
-                    OnAfterCancel ??= new Action(async () => await AfterCancel());
-                    OnBeforeReset ??= new Action(async () => await BeforeReset());
-                    OnAfterReset ??= new Action(async () => await AfterReset());
-                    if (!string.IsNullOrWhiteSpace(RecordId))
+                    if (OnBeforeSearch.IsNotNull())
                     {
-                        Identifier = new Identifier<string>
-                        {
-                            Model = (string)Convert.ChangeType(RecordId, typeof(string))
-                        };
+                        OnBeforeSearch.Invoke();
                     }
-                    if (AutoLoad)
+                    else
                     {
-                        if (OnBeforeLoad.IsNotNull())
-                        {
-                            OnBeforeLoad.Invoke();
-                        }
-                        else
-                        {
-                            await Load();
-                        }
-                    }
-                    if (InitialAutoSearch)
-                    {
-                        if (OnBeforeSearch.IsNotNull())
-                        {
-                            OnBeforeSearch.Invoke();
-                        }
-                        else
-                        {
-                            await Search();
-                        }
+                        await Search();
                     }
                 }
                 StateHasChanged();

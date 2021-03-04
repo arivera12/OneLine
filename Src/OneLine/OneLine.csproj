@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Dropped smtp and message hub from api context service and moved implementation to the template output folder and the scaffolding.</PackageReleaseNotes>
-    <Version>3.0.55</Version>
+    <PackageReleaseNotes>Fixed camel casing naming convention on serialization for notification options.</PackageReleaseNotes>
+    <Version>3.0.57</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.55.0</AssemblyVersion>
-    <FileVersion>3.0.55.0</FileVersion>
+    <AssemblyVersion>3.0.57.0</AssemblyVersion>
+    <FileVersion>3.0.57.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.55</Version>
+    <Version>3.0.57</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine.Server is a project that can be used on a server backend. This package already includes OneLine.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,12 +12,12 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Dropped smtp and message hub from api context service and moved implementation to the template output folder and the scaffolding.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed camel casing naming convention on serialization for notification options.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.55.0</AssemblyVersion>
-    <FileVersion>3.0.55.0</FileVersion>
+    <AssemblyVersion>3.0.57.0</AssemblyVersion>
+    <FileVersion>3.0.57.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

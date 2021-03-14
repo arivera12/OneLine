@@ -7,7 +7,7 @@ namespace OneLine.Validations
     /// <summary>
     /// User blobs validator rules
     /// </summary>
-    public class UserBlobsValidator : AbstractValidator<UserBlobs>
+    public class UserBlobsValidator : AbstractValidator<IUserBlobs>
     {
         /// <summary>
         /// Default constructor with the user blobs validator rules
@@ -28,7 +28,7 @@ namespace OneLine.Validations
     /// <summary>
     /// User blobs collection validator rules
     /// </summary>
-    public class UserBlobsCollectionValidator : AbstractValidator<IEnumerable<UserBlobs>>
+    public class UserBlobsCollectionValidator : AbstractValidator<IEnumerable<IUserBlobs>>
     {
         /// <summary>
         /// Default constructor with the user blobs validator rules

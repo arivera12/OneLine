@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed camel casing naming convention on serialization for notification options.</PackageReleaseNotes>
-    <Version>3.0.57</Version>
+    <PackageReleaseNotes>Removed UserBlobs model and view model only left the interface for output project template. Fixed binary property field reference data.</PackageReleaseNotes>
+    <Version>3.0.59</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.57.0</AssemblyVersion>
-    <FileVersion>3.0.57.0</FileVersion>
+    <AssemblyVersion>3.0.59.0</AssemblyVersion>
+    <FileVersion>3.0.59.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

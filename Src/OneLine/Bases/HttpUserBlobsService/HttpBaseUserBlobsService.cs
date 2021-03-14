@@ -18,7 +18,7 @@ namespace OneLine.Bases
         where TIdentifier : class, IIdentifier<TId>
     {
         public override string Api { get; set; } = "api";
-        public override string ControllerName { get; set; } = nameof(UserBlobs).ToLower();
+        public override string ControllerName { get; set; } = nameof(T).ToLower();
         public string DownloadBinaryMethod { get; set; } = "downloadbinary";
         public string DownloadRangeBinaryMethod { get; set; } = "downloadrangebinary";
         public string DownloadBase64Method { get; set; } = "dowloadbase64";
@@ -50,17 +50,17 @@ namespace OneLine.Bases
         public HttpBaseUserBlobsService(Uri baseAddress, string AuthorizationToken, bool AddBearerScheme = true) : base(baseAddress, AuthorizationToken, AddBearerScheme)
         {
         }
-        public Task<IResponseResult<ApiResponse<UserBlobs>>> AddAsync(IEnumerable<BlobData> blobDatas)
+        public Task<IResponseResult<ApiResponse<T>>> AddAsync(IEnumerable<BlobData> blobDatas)
         {
-            return HttpClient.SendJsonResponseResultAsync<UserBlobs, BlobData>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddMethod}", blobDatas.FirstOrDefault(), new BlobDataValidator());
+            return HttpClient.SendJsonResponseResultAsync<T, BlobData>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddMethod}", blobDatas.FirstOrDefault(), new BlobDataValidator());
         }
-        public Task<IResponseResult<ApiResponse<IEnumerable<UserBlobs>>>> AddRangeAsync(IEnumerable<BlobData> blobDatas)
+        public Task<IResponseResult<ApiResponse<IEnumerable<T>>>> AddRangeAsync(IEnumerable<BlobData> blobDatas)
         {
-            return HttpClient.SendJsonResponseResultAsync<IEnumerable<UserBlobs>, IEnumerable<BlobData>>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddMethod}", blobDatas, new BlobDataCollectionValidator());
+            return HttpClient.SendJsonResponseResultAsync<IEnumerable<T>, IEnumerable<BlobData>>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{AddMethod}", blobDatas, new BlobDataCollectionValidator());
         }
-        public Task<IResponseResult<ApiResponse<Tuple<string, UserBlobs>>>> DownloadBase64Async(TIdentifier identifier, IValidator validator)
+        public Task<IResponseResult<ApiResponse<Tuple<string, T>>>> DownloadBase64Async(TIdentifier identifier, IValidator validator)
         {
-            return HttpClient.SendJsonResponseResultAsync<Tuple<string, UserBlobs>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadBase64Method}", identifier, validator);
+            return HttpClient.SendJsonResponseResultAsync<Tuple<string, T>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadBase64Method}", identifier, validator);
         }
         public Task<IResponseResult<HttpResponseMessage>> DownloadBinaryAsync(TIdentifier identifier, IValidator validator)
         {
@@ -70,9 +70,9 @@ namespace OneLine.Bases
         {
             return HttpClient.SendJsonRequestHttpResponseMessageResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvOwnsMethod}"), new { SearchPaging, searchExtraParams });
         }
-        public Task<IResponseResult<ApiResponse<Tuple<IEnumerable<string>, IEnumerable<UserBlobs>>>>> DownloadRangeBase64Async(IEnumerable<TIdentifier> identifiers, IValidator validator)
+        public Task<IResponseResult<ApiResponse<Tuple<IEnumerable<string>, IEnumerable<T>>>>> DownloadRangeBase64Async(IEnumerable<TIdentifier> identifiers, IValidator validator)
         {
-            return HttpClient.SendJsonRangeResponseResultAsync<Tuple<IEnumerable<string>, IEnumerable<UserBlobs>>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadRangeBase64Method}", identifiers, validator);
+            return HttpClient.SendJsonRangeResponseResultAsync<Tuple<IEnumerable<string>, IEnumerable<T>>, TIdentifier>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadRangeBase64Method}", identifiers, validator);
         }
         public Task<IResponseResult<HttpResponseMessage>> DownloadRangeBinaryAsync(IEnumerable<TIdentifier> identifiers, IValidator validator)
         {
@@ -94,13 +94,13 @@ namespace OneLine.Bases
         {
             return HttpClient.GetJsonResponseResultAsync<ApiResponse<Paged<IEnumerable<TResponse>>>>($"{GetApi()}/{ControllerName}/{SearchOwnsMethod}", new { SearchPaging, searchExtraParams });
         }
-        public Task<IResponseResult<ApiResponse<Tuple<UserBlobs, UserBlobs>>>> UpdateAsync(UserBlobs userBlobs, IEnumerable<BlobData> blobDatas)
+        public Task<IResponseResult<ApiResponse<Tuple<T, T>>>> UpdateAsync(T userBlobs, IEnumerable<BlobData> blobDatas)
         {
-            return HttpClient.SendJsonResponseResultAsync<Tuple<UserBlobs, UserBlobs>, BlobData>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}", blobDatas.FirstOrDefault(), new BlobDataValidator());
+            return HttpClient.SendJsonResponseResultAsync<Tuple<T, T>, BlobData>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}", blobDatas.FirstOrDefault(), new BlobDataValidator());
         }
-        public Task<IResponseResult<ApiResponse<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>>>> UpdateRangeAsync(IEnumerable<UserBlobs> userBlobs, IEnumerable<BlobData> blobDatas)
+        public Task<IResponseResult<ApiResponse<Tuple<IEnumerable<T>, IEnumerable<T>>>>> UpdateRangeAsync(IEnumerable<T> userBlobs, IEnumerable<BlobData> blobDatas)
         {
-            return HttpClient.SendJsonResponseResultAsync<Tuple<IEnumerable<UserBlobs>, IEnumerable<UserBlobs>>, IEnumerable<BlobData>>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}", blobDatas, new BlobDataCollectionValidator());
+            return HttpClient.SendJsonResponseResultAsync<Tuple<IEnumerable<T>, IEnumerable<T>>, IEnumerable<BlobData>>(HttpMethod.Put, $"{GetApi()}/{ControllerName}/{UpdateMethod}", blobDatas, new BlobDataCollectionValidator());
         }
         public Task<IResponseResult<byte[]>> DownloadCsvOwnsAsByteArrayAsync(ISearchPaging SearchPaging, object searchExtraParams)
         {

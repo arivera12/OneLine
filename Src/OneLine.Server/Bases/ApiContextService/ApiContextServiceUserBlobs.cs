@@ -110,7 +110,7 @@ namespace OneLine.Bases
             {
                 var userBlobs = await AddUserBlobsRangeAsync<T>(uploadBlobDatas, path);
                 userBlobsUploadedList.AddRange(userBlobs.Data);
-                record.GetType().GetProperty(uploadBlobData.PropertyName).SetValue(record, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(userBlobs)));
+                record.GetType().GetProperty(uploadBlobData.PropertyName).SetValue(record, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(userBlobs.Data)));
             }
             return userBlobsUploadedList.AsEnumerable().ToApiResponse();
         }

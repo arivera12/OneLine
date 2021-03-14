@@ -13,7 +13,7 @@ namespace OneLine.Validations
     /// <summary>
     /// Blob data validation rules
     /// </summary>
-    public class BlobDataValidator : AbstractValidator<BlobData>
+    public class BlobDataValidator : AbstractValidator<IBlobData>
     {
         /// <summary>
         /// Default constructor
@@ -32,7 +32,7 @@ namespace OneLine.Validations
         /// <param name="blobData"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public async Task<ValidationResult> ValidateFormFileRulesAsync(BlobData blobData, FormFileRules formFileRules)
+        public async Task<ValidationResult> ValidateFormFileRulesAsync(IBlobData blobData, FormFileRules formFileRules)
         {
             if (formFileRules == null)
             {
@@ -79,7 +79,7 @@ namespace OneLine.Validations
     /// <summary>
     /// Blob data collection validation rules
     /// </summary>
-    public class BlobDataCollectionValidator : AbstractValidator<IEnumerable<BlobData>>
+    public class BlobDataCollectionValidator : AbstractValidator<IEnumerable<IBlobData>>
     {
         /// <summary>
         /// Default constructor
@@ -95,7 +95,7 @@ namespace OneLine.Validations
         /// <param name="blobDatas"></param>
         /// <param name="formFileRules"></param>
         /// <returns></returns>
-        public async Task<ValidationResult> ValidateFormFileRulesAsync(IEnumerable<BlobData> blobDatas, FormFileRules formFileRules)
+        public async Task<ValidationResult> ValidateFormFileRulesAsync(IEnumerable<IBlobData> blobDatas, FormFileRules formFileRules)
         {
             if (formFileRules == null)
             {

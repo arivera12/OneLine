@@ -55,7 +55,7 @@ namespace OneLine.Bases
                         //and that the value parses to user blobs and is valid userblobs
                         try
                         {
-                            var userBlobs = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(Encoding.UTF8.GetString((byte[])propertyValue));
+                            var userBlobs = JsonConvert.DeserializeObject<IEnumerable<TUserBlobs>>(Encoding.UTF8.GetString((byte[])propertyValue));
                             var userBlobsCollectionValidator = new UserBlobsCollectionValidator();
                             var validationResult = await userBlobsCollectionValidator.ValidateAsync(userBlobs);
                             if (!validationResult.IsValid)
@@ -111,7 +111,7 @@ namespace OneLine.Bases
                             //and that the value parses to user blobs and is valid userblobs
                             try
                             {
-                                var userBlobs = JsonConvert.DeserializeObject<IEnumerable<UserBlobs>>(Encoding.UTF8.GetString((byte[])propertyValue));
+                                var userBlobs = JsonConvert.DeserializeObject<IEnumerable<TUserBlobs>>(Encoding.UTF8.GetString((byte[])propertyValue));
                                 var userBlobsCollectionValidator = new UserBlobsCollectionValidator();
                                 var validationResult = await userBlobsCollectionValidator.ValidateAsync(userBlobs);
                                 if (!validationResult.IsValid)

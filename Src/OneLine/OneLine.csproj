@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Removed UserBlobs model and view model only left the interface for output project template. Fixed binary property field reference data.</PackageReleaseNotes>
-    <Version>3.0.59</Version>
+    <PackageReleaseNotes>Fixed helper method to delete userblobs from an entity or object</PackageReleaseNotes>
+    <Version>3.0.60</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.59.0</AssemblyVersion>
-    <FileVersion>3.0.59.0</FileVersion>
+    <AssemblyVersion>3.0.60.0</AssemblyVersion>
+    <FileVersion>3.0.60.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

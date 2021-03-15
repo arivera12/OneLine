@@ -605,47 +605,18 @@ namespace OneLine.Bases
         /// <returns></returns>
         public async Task<IApiResponse<IEnumerable<IApiResponse<IEnumerable<TUserBlobs>>>>> DeleteUserBlobsFromObjectAsync(object model)
         {
-            bool anyError = false;
-            var apiResponse = new ApiResponse<IEnumerable<IApiResponse<IEnumerable<TUserBlobs>>>>();
             var deletedUserBlobs = new List<IApiResponse<IEnumerable<TUserBlobs>>>();
             foreach (var property in model
                                 .GetType()
                                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                .Where(w => w.PropertyType.IsAssignableFrom(typeof(IEnumerable<TUserBlobs>))
-                                      )
+                                .Where(w => w.PropertyType.IsAssignableFrom(typeof(Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<TUserBlobs>>)))
                     )
             {
-                if (property.PropertyType.IsAssignableFrom(typeof(TUserBlobs)))
-                {
-                    var UserBlobs = (TUserBlobs)property.GetValue(model);
-                    var deletedBlobs = await DeleteForcedUserBlobsAsync(UserBlobs);
-                    if (!anyError)
-                    {
-                        if (deletedBlobs.Status.Failed())
-                        {
-                            anyError = true;
-                        }
-                    }
-                    deletedUserBlobs.Add(new ApiResponse<IEnumerable<TUserBlobs>>(deletedBlobs.Status, new List<TUserBlobs>() { deletedBlobs.Data }, deletedBlobs.Message));
-                }
-                else
-                {
-                    var UserBlobs = (IEnumerable<TUserBlobs>)property.GetValue(model);
-                    var deletedBlobs = await DeleteRangeForcedUserBlobsAsync(UserBlobs);
-                    if (!anyError)
-                    {
-                        if (deletedBlobs.Status.Failed())
-                        {
-                            anyError = true;
-                        }
-                    }
-                    deletedUserBlobs.Add(deletedBlobs);
-                }
+                var MutableUserBlobs = (Mutable<FormFileRules, IEnumerable<BlobData>, IEnumerable<TUserBlobs>>)property.GetValue(model);
+                var deletedBlobs = await RemoveRangeForcedUserBlobsAsync(MutableUserBlobs.Item3);
+                deletedUserBlobs.Add(deletedBlobs);
             }
-            var apiResponseStatus = anyError ? ApiResponseStatus.Failed : ApiResponseStatus.Succeeded;
-            apiResponse.Data = deletedUserBlobs;
-            apiResponse.Status = apiResponseStatus;
-            return apiResponse;
+            return new ApiResponse<IEnumerable<IApiResponse<IEnumerable<TUserBlobs>>>>(ApiResponseStatus.Succeeded, deletedUserBlobs);
         }
         /// <summary>
         /// Deletes all user blobs within the <typeparamref name="T"/>

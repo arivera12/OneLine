@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed helper method to delete userblobs from an entity or object</PackageReleaseNotes>
-    <Version>3.0.60</Version>
+    <PackageReleaseNotes>Fixed type name for userblobs http service.</PackageReleaseNotes>
+    <Version>3.0.63</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.60.0</AssemblyVersion>
-    <FileVersion>3.0.60.0</FileVersion>
+    <AssemblyVersion>3.0.63.0</AssemblyVersion>
+    <FileVersion>3.0.63.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

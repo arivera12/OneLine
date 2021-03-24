@@ -2,30 +2,22 @@
 
 namespace OneLine.Models
 {
-    public class Notification<T> : INotification<T>
+    public class Notification : INotification
     {
         /// <inheritdoc/>
         public string NotificationId { get; set; }
-        /// <inheritdoc/>
-        public string UserId { get; set; }
-        /// <inheritdoc/>
-        public string SenderUser { get; set; }
         /// <inheritdoc/>
         public string Title { get; set; }
         /// <inheritdoc/>
         public string Message { get; set; }
         /// <inheritdoc/>
-        public string WebIconOrImageUrl { get; set; }
+        public string IconUri { get; set; }
         /// <inheritdoc/>
-        public string WebRedirectTo { get; set; }
-        /// <inheritdoc/>
-        public string NativeIconOrImageUrl { get; set; }
-        /// <inheritdoc/>
-        public string NativeRedirectTo { get; set; }
-        /// <inheritdoc/>
-        public T Data { get; set; }
+        public string DestinationUri { get; set; }
         /// <inheritdoc/>
         public bool IsDeleted { get; set; }
+        /// <inheritdoc/>
+        public bool IsReaded { get; set; }
         /// <inheritdoc/>
         public DateTime CreatedOn { get; set; }
         /// <inheritdoc/>

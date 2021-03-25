@@ -2,10 +2,10 @@
 
 namespace OneLine.Models
 {
-    public class Notification : INotification
+    public class NotificationMessage : INotificationMessage
     {
         /// <inheritdoc/>
-        public string NotificationId { get; set; }
+        public string NotificationMessageId { get; set; }
         /// <inheritdoc/>
         public string Title { get; set; }
         /// <inheritdoc/>

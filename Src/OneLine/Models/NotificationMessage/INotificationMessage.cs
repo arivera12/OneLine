@@ -2,12 +2,12 @@
 
 namespace OneLine.Models
 {
-    public interface INotification
+    public interface INotificationMessage
     {
         /// <summary>
         /// Notification identifier
         /// </summary>
-        string NotificationId { get; set; }
+        string NotificationMessageId { get; set; }
         /// <summary>
         /// The notification title
         /// </summary>

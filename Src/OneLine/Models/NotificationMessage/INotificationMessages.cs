@@ -2,7 +2,7 @@
 
 namespace OneLine.Models
 {
-    public interface INotificationMessage
+    public interface INotificationMessages
     {
         /// <summary>
         /// Notification identifier

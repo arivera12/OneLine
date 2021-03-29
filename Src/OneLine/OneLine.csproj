@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added notification service which is a holder of separate platforms services. Web notification and native notification have a lot of differences in their api implementations. Platform detection is required when using this service to tell when user blazor or native notifications. Renamed notification model to notification message.</PackageReleaseNotes>
-    <Version>3.0.65</Version>
+    <PackageReleaseNotes>Pluralize notificationmessage to notificationmessages. Removed notificationmessages implementation.</PackageReleaseNotes>
+    <Version>3.0.66</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.65.0</AssemblyVersion>
-    <FileVersion>3.0.65.0</FileVersion>
+    <AssemblyVersion>3.0.66.0</AssemblyVersion>
+    <FileVersion>3.0.66.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

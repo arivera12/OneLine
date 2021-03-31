@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
+using OneLine.Extensions;
 using System;
 using System.Globalization;
 using System.Resources;
@@ -19,6 +20,11 @@ namespace OneLine.Services
         public string this[string key] { get => string.IsNullOrWhiteSpace(CurrentApplicationLocale) ? 
                 ResourceManager.GetString(key) : 
                 ResourceManager.GetString(key, new CultureInfo(CurrentApplicationLocale)); }
+        public ResourceManagerLocalizer(IApplicationConfigurationSource applicationConfigurationSource)
+        {
+            ApplicationConfigurationSource = applicationConfigurationSource;
+            ResourceManager = new ResourceManager(ApplicationConfigurationSource.ResourceFilesBasePath, ApplicationConfigurationSource.ResourceFilesAssemblyFile);
+        }
         public ResourceManagerLocalizer(IApplicationConfigurationSource applicationConfigurationSource, IDevice device)
         {
             ApplicationConfigurationSource = applicationConfigurationSource;
@@ -37,6 +43,10 @@ namespace OneLine.Services
         /// <inheritdoc/>
         public async Task<string> GetApplicationLocale()
         {
+            if(Device.IsNull())
+            {
+                new PlatformNotSupportedException("This method is not supported by this service on this platform.");
+            }
             if (Device.IsXamarinPlatform)
             {
                 return await SecureStorage.GetAsync("ApplicationLocale");
@@ -54,6 +64,10 @@ namespace OneLine.Services
         /// <inheritdoc/>
         public async Task SetApplicationLocale(string applicationLocale)
         {
+            if (Device.IsNull())
+            {
+                new PlatformNotSupportedException("This method is not supported by this service on this platform.");
+            }
             if (Device.IsXamarinPlatform)
             {
                 await SecureStorage.SetAsync("ApplicationLocale", applicationLocale);
@@ -70,6 +84,10 @@ namespace OneLine.Services
         /// <inheritdoc/>
         public async Task SetCurrentThreadCulture()
         {
+            if (Device.IsNull())
+            {
+                new PlatformNotSupportedException("This method is not supported by this service on this platform.");
+            }
             var applicationLocale = await GetApplicationLocale();
             if(!string.IsNullOrWhiteSpace(applicationLocale))
             {

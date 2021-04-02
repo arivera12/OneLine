@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using OneLine.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace OneLine.Messaging
     {
         public readonly ISmtpSettings SmtpSettings;
         public readonly IConfiguration Configuration;
+        public readonly IResourceManagerLocalizer ResourceManagerLocalizer;
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -40,6 +42,24 @@ namespace OneLine.Messaging
         /// Constructor using DI
         /// </summary>
         /// <param name="options"></param>
+        public Smtp(IOptions<SmtpSettings> options, IResourceManagerLocalizer resourceManagerLocalizer)
+        {
+            SmtpSettings = options.Value;
+            ResourceManagerLocalizer = resourceManagerLocalizer;
+        }
+        /// <summary>
+        /// Constructor using DI
+        /// </summary>
+        /// <param name="options"></param>
+        public Smtp(ISmtpSettings smtpSettings, IResourceManagerLocalizer resourceManagerLocalizer)
+        {
+            SmtpSettings = smtpSettings;
+            ResourceManagerLocalizer = resourceManagerLocalizer;
+        }
+        /// <summary>
+        /// Constructor using DI
+        /// </summary>
+        /// <param name="options"></param>
         public Smtp(IOptions<SmtpSettings> options, IConfiguration configuration)
         {
             SmtpSettings = options.Value;
@@ -53,6 +73,26 @@ namespace OneLine.Messaging
         {
             SmtpSettings = smtpSettings;
             Configuration = configuration;
+        }
+        /// <summary>
+        /// Constructor using DI
+        /// </summary>
+        /// <param name="options"></param>
+        public Smtp(IOptions<SmtpSettings> options, IConfiguration configuration, IResourceManagerLocalizer resourceManagerLocalizer)
+        {
+            SmtpSettings = options.Value;
+            Configuration = configuration;
+            ResourceManagerLocalizer = resourceManagerLocalizer;
+        }
+        /// <summary>
+        /// Constructor using DI
+        /// </summary>
+        /// <param name="options"></param>
+        public Smtp(ISmtpSettings smtpSettings, IConfiguration configuration, IResourceManagerLocalizer resourceManagerLocalizer)
+        {
+            SmtpSettings = smtpSettings;
+            Configuration = configuration;
+            ResourceManagerLocalizer = resourceManagerLocalizer;
         }
         /// <summary>
         /// <inheritdoc/>

@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added minimalist ResourceManagerLocalizer service ctor to support server DI integration. Added platform validations.</PackageReleaseNotes>
-    <Version>3.0.68</Version>
+    <PackageReleaseNotes>Added IResourceManagerLocalizer to SMTP DI ctor.</PackageReleaseNotes>
+    <Version>3.0.69</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.68.0</AssemblyVersion>
-    <FileVersion>3.0.68.0</FileVersion>
+    <AssemblyVersion>3.0.69.0</AssemblyVersion>
+    <FileVersion>3.0.69.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

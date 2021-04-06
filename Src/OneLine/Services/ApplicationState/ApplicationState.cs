@@ -74,14 +74,14 @@ namespace OneLine.Services
                         key = await SessionStorage.GetItem<string>("DUEK");
                         SUser = await SessionStorage.GetItem<string>("SUser");
                     }
-                    if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
-                    {
-                        decryptedUser = SUser.Decrypt(key);
-                    }
-                    else if (Device.IsWebBlazorWAsmPlatform)
-                    {
-                        decryptedUser = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.decrypt('{SUser}', '{key}').toString(CryptoJS.enc.Utf8)" });
-                    }
+                    //if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
+                    //{
+                    decryptedUser = SUser.Decrypt(key);
+                    //}
+                    //else if (Device.IsWebBlazorWAsmPlatform)
+                    //{
+                    //    decryptedUser = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.decrypt('{SUser}', '{key}').toString(CryptoJS.enc.Utf8)" });
+                    //}
                     return JsonConvert.DeserializeObject<TUser>(decryptedUser);
                 }
                 else
@@ -114,16 +114,16 @@ namespace OneLine.Services
             {
                 var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
                 string jsonUserEncrypted = null;
-                if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
-                {
-                    key = key.Encrypt(key);
-                    jsonUserEncrypted = jsonUser.Encrypt(key);
-                }
-                else if (Device.IsWebBlazorWAsmPlatform)
-                {
-                    key = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{key}', '{key}').toString()" });
-                    jsonUserEncrypted = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{jsonUser}', '{key}').toString()" });
-                }
+                //if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
+                //{
+                key = key.Encrypt(key);
+                jsonUserEncrypted = jsonUser.Encrypt(key);
+                //}
+                //else if (Device.IsWebBlazorWAsmPlatform)
+                //{
+                //    key = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{key}', '{key}').toString()" });
+                //    jsonUserEncrypted = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{jsonUser}', '{key}').toString()" });
+                //}
                 if (applicationSession == ApplicationSession.LocalStorage)
                 {
                     await LocalStorage.SetItem("DUEK", key);
@@ -159,16 +159,16 @@ namespace OneLine.Services
             {
                 var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
                 string jsonUserEncrypted = null;
-                if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
-                {
-                    key = key.Encrypt(key);
-                    jsonUserEncrypted = jsonUser.Encrypt(key);
-                }
-                else if (Device.IsWebBlazorWAsmPlatform)
-                {
-                    key = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{key}', '{key}').toString()" });
-                    jsonUserEncrypted = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{jsonUser}', '{key}').toString()" });
-                }
+                //if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
+                //{
+                key = key.Encrypt(key);
+                jsonUserEncrypted = jsonUser.Encrypt(key);
+                //}
+                //else if (Device.IsWebBlazorWAsmPlatform)
+                //{
+                //    key = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{key}', '{key}').toString()" });
+                //    jsonUserEncrypted = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{jsonUser}', '{key}').toString()" });
+                //}
                 if (applicationSession == ApplicationSession.LocalStorage)
                 {
                     await LocalStorage.SetItem("DUEK", key);

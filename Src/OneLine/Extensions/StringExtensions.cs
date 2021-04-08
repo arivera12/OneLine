@@ -554,7 +554,7 @@ namespace OneLine.Extensions
                     DateTime.Now.Date.Day.ToString();
         }
         /// <summary>
-        /// Generates a unique file name.
+        /// Generates a unique file name extracting the file extension from the filename.
         /// </summary>
         /// <param name="FileName"></param>
         /// <returns></returns>

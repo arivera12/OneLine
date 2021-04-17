@@ -19,13 +19,8 @@ namespace OneLine.Bases
         where TBlobStorage : class, IBlobStorageService, new()
     {
         /// <inheritdoc/>
-        public async Task<IApiResponse<T>> ValidatedWithBlobsAsync<T>(T record, IValidator validator, SaveOperation saveOperation, IEnumerable<IUploadBlobData> uploadBlobDatas)
+        public async Task<IApiResponse<T>> ValidateUploadBlobsAsync<T>(T record, IEnumerable<IUploadBlobData> uploadBlobDatas, SaveOperation saveOperation)
         {
-            var apiResponse = await record.ValidateAsync(validator);
-            if (apiResponse.Status.Failed())
-            {
-                return apiResponse;
-            }
             //Lets check if our files uploaded comply with our rules first
             foreach (var uploadBlobData in uploadBlobDatas)
             {
@@ -74,13 +69,8 @@ namespace OneLine.Bases
             return new ApiResponse<T>(ApiResponseStatus.Succeeded, record);
         }
         /// <inheritdoc/>
-        public async Task<IApiResponse<IEnumerable<T>>> ValidatedRangeWithBlobsAsync<T>(IEnumerable<T> records, IValidator validator, SaveOperation saveOperation, IEnumerable<IUploadBlobData> uploadBlobDatas)
+        public async Task<IApiResponse<IEnumerable<T>>> ValidateRangeUploadBlobsAsync<T>(IEnumerable<T> records, IEnumerable<IUploadBlobData> uploadBlobDatas, SaveOperation saveOperation)
         {
-            var apiResponse = await records.ValidateRangeAsync(validator);
-            if (apiResponse.Status.Failed())
-            {
-                return apiResponse;
-            }
             foreach (var record in records)
             {
                 //Lets check if our files uploaded comply with our rules first

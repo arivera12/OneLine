@@ -85,8 +85,8 @@ namespace OneLine.Bases
             {
                 return record.ToApiResponseFailed("RecordNotFound");
             }
-            await DeleteUserBlobsFromEntityAsync(record);
-            return await DeleteAuditedAsync(record, transactionSuccessMessage, transactionErrorMessage);
+            var apiResponse = await DeleteUserBlobsFromEntityAsync(record);
+            return new ApiResponse<T>(apiResponse.Status, apiResponse.Data.Item1, apiResponse.Status.Succeeded() ? transactionSuccessMessage : transactionErrorMessage);
         }
         /// <summary>
         /// Deletes a range of records within it's blobs

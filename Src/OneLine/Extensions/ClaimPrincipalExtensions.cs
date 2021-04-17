@@ -8,6 +8,37 @@ namespace OneLine.Extensions
     public static class ClaimPrincipalExtensions
     {
         /// <summary>
+        /// Gets the claim and converts them into <typeparamref name="T"/> by the specified claim type.
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns></returns>
+        public static T GetClaim<T>(this ClaimsPrincipal principal, string claimType)
+        {
+            if (principal.IsNull())
+                throw new ArgumentNullException(nameof(principal));
+            return (T)Convert.ChangeType(principal.FindFirst(claimType)?.Value, typeof(T));
+        }
+        /// <summary>
+        /// Gets the claims and converts them into <typeparamref name="T"/> by the specified claim type.
+        /// This method expect that the claim value is a valid json and the specified <typeparamref name="T"/> is compatible with deserialization. 
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> GetClaims<T>(this ClaimsPrincipal principal, string claimType)
+        {
+            if (principal.IsNull())
+                throw new ArgumentNullException(nameof(principal));
+            var claims = principal.FindAll(claimType);
+            if (claims.IsNull() || !claims.Any())
+                return null;
+            IList<T> dynamicObjectClaim = new List<T>();
+            foreach (var claim in claims)
+            {
+                dynamicObjectClaim.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(claim.Value));
+            }
+            return dynamicObjectClaim;
+        }
+        /// <summary>
         /// Gets the current user id by <see cref="ClaimTypes.NameIdentifier"/>.
         /// </summary>
         /// <param name="principal"></param>

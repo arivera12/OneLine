@@ -40,7 +40,7 @@ namespace OneLine.Extensions
                 throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
             }
             var blobs = predicate == null ? blobDatas : blobDatas.Where(predicate);
-            if ((blobs.IsNull() || !blobDatas.Any()) && formFileRules.IsRequired)
+            if ((blobs.IsNull() || !blobDatas.Any()) && formFileRules.IsRequired || formFileRules.ForceUpload)
             {
                 return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "FileUploadRequired" };
             }

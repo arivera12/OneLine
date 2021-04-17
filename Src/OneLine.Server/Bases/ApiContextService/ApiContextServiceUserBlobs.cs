@@ -96,13 +96,10 @@ namespace OneLine.Bases
                 return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("uploadBlobDatasIsNullOrEmpty");
             }
             //Validate blobs datas with the rules
-            foreach (var uploadBlobData in uploadBlobDatas)
+            var isFormFileUploadedApiResponse = await ValidateUploadBlobsAsync(record, uploadBlobDatas, SaveOperation.Add);
+            if (isFormFileUploadedApiResponse.Status.Failed())
             {
-                var isFormFileUploadedApiResponse = await IsValidBlobDataAsync<T>(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules);
-                if (isFormFileUploadedApiResponse.Status.Failed() || !isFormFileUploadedApiResponse.Data)
-                {
-                    return new ApiResponse<IEnumerable<TUserBlobs>>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
-                }
+                return new ApiResponse<IEnumerable<TUserBlobs>>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
             }
             //Upload the blobdata
             var userBlobsUploadedList = new List<TUserBlobs>();
@@ -162,13 +159,11 @@ namespace OneLine.Bases
             {
                 return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("RecordIsNull");
             }
-            foreach (var uploadBlobData in uploadBlobDatas)
+            //Validate blobs datas with the rules
+            var isFormFileUploadedApiResponse = await ValidateUploadBlobsAsync(record, uploadBlobDatas, SaveOperation.Update);
+            if (isFormFileUploadedApiResponse.Status.Failed())
             {
-                var isFormFileUploadedApiResponse = await IsValidBlobDataAsync<T>(uploadBlobData.BlobDatas, uploadBlobData.FormFileRules);
-                if (isFormFileUploadedApiResponse.Status.Failed() || !isFormFileUploadedApiResponse.Data)
-                {
-                    return new ApiResponse<IEnumerable<TUserBlobs>>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
-                }
+                return new ApiResponse<IEnumerable<TUserBlobs>>(isFormFileUploadedApiResponse.Status, isFormFileUploadedApiResponse.Message);
             }
             var userBlobsList = new List<TUserBlobs>();
             foreach (var uploadBlobData in uploadBlobDatas)

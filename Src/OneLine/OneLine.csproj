@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Falled back to crypto api/s. Downgraded blazor WAsm.</PackageReleaseNotes>
-    <Version>3.0.70</Version>
+    <PackageReleaseNotes>Added useful extension methods in ClaimPrincipalExtensions GetClaim and GetClaims which support dynamic types from complex object claims serialized in string. Removed some ApiContextService methods and exposed them into the output to increase performance and limitation of some cases, also refactored some of them.</PackageReleaseNotes>
+    <Version>3.0.71</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.70.0</AssemblyVersion>
-    <FileVersion>3.0.70.0</FileVersion>
+    <AssemblyVersion>3.0.71.0</AssemblyVersion>
+    <FileVersion>3.0.71.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

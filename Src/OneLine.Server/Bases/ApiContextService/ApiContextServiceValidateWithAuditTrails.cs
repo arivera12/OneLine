@@ -7,6 +7,7 @@ using OneLine.Models;
 using OneLine.Validations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,10 @@ namespace OneLine.Bases
         /// <inheritdoc/>
         public async Task<IApiResponse<T>> ValidateUploadBlobsAsync<T>(T record, IEnumerable<IUploadBlobData> uploadBlobDatas, SaveOperation saveOperation)
         {
+            if(uploadBlobDatas.IsNull() || !uploadBlobDatas.Any())
+            {
+                return record.ToApiResponse("UploadBlobDataIsNullOrEmpty");
+            }
             //Lets check if our files uploaded comply with our rules first
             foreach (var uploadBlobData in uploadBlobDatas)
             {

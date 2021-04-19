@@ -70,8 +70,7 @@ namespace OneLine.Bases
                     userBlob.CreatedOn = createdOn;
                     userBlob.TableName = typeof(T).Name;
                     uploadedUserBlobs.Add(userBlob);
-                    await DbContext.AddAsync(userBlob);
-                    await AddAuditrailsAsync(userBlob, "Added a userblob");
+                    await AddAuditedAsync(userBlob);
                 }
             }
             return uploadedUserBlobs.AsEnumerable().ToApiResponse();
@@ -103,11 +102,33 @@ namespace OneLine.Bases
             }
             //Upload the blobdata
             var userBlobsUploadedList = new List<TUserBlobs>();
+            var createdOn = DateTime.Now;
+            var userId = HttpContextAccessor.HttpContext.User.UserId();
+            IList<TUserBlobs> uploadedUserBlobs = new List<TUserBlobs>();
             foreach (var uploadBlobData in uploadBlobDatas)
             {
-                var userBlobs = await AddUserBlobsRangeAsync<T>(uploadBlobDatas, path);
-                userBlobsUploadedList.AddRange(userBlobs.Data);
-                record.GetType().GetProperty(uploadBlobData.PropertyName).SetValue(record, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(userBlobs.Data)));
+                //Blob data related to a property
+                var recordPropertyBlobData = new List<TUserBlobs>();
+                foreach (var file in uploadBlobData.BlobDatas)
+                {
+                    var fileExtension = Path.GetExtension(file.Name);
+                    var uniqueFileName = Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier().ToString();
+                    var filename = $"{(string.IsNullOrWhiteSpace(path) ? "" : path)}{uniqueFileName}{fileExtension}";
+                    await BlobStorageService.BlobStorage.WriteAsync(filename, file.Data);
+                    var userBlob = new TUserBlobs().AutoMap(file);
+                    userBlob.UserBlobId = Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier().ToString();
+                    userBlob.FileName = file.Name;
+                    userBlob.FilePath = filename;
+                    userBlob.Length = file.Size;
+                    userBlob.UserIdentifier = userId;
+                    userBlob.CreatedBy = userId;
+                    userBlob.CreatedOn = createdOn;
+                    userBlob.TableName = typeof(T).Name;
+                    uploadedUserBlobs.Add(userBlob);
+                    await AddAuditedAsync(userBlob);
+                    recordPropertyBlobData.Add(userBlob);
+                }
+                record.GetType().GetProperty(uploadBlobData.PropertyName).SetValue(record, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(recordPropertyBlobData)));
             }
             return userBlobsUploadedList.AsEnumerable().ToApiResponse();
         }
@@ -131,6 +152,7 @@ namespace OneLine.Bases
                 return Enumerable.Empty<TUserBlobs>().ToApiResponseFailed("RecordsIsNullOrEmpty");
             }
             var uploadedUserBlobsList = new List<TUserBlobs>();
+            //Add
             var uploadedUserBlobs = await AddUserBlobsRangeAsync<T>(uploadBlobDatas, path);
             if (uploadedUserBlobs.Status.Failed())
             {

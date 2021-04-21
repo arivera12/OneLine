@@ -151,9 +151,10 @@ namespace OneLine.Bases
         {
             searchPaging ??= new SearchPaging();
             searchExtraParams ??= new { };
-            var dictionary = searchPaging.ToDictionary();
-            dictionary.Add(new KeyValuePair<string, object>("SearchExtraParams", searchExtraParams));
-            return HttpClient.SendJsonResponseResultAsync<Paged<IEnumerable<TResponse>>, object>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{SearchMethod}", dictionary);
+            var searchPagingDictionary = searchPaging.ToDictionary();
+            var searchExtraParamsDictionary = searchExtraParams.ToDictionary();
+            var dictionaryMerge = searchPagingDictionary.Merge(searchExtraParamsDictionary);
+            return HttpClient.SendJsonResponseResultAsync<Paged<IEnumerable<TResponse>>, object>(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{SearchMethod}", dictionaryMerge);
         }
     }
 }

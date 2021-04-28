@@ -9,6 +9,10 @@ namespace OneLine.Models
         /// </summary>
         string NotificationMessageId { get; set; }
         /// <summary>
+        /// Notification user identifier
+        /// </summary>
+        string UserId { get; set; }
+        /// <summary>
         /// The notification title
         /// </summary>
         string Title { get; set; }

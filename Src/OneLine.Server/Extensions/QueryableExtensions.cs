@@ -56,10 +56,17 @@ namespace OneLine.Extensions
             };
         }
         /// <summary>
-        /// Checks if <see cref="ISoftDeletable.IsDeleted"/> is <see cref="true"/>
+        /// Pageds a <see cref="IQueryable{T}"/> to an <see cref="IApiResponse{IPaged{IEnumerable{T}}}"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
+        /// <param name="Page"></param>
+        /// <param name="PageSize"></param>
+        /// <param name="Count"></param>
+        /// <param name="decryptFieldsOnRead"></param>
+        /// <param name="encryptionKey"></param>
+        /// <param name="message"></param>
+        /// <param name="apiResponseStatus"></param>
         /// <returns></returns>
         public static IApiResponse<IPaged<IEnumerable<T>>> ToPagedApiResponse<T>(this IQueryable<T> source, int? Page, int? PageSize, out int Count, IEnumerable<string> decryptFieldsOnRead, string encryptionKey, string message = null, ApiResponseStatus apiResponseStatus = ApiResponseStatus.Succeeded)
         {
@@ -85,6 +92,12 @@ namespace OneLine.Extensions
                 Status = apiResponseStatus
             };
         }
+        /// <summary>
+        /// Checks if <see cref="ISoftDeletable.IsDeleted"/> is <see cref="true"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static IQueryable<T> WhereIsDeleted<T>(this IQueryable<T> source) where T : ISoftDeletable
         {
             return source.Where(x => x.IsDeleted);

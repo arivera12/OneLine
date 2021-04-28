@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed search extra parameters merging structure.</PackageReleaseNotes>
-    <Version>3.0.73</Version>
+    <PackageReleaseNotes>Added UserId to notificationMessages interface. Moved UploadBlobData to OneLine.</PackageReleaseNotes>
+    <Version>3.0.74</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.73.0</AssemblyVersion>
-    <FileVersion>3.0.73.0</FileVersion>
+    <AssemblyVersion>3.0.74.0</AssemblyVersion>
+    <FileVersion>3.0.74.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

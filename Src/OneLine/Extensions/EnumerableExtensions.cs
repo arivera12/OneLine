@@ -82,6 +82,13 @@ namespace OneLine.Extensions
             object ret = genericMethod.Invoke(null, new object[] { source, lambda });
             return (IEnumerable<T>)ret;
         }
+        /// <summary>
+        /// Returns a <see cref="IEnumerable{T item, int index}"/> where you can loop with the item type and it's index.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> source) => source.Select((item, index) => (item, index));
     }
 }
 

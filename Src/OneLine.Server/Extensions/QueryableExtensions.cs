@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Z.EntityFramework.Plus;
 
 namespace OneLine.Extensions
 {
@@ -26,7 +27,7 @@ namespace OneLine.Extensions
             if (source.GetType().IsAnonymousType())
                 throw new InvalidOperationException("source can't be an anonymous type");
 
-            Count = source.Count();
+            Count = source.DeferredCount().FutureValue();
             Page = Page.HasValue && Page.Value >= 0 ? Page.Value : 0;
             PageSize = PageSize.HasValue && PageSize.Value > 0 ? PageSize.Value : Count;
 

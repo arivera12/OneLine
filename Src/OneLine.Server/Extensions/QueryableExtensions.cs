@@ -31,7 +31,7 @@ namespace OneLine.Extensions
             Page = Page.HasValue && Page.Value >= 0 ? Page.Value : 0;
             PageSize = PageSize.HasValue && PageSize.Value > 0 ? PageSize.Value : Count;
 
-            return source.Skip(Page.Value * PageSize.Value).Take(PageSize.Value).AsQueryable();
+            return source.Skip(Page.Value * PageSize.Value).Take(PageSize.Value).Future().AsQueryable();
         }
         /// <summary>
         /// Pageds a <see cref="IQueryable{T}"/> to an <see cref="IApiResponse{IPaged{IEnumerable{T}}}"/>

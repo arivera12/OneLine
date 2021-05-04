@@ -26,6 +26,13 @@ namespace OneLine.Bases
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
         /// </summary>
         /// <param name="dbContext"></param>
+        public ApiContextService()
+        {
+        }
+        /// <summary>
+        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
+        /// </summary>
+        /// <param name="dbContext"></param>
         public ApiContextService(TDbContext dbContext)
         {
             DbContext = dbContext;

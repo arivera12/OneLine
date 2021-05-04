@@ -8,9 +8,20 @@ namespace OneLine.Services
     {
         public IBlazorNotificationService BlazorNotificationService { get; set; }
         public INotificationManager NotificationManager { get; set; }
-        public Notification(IBlazorNotificationService blazorNotificationService)
+        public Notification(IDevice device)
+        {
+            if (device.IsXamarinPlatform)
+            {
+                NotificationManager = Shiny.ShinyHost.Resolve<INotificationManager>();
+            }
+        }
+        public Notification(IBlazorNotificationService blazorNotificationService, IDevice device)
         {
             BlazorNotificationService = blazorNotificationService;
+            if(device.IsXamarinPlatform)
+            {
+                NotificationManager = Shiny.ShinyHost.Resolve<INotificationManager>();
+            }
         }
         public Notification(INotificationManager notificationManager)
         {

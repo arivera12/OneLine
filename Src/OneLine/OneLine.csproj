@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added ApiContextService default constructor.</PackageReleaseNotes>
-    <Version>3.0.77</Version>
+    <PackageReleaseNotes>Fixed notification service for native mobile platform using shiny notification manager.</PackageReleaseNotes>
+    <Version>3.0.78</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.77.0</AssemblyVersion>
-    <FileVersion>3.0.77.0</FileVersion>
+    <AssemblyVersion>3.0.78.0</AssemblyVersion>
+    <FileVersion>3.0.78.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

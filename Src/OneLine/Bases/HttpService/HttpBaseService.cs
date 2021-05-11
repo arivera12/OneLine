@@ -14,6 +14,8 @@ namespace OneLine.Bases
         public virtual string Api { get; set; } = "api";
         /// <inheritdoc/>
         public HttpClient HttpClient { get; set; }
+        
+
         public HttpBaseService()
         {
             HttpClient ??= new HttpClient();

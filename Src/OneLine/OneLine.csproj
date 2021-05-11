@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Fixed notification service for native mobile platform using shiny notification manager.</PackageReleaseNotes>
-    <Version>3.0.78</Version>
+    <PackageReleaseNotes>Exposed users blobs to the output project template. Removed some unused files and source files. Dropped Required file and validate model state attributes. Removed empty validator, identifier string validator and userblobs validator. Added default constructor to workflowmanager and workflowstateprocess.</PackageReleaseNotes>
+    <Version>3.0.79</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.78.0</AssemblyVersion>
-    <FileVersion>3.0.78.0</FileVersion>
+    <AssemblyVersion>3.0.79.0</AssemblyVersion>
+    <FileVersion>3.0.79.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

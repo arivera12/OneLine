@@ -1,3 +1,0 @@
-﻿Move Delete With Blobs to the output tool.
-
-Then with more time UserBlobs, ValidateWithAuditTrails to the output tool

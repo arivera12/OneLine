@@ -10,6 +10,9 @@ namespace OneLine.Bases
 {
     public class WorkFlowManager<T, TState> : IWorkFlowManager<T, TState>
     {
+        public WorkFlowManager()
+        {
+        }
         /// <inheritdoc/>
         public Func<T, string> StatePropertyName { get; set; }
         /// <inheritdoc/>

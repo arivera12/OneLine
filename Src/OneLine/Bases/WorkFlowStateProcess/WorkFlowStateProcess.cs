@@ -11,6 +11,9 @@ namespace OneLine.Bases
     /// <typeparam name="TState">The state of the record</typeparam>
     public class WorkFlowStateProcess<T, TState> : IWorkFlowStateProcess<T, TState>
     {
+        public WorkFlowStateProcess()
+        {
+        }
         /// <inheritdoc/>
         public T Record { get; set; }
         /// <inheritdoc/>

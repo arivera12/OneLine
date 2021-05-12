@@ -82,13 +82,14 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] Tablet
   - [x] Mobile
 - [x] Bootstrap 4 Template
-- [x] Pre-Implemented Service Enviroment (Controllers and Repositories)
+- [x] Pre-Implemented Controllers with authorization and authentication
+- [x] Pre-Implemented Repositories as services
+  - [x] Repository and Service patterns have been redefined and reimplemented as Repository Service using Base Api Context Service
 - [x] Rest Arquitecture (JSON)
 - [x] Services are pre-registered per enviroment or platform
-- [x] Request data is validated always using it's default validator
+- [x] Request data is validated always using the default validator
 - [x] Response has a base api response format
 - [x] Search results are always paged by default
-- [x] Repository and Service patterns have been redefined and reimplemented as Repository Service
 - [x] CRUD methods are pre implemented supports single and multiple, also with performance multiple method.
 - [ ] Import data uploading *.csv file for create or update operations
 - [x] Exporting data in *.csv file

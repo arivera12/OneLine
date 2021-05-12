@@ -32,7 +32,7 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [ ] Windows (Coming Soon)
   - [ ] MacOS (Coming Soon)
   - [ ] Linux (Coming Soon)
-- [ ] Multiple Database Providers Support
+- [ ] Database Providers Supported
   - [x] SQL Server 2012 onwards
   - [ ] SQLite 3.7 onwards
   - [ ] Azure Cosmos DB SQL API (Still planning for support)

@@ -154,7 +154,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 
 ### Blazor Core Features
 
-- [x] Pre implmented base class for forms and fata views
+- [x] Pre implemented base class for forms and data views
   - [x] Load (with before and after actions)
   - [x] Validate (using fluentvalidation)
   - [x] Save (create & update) (with before and after actions)

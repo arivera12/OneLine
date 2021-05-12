@@ -188,7 +188,7 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] CRUD (Create, Read, Update, Delete operations) (back and/or next) 
   - [x] Data Views (Select single or multiple, back and/or next)
 
-## Let's talk about the benefits of the Multi platform solution Scaffolding Tool
+## Let's talk about the benefits of the OneLine multi platform solution scaffolding tool
 - Extreme fast, optimized and high level development.
 - Reduces development bugs or errors margin to almost 0% (I have done myself a few dozen of projects without any bugs or errors of any class).
 - Increase developers productivity starting from 500% to 1200% (This is my estimates based on how slow or fast I have delivered a project). 

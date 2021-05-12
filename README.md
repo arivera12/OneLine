@@ -215,7 +215,7 @@ Take note that at this time Sql Server is the only Database engine supported, ot
 ## Roadmap
 
 - Push notifications and notifications history Management (Cross Platform)
-  - In-App notification and messages si available for now
+  - In-App notification and messages is available for now
 - In-App Blob Storage Manager (Like any web drive service like dropbox, google drive, one drive, etc)
   - Read only view is available for now
 - Cross Platform Device API's Implementations for Browser and Xamarin. 

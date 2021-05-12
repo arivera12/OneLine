@@ -76,6 +76,7 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] *ModalOptionsComponent.razor
   - [x] *TableViewComponent.razor
   - [x] *TypeaheadComponent.razor
+- [x] Every UI component is editable as needed
 - [x] Device Oriented UI/UX
   - [x] Desktop
   - [x] Tablet
@@ -118,6 +119,25 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Server exceptions are pre-handled and recorded
 - [x] Every operation is auto audited with option of rolling back any operation at any time
 - [x] SDK export available to share from base project for .net
+
+## Default framework views implementation
+- [x] Login
+- [x] Register
+- [x] Forgot password
+- [x] Reset password
+- [x] Translate Component
+- [x] Confirm Email/Account
+- [x] Users account management
+- [x] Audit trails
+- [x] Exception logs
+- [x] Supported cultures
+- [x] Notification messages
+- [x] User blobs
+- [x] Smtp pre implementation and integration with localized basic email templates
+- [x] File component
+- [x] Navigation sidebar menu component with icons
+- [x] Empty layout
+- [x] Log out
 
 ## Multi Platform Services
 - [x] Application configuration

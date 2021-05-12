@@ -54,7 +54,7 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] Resource.en-US.resx
   - [x] Resource.es-PR.resx
 - [x] Translations and localization management server and client side withing the app and the user account
-- [x] Http Services with user token management and integration
+- [x] Http Services with user token management and api integration
 - [x] Message and Notifications management using SignalR (In-App only at the moment) 
 - [x] User and Application State Management
 - [x] User Info Storage Management (Encrypted by default)

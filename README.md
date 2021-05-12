@@ -179,7 +179,6 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] Page Size (client and server)
   - [x] Page Sort By (client and server)
   - [x] Collection Mode Management (append or replace)
-  - [x] Request and Response Management
   
 ### Blazor Extended Core Features
 

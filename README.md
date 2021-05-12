@@ -194,7 +194,7 @@ OneLine is a multiplatform, standardized, redefined framework.
   - In-App notification and messages si available for now
 - In-App Blob Storage Manager (Like any web drive service like dropbox, google drive, one drive, etc)
   - Read only view is available for now
-- Cross Platform Device API's Implementations for Browser, Electron.Net and Xamarin. 
+- Cross Platform Device API's Implementations for Browser and Xamarin. 
   - Accelerometer
   - App Information
   - App Theme

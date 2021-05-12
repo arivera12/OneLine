@@ -183,7 +183,7 @@ OneLine is a multiplatform, standardized, redefined framework.
   
 ## Blazor Extended Core Features
 
-- [x] Chained components behavior (behavior like stepper)
+- [x] Chained components behavior (behavior like stepper) with a few source modifications
   - [x] Forms (Back or Save/Next)
   - [x] CRUD (Create, Read, Update, Delete operations) (back and/or next) 
   - [x] Data Views (Select single or multiple, back and/or next)

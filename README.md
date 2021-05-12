@@ -116,7 +116,8 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] In-Memory (Blobs, Messaging)
   - [x] FTP (Blobs)
 - [x] Blobs Management is centralized and auto managed
-- [x] Blobs doesn't never need a child tables to support multiple file upload references
+- [x] Blobs doesn't never need a child table to support multiple file upload references
+  - [x] Define a binary column field on your table and the tool will manage it for you saving the file reference in the binary column and the file in the physical storage.
 - [x] Server exceptions are pre-handled and recorded
 - [x] Every operation is auto audited with option of rolling back any operation at any time
 - [x] SDK export available to share from base project for .net

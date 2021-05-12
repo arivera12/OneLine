@@ -19,7 +19,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Overridable
 - [x] Recyclable
 
-## Multi platform solution Scaffolding Tool  (Commercially available)
+## OneLine multi platform solution scaffolding tool  (Commercially available)
 - [x] RAD (Rapid Application Development) and Prototyping
 - [x] WORE (Write once, run everywhere)
 - [x] Multi platform deployment support (Thanks to [MobileBlazorBindings](https://github.com/dotnet/MobileBlazorBindings))
@@ -122,7 +122,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Every operation is auto audited with option of rolling back any operation at any time
 - [x] SDK export available to share from base project for .net
 
-## Default framework views implementation
+### Default framework views implementation
 - [x] Login
 - [x] Register
 - [x] Forgot password
@@ -141,7 +141,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Empty layout
 - [x] Log out
 
-## Multi Platform Services
+### Multi Platform Services
 - [x] Application configuration
 - [x] Application configuration source
 - [x] Application State
@@ -152,7 +152,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Save file
 - [x] Supported cultures
 
-## Blazor Core Features
+### Blazor Core Features
 
 - [x] Pre implmented base class for forms and fata views
   - [x] Load (with before and after actions)
@@ -181,12 +181,37 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] Collection Mode Management (append or replace)
   - [x] Request and Response Management
   
-## Blazor Extended Core Features
+### Blazor Extended Core Features
 
 - [x] Chained components behavior (behavior like stepper) with a few source modifications
   - [x] Forms (Back or Save/Next)
   - [x] CRUD (Create, Read, Update, Delete operations) (back and/or next) 
   - [x] Data Views (Select single or multiple, back and/or next)
+
+## Let's talk about the benefits of the Multi platform solution Scaffolding Tool
+- Extreme fast, optimized and high level development.
+- Reduces development bugs or errors margin to almost 0% (I have done myself a few dozen of projects without any bugs or errors of any class).
+- Increase developers productivity starting from 500% to 1200% (This is my estimates based on how slow or fast I have delivered a project). 
+- The development from scratch application real estimated time will be cut from 62% to 84% (You will only need to develop for 38% to 26% of the project).
+- Less coding to resolve general or specific software patterns.
+- Less code means easier and less hard to maintain.
+- What are the things I need to do or should take care starting from this advantage point?
+  - Adjust labels text and translations on forms and data views (This will be improved in the near future but what you will get out of the box is still great).
+  - Apply business and security rules to the web api and the web user interface.
+  - Maybe dashboard and/or reports?
+
+
+### Don't write code with stress or workload anymore. 
+
+### Write code with peace of mind, speed and confidence.
+
+### Work smart not hard.
+
+For questions, quote or demo of the service you can contact me via email at anthony.revocodez@gmail.com
+
+Quotes are based on a tool which reverse engineering your database and estimates based on the tables, fields and table relationship design.
+
+Take note that at this time Sql Server is the only Database engine supported, others database engines are planned to be supported before this year ends.
 
 ## Roadmap
 

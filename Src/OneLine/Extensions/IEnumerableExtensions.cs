@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace OneLine.Extensions
 {
-    public static class EnumerableExtensions
+    public static class IEnumerableExtensions
     {
         /// <summary>
         /// Method that checks wether IsDeleted is true

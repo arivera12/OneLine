@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using OneLine.Enums;
 using OneLine.Extensions;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
@@ -53,12 +54,40 @@ namespace OneLine.Services
             {
                 string SUser, key, decryptedUser = null;
                 var applicationSession = await GetApplicationSession();
-                if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
+                if (Device.IsXamarinPlatform &&
+                    (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                    !Device.IsDesktop && 
+                    applicationSession.Equals(ApplicationSession.LocalStorage))
                 {
                     SUser = await SecureStorage.GetAsync("SUser");
                     return JsonConvert.DeserializeObject<TUser>(SUser);
                 }
-                else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.SessionStorage))
+                else if (Device.IsXamarinPlatform &&
+                    (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                    !Device.IsDesktop && 
+                    applicationSession.Equals(ApplicationSession.SessionStorage))
+                {
+                    return JsonConvert.DeserializeObject<TUser>(SessionSecureUser.Decrypt(SessionKey));
+                }
+                else if (Device.IsXamarinPlatform &&
+                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.LocalStorage))
+                {
+                    var applicationDataUserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SUser");
+                    var applicationDataKeyPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DUEK");
+                    if (File.Exists(applicationDataUserPath) && File.Exists(applicationDataKeyPath))
+                    {
+                        SUser = File.ReadAllText(applicationDataUserPath);
+                        key = File.ReadAllText(applicationDataKeyPath);
+                        decryptedUser = SUser.Decrypt(key);
+                        return JsonConvert.DeserializeObject<TUser>(SUser);
+                    }
+                }
+                else if (Device.IsXamarinPlatform &&
+                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.SessionStorage))
                 {
                     return JsonConvert.DeserializeObject<TUser>(SessionSecureUser.Decrypt(SessionKey));
                 }
@@ -74,14 +103,7 @@ namespace OneLine.Services
                         key = await SessionStorage.GetItem<string>("DUEK");
                         SUser = await SessionStorage.GetItem<string>("SUser");
                     }
-                    //if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
-                    //{
                     decryptedUser = SUser.Decrypt(key);
-                    //}
-                    //else if (Device.IsWebBlazorWAsmPlatform)
-                    //{
-                    //    decryptedUser = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.decrypt('{SUser}', '{key}').toString(CryptoJS.enc.Utf8)" });
-                    //}
                     return JsonConvert.DeserializeObject<TUser>(decryptedUser);
                 }
                 else
@@ -100,11 +122,39 @@ namespace OneLine.Services
         {
             var jsonUser = JsonConvert.SerializeObject(user);
             var applicationSession = await GetApplicationSession();
-            if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
+            if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop && 
+                applicationSession.Equals(ApplicationSession.LocalStorage))
             {
                 await SecureStorage.SetAsync("SUser", jsonUser);
             }
-            else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.SessionStorage))
+            else if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop && 
+                applicationSession.Equals(ApplicationSession.SessionStorage))
+            {
+                SessionKey = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
+                SessionKey = SessionKey.Encrypt(SessionKey);
+                SessionSecureUser = jsonUser.Encrypt(SessionKey);
+            }
+            else if (Device.IsXamarinPlatform &&
+                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.LocalStorage))
+            {
+                var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
+                key = key.Encrypt(key);
+                string jsonUserEncrypted = jsonUser.Encrypt(key);
+                var applicationDataUserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SUser");
+                File.WriteAllText(applicationDataUserPath, jsonUserEncrypted);
+                var applicationDataKeyPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DUEK");
+                File.WriteAllText(applicationDataKeyPath, key);
+            }
+            else if (Device.IsXamarinPlatform &&
+                (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.SessionStorage))
             {
                 SessionKey = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
                 SessionKey = SessionKey.Encrypt(SessionKey);
@@ -113,17 +163,8 @@ namespace OneLine.Services
             else if (Device.IsWebPlatform)
             {
                 var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
-                string jsonUserEncrypted = null;
-                //if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
-                //{
                 key = key.Encrypt(key);
-                jsonUserEncrypted = jsonUser.Encrypt(key);
-                //}
-                //else if (Device.IsWebBlazorWAsmPlatform)
-                //{
-                //    key = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{key}', '{key}').toString()" });
-                //    jsonUserEncrypted = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{jsonUser}', '{key}').toString()" });
-                //}
+                string jsonUserEncrypted = jsonUser.Encrypt(key);
                 if (applicationSession == ApplicationSession.LocalStorage)
                 {
                     await LocalStorage.SetItem("DUEK", key);
@@ -144,13 +185,40 @@ namespace OneLine.Services
         public async ValueTask SetApplicationUserSecure<TUser>(TUser user, ApplicationSession applicationSession)
         {
             var jsonUser = JsonConvert.SerializeObject(user);
-            if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.LocalStorage))
+            if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.LocalStorage))
             {
                 await SecureStorage.SetAsync("SUser", jsonUser);
             }
-            else if (Device.IsXamarinPlatform && applicationSession.Equals(ApplicationSession.SessionStorage))
+            else if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.SessionStorage))
             {
-                await SecureStorage.SetAsync("SUser", jsonUser);
+                SessionKey = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
+                SessionKey = SessionKey.Encrypt(SessionKey);
+                SessionSecureUser = jsonUser.Encrypt(SessionKey);
+            }
+            else if (Device.IsXamarinPlatform &&
+                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.LocalStorage))
+            {
+                var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
+                key = key.Encrypt(key);
+                string jsonUserEncrypted = jsonUser.Encrypt(key);
+                var applicationDataUserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SUser");
+                File.WriteAllText(applicationDataUserPath, jsonUserEncrypted);
+                var applicationDataKeyPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DUEK");
+                File.WriteAllText(applicationDataKeyPath, key);
+            }
+            else if (Device.IsXamarinPlatform &&
+                (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.SessionStorage))
+            {
                 SessionKey = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
                 SessionKey = SessionKey.Encrypt(SessionKey);
                 SessionSecureUser = jsonUser.Encrypt(SessionKey);
@@ -158,17 +226,8 @@ namespace OneLine.Services
             else if (Device.IsWebPlatform)
             {
                 var key = (Guid.NewGuid().ToString("N") + string.Empty.NewNumericIdentifier()).Replace("-", "");
-                string jsonUserEncrypted = null;
-                //if (Device.IsWebBlazorServerPlatform || Device.IsHybridPlatform)
-                //{
                 key = key.Encrypt(key);
-                jsonUserEncrypted = jsonUser.Encrypt(key);
-                //}
-                //else if (Device.IsWebBlazorWAsmPlatform)
-                //{
-                //    key = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{key}', '{key}').toString()" });
-                //    jsonUserEncrypted = await JsRuntime.InvokeAsync<string>("eval", new[] { $@"CryptoJS.AES.encrypt('{jsonUser}', '{key}').toString()" });
-                //}
+                string jsonUserEncrypted = jsonUser.Encrypt(key);
                 if (applicationSession == ApplicationSession.LocalStorage)
                 {
                     await LocalStorage.SetItem("DUEK", key);
@@ -188,10 +247,29 @@ namespace OneLine.Services
         /// <inheritdoc/>
         public async ValueTask Logout()
         {
-            if (Device.IsXamarinPlatform)
+            if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop)
             {
                 SecureStorage.Remove("SUser");
                 SecureStorage.Remove("DUEK");
+                SessionKey = null;
+                SessionSecureUser = null;
+            }
+            else if(Device.IsXamarinPlatform &&
+                (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                Device.IsDesktop)
+            {
+                var applicationDataUserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SUser");
+                if(File.Exists(applicationDataUserPath))
+                {
+                    File.Delete(applicationDataUserPath);
+                }
+                var applicationDataKeyPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DUEK");
+                if (File.Exists(applicationDataKeyPath))
+                {
+                    File.Delete(applicationDataKeyPath);
+                }
                 SessionKey = null;
                 SessionSecureUser = null;
             }
@@ -218,9 +296,22 @@ namespace OneLine.Services
         {
             try
             {
-                if (Device.IsXamarinPlatform)
+                if (Device.IsXamarinPlatform &&
+                    (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                    !Device.IsDesktop)
                 {
                     return Enum.Parse<ApplicationSession>(await SecureStorage.GetAsync("ApplicationSession"));
+                }
+                else if(Device.IsXamarinPlatform &&
+                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop)
+                {
+                    var applicationDataApplicationSessionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ApplicationSession");
+                    if(File.Exists(applicationDataApplicationSessionPath))
+                    {
+                        var applicationSessionString = File.ReadAllText(applicationDataApplicationSessionPath);
+                        return Enum.Parse<ApplicationSession>(applicationSessionString);
+                    }
                 }
                 else if (Device.IsWebPlatform)
                 {
@@ -240,9 +331,18 @@ namespace OneLine.Services
         /// <inheritdoc/>
         public async ValueTask SetApplicationSession(ApplicationSession applicationSession)
         {
-            if (Device.IsXamarinPlatform)
+            if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop)
             {
                 await SecureStorage.SetAsync("ApplicationSession", applicationSession.ToString());
+            }
+            else if (Device.IsXamarinPlatform &&
+                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop)
+            {
+                var applicationDataApplicationSessionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ApplicationSession");
+                File.WriteAllText(applicationDataApplicationSessionPath, applicationSession.ToString());
             }
             else if (Device.IsWebPlatform)
             {

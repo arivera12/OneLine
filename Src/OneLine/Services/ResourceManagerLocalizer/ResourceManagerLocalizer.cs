@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using OneLine.Extensions;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,9 +48,22 @@ namespace OneLine.Services
             {
                 new PlatformNotSupportedException("This method is not supported by this service on this platform.");
             }
-            if (Device.IsXamarinPlatform)
+            if (Device.IsXamarinPlatform && 
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) && 
+                !Device.IsDesktop)
             {
                 return await SecureStorage.GetAsync("ApplicationLocale");
+            }
+            else if (Device.IsXamarinPlatform && 
+                (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) && 
+                Device.IsDesktop)
+            {
+                var applicationDataLocalePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ApplicationLocale");
+                if(File.Exists(applicationDataLocalePath))
+                {
+                    var applicationLocale = File.ReadAllText(applicationDataLocalePath);
+                    return applicationLocale;
+                }
             }
             else if (Device.IsWebPlatform)
             {
@@ -68,9 +82,18 @@ namespace OneLine.Services
             {
                 new PlatformNotSupportedException("This method is not supported by this service on this platform.");
             }
-            if (Device.IsXamarinPlatform)
+            if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop)
             {
                 await SecureStorage.SetAsync("ApplicationLocale", applicationLocale);
+            }
+            else if (Device.IsXamarinPlatform &&
+               (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                Device.IsDesktop)
+            {
+                var applicationDataLocalePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ApplicationLocale");
+                File.WriteAllText(applicationDataLocalePath, applicationLocale);
             }
             else if (Device.IsWebPlatform)
             {

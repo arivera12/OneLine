@@ -2,7 +2,7 @@
 
 namespace OneLine.Extensions
 {
-    public static class DictionaryExtensions
+    public static class IDictionaryExtensions
     {
         /// <summary>
         /// Merges the current dictionary with the supplied dictionary into a new dictionary.

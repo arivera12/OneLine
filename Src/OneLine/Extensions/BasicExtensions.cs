@@ -237,6 +237,10 @@ namespace OneLine.Extensions
                 type.IsValueType ||
                 type.IsPrimitive ||
                 new Type[] {
+                typeof(byte),
+                typeof(byte[]),
+                typeof(sbyte),
+                typeof(sbyte[]),
                 typeof(short),
                 typeof(float),
                 typeof(string),
@@ -363,6 +367,56 @@ namespace OneLine.Extensions
                 return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Failed, source, validationResult.Errors.Select(x => x.ErrorMessage));
             }
             return new ApiResponse<IEnumerable<T>>(ApiResponseStatus.Succeeded, source);
+        }
+        /// <summary>
+        /// Determines wether the type is numeric
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public static bool IsNumericType(this object o)
+        {
+            switch (Type.GetTypeCode(o.GetType()))
+            {
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Decimal:
+                case TypeCode.Double:
+                case TypeCode.Single:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        /// <summary>
+        ///  Determines wether the type is numeric
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public static bool IsNumericType(this Type type)
+        {
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Decimal:
+                case TypeCode.Double:
+                case TypeCode.Single:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

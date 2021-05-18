@@ -10,7 +10,9 @@ namespace OneLine.Services
         public INotificationManager NotificationManager { get; set; }
         public Notification(IDevice device)
         {
-            if (device.IsXamarinPlatform)
+            if (device.IsXamarinPlatform &&
+                (device.IsiOSDevice || device.IsAndroidDevice || device.IsWindowsOSPlatform) &&
+                !device.IsDesktop)
             {
                 NotificationManager = Shiny.ShinyHost.Resolve<INotificationManager>();
             }
@@ -18,7 +20,9 @@ namespace OneLine.Services
         public Notification(IBlazorNotificationService blazorNotificationService, IDevice device)
         {
             BlazorNotificationService = blazorNotificationService;
-            if(device.IsXamarinPlatform)
+            if(device.IsXamarinPlatform &&
+                (device.IsiOSDevice || device.IsAndroidDevice || device.IsWindowsOSPlatform) &&
+                !device.IsDesktop)
             {
                 NotificationManager = Shiny.ShinyHost.Resolve<INotificationManager>();
             }

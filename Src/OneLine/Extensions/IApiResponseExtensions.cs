@@ -3,7 +3,7 @@ using OneLine.Models;
 
 namespace OneLine.Extensions
 {
-    public static class ApiResponseExtensions
+    public static class IApiResponseExtensions
     {
         /// <summary>
         /// Checks if the Api Response Status Succeeded

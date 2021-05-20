@@ -41,8 +41,8 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] Blazor Server
   - [x] Android 4.4 onwards
   - [x] iOS 12.0 onwards
-  - [x] Windows Desktop and WPF 
-  - [ ] MacOS Desktop (Needs Testing)
+  - [ ] Windows Desktop and WPF (Under Development)
+  - [ ] MacOS Desktop (Under Development)
   - [ ] Linux (Planning TBA)
 - [ ] Database Providers Supported
   - [x] SQL Server 2012 onwards

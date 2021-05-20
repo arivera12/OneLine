@@ -437,18 +437,6 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
         }
-        public static async Task<IResponseResult<Stream>> DownloadAsStreamResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
-        {
-            try
-            {
-                var response = await httpClient.DownloadAsStreamAsync(httpRequestMessage);
-                return new ResponseResult<Stream>(response, null);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseResult<Stream>(default, ex);
-            }
-        }
         public static async Task<Stream> SendJsonDownloadAsStreamAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
         {
             //Send content over url
@@ -464,18 +452,6 @@ namespace OneLine.Extensions
             }
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
-        }
-        public static async Task<IResponseResult<Stream>> SendJsonDownloadAsStreamResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
-        {
-            try
-            {
-                var response = await httpClient.SendJsonDownloadAsStreamAsync(httpRequestMessage, content);
-                return new ResponseResult<Stream>(response, null);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseResult<Stream>(default, ex);
-            }
         }
         public static async Task<Stream> SendJsonDownloadAsStreamAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
             where TContent : class
@@ -498,19 +474,6 @@ namespace OneLine.Extensions
             }
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
-        }
-        public static async Task<IResponseResult<Stream>> SendJsonDownloadAsStreamResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, TContent content, IValidator validator)
-            where TContent : class
-        {
-            try
-            {
-                var response = await httpClient.SendJsonDownloadAsStreamAsync(httpRequestMessage, content, validator);
-                return new ResponseResult<Stream>(response, null);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseResult<Stream>(default, ex);
-            }
         }
         public static async Task<Stream> SendJsonRangeDownloadAsStreamAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
             where TContent : class
@@ -541,20 +504,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
         }
-        public static async Task<IResponseResult<Stream>> SendJsonRangeDownloadAsStreamResponseResultAsync<TContent>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, IEnumerable<TContent> contents, IValidator validator)
-            where TContent : class
-        {
-            try
-            {
-                var response = await httpClient.SendJsonRangeDownloadAsStreamAsync(httpRequestMessage, contents, validator);
-                return new ResponseResult<Stream>(response, null);
-            }
-            catch (Exception ex)
-            {
-                return new ResponseResult<Stream>(default, ex);
-            }
-        }
-
+        
         #endregion
 
         #region Send request or json and get String

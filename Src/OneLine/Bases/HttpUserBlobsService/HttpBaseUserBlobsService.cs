@@ -106,10 +106,10 @@ namespace OneLine.Bases
         {
             return HttpClient.SendJsonDownloadAsByteArrayResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvOwnsMethod}"), new { SearchPaging, searchExtraParams });
         }
-        public Task<IResponseResult<Stream>> DownloadCsvOwnsAsStreamAsync(ISearchPaging SearchPaging, object searchExtraParams)
-        {
-            return HttpClient.SendJsonDownloadAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvOwnsMethod}"), new { SearchPaging, searchExtraParams });
-        }
+        //public Task<IResponseResult<Stream>> DownloadCsvOwnsAsStreamAsync(ISearchPaging SearchPaging, object searchExtraParams)
+        //{
+        //    return HttpClient.SendJsonDownloadAsStreamResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvOwnsMethod}"), new { SearchPaging, searchExtraParams });
+        //}
         public Task<IResponseResult<HttpResponseMessage>> DownloadCsvOwnsAsHttpResponseMessageAsync(ISearchPaging SearchPaging, object searchExtraParams)
         {
             return HttpClient.SendJsonRequestHttpResponseMessageResponseResultAsync(new HttpRequestMessage(HttpMethod.Post, $"{GetApi()}/{ControllerName}/{DownloadCsvOwnsMethod}"), new { SearchPaging, searchExtraParams });

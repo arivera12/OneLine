@@ -29,13 +29,13 @@ namespace OneLine.Contracts
         /// <param name="searchExtraParams"></param>
         /// <returns></returns>
         Task<IResponseResult<byte[]>> DownloadCsvAsByteArrayAsync(ISearchPaging SearchPaging, object searchExtraParams);
-        /// <summary>
-        /// The dowload csv server method as a <see cref="Stream"/>
-        /// </summary>
-        /// <param name="SearchPaging"></param>
-        /// <param name="searchExtraParams"></param>
-        /// <returns></returns>
-        Task<IResponseResult<Stream>> DownloadCsvAsStreamAsync(ISearchPaging SearchPaging, object searchExtraParams);
+        ///// <summary>
+        ///// The dowload csv server method as a <see cref="Stream"/>
+        ///// </summary>
+        ///// <param name="SearchPaging"></param>
+        ///// <param name="searchExtraParams"></param>
+        ///// <returns></returns>
+        //Task<IResponseResult<Stream>> DownloadCsvAsStreamAsync(ISearchPaging SearchPaging, object searchExtraParams);
         /// <summary>
         /// The download csv server method as a <see cref="HttpResponseMessage"/>
         /// </summary>

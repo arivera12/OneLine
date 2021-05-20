@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using OneLine.Models;
 
 namespace OneLine.Bases
@@ -23,6 +24,10 @@ namespace OneLine.Bases
         /// </summary>
         public TBlobStorage BlobStorageService { get; set; }
         /// <summary>
+        /// Gets the scope factory of the current application or service
+        /// </summary>
+        public IServiceScopeFactory ServiceScopeFactory { get; set; }
+        /// <summary>
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
         /// </summary>
         /// <param name="dbContext"></param>
@@ -33,9 +38,26 @@ namespace OneLine.Bases
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
         /// </summary>
         /// <param name="dbContext"></param>
+        public ApiContextService(IServiceScopeFactory serviceScopeFactory)
+        {
+            ServiceScopeFactory = serviceScopeFactory;
+        }
+        /// <summary>
+        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
+        /// </summary>
+        /// <param name="dbContext"></param>
         public ApiContextService(TDbContext dbContext)
         {
             DbContext = dbContext;
+        }
+        /// <summary>
+        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
+        /// </summary>
+        /// <param name="dbContext"></param>
+        public ApiContextService(TDbContext dbContext, IServiceScopeFactory serviceScopeFactory)
+        {
+            DbContext = dbContext;
+            ServiceScopeFactory = serviceScopeFactory;
         }
         /// <summary>
         /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
@@ -52,12 +74,36 @@ namespace OneLine.Bases
         /// </summary>
         /// <param name="httpContextAccessor"></param>
         /// <param name="dbContext"></param>
+        public ApiContextService(TDbContext dbContext, IHttpContextAccessor httpContextAccessor, IServiceScopeFactory serviceScopeFactory)
+        {
+            DbContext = dbContext;
+            HttpContextAccessor = httpContextAccessor;
+            ServiceScopeFactory = serviceScopeFactory;
+        }
+        /// <summary>
+        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
+        /// </summary>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="dbContext"></param>
         /// <param name="blobStorage"></param>
         public ApiContextService(TDbContext dbContext, IHttpContextAccessor httpContextAccessor, TBlobStorage blobStorage)
         {
             DbContext = dbContext;
             HttpContextAccessor = httpContextAccessor;
             BlobStorageService = blobStorage;
+        }
+        /// <summary>
+        /// The api context service will create a context containing from the most minimalist api service to the most robust service provider
+        /// </summary>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="dbContext"></param>
+        /// <param name="blobStorage"></param>
+        public ApiContextService(TDbContext dbContext, IHttpContextAccessor httpContextAccessor, TBlobStorage blobStorage, IServiceScopeFactory serviceScopeFactory)
+        {
+            DbContext = dbContext;
+            HttpContextAccessor = httpContextAccessor;
+            BlobStorageService = blobStorage;
+            ServiceScopeFactory = serviceScopeFactory;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace OneLine.Contracts
         Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> ListAsync<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
         Task<IResponseResult<ApiResponse<Paged<IEnumerable<TResponse>>>>> ListOwnsAsync<TResponse>(ISearchPaging SearchPaging, object searchExtraParams);
         Task<IResponseResult<byte[]>> DownloadCsvOwnsAsByteArrayAsync(ISearchPaging SearchPaging, object searchExtraParams);
-        Task<IResponseResult<Stream>> DownloadCsvOwnsAsStreamAsync(ISearchPaging SearchPaging, object searchExtraParams);
+        //Task<IResponseResult<Stream>> DownloadCsvOwnsAsStreamAsync(ISearchPaging SearchPaging, object searchExtraParams);
         Task<IResponseResult<HttpResponseMessage>> DownloadCsvOwnsAsHttpResponseMessageAsync(ISearchPaging SearchPaging, object searchExtraParams);
     }
 }

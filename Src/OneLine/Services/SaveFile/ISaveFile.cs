@@ -8,8 +8,8 @@ namespace OneLine.Services
     /// </summary>
     public interface ISaveFile
     {
-        Task SaveFileAsync(Stream stream, string path);
-        Task SaveFileAsync(Stream stream, string path, int bufferSize);
-        Task SaveFileAsync(byte[] byteArray, string path);
+        Task SaveFileAsync(Stream stream, string pathOrDownloadFileName);
+        Task SaveFileAsync(Stream stream, string pathOrDownloadFileName, int bufferSize);
+        Task SaveFileAsync(byte[] byteArray, string pathOrDownloadFileName);
     }
 }

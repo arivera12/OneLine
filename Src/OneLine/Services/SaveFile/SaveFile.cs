@@ -22,45 +22,45 @@ namespace OneLine.Services
             Device = device;
             BlazorDownloadFileService = blazorDownloadFileService;
         }
-        public async Task SaveFileAsync(Stream stream, string path, int bufferSize)
+        public async Task SaveFileAsync(Stream stream, string pathOrDownloadFileName, int bufferSize)
         {
             if (Device.IsXamarinPlatform)
             {
-                await stream.WriteStreamToFileSystemAsync(path, bufferSize);
+                await stream.WriteStreamToFileSystemAsync(pathOrDownloadFileName, bufferSize);
             }
             else if (Device.IsWebPlatform)
             {
-                await BlazorDownloadFileService.DownloadFile(path, stream, bufferSize);
+                await BlazorDownloadFileService.DownloadFile(pathOrDownloadFileName, stream, bufferSize);
             }
             else
             {
                 new PlatformNotSupportedException("Saving a file seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
             }
         }
-        public async Task SaveFileAsync(byte[] byteArray, string path)
+        public async Task SaveFileAsync(byte[] byteArray, string pathOrDownloadFileName)
         {
             if (Device.IsXamarinPlatform)
             {
-                await File.WriteAllBytesAsync(path, byteArray);
+                await File.WriteAllBytesAsync(pathOrDownloadFileName, byteArray);
             }
             else if (Device.IsWebPlatform)
             {
-                await BlazorDownloadFileService.DownloadFile(path, byteArray, "application/octet-stream");
+                await BlazorDownloadFileService.DownloadFile(pathOrDownloadFileName, byteArray, "application/octet-stream");
             }
             else
             {
                 new PlatformNotSupportedException("Saving a file seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
             }
         }
-        public async Task SaveFileAsync(Stream stream, string path)
+        public async Task SaveFileAsync(Stream stream, string pathOrDownloadFileName)
         {
             if (Device.IsXamarinPlatform)
             {
-                await File.WriteAllBytesAsync(path, await stream.ToByteArrayAsync());
+                await File.WriteAllBytesAsync(pathOrDownloadFileName, await stream.ToByteArrayAsync());
             }
             else if (Device.IsWebPlatform)
             {
-                await BlazorDownloadFileService.DownloadFile(path, stream, "application/octet-stream");
+                await BlazorDownloadFileService.DownloadFile(pathOrDownloadFileName, stream, "application/octet-stream");
             }
             else
             {

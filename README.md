@@ -10,16 +10,29 @@
 
 OneLine is a multiplatform, standardized, redefined framework.
 
-## General Technical Features 
+## General technical features 
 
+- [x] Service Arquitecture (Dependency Injection & Inversion of Control)
+  - [x] HttpClient's
+  - [x] DbContext
+  - [x] Smtp
+  - [x] BlobStorage
+  - [x] Repositories
+  - [x] Authorization
+  - [x] Authentication
+  - [x] SignalR client and server hub context
+  - [x] Resource manager localizer client and server
+  - [x] Localized label, text and messages
+  - [x] AuditTrails
+  - [x] System exception logs   
+- [x] Componentization
+- [x] Single Page Application Arquitecture
+- [x] RESTful API 
 - [x] Standardized
 - [x] Eventable
 - [x] Listenable
-- [x] Chainable
-- [x] Overridable
-- [x] Recyclable
 
-## OneLine multi platform solution scaffolding tool  (Commercially available)
+## OneLine multi platform solution scaffolding tool features  (Commercially available)
 - [x] RAD (Rapid Application Development) and Prototyping
 - [x] WORE (Write once, run everywhere)
 - [x] Multi platform deployment support (Thanks to [MobileBlazorBindings](https://github.com/dotnet/MobileBlazorBindings))
@@ -28,8 +41,8 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] Blazor Server
   - [x] Android 4.4 onwards
   - [x] iOS 12.0 onwards
-  - [x] Windows Desktop and WPF 
-  - [ ] MacOS Desktop (Needs Testing)
+  - [ ] Windows Desktop and WPF (Under Development)
+  - [ ] MacOS Desktop (Under Development)
   - [ ] Linux (Planning TBA)
 - [ ] Database Providers Supported
   - [x] SQL Server 2012 onwards
@@ -45,7 +58,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Localized Emails Management
 - [x] Authorization and authentication management
 - [x] Default security pre implemented (Admin only)
-- [x] Claims based security pre implemented
+- [x] Fully claims based security pre implemented
 - [x] Interfaces, models and view models implementations
 - [x] Localized validations implementation
 - [x] Resource files with translations
@@ -75,16 +88,17 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] *ModalOptionsComponent.razor
   - [x] *TableViewComponent.razor
   - [x] *TypeaheadComponent.razor
-- [x] Every UI component is editable as needed
+- [x] Every UI component withing the same table context shares the same base UI class
+- [x] Every UI component is editable and extendable as needed
 - [x] Device Oriented UI/UX
   - [x] Desktop
   - [x] Tablet
   - [x] Mobile
 - [x] Bootstrap 4 Template
 - [x] Pre-Implemented Controllers with authorization and authentication
-- [x] Pre-Implemented Repositories as services
+- [x] Pre-Implemented Repositories as services and pre registeres de service container
   - [x] Repository and Service patterns have been redefined and reimplemented as Repository Service using Base Api Context Service
-- [x] Rest Arquitecture (JSON)
+- [x] RESTful API Arquitecture (JSON)
 - [x] Services are pre-registered per enviroment or platform
 - [x] Request data is validated always using the default validator
 - [x] Response has a base api response format

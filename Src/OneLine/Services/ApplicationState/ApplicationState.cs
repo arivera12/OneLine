@@ -70,7 +70,7 @@ namespace OneLine.Services
                     return JsonConvert.DeserializeObject<TUser>(SessionSecureUser.Decrypt(SessionKey));
                 }
                 else if (Device.IsXamarinPlatform &&
-                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                     Device.IsDesktop &&
                     applicationSession.Equals(ApplicationSession.LocalStorage))
                 {
@@ -85,7 +85,7 @@ namespace OneLine.Services
                     }
                 }
                 else if (Device.IsXamarinPlatform &&
-                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                     Device.IsDesktop &&
                     applicationSession.Equals(ApplicationSession.SessionStorage))
                 {
@@ -139,7 +139,7 @@ namespace OneLine.Services
                 SessionSecureUser = jsonUser.Encrypt(SessionKey);
             }
             else if (Device.IsXamarinPlatform &&
-                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                     Device.IsDesktop &&
                     applicationSession.Equals(ApplicationSession.LocalStorage))
             {
@@ -152,7 +152,7 @@ namespace OneLine.Services
                 File.WriteAllText(applicationDataKeyPath, key);
             }
             else if (Device.IsXamarinPlatform &&
-                (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                 Device.IsDesktop &&
                 applicationSession.Equals(ApplicationSession.SessionStorage))
             {
@@ -202,7 +202,7 @@ namespace OneLine.Services
                 SessionSecureUser = jsonUser.Encrypt(SessionKey);
             }
             else if (Device.IsXamarinPlatform &&
-                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                     Device.IsDesktop &&
                     applicationSession.Equals(ApplicationSession.LocalStorage))
             {
@@ -215,7 +215,7 @@ namespace OneLine.Services
                 File.WriteAllText(applicationDataKeyPath, key);
             }
             else if (Device.IsXamarinPlatform &&
-                (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                 Device.IsDesktop &&
                 applicationSession.Equals(ApplicationSession.SessionStorage))
             {
@@ -257,7 +257,7 @@ namespace OneLine.Services
                 SessionSecureUser = null;
             }
             else if(Device.IsXamarinPlatform &&
-                (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                 Device.IsDesktop)
             {
                 var applicationDataUserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SUser");
@@ -303,7 +303,7 @@ namespace OneLine.Services
                     return Enum.Parse<ApplicationSession>(await SecureStorage.GetAsync("ApplicationSession"));
                 }
                 else if(Device.IsXamarinPlatform &&
-                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                     Device.IsDesktop)
                 {
                     var applicationDataApplicationSessionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ApplicationSession");
@@ -338,7 +338,7 @@ namespace OneLine.Services
                 await SecureStorage.SetAsync("ApplicationSession", applicationSession.ToString());
             }
             else if (Device.IsXamarinPlatform &&
-                    (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                     Device.IsDesktop)
             {
                 var applicationDataApplicationSessionPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ApplicationSession");

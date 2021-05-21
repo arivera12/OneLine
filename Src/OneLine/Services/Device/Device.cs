@@ -131,7 +131,7 @@ namespace OneLine.Services
                 }
             }
         }
-        public bool IsMacOsDevice
+        public bool IsMacOSDevice
         {
             get
             {

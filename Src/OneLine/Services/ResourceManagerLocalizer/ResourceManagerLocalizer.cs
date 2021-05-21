@@ -55,7 +55,7 @@ namespace OneLine.Services
                 return await SecureStorage.GetAsync("ApplicationLocale");
             }
             else if (Device.IsXamarinPlatform && 
-                (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) && 
+                (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) && 
                 Device.IsDesktop)
             {
                 var applicationDataLocalePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ApplicationLocale");
@@ -89,7 +89,7 @@ namespace OneLine.Services
                 await SecureStorage.SetAsync("ApplicationLocale", applicationLocale);
             }
             else if (Device.IsXamarinPlatform &&
-               (Device.IsMacOsDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+               (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
                 Device.IsDesktop)
             {
                 var applicationDataLocalePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ApplicationLocale");

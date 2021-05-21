@@ -12,7 +12,7 @@
         bool IsAndroidDevice { get; }
         bool IsGTKDevice { get; }
         bool IsiOSDevice { get; }
-        bool IsMacOsDevice { get; }
+        bool IsMacOSDevice { get; }
         bool IsTizenDevice { get; }
         bool IsWPFDevice { get; }
         bool IsWindowsOSPlatform { get; }

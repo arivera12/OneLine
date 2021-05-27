@@ -37,7 +37,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static IApiResponse<IEnumerable<T>> TransactionResultApiResponse<T>(this int value, IEnumerable<T> data)
         {
-            var status = value.Succeeded() && value == data.Count() ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
+            var status = value.Succeeded() && value >= data.Count() ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
             return new ApiResponse<IEnumerable<T>>(status, data);
         }
         /// <summary>
@@ -68,8 +68,8 @@ namespace OneLine.Extensions
         public static IApiResponse<IEnumerable<T>> TransactionResultApiResponse<T>(this int value, IEnumerable<T> data, string successMessage, string errorMessage)
         {
             var success = value.Succeeded();
-            var status = success && value == data.Count() ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
-            var message = success && value == data.Count() ? successMessage : errorMessage;
+            var status = success && value >= data.Count() ? ApiResponseStatus.Succeeded : ApiResponseStatus.Failed;
+            var message = success && value >= data.Count() ? successMessage : errorMessage;
             return new ApiResponse<IEnumerable<T>> (status, data, message);
         }
     }

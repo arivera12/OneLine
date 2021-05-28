@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Renamed ScopeFactory to ServiceScopeFactory.</PackageReleaseNotes>
-    <Version>3.0.83</Version>
+    <PackageReleaseNotes>Added IsDefaultValue and IsNotDefaultValue extension methods.</PackageReleaseNotes>
+    <Version>3.0.85</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.83.0</AssemblyVersion>
-    <FileVersion>3.0.83.0</FileVersion>
+    <AssemblyVersion>3.0.85.0</AssemblyVersion>
+    <FileVersion>3.0.85.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

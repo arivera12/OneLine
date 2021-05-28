@@ -418,5 +418,25 @@ namespace OneLine.Extensions
                     return false;
             }
         }
+        /// <summary>
+        /// Checks wether the <typeparamref name="T"/> is the default value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsDefaultValue<T>(this T value)
+        {
+            return EqualityComparer<T>.Default.Equals(value, default);
+        }
+        /// <summary>
+        /// Checks wether the <typeparamref name="T"/> is not the default value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsNotDefaultValue<T>(this T value)
+        {
+            return !IsDefaultValue(value);
+        }
     }
 }

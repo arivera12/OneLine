@@ -140,6 +140,41 @@ namespace OneLine.Extensions
             return destination;
         }
         /// <summary>
+        /// Maps to <typeparamref name="T"/>. 
+        /// Take note that field names, types and accessfiers must be equal.
+        /// This method is faster since it doesn't do any conversion, check ups on props names and datatypes wether is assignable or if exists.
+        /// </summary>
+        /// <typeparam name="T">The to type that will be converted</typeparam>
+        /// <param name="collection">The collection</param>
+        /// <returns></returns>
+        public static IEnumerable<T> AutoMapFast<T>(this IEnumerable<object> collection)
+        {
+            IList<T> toTModels = Activator.CreateInstance<List<T>>();
+            foreach (var item in collection)
+            {
+                T toTModel = Activator.CreateInstance<T>();
+                toTModels.Add(toTModel.AutoMapFast(item));
+            }
+            return toTModels.AsEnumerable();
+        }
+        /// <summary>
+        /// Maps the <paramref name="source"/> object to <typeparamref name="T"/>. 
+        /// Take note that field names, types and accessfiers must be equal.
+        /// This method is faster since it doesn't do any conversion, check ups on props names and datatypes wether is assignable or if exists.
+        /// </summary>
+        /// <typeparam name="T">The destination type that will be converted</typeparam>
+        /// <param name="source">The source type that will be converted to <typeparamref name="T"/></param>
+        /// <param name="destination">The destination type that will be converted</param>
+        /// <returns></returns>
+        public static T AutoMapFast<T>(this T destination, object source)
+        {
+            foreach (PropertyInfo SourceProp in source.GetType().GetProperties())
+            {
+                destination.GetType().GetProperty(SourceProp.Name).SetValue(destination, SourceProp.GetValue(source));                
+            }
+            return destination;
+        }
+        /// <summary>
         /// Converts <typeparamref name="T"/> to a url query string
         /// </summary>
         /// <typeparam name="T"></typeparam>

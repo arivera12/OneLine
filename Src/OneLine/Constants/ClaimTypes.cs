@@ -14,5 +14,13 @@
         // Summary:
         //     The URI for a claim that specifies the prefered culture locale.
         public const string PreferredCultureLocale = "http://schemas.microsoft.com/identity/claims/preferredculturelocale";
+        //
+        // Summary:
+        //     The URI for a claim that specifies the short message service gateway.
+        public const string SMSGateway = "http://schemas.microsoft.com/identity/claims/shortmessageservicegateway";
+        //
+        // Summary:
+        //     The URI for a claim that specifies the multimedia messaging service gateway.
+        public const string MMSGateway = "http://schemas.microsoft.com/identity/claims/multimediamessagingservicegateway";
     }
 }

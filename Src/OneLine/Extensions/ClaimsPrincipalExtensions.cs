@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace OneLine.Extensions
 {
-    public static class ClaimPrincipalExtensions
+    public static class ClaimsPrincipalExtensions
     {
         /// <summary>
         /// Gets the claim and converts them into <typeparamref name="T"/> by the specified claim type.
@@ -103,6 +103,28 @@ namespace OneLine.Extensions
             if (principal.IsNull())
                 throw new ArgumentNullException(nameof(principal));
             return principal.FindFirst(Constants.ClaimTypes.PreferredCultureLocale)?.Value;
+        }
+        /// <summary>
+        /// Gets the short message service gateway by <see cref="Constants.ClaimTypes.SMSGateway"/>
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns></returns>
+        public static string ShortMessageServiceGateway(this ClaimsPrincipal principal)
+        {
+            if (principal.IsNull())
+                throw new ArgumentNullException(nameof(principal));
+            return principal.FindFirst(Constants.ClaimTypes.SMSGateway)?.Value;
+        }
+        /// <summary>
+        /// Gets the multimedia messaging service gateway by <see cref="Constants.ClaimTypes.MMSGateway"/>
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns></returns>
+        public static string MultimediaMessagingServiceGateway(this ClaimsPrincipal principal)
+        {
+            if (principal.IsNull())
+                throw new ArgumentNullException(nameof(principal));
+            return principal.FindFirst(Constants.ClaimTypes.MMSGateway)?.Value;
         }
     }
 }

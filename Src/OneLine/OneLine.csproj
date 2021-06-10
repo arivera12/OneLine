@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added enumarable paged specific implementation.</PackageReleaseNotes>
-    <Version>3.0.87</Version>
+    <PackageReleaseNotes>Added claims principal extension method ShortMessageServiceGateway and MultimediaMessagingServiceGateway.</PackageReleaseNotes>
+    <Version>3.0.89</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.87.0</AssemblyVersion>
-    <FileVersion>3.0.87.0</FileVersion>
+    <AssemblyVersion>3.0.89.0</AssemblyVersion>
+    <FileVersion>3.0.89.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

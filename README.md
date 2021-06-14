@@ -59,7 +59,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Authorization and authentication management
 - [x] Default security pre implemented (Admin only)
 - [x] Fully claims based security pre implemented
-- [x] Interfaces, models and view models implementations
+- [x] Interfaces, models, view models and search criteria model implementations
 - [x] Localized validations implementation
 - [x] Resource files with translations
   - [x] Resource.resx (Default English)

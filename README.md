@@ -56,10 +56,10 @@ OneLine is a multiplatform, standardized, redefined framework.
 ### Managements and Pre-implementations
 - [x] User account management
 - [x] Localized Emails Management
-- [x] Authorization and authentication management
+- [x] Authorization and authentication management using JWT
 - [x] Default security pre implemented (Admin only)
 - [x] Fully claims based security pre implemented
-- [x] Interfaces, models and view models implementations
+- [x] Interfaces, models, view models and search criteria model implementations
 - [x] Localized validations implementation
 - [x] Resource files with translations
   - [x] Resource.resx (Default English)
@@ -96,7 +96,7 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] Mobile
 - [x] Bootstrap 4 Template
 - [x] Pre-Implemented Controllers with authorization and authentication
-- [x] Pre-Implemented Repositories as services and pre registeres de service container
+- [x] Pre-Implemented Repositories as services and pre registered service container
   - [x] Repository and Service patterns have been redefined and reimplemented as Repository Service using Base Api Context Service
 - [x] RESTful API Arquitecture (JSON)
 - [x] Services are pre-registered per enviroment or platform

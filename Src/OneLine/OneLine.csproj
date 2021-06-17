@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added claims principal extension method ShortMessageServiceGateway and MultimediaMessagingServiceGateway.</PackageReleaseNotes>
-    <Version>3.0.89</Version>
+    <PackageReleaseNotes>Removed CsvHelper from base library and moved it out to the output solution instead since is not being used by one line core. Updated xamarin essentials to 1.6.1.</PackageReleaseNotes>
+    <Version>3.0.90</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.89.0</AssemblyVersion>
-    <FileVersion>3.0.89.0</FileVersion>
+    <AssemblyVersion>3.0.90.0</AssemblyVersion>
+    <FileVersion>3.0.90.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>
@@ -42,11 +42,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Sendgrid" Version="9.22.0" />
     <PackageReference Include="FluentValidation" Version="9.5.3" />
-    <PackageReference Include="CsvHelper" Version="26.1.0" />
     <PackageReference Include="BlazorBrowserStorage" Version="1.0.1" />
     <PackageReference Include="BlazorDownloadFile" Version="2.1.6" />
     <PackageReference Include="Shiny.Notifications" Version="2.0.0.2280-preview" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>
 
   <ItemGroup>

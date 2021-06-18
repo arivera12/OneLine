@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace OneLine.Extensions
 {
-    public static class AuditTrailsExtensions
+    public static class IAuditTrailsExtensions
     {
         /// <summary>
         /// Creates a new <typeparamref name="TAuditTrails"/> object saving the <typeparamref name="T"/> state and returns it binding the <paramref name="httpContextAccessor"/> values

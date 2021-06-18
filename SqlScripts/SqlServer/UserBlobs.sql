@@ -8,8 +8,8 @@ CREATE TABLE [dbo].[UserBlobs](
 	[Length] [bigint] NOT NULL,
 	[FilePath] [nvarchar](512) NOT NULL,
 	[TableName] [nvarchar](128) NOT NULL,
-	[IsDeleted] [bit] NOT NULL,
-	[CreatedOn] [datetime] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedOn] [datetime] NOT NULL,
 	[CreatedBy] [nvarchar](128) NULL,
  CONSTRAINT [PK_UserBlob] PRIMARY KEY CLUSTERED 
 (

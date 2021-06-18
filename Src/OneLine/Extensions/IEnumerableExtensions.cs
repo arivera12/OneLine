@@ -10,26 +10,6 @@ namespace OneLine.Extensions
 {
     public static class IEnumerableExtensions
     {
-        /// <summary>
-        /// Method that checks wether IsDeleted is true
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> WhereIsDeleted<T>(this IEnumerable<T> source) where T : ISoftDeletable
-        {
-            return source.Where(e => e.IsDeleted);
-        }
-        /// <summary>
-        /// Method that checks wether IsDeleted is false
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> WhereNotDeleted<T>(this IEnumerable<T> source) where T : ISoftDeletable
-        {
-            return source.Where(e => !e.IsDeleted);
-        }
         private static readonly MethodInfo OrderByMethod =
                                 typeof(Queryable)
                                     .GetMethods()

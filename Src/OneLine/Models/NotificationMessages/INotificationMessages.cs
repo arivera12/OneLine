@@ -31,11 +31,11 @@ namespace OneLine.Models
         /// <summary>
         /// The is deleted is to allow soft delete
         /// </summary>
-        bool IsDeleted { get; set; }
+        bool? IsDeleted { get; set; }
         /// <summary>
         /// The is readed is to know when the user readed the notification
         /// </summary>
-        bool IsReaded { get; set; }
+        bool? IsReaded { get; set; }
         /// <summary>
         /// Created on
         /// </summary>

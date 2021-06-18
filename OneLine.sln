@@ -11,6 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServer", "SqlServer", "{
 		SqlScripts\SqlServer\AuditTrails.sql = SqlScripts\SqlServer\AuditTrails.sql
 		Constraints.sql = Constraints.sql
 		SqlScripts\SqlServer\ExceptionLogs.sql = SqlScripts\SqlServer\ExceptionLogs.sql
+		NotificationMessages.sql = NotificationMessages.sql
+		SupportedCultures.sql = SupportedCultures.sql
+		TeleCommunicationServiceProviders.sql = TeleCommunicationServiceProviders.sql
 		SqlScripts\SqlServer\UserBlobs.sql = SqlScripts\SqlServer\UserBlobs.sql
 	EndProjectSection
 EndProject

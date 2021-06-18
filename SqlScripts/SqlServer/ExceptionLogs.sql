@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[ExceptionLogs](
 	[Message] [nvarchar](4000) NULL,
 	[Source] [nvarchar](4000) NULL,
 	[StackTrace] [nvarchar](4000) NULL,
-	[CreatedOn] [datetime] NULL,
+	[CreatedOn] [datetime] NOT NULL,
 	[CreatedBy] [nvarchar](128) NULL,
  CONSTRAINT [PK_exceptionlogs_ExceptionLogID] PRIMARY KEY CLUSTERED 
 (

@@ -1,6 +1,6 @@
 CREATE TABLE [dbo].[AuditTrails](
 	[AuditTrailId] [nvarchar](128) NOT NULL,
-	[Action] [nvarchar](128) NULL,
+	[Action] [nvarchar](512) NULL,
 	[ActionName] [nvarchar](256) NULL,
 	[ControllerName] [nvarchar](128) NULL,
 	[TableName] [nvarchar](128) NULL,
@@ -13,4 +13,4 @@ CREATE TABLE [dbo].[AuditTrails](
 (
 	[AuditTrailId] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]

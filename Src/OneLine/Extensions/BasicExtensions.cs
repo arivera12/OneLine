@@ -262,41 +262,6 @@ namespace OneLine.Extensions
             return !source.IsNull();
         }
         /// <summary>
-        /// Checks whether the type is a simple type
-        /// </summary>
-        /// <param name="type">The type</param>
-        /// <returns></returns>
-        public static bool IsSimpleType(this Type type)
-        {
-            return
-                type.IsValueType ||
-                type.IsPrimitive ||
-                new Type[] {
-                typeof(byte),
-                typeof(byte[]),
-                typeof(sbyte),
-                typeof(sbyte[]),
-                typeof(short),
-                typeof(float),
-                typeof(string),
-                typeof(decimal),
-                typeof(DateTime),
-                typeof(DateTimeOffset),
-                typeof(TimeSpan),
-                typeof(Guid)
-                }.Contains(type) ||
-                Convert.GetTypeCode(type) != TypeCode.Object;
-        }
-        /// <summary>
-        /// Checks whether the type is a complex type 
-        /// </summary>
-        /// <param name="type">The type</param>
-        /// <returns></returns>
-        public static bool IsComplextType(this Type type)
-        {
-            return !type.IsSimpleType();
-        }
-        /// <summary>
         /// Checks whether the <paramref name="propertyName"/> exists in <typeparamref name="T"/>
         /// </summary>
         /// <typeparam name="T">The type</typeparam>
@@ -429,31 +394,6 @@ namespace OneLine.Extensions
             }
         }
         /// <summary>
-        ///  Determines wether the type is numeric
-        /// </summary>
-        /// <param name="o"></param>
-        /// <returns></returns>
-        public static bool IsNumericType(this Type type)
-        {
-            switch (Type.GetTypeCode(type))
-            {
-                case TypeCode.Byte:
-                case TypeCode.SByte:
-                case TypeCode.UInt16:
-                case TypeCode.UInt32:
-                case TypeCode.UInt64:
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                case TypeCode.Decimal:
-                case TypeCode.Double:
-                case TypeCode.Single:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-        /// <summary>
         /// Checks wether the <typeparamref name="T"/> is the default value.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -471,7 +411,7 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static bool IsNotDefaultValue<T>(this T value)
         {
-            return !IsDefaultValue(value);
+            return !EqualityComparer<T>.Default.Equals(value, default);
         }
     }
 }

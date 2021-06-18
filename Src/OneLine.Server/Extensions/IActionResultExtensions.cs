@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace OneLine.Extensions
 {
-    public static class ActionResultExtensions
+    public static class IActionResultExtensions
     {
         public static IActionResult OutputJson(this ContentResult result, object data, JsonSerializerSettings jsonSerializerSettings)
         {

@@ -25,25 +25,5 @@ namespace OneLine.Extensions
         {
             return apiResponse.Status.Equals(ApiResponseStatus.Failed);
         }
-        /// <summary>
-        /// Checks if the Api Response Status Succeeded
-        /// </summary>
-        /// <param name="apiResponseStatus"></param>
-        /// <returns></returns>
-
-        public static bool Succeeded(this ApiResponseStatus apiResponseStatus)
-        {
-            return apiResponseStatus.Equals(ApiResponseStatus.Succeeded);
-        }
-        /// <summary>
-        /// Checks if the Api Response Status Failed 
-        /// </summary>
-        /// <param name="apiResponseStatus"></param>
-        /// <returns></returns>
-
-        public static bool Failed(this ApiResponseStatus apiResponseStatus)
-        {
-            return apiResponseStatus.Equals(ApiResponseStatus.Failed);
-        }
     }
 }

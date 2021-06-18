@@ -46,7 +46,7 @@ namespace OneLine.Models
         /// <summary>
         /// The is deleted user blob is to allow soft delete
         /// </summary>
-        bool IsDeleted { get; set; }
+        bool? IsDeleted { get; set; }
         /// <summary>
         /// Created on
         /// </summary>

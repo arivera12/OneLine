@@ -94,26 +94,6 @@ namespace OneLine.Extensions
             };
         }
         /// <summary>
-        /// Checks if <see cref="ISoftDeletable.IsDeleted"/> is <see cref="true"/>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IQueryable<T> WhereIsDeleted<T>(this IQueryable<T> source) where T : ISoftDeletable
-        {
-            return source.Where(x => x.IsDeleted);
-        }
-        /// <summary>
-        /// Checks if <see cref="ISoftDeletable.IsDeleted"/> is <see cref="false"/>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IQueryable<T> WhereNotIsDeleted<T>(this IQueryable<T> source) where T : ISoftDeletable
-        {
-            return source.Where(x => !x.IsDeleted);
-        }
-        /// <summary>
         /// Check whether a property exist in <typeparamref name="T"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>

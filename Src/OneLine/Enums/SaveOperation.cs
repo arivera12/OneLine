@@ -5,6 +5,7 @@
     /// </summary>
     public enum SaveOperation
     {
+        Any,
         Add,
         Update
     }

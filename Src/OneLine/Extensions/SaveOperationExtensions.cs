@@ -22,5 +22,14 @@ namespace OneLine.Extensions
         {
             return saveOperation == SaveOperation.Update;
         }
+        /// <summary>
+        /// Check whether the <see cref="SaveOperation"/> equals <seealso cref="SaveOperation.Any"/>
+        /// </summary>
+        /// <param name="saveOperation"></param>
+        /// <returns></returns>
+        public static bool IsAny(this SaveOperation saveOperation)
+        {
+            return saveOperation == SaveOperation.Any;
+        }
     }
 }

@@ -7,16 +7,12 @@ namespace OneLine.Models
     /// This interface defines a base api response structure to be used as an standard object in every api response result.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IApiResponse<T>
+    public interface IApiResponse<T> : IDataHolder<T>
     {
         /// <summary>
         /// The api response status is the result of the transaction wether it succeeded or failed. 
         /// </summary>
         ApiResponseStatus Status { get; set; }
-        /// <summary>
-        /// The data that came from reponse with the T type.
-        /// </summary>
-        T Data { get; set; }
         /// <summary>
         /// The message from response whether there is anything that needs to be notified about like an error message or success message.
         /// </summary>

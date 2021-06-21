@@ -4,7 +4,7 @@
     /// Defines a paged data structure
     /// </summary>
     /// <typeparam name="T">The type of the data</typeparam>
-    public interface IPaged<T>
+    public interface IPaged<T> : IDataHolder<T>
     {
         /// <summary>
         /// The page index
@@ -34,9 +34,5 @@
         /// Determines wether you can go foward to the next page of record
         /// </summary>
         bool HasNextPage { get; set; }
-        /// <summary>
-        /// The data
-        /// </summary>
-        T Data { get; set; }
     }
 }

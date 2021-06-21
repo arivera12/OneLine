@@ -7,12 +7,8 @@ namespace OneLine.Models
     /// Defines model to save a form.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ISaveFormWithValidator<T>
+    public interface ISaveFormWithValidator<T> : IDataHolder<T>
     {
-        /// <summary>
-        /// The form data to save.
-        /// </summary>
-        public T Data { get; set; }
         /// <summary>
         /// The validator of the data.
         /// </summary>

@@ -1,14 +1,10 @@
 ﻿namespace OneLine.Models
 {
-    public interface ISaveReplaceList<T>
+    public interface ISaveReplaceList<TId, T> : IDataHolder<T>
     {
         /// <summary>
         /// The id to be used to save the record on the query filter
         /// </summary>
-        string Id { get; set; }
-        /// <summary>
-        /// The data to be stored
-        /// </summary>
-        T Data { get; set; }
+        TId Id { get; set; }
     }
 }

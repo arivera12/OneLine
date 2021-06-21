@@ -5,7 +5,7 @@ namespace OneLine.Models
     /// <summary>
     /// Defines a structure to hold binary data
     /// </summary>
-    public interface IBlobData
+    public interface IBlobData : IDataHolder<byte[]>
     {
         /// <summary>
         /// Last modified
@@ -27,9 +27,5 @@ namespace OneLine.Models
         /// The file type
         /// </summary>
         string Type { get; set; }
-        /// <summary>
-        /// The file stream data
-        /// </summary>
-        byte[] Data { get; set; }
     }
 }

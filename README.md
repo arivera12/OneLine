@@ -98,14 +98,13 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Pre-Implemented Controllers with authorization and authentication
 - [x] Pre-Implemented Repositories as services and pre registered service container
   - [x] Repository and Service patterns have been redefined and reimplemented as Repository Service using Base Api Context Service
-- [x] RESTful API Arquitecture (JSON)
+- [x] RESTful API Arquitecture (JSON, XML and CSV)
+- [x] .csv and .xlsx document templates for posting to the API per controller
 - [x] Services are pre-registered per enviroment or platform
 - [x] Request data is validated always using the default validator
 - [x] Response has a base api response format
 - [x] Search results are always paged by default
 - [x] CRUD methods are pre implemented supports single and multiple, also with performance multiple method.
-- [ ] Import data uploading *.csv file for create or update operations
-- [x] Exporting data in *.csv file
 - [x] Multiple Blob Storage Provider Support (Thanks to [Storage.Net](https://github.com/aloneguid/storage))
 - [x] Microsoft Azure
   - [x] Blob Storage

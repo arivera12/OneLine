@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added new model DataHolder for holding different DataTypes data.</PackageReleaseNotes>
-    <Version>3.0.96</Version>
+    <PackageReleaseNotes>Removed .ToJsonActionResult and outputjson. now using input and output formateers instead.</PackageReleaseNotes>
+    <Version>3.0.97</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.96.0</AssemblyVersion>
-    <FileVersion>3.0.96.0</FileVersion>
+    <AssemblyVersion>3.0.97.0</AssemblyVersion>
+    <FileVersion>3.0.97.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

@@ -257,49 +257,7 @@ namespace OneLine.Extensions
             {
                 return new ResponseResult<T>(default, ex, null);
             }
-        }
-        public static async Task<IResponseResult<ApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content)
-        {
-            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, content);
-        }
-        public static async Task<IResponseResult<ApiResponse<TResponse>>> SendJsonResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, TContent content, IValidator validator)
-        {
-            var validationResult = await validator.ValidateAsync(new ValidationContext<TContent>(content));
-            if (!validationResult.IsValid)
-            {
-                return new ResponseResult<ApiResponse<TResponse>>
-                {
-                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
-                };
-            }
-            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, content);
-        }
-        public static async Task<IResponseResult<ApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents)
-        {
-            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, contents);
-        }
-        public static async Task<IResponseResult<ApiResponse<TResponse>>> SendJsonRangeResponseResultAsync<TResponse, TContent>(this HttpClient httpClient, HttpMethod method, string requestUri, IEnumerable<TContent> contents, IValidator validator)
-        {
-            if (contents == null || !contents.Any())
-            {
-                return new ResponseResult<ApiResponse<TResponse>>
-                {
-                    Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "CollectionIsNullOrEmpty", true)
-                };
-            }
-            foreach (var content in contents)
-            {
-                var validationResult = await validator.ValidateAsync(new ValidationContext<IEnumerable<TContent>>(contents));
-                if (!validationResult.IsValid)
-                {
-                    return new ResponseResult<ApiResponse<TResponse>>
-                    {
-                        Response = new ApiResponse<TResponse>(ApiResponseStatus.Failed, default, "ValidationFailed", validationResult.Errors.Select(x => x.ErrorMessage))
-                    };
-                }
-            }
-            return await httpClient.SendJsonResponseResultAsync<ApiResponse<TResponse>>(method, requestUri, contents);
-        }
+        }  
 
         #endregion
 

@@ -87,11 +87,11 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex, null);
             }
         }
-        public static Task PostJsonAsync(this HttpClient httpClient, string requestUri, object content)
+        public static Task PostJsonAsync(this HttpClient httpClient, string requestUri, object content = null)
             => httpClient.SendJsonAsync(HttpMethod.Post, requestUri, content);
-        public static Task<T> PostJsonAsync<T>(this HttpClient httpClient, string requestUri, object content)
+        public static Task<T> PostJsonAsync<T>(this HttpClient httpClient, string requestUri, object content = null)
             => httpClient.SendJsonAsync<T>(HttpMethod.Post, requestUri, content);
-        public static async Task<IResponseResult<T>> PostJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content)
+        public static async Task<IResponseResult<T>> PostJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content = null)
         {
             try
             {
@@ -120,11 +120,11 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex, null);
             }
         }
-        public static Task PutJsonAsync(this HttpClient httpClient, string requestUri, object content)
+        public static Task PutJsonAsync(this HttpClient httpClient, string requestUri, object content = null)
             => httpClient.SendJsonAsync(HttpMethod.Put, requestUri, content);
-        public static Task<T> PutJsonAsync<T>(this HttpClient httpClient, string requestUri, object content)
+        public static Task<T> PutJsonAsync<T>(this HttpClient httpClient, string requestUri, object content = null)
             => httpClient.SendJsonAsync<T>(HttpMethod.Put, requestUri, content);
-        public static async Task<IResponseResult<T>> PutJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content)
+        public static async Task<IResponseResult<T>> PutJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content = null)
         {
             try
             {
@@ -153,11 +153,11 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex, null);
             }
         }
-        public static Task DeleteJsonAsync(this HttpClient httpClient, string requestUri, object content)
+        public static Task DeleteJsonAsync(this HttpClient httpClient, string requestUri, object content = null)
             => httpClient.SendJsonAsync(HttpMethod.Delete, requestUri, content);
-        public static Task<T> DeleteJsonAsync<T>(this HttpClient httpClient, string requestUri, object content)
+        public static Task<T> DeleteJsonAsync<T>(this HttpClient httpClient, string requestUri, object content = null)
             => httpClient.SendJsonAsync<T>(HttpMethod.Delete, requestUri, content);
-        public static async Task<IResponseResult<T>> DeleteJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content)
+        public static async Task<IResponseResult<T>> DeleteJsonResponseResultAsync<T>(this HttpClient httpClient, string requestUri, object content = null)
         {
             try
             {
@@ -186,9 +186,9 @@ namespace OneLine.Extensions
                 return new ResponseResult<T>(default, ex, null);
             }
         }
-        public static Task SendJsonAsync(this HttpClient httpClient, HttpMethod method, string requestUri, object content)
+        public static Task SendJsonAsync(this HttpClient httpClient, HttpMethod method, string requestUri, object content = null)
             => httpClient.SendJsonAsync<IgnoreResponse>(method, requestUri, content);
-        public static async Task<T> SendJsonAsync<T>(this HttpClient httpClient, HttpMethod method, string requestUri, object content)
+        public static async Task<T> SendJsonAsync<T>(this HttpClient httpClient, HttpMethod method, string requestUri, object content = null)
         {
             //Get method sends data over the url
             if (method == HttpMethod.Get)
@@ -221,7 +221,7 @@ namespace OneLine.Extensions
                 }
             }
         }
-        public static async Task<IResponseResult<T>> SendJsonResponseResultAsync<T>(this HttpClient httpClient, HttpMethod method, string requestUri, object content)
+        public static async Task<IResponseResult<T>> SendJsonResponseResultAsync<T>(this HttpClient httpClient, HttpMethod method, string requestUri, object content = null)
         {
             try
             {
@@ -280,7 +280,7 @@ namespace OneLine.Extensions
                 return new ResponseResult<byte[]>(default, ex);
             }
         }
-        public static async Task<byte[]> SendJsonDownloadAsByteArrayAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<byte[]> SendJsonDownloadAsByteArrayAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content = null)
         {
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
@@ -296,7 +296,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsByteArrayAsync();
         }
-        public static async Task<IResponseResult<byte[]>> SendJsonDownloadAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<IResponseResult<byte[]>> SendJsonDownloadAsByteArrayResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content = null)
         {
             try
             {
@@ -395,7 +395,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStreamAsync();
         }
-        public static async Task<Stream> SendJsonDownloadAsStreamAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<Stream> SendJsonDownloadAsStreamAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content = null)
         {
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
@@ -484,7 +484,7 @@ namespace OneLine.Extensions
                 return new ResponseResult<string>(default, ex);
             }
         }
-        public static async Task<string> SendJsonDownloadAsStringAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<string> SendJsonDownloadAsStringAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content = null)
         {
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
@@ -500,7 +500,7 @@ namespace OneLine.Extensions
             var response = await httpClient.SendAsync(httpRequestMessage);
             return await response.Content.ReadAsStringAsync();
         }
-        public static async Task<IResponseResult<string>> SendJsonDownloadAsStringResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<IResponseResult<string>> SendJsonDownloadAsStringResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content = null)
         {
             try
             {
@@ -606,7 +606,7 @@ namespace OneLine.Extensions
                 return new ResponseResult<HttpResponseMessage>(default, ex, default);
             }
         }
-        public static async Task<IResponseResult<HttpResponseMessage>> SendJsonRequestHttpResponseMessageResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<IResponseResult<HttpResponseMessage>> SendJsonRequestHttpResponseMessageResponseResultAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content = null)
         {
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)
@@ -661,7 +661,7 @@ namespace OneLine.Extensions
                 return new ResponseResult<HttpResponseMessage>(default, ex, default);
             }
         }
-        public static async Task<HttpResponseMessage> SendJsonHttpResponseMessageAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content)
+        public static async Task<HttpResponseMessage> SendJsonHttpResponseMessageAsync(this HttpClient httpClient, HttpRequestMessage httpRequestMessage, object content = null)
         {
             //Send content over url
             if (httpRequestMessage.Method == HttpMethod.Get)

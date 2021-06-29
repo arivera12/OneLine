@@ -78,7 +78,7 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [ ] Redirect on Session Expired Client time out
   - [x] Redirect when Session is Expired in a User Action after Server Response 
 - [x] Configuration file management
-- [x] Configuration file chooser per enviroment management (Debug (Development) or Release (Production))
+- [x] Configuration file chooser per enviroment management (Debug (Development), Staging (Test) or Release (Production))
 - [x] Pre-implemented localized core base classes for forms and data views per every table
   - [x] *CardViewComponent.razor
   - [x] *DetailsComponent.razor

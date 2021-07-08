@@ -101,7 +101,6 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] RESTful API Arquitecture (JSON, XML and CSV)
 - [x] .csv and .xlsx document templates for posting to the API per controller
 - [x] Services are pre-registered per enviroment or platform
-- [x] Request data is validated always using the default validator
 - [x] Response has a base api response format
 - [x] Search results are always paged by default
 - [x] CRUD methods are pre implemented supports single and multiple, also with performance multiple method.

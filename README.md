@@ -78,7 +78,7 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [ ] Redirect on Session Expired Client time out
   - [x] Redirect when Session is Expired in a User Action after Server Response 
 - [x] Configuration file management
-- [x] Configuration file chooser per enviroment management (Debug (Development) or Release (Production))
+- [x] Configuration file chooser per enviroment management (Debug (Development), Staging (Test) or Release (Production))
 - [x] Pre-implemented localized core base classes for forms and data views per every table
   - [x] *CardViewComponent.razor
   - [x] *DetailsComponent.razor
@@ -101,7 +101,6 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] RESTful API Arquitecture (JSON, XML and CSV)
 - [x] .csv and .xlsx document templates for posting to the API per controller
 - [x] Services are pre-registered per enviroment or platform
-- [x] Request data is validated always using the default validator
 - [x] Response has a base api response format
 - [x] Search results are always paged by default
 - [x] CRUD methods are pre implemented supports single and multiple, also with performance multiple method.
@@ -222,7 +221,7 @@ For questions, quote or demo of the service you can contact me via email at anth
 
 Quotes are based on a tool which reverse engineering your database and estimates based on the tables, fields and table relationship design.
 
-Take note that at this time Sql Server is the only Database engine supported, others database engines are planned to be supported before this year ends.
+Take note that at this time Sql Server is the only Database engine supported, others database engines are planned to be supported soon.
 
 ## Roadmap
 

@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using OneLine.Enums;
 using OneLine.Extensions;
 using OneLine.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace OneLine.Bases
 {
@@ -167,6 +169,148 @@ namespace OneLine.Bases
         {
             await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<TAudit, TAuditTrails>(transactionMessage, HttpContextAccessor));
             await DbContext.SaveChangesAsync();
+        }
+        /// <summary>
+        /// Creates and audits a range of records adding it to the DbContext tracking and saving the operation
+        /// </summary>
+        /// <typeparam name="TAudit"></typeparam>
+        /// <param name="entities"></param>
+        /// <param name="transactionType"></param>
+        /// <param name="batchSize"></param>
+        /// <param name="recreateContext"></param>
+        public void CreateRangeBulkAuditrails<TAudit>(IEnumerable<TAudit> entities, TransactionType transactionType, int batchSize = 30, bool recreateContext = true)
+        {
+            var records = entities.CreateRangeAuditTrails<TAudit, TAuditTrails>(transactionType, HttpContextAccessor);
+            using (TransactionScope scope = new TransactionScope())
+            {
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+                int count = 0;
+                foreach (var record in records)
+                {
+                    ++count;
+                    DbContext.Add(record);
+                    if (count % batchSize == 0)
+                    {
+                        DbContext.SaveChanges();
+                        if (recreateContext)
+                        {
+                            DbContext.Dispose();
+                            var scopeFactory = ServiceScopeFactory.CreateScope();
+                            DbContext = scopeFactory.ServiceProvider.GetRequiredService<TDbContext>();
+                            DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+                        }
+                    }
+                }
+                DbContext.SaveChanges();
+                scope.Complete();
+            }
+        }
+        /// <summary>
+        /// Creates and audits a range of records adding it to the DbContext tracking and saving the operation
+        /// </summary>
+        /// <typeparam name="TAudit"></typeparam>
+        /// <param name="entities"></param>
+        /// <param name="transactionType"></param>
+        /// <param name="batchSize"></param>
+        /// <param name="recreateContext"></param>
+        /// <returns></returns>
+        public async Task CreateRangeBulkAuditrailsAsync<TAudit>(IEnumerable<TAudit> entities, TransactionType transactionType, int batchSize = 30, bool recreateContext = true)
+        {
+            var records = entities.CreateRangeAuditTrails<TAudit, TAuditTrails>(transactionType, HttpContextAccessor);
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+                int count = 0;
+                foreach (var record in records)
+                {
+                    ++count;
+                    await DbContext.AddAsync(record);
+                    if (count % batchSize == 0)
+                    {
+                        await DbContext.SaveChangesAsync();
+                        if (recreateContext)
+                        {
+                            await DbContext.DisposeAsync();
+                            var scopeFactory = ServiceScopeFactory.CreateScope();
+                            DbContext = scopeFactory.ServiceProvider.GetRequiredService<TDbContext>();
+                            DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+                        }
+                    }
+                }
+                await DbContext.SaveChangesAsync();
+                scope.Complete();
+            }
+        }
+        /// <summary>
+        /// Creates and audits a range of records adding it to the DbContext tracking and saving the operation
+        /// </summary>
+        /// <typeparam name="TAudit"></typeparam>
+        /// <param name="entities"></param>
+        /// <param name="transactionMessage"></param>
+        /// <param name="batchSize"></param>
+        /// <param name="recreateContext"></param>
+        public void CreateRangeBulkAuditrails<TAudit>(IEnumerable<TAudit> entities, string transactionMessage, int batchSize = 30, bool recreateContext = true)
+        {
+            var records = entities.CreateRangeAuditTrails<TAudit, TAuditTrails>(transactionMessage, HttpContextAccessor);
+            using (TransactionScope scope = new TransactionScope())
+            {
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+                int count = 0;
+                foreach (var record in records)
+                {
+                    ++count;
+                    DbContext.Add(record);
+                    if (count % batchSize == 0)
+                    {
+                        DbContext.SaveChanges();
+                        if (recreateContext)
+                        {
+                            DbContext.Dispose();
+                            var scopeFactory = ServiceScopeFactory.CreateScope();
+                            DbContext = scopeFactory.ServiceProvider.GetRequiredService<TDbContext>();
+                            DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+                        }
+                    }
+                }
+                DbContext.SaveChanges();
+                scope.Complete();
+            }
+        }
+        /// <summary>
+        /// Creates and audits a range of records adding it to the DbContext tracking and saving the operation
+        /// </summary>
+        /// <typeparam name="TAudit"></typeparam>
+        /// <param name="entities"></param>
+        /// <param name="transactionMessage"></param>
+        /// <param name="batchSize"></param>
+        /// <param name="recreateContext"></param>
+        /// <returns></returns>
+        public async Task CreateRangeBulkAuditrailsAsync<TAudit>(IEnumerable<TAudit> entities, string transactionMessage, int batchSize = 30, bool recreateContext = true)
+        {
+            var records = entities.CreateRangeAuditTrails<TAudit, TAuditTrails>(transactionMessage, HttpContextAccessor);
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+                int count = 0;
+                foreach (var record in records)
+                {
+                    ++count;
+                    await DbContext.AddAsync(record);
+                    if (count % batchSize == 0)
+                    {
+                        await DbContext.SaveChangesAsync();
+                        if (recreateContext)
+                        {
+                            await DbContext.DisposeAsync();
+                            var scopeFactory = ServiceScopeFactory.CreateScope();
+                            DbContext = scopeFactory.ServiceProvider.GetRequiredService<TDbContext>();
+                            DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+                        }
+                    }
+                }
+                await DbContext.SaveChangesAsync();
+                scope.Complete();
+            }
         }
         /// <summary>
         /// Adds an entity to the change tracker and audit it

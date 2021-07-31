@@ -16,3 +16,7 @@ INSERT [dbo].[TeleCommunicationServiceProviders] ([TeleCommunicationServiceProvi
 GO
 SET IDENTITY_INSERT [dbo].[TeleCommunicationServiceProviders] OFF
 GO
+INSERT [dbo].[SupportedCultures] ([SupportedCultureId], [Locale], [Name], [IsDeleted], [CreatedBy], [CreatedOn], [ModifiedBy], [ModifiedOn]) VALUES (N'en-US', N'en-US', N'English (United States)', 0, N'64666f90-f15e-491f-98df-069d02aa19f9', CAST(N'2021-04-07T23:17:01.770' AS DateTime), NULL, NULL)
+GO
+INSERT [dbo].[SupportedCultures] ([SupportedCultureId], [Locale], [Name], [IsDeleted], [CreatedBy], [CreatedOn], [ModifiedBy], [ModifiedOn]) VALUES (N'es-PR', N'es-PR', N'Spanish (Puerto Rico)', 0, N'64666f90-f15e-491f-98df-069d02aa19f9', CAST(N'2021-04-07T23:17:22.930' AS DateTime), NULL, NULL)
+GO

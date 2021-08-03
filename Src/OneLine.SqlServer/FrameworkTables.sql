@@ -168,10 +168,10 @@ CREATE TABLE [dbo].[ExceptionLogs](
 	[ExceptionLogId] [nvarchar](128) NOT NULL,
 	[HResult] [int] NULL,
 	[HelpLink] [nvarchar](4000) NULL,
-	[InnerException] [nvarchar](4000) NULL,
+	[InnerException] [nvarchar](MAX) NULL,
 	[Message] [nvarchar](4000) NULL,
 	[Source] [nvarchar](4000) NULL,
-	[StackTrace] [nvarchar](4000) NULL,
+	[StackTrace] [nvarchar](MAX) NULL,
 	[CreatedOn] [datetime] NOT NULL,
 	[CreatedBy] [nvarchar](128) NULL,
  CONSTRAINT [PK_exceptionlogs_ExceptionLogID] PRIMARY KEY CLUSTERED 

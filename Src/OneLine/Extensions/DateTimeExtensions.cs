@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 
 namespace OneLine.Extensions
 {
@@ -224,7 +222,7 @@ namespace OneLine.Extensions
         public static DateTime EndOfYear(this DateTime date)
         {
             int year = DateTime.Now.Year;
-            return new DateTime(year, 12, 31);                             
+            return new DateTime(year, 12, 31);
         }
         /// <summary>
         /// Check whether the <see cref="DateTime"/> date part is the end of the year

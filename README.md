@@ -199,17 +199,18 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [x] Data Views (Select single or multiple, back and/or next)
 
 ## Let's talk about the benefits of the OneLine multi platform solution scaffolding tool
-- Extreme fast, optimized and high level development.
-- Reduces development bugs or errors margin to almost 0% (I have done myself a few dozen of projects without any bugs or errors of any class).
+- Reduces and cuts development time and deliverables.
+- Reduces and cuts the numbers of developers or team.
+- Reduces and cuts development bugs or errors margin to or almost 0% (I have done myself a few dozen of projects without any bugs or errors of any class).
 - Increase developers productivity starting from 500% to 1200% (This is my estimates based on how slow or fast I have delivered a project). 
 - The development from scratch application real estimated time will be cut from 62% to 84% (You will only need to develop for 38% to 26% of the project).
+- Extreme fast, optimized and high level development.
 - Less coding to resolve general or specific software patterns.
 - Less code means easier and less hard to maintain.
 - What are the things I need to do or should take care starting from this advantage point?
   - Adjust labels text and translations on forms and data views (This will be improved in the near future but what you will get out of the box is still great).
   - Apply business and security rules to the web api and the web user interface.
   - Maybe dashboard and/or reports?
-
 
 ### Don't write code with stress or workload anymore. 
 

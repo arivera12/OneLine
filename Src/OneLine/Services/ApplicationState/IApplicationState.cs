@@ -22,6 +22,27 @@ namespace OneLine.Services
         /// <returns></returns>
         ValueTask SetApplicationUserSecure<TUser>(TUser user);
         /// <summary>
+        /// Sets the application current user in local or session storage based on the <paramref name="applicationSession"/>
+        /// </summary>
+        /// <typeparam name="TUser"></typeparam>
+        /// <param name="user"></param>
+        /// <param name="applicationSession"></param>
+        /// <returns></returns>
+        ValueTask SetApplicationUser<TUser>(TUser user, ApplicationSession applicationSession);
+        /// <summary>
+        /// Gets the application current user
+        /// </summary>
+        /// <typeparam name="TUser"></typeparam>
+        /// <returns></returns>
+        ValueTask<TUser> GetApplicationUser<TUser>();
+        /// <summary>
+        /// Sets the application current user
+        /// </summary>
+        /// <typeparam name="TUser"></typeparam>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        ValueTask SetApplicationUser<TUser>(TUser user);
+        /// <summary>
         /// Sets the application current user securely in local or session storage based on the <paramref name="applicationSession"/>
         /// </summary>
         /// <typeparam name="TUser"></typeparam>

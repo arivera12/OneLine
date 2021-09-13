@@ -245,6 +245,166 @@ namespace OneLine.Services
             }
         }
         /// <inheritdoc/>
+        public async ValueTask<TUser> GetApplicationUser<TUser>()
+        {
+            try
+            {
+                var applicationSession = await GetApplicationSession();
+                if (Device.IsXamarinPlatform &&
+                    (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                    !Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.LocalStorage))
+                {
+                    return JsonConvert.DeserializeObject<TUser>(await SecureStorage.GetAsync("User"));
+                }
+                else if (Device.IsXamarinPlatform &&
+                    (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                    !Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.SessionStorage))
+                {
+                    return JsonConvert.DeserializeObject<TUser>(SessionSecureUser);
+                }
+                else if (Device.IsXamarinPlatform &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.LocalStorage))
+                {
+                    var applicationDataUserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "User");
+                    if (File.Exists(applicationDataUserPath))
+                    {
+                        return JsonConvert.DeserializeObject<TUser>(File.ReadAllText(applicationDataUserPath));
+                    }
+                }
+                else if (Device.IsXamarinPlatform &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.SessionStorage))
+                {
+                    return JsonConvert.DeserializeObject<TUser>(SessionSecureUser);
+                }
+                else if (Device.IsWebPlatform)
+                {
+                    if (applicationSession == ApplicationSession.LocalStorage)
+                    {
+                        SessionSecureUser = await LocalStorage.GetItem<string>("User");
+                    }
+                    else
+                    {
+                        SessionSecureUser = await SessionStorage.GetItem<string>("User");
+                    }
+                    return JsonConvert.DeserializeObject<TUser>(SessionSecureUser);
+                }
+                else
+                {
+                    new PlatformNotSupportedException("Application state seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
+                }
+            }
+            catch
+            {
+                return default;
+            }
+            return default;
+        }
+        /// <inheritdoc/>
+        public async ValueTask SetApplicationUser<TUser>(TUser user)
+        {
+            var jsonUser = JsonConvert.SerializeObject(user);
+            var applicationSession = await GetApplicationSession();
+            if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.LocalStorage))
+            {
+                await SecureStorage.SetAsync("User", jsonUser);
+            }
+            else if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.SessionStorage))
+            {
+                SessionSecureUser = jsonUser;
+            }
+            else if (Device.IsXamarinPlatform &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.LocalStorage))
+            {
+                var applicationDataUserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "User");
+                File.WriteAllText(applicationDataUserPath, jsonUser);
+            }
+            else if (Device.IsXamarinPlatform &&
+                (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.SessionStorage))
+            {
+                SessionSecureUser = jsonUser;
+            }
+            else if (Device.IsWebPlatform)
+            {
+                if (applicationSession == ApplicationSession.LocalStorage)
+                {
+                    await LocalStorage.SetItem("User", jsonUser);
+                }
+                else
+                {
+                    await SessionStorage.SetItem("User", jsonUser);
+                }
+            }
+            else
+            {
+                new PlatformNotSupportedException("Application state seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
+            }
+        }
+        /// <inheritdoc/>
+        public async ValueTask SetApplicationUser<TUser>(TUser user, ApplicationSession applicationSession)
+        {
+            var jsonUser = JsonConvert.SerializeObject(user);
+            if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.LocalStorage))
+            {
+                await SecureStorage.SetAsync("User", jsonUser);
+            }
+            else if (Device.IsXamarinPlatform &&
+                (Device.IsiOSDevice || Device.IsAndroidDevice || Device.IsWindowsOSPlatform) &&
+                !Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.SessionStorage))
+            {
+                SessionSecureUser = jsonUser;
+            }
+            else if (Device.IsXamarinPlatform &&
+                    (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                    Device.IsDesktop &&
+                    applicationSession.Equals(ApplicationSession.LocalStorage))
+            {
+                var applicationDataUserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "User");
+                File.WriteAllText(applicationDataUserPath, jsonUser);
+            }
+            else if (Device.IsXamarinPlatform &&
+                (Device.IsMacOSDevice || Device.IsWindowsOSPlatform || Device.IsLinuxOSPlatform) &&
+                Device.IsDesktop &&
+                applicationSession.Equals(ApplicationSession.SessionStorage))
+            {
+                SessionSecureUser = jsonUser.Encrypt(SessionKey);
+            }
+            else if (Device.IsWebPlatform)
+            {
+                if (applicationSession == ApplicationSession.LocalStorage)
+                {
+                    await LocalStorage.SetItem("User", jsonUser);
+                }
+                else
+                {
+                    await SessionStorage.SetItem("User", jsonUser);
+                }
+            }
+            else
+            {
+                new PlatformNotSupportedException("Application state seems not to be supported by this platform. We could not recognize wether the platform is running on xamarin or blazor");
+            }
+        }
+        /// <inheritdoc/>
         public async ValueTask Logout()
         {
             if (Device.IsXamarinPlatform &&

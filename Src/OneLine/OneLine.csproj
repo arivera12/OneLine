@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Updated packaged removed storage net specific provier packages.</PackageReleaseNotes>
-    <Version>3.0.102</Version>
+    <PackageReleaseNotes>Added password claim extension.</PackageReleaseNotes>
+    <Version>3.0.105</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.102.0</AssemblyVersion>
-    <FileVersion>3.0.102.0</FileVersion>
+    <AssemblyVersion>3.0.105.0</AssemblyVersion>
+    <FileVersion>3.0.105.0</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

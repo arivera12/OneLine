@@ -7,5 +7,20 @@
     {
         /// <inheritdoc/>
         public string SearchTerm { get; set; }
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public Search()
+        {
+
+        }
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="searchTerm">The search term</param>
+        public Search(string searchTerm)
+        {
+            SearchTerm = searchTerm;
+        }
     }
 }

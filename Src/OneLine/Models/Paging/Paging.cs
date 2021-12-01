@@ -27,7 +27,7 @@
         /// <param name="pageSize">The page size</param>
         /// <param name="descending">Descending indicator</param>
         /// <param name="sortBy">Sort by property name</param>
-        public Paging(int pageIndex, int pageSize, bool descending, string sortBy)
+        public Paging(int? pageIndex, int? pageSize, bool? descending, string sortBy)
         {
             PageIndex = pageIndex;
             PageSize = pageSize;

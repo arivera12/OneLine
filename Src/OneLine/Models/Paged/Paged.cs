@@ -25,10 +25,17 @@ namespace OneLine.Models
         /// <inheritdoc/>
         public T Data { get; set; }
         /// <summary>
+        /// The default constructor
+        /// </summary>
+        public Paged()
+        {
+
+        }
+        /// <summary>
         /// The paged main constructors
         /// </summary>
         /// <param name="pageIndex">The page index</param>
-        /// <param name="pageSize">The page sie</param>
+        /// <param name="pageSize">The page size</param>
         /// <param name="totalCount">The records total count</param>
         /// <param name="data">The paged data</param>
         public Paged(int pageIndex, int pageSize, int totalCount, T data)
@@ -41,12 +48,6 @@ namespace OneLine.Models
             HasPreviousPage = PageIndex > 0;
             HasNextPage = TotalCount != 0 && PageIndex == 0 ? TotalCount > PageSize : TotalCount > (PageIndex + 1) * PageSize;
             Data = data;
-        }
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public Paged()
-        {
         }
     }
 }

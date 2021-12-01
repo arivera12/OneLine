@@ -126,6 +126,17 @@ namespace OneLine.Extensions
                 throw new ArgumentNullException(nameof(principal));
             return principal.FindFirst(Constants.ClaimTypes.MMSGateway)?.Value;
         }
+        /// <summary>
+        /// Gets the multimedia messaging service gateway by <see cref="Constants.ClaimTypes.Password"/>
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns></returns>
+        public static string Password(this ClaimsPrincipal principal)
+        {
+            if (principal.IsNull())
+                throw new ArgumentNullException(nameof(principal));
+            return principal.FindFirst(Constants.ClaimTypes.Password)?.Value;
+        }
     }
 }
 

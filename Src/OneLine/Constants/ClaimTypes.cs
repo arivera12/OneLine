@@ -22,5 +22,9 @@
         // Summary:
         //     The URI for a claim that specifies the multimedia messaging service gateway.
         public const string MMSGateway = "http://schemas.oneline.com/identity/claims/multimediamessagingservicegateway";
+        //
+        // Summary:
+        //     The URI for a claim that specifies the password.
+        public const string Password = "http://schemas.oneline.com/identity/claims/password";
     }
 }

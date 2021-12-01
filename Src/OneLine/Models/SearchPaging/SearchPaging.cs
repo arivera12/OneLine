@@ -26,7 +26,7 @@
         /// <param name="pageSize">The page size</param>
         /// <param name="descending">Descending indicator</param>
         /// <param name="sortBy">Sort by property name</param>
-        public SearchPaging(int pageIndex, int pageSize, bool descending, string sortBy)
+        public SearchPaging(int? pageIndex, int? pageSize, bool? descending, string sortBy)
         {
             PageIndex = pageIndex;
             PageSize = pageSize;
@@ -41,7 +41,7 @@
         /// <param name="descending">Descending indicator</param>
         /// <param name="sortBy">Sort by property name</param>
         /// <param name="searchTerm">The search term</param>
-        public SearchPaging(int pageIndex, int pageSize, bool descending, string sortBy, string searchTerm)
+        public SearchPaging(int? pageIndex, int? pageSize, bool? descending, string sortBy, string searchTerm)
         {
             PageIndex = pageIndex;
             PageSize = pageSize;

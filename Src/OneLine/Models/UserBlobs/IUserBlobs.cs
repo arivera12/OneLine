@@ -14,7 +14,7 @@ namespace OneLine.Models
         /// <summary>
         /// The user identifier
         /// </summary>
-        string UserIdentifier { get; set; }
+        string UserId { get; set; }
         /// <summary>
         /// The content disposition
         /// </summary>

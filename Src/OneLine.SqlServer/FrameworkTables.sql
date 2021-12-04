@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [dbo].[AspNetRoleClaims]    Script Date: 7/28/2021 3:31:36 PM ******/
+﻿/****** Object:  Table [dbo].[AspNetRoleClaims]    Script Date: 12/4/2021 1:17:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,7 +14,7 @@ CREATE TABLE [dbo].[AspNetRoleClaims](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetRoles]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[AspNetRoles]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30,7 +30,7 @@ CREATE TABLE [dbo].[AspNetRoles](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUserClaims]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[AspNetUserClaims]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -46,7 +46,7 @@ CREATE TABLE [dbo].[AspNetUserClaims](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUserLogins]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[AspNetUserLogins]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -63,7 +63,7 @@ CREATE TABLE [dbo].[AspNetUserLogins](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUserRoles]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[AspNetUserRoles]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -78,7 +78,7 @@ CREATE TABLE [dbo].[AspNetUserRoles](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUsers]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[AspNetUsers]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -119,7 +119,7 @@ CREATE TABLE [dbo].[AspNetUsers](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUserTokens]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[AspNetUserTokens]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -137,7 +137,7 @@ CREATE TABLE [dbo].[AspNetUserTokens](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AuditTrails]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[AuditTrails]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -151,7 +151,7 @@ CREATE TABLE [dbo].[AuditTrails](
 	[Record] [nvarchar](max) NULL,
 	[Hostname] [nvarchar](128) NULL,
 	[RemoteIpAddress] [nvarchar](64) NULL,
-	[CreatedBy] [nvarchar](128) NULL,
+	[CreatedBy] [nvarchar](450) NULL,
 	[CreatedOn] [datetime] NOT NULL,
  CONSTRAINT [PK_audittrail_AuditTrailID] PRIMARY KEY CLUSTERED 
 (
@@ -159,7 +159,7 @@ CREATE TABLE [dbo].[AuditTrails](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ExceptionLogs]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[ExceptionLogs]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -168,19 +168,19 @@ CREATE TABLE [dbo].[ExceptionLogs](
 	[ExceptionLogId] [nvarchar](128) NOT NULL,
 	[HResult] [int] NULL,
 	[HelpLink] [nvarchar](4000) NULL,
-	[InnerException] [nvarchar](MAX) NULL,
+	[InnerException] [nvarchar](4000) NULL,
 	[Message] [nvarchar](4000) NULL,
 	[Source] [nvarchar](4000) NULL,
-	[StackTrace] [nvarchar](MAX) NULL,
+	[StackTrace] [nvarchar](4000) NULL,
 	[CreatedOn] [datetime] NOT NULL,
-	[CreatedBy] [nvarchar](128) NULL,
+	[CreatedBy] [nvarchar](450) NULL,
  CONSTRAINT [PK_exceptionlogs_ExceptionLogID] PRIMARY KEY CLUSTERED 
 (
 	[ExceptionLogId] ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[NotificationMessages]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[NotificationMessages]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -202,7 +202,7 @@ CREATE TABLE [dbo].[NotificationMessages](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SupportedCultures]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[SupportedCultures]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -222,7 +222,7 @@ CREATE TABLE [dbo].[SupportedCultures](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TeleCommunicationServiceProviders]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[TeleCommunicationServiceProviders]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -243,14 +243,14 @@ CREATE TABLE [dbo].[TeleCommunicationServiceProviders](
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserBlobs]    Script Date: 7/28/2021 3:31:36 PM ******/
+/****** Object:  Table [dbo].[UserBlobs]    Script Date: 12/4/2021 1:17:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[UserBlobs](
 	[UserBlobId] [nvarchar](128) NOT NULL,
-	[UserIdentifier] [nvarchar](450) NOT NULL,
+	[UserId] [nvarchar](450) NULL,
 	[ContentDisposition] [nvarchar](128) NULL,
 	[ContentType] [nvarchar](128) NULL,
 	[FileName] [nvarchar](512) NOT NULL,
@@ -302,4 +302,24 @@ REFERENCES [dbo].[AspNetUsers] ([Id])
 ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[AspNetUserTokens] CHECK CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId]
+GO
+ALTER TABLE [dbo].[AuditTrails]  WITH CHECK ADD  CONSTRAINT [FK_AuditTrails_AspNetUsers] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+GO
+ALTER TABLE [dbo].[AuditTrails] CHECK CONSTRAINT [FK_AuditTrails_AspNetUsers]
+GO
+ALTER TABLE [dbo].[ExceptionLogs]  WITH CHECK ADD  CONSTRAINT [FK_ExceptionLogs_AspNetUsers] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+GO
+ALTER TABLE [dbo].[ExceptionLogs] CHECK CONSTRAINT [FK_ExceptionLogs_AspNetUsers]
+GO
+ALTER TABLE [dbo].[NotificationMessages]  WITH CHECK ADD  CONSTRAINT [FK_NotificationMessages_AspNetUsers] FOREIGN KEY([UserId])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+GO
+ALTER TABLE [dbo].[NotificationMessages] CHECK CONSTRAINT [FK_NotificationMessages_AspNetUsers]
+GO
+ALTER TABLE [dbo].[UserBlobs]  WITH CHECK ADD  CONSTRAINT [FK_UserBlobs_AspNetUsers] FOREIGN KEY([UserId])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+GO
+ALTER TABLE [dbo].[UserBlobs] CHECK CONSTRAINT [FK_UserBlobs_AspNetUsers]
 GO

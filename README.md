@@ -211,6 +211,8 @@ OneLine is a multiplatform, standardized, redefined framework.
   - Apply business and security rules to the web api and the web user interface.
   - Maybe dashboard and/or reports?
 
+### DON'T REPEAT YOURSELF
+
 ### Don't write code with stress or workload anymore. 
 
 ### Write code with peace of mind, speed and confidence.

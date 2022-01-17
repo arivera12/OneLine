@@ -75,7 +75,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [ ] Session Token Lifetime Management
   - [x] Auto Renew Session Token when Session is Expired in a User Action after Server Response
   - [ ] Ask for More Session Time
-  - [ ] Redirect on Session Expired Client time out 
+  - [x] Redirect on Session Expired Client time out 
 - [x] Configuration file management
 - [x] Configuration file chooser per enviroment management (Debug (Development), Staging (Test) or Release (Production))
 - [x] Pre-implemented localized core base classes for forms and data views per every table

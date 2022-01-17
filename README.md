@@ -1,4 +1,4 @@
-# OneLine (Development, beta coming soon)
+# OneLine
 <p>
     	<a href="https://www.nuget.org/packages/OneLine">
          <img src="https://buildstats.info/nuget/OneLine?v=2.0.89" />

@@ -224,7 +224,7 @@ For questions, quote or demo of the service you can contact me via email at anth
 
 Quotes are based on a tool which reverse engineering your database and estimates based on the tables, fields and table relationship design.
 
-#Pre Requisites of OneLine Tool
+### Pre Requisites of OneLine Tool
 - LibreTranslate web server on local/remote network (docker is what I use and should be prefered)
 - EF Core Tools (dotnet tool install --global dotnet-ef --version 5.0.15)
 

@@ -44,14 +44,15 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [ ] Windows Desktop and WPF (Under Development)
   - [ ] MacOS Desktop (Under Development)
   - [ ] Linux (Planning TBA)
-- [ ] Database Providers Supported
+- [x] Database Providers Supported Over Entity Framework Core
   - [x] SQL Server 2012 onwards
-  - [ ] SQLite 3.7 onwards
-  - [ ] Azure Cosmos DB SQL API (Still planning for support)
-  - [ ] PostgreSQL
-  - [ ] MySQL
-  - [ ] MariaDB
-  - [ ] Oracle DB 11.2 onwards
+  - [x] SQLite 3.7 onwards
+  - [x] PostgreSQL
+  - [x] MySQL
+  - [x] MariaDB
+  - [x] Oracle DB 11.2 onwards
+
+Any other database engines can be supported as requested per need.
 
 ### Managements and Pre-implementations
 - [x] User account management
@@ -213,17 +214,15 @@ OneLine is a multiplatform, standardized, redefined framework.
 
 ### DON'T REPEAT YOURSELF
 
-### Don't write code with stress or workload anymore. 
+### DON'T WRITE CODE WITH STRESS OR WORKLOAD ANYMORE.
 
-### Write code with peace of mind, speed and confidence.
+### WRITE CODE WITH PEACE OF MIND, SPEED AND CONFIDENCE.
 
-### Work smart not hard.
+### WORK SMART NOT HARD.
 
 For questions, quote or demo of the service you can contact me via email at anthony.revocodez@gmail.com
 
 Quotes are based on a tool which reverse engineering your database and estimates based on the tables, fields and table relationship design.
-
-Take note that at this time Sql Server is the only Database engine supported, others database engines are planned to be supported soon.
 
 ## Roadmap
 

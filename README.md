@@ -1,7 +1,7 @@
 # OneLine
 <p>
     	<a href="https://www.nuget.org/packages/OneLine">
-         <img src="https://buildstats.info/nuget/OneLine?v=2.0.89" />
+         <img src="https://buildstats.info/nuget/OneLine?v=3.0.108" />
      </a>
      <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSE2NMEG3F7QU&source=url">
          <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" />
@@ -212,7 +212,7 @@ Any other database engines can be supported as requested per need.
   - Apply business and security rules to the web api and the web user interface.
   - Maybe dashboard and/or reports?
 
-### DON'T REPEAT YOURSELF
+### DON'T REPEAT YOURSELF.
 
 ### DON'T WRITE CODE WITH STRESS OR WORKLOAD ANYMORE.
 
@@ -223,6 +223,10 @@ Any other database engines can be supported as requested per need.
 For questions, quote or demo of the service you can contact me via email at anthony.revocodez@gmail.com
 
 Quotes are based on a tool which reverse engineering your database and estimates based on the tables, fields and table relationship design.
+
+#Pre Requisites of OneLine Tool
+- LibreTranslate web server on local/remote network (docker is what I use and should be prefered)
+- EF Core Tools (dotnet tool install --global dotnet-ef --version 5.0.15)
 
 ## Roadmap
 

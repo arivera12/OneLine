@@ -1,9 +1,9 @@
 # OneLine
 <p>
-    	<a href="https://www.nuget.org/packages/OneLine">
+    	<a href="https://www.nuget.org/packages/OneLine" target="_blank">
          <img src="https://buildstats.info/nuget/OneLine?v=3.0.108" />
      </a>
-     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSE2NMEG3F7QU&source=url">
+     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSE2NMEG3F7QU&source=url" target="_blank">
          <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" />
      </a>
 </p>
@@ -220,7 +220,7 @@ Any other database engines can be supported as requested per need.
 
 ### WORK SMART NOT HARD.
 
-For questions, quote or <a href="https://www.youtube.com/watch?v=oqxUwLM5_hc">demo</a> of the service you can contact me via email at anthony.revocodez@gmail.com
+For questions, quote or <a href="https://www.youtube.com/watch?v=oqxUwLM5_hc" target="_blank">demo</a> of the service you can contact me via email at anthony.revocodez@gmail.com
 
 Quotes are based on a tool which reverse engineering your database and estimates based on the tables, fields and table relationship design.
 

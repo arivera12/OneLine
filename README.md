@@ -212,7 +212,8 @@ Any other database engines can be supported as requested per need.
 - What are the things I need to do or should take care starting from this advantage point?
   - Adjust labels text and translations on forms and data views (This will be improved in the near future but what you will get out of the box is still great).
   - Apply business and security rules to the web api and the web user interface.
-  - Maybe dashboard and/or reports?
+  - Third party api/service integrations.
+  - Dashboards and/or reports.
 
 ### DON'T REPEAT YOURSELF.
 

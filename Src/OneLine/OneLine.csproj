@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Upgraded blazor download file.</PackageReleaseNotes>
-    <Version>3.0.108</Version>
+    <PackageReleaseNotes>Removed shiny due to inconsistency on the author. Updated some dependency packages.</PackageReleaseNotes>
+    <Version>3.1</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.0.108.0</AssemblyVersion>
-    <FileVersion>3.0.108.0</FileVersion>
+    <AssemblyVersion>3.1</AssemblyVersion>
+    <FileVersion>3.1</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>
@@ -44,12 +44,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.13" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.13" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Sendgrid" Version="9.25.1" />
-    <PackageReference Include="FluentValidation" Version="9.5.3" />
+    <PackageReference Include="Sendgrid" Version="9.28.0" />
+    <PackageReference Include="FluentValidation" Version="11.0.1" />
     <PackageReference Include="BlazorBrowserStorage" Version="1.0.1" />
-    <PackageReference Include="BlazorDownloadFile" Version="2.3.0" />
-    <PackageReference Include="Shiny.Notifications" Version="2.0.0.2280-preview" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="BlazorDownloadFile" Version="2.4.0.2" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,14 +1,16 @@
-# OneLine (Development, beta coming soon)
+# OneLine
 <p>
-    	<a href="https://www.nuget.org/packages/OneLine">
-         <img src="https://buildstats.info/nuget/OneLine?v=2.0.89" />
+    	<a href="https://www.nuget.org/packages/OneLine" target="_blank">
+         <img src="https://buildstats.info/nuget/OneLine?v=3.0.108" />
      </a>
-     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSE2NMEG3F7QU&source=url">
+     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSE2NMEG3F7QU&source=url" target="_blank">
          <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" />
      </a>
 </p>
 
 OneLine is a multiplatform, standardized, redefined framework.
+
+## <a href="https://www.youtube.com/watch?v=oqxUwLM5_hc" target="_blank">Demo (Spanish Language)</a>
 
 ## General technical features 
 
@@ -44,14 +46,15 @@ OneLine is a multiplatform, standardized, redefined framework.
   - [ ] Windows Desktop and WPF (Under Development)
   - [ ] MacOS Desktop (Under Development)
   - [ ] Linux (Planning TBA)
-- [ ] Database Providers Supported
+- [x] Database Providers Supported Over Entity Framework Core
   - [x] SQL Server 2012 onwards
-  - [ ] SQLite 3.7 onwards
-  - [ ] Azure Cosmos DB SQL API (Still planning for support)
-  - [ ] PostgreSQL
-  - [ ] MySQL
-  - [ ] MariaDB
-  - [ ] Oracle DB 11.2 onwards
+  - [x] SQLite 3.7 onwards
+  - [x] PostgreSQL
+  - [x] MySQL
+  - [x] MariaDB
+  - [x] Oracle DB 11.2 onwards
+
+Any other database engines can be supported as requested per need.
 
 ### Managements and Pre-implementations
 - [x] User account management
@@ -75,7 +78,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [ ] Session Token Lifetime Management
   - [x] Auto Renew Session Token when Session is Expired in a User Action after Server Response
   - [ ] Ask for More Session Time
-  - [ ] Redirect on Session Expired Client time out 
+  - [x] Redirect on Session Expired Client time out 
 - [x] Configuration file management
 - [x] Configuration file chooser per enviroment management (Debug (Development), Staging (Test) or Release (Production))
 - [x] Pre-implemented localized core base classes for forms and data views per every table
@@ -209,19 +212,24 @@ OneLine is a multiplatform, standardized, redefined framework.
 - What are the things I need to do or should take care starting from this advantage point?
   - Adjust labels text and translations on forms and data views (This will be improved in the near future but what you will get out of the box is still great).
   - Apply business and security rules to the web api and the web user interface.
-  - Maybe dashboard and/or reports?
+  - Third party api/service integrations.
+  - Dashboards and/or reports.
 
-### Don't write code with stress or workload anymore. 
+### DON'T REPEAT YOURSELF.
 
-### Write code with peace of mind, speed and confidence.
+### DON'T WRITE CODE WITH STRESS OR WORKLOAD ANYMORE.
 
-### Work smart not hard.
+### WRITE CODE WITH PEACE OF MIND, SPEED AND CONFIDENCE.
 
-For questions, quote or demo of the service you can contact me via email at anthony.revocodez@gmail.com
+### WORK SMART NOT HARD.
+
+For questions, quote or <a href="https://www.youtube.com/watch?v=oqxUwLM5_hc" target="_blank">demo</a> of the service you can contact me via email at anthony.revocodez@gmail.com
 
 Quotes are based on a tool which reverse engineering your database and estimates based on the tables, fields and table relationship design.
 
-Take note that at this time Sql Server is the only Database engine supported, others database engines are planned to be supported soon.
+### Pre Requisites of OneLine Tool
+- LibreTranslate web server on local/remote network (docker is what I use and should be prefered)
+- EF Core Tools (dotnet tool install --global dotnet-ef --version 5.0.15)
 
 ## Roadmap
 

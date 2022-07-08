@@ -205,7 +205,7 @@ Any other database engines can be supported as requested per need.
 - The development from scratch application real estimated time will be cut from 62% to 84% (You will only need to develop for 38% to 26% of the project).
 - Extreme fast, optimized and high level development.
 - Less coding to resolve general or specific software patterns.
-- Less code means easier and less hard to maintain.
+- Less code means easier to maintain.
 - What are the things I need to do or should take care starting from this advantage point?
   - Adjust labels text and translations on forms and data views (This will be improved in the near future but what you will get out of the box is still great).
   - Apply business and security rules to the web api and the web user interface.

@@ -7,7 +7,21 @@
 
 OneLine is a multiplatform, standardized, redefined framework.
 
-## <a href="https://www.youtube.com/watch?v=7CZL-Jo6TAE" target="_blank">See OneLine Robot in Action!</a>
+Botoneline is a bot that analyzes databases design and setups a generic multiplatform solution for you.
+
+## <a href="https://www.youtube.com/watch?v=7CZL-Jo6TAE" target="_blank">See Botoneline in Action!</a>
+
+### How it's possible a robot that develops?
+
+Yes, it's possible!
+
+I have been developing this robot since 2013.
+
+This robot resolve common patterns and some general patterns as well.
+
+Botoneline is being teached more everyday.
+
+I have developed 35+ applications with it.
 
 ## General technical features 
 
@@ -31,7 +45,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Eventable
 - [x] Listenable
 
-## OneLine multi platform solution scaffolding robot features  (Commercially available)
+## Botoneline features  (Commercially available)
 - [x] RAD (Rapid Application Development) and Prototyping
 - [x] WORE (Write once, run everywhere)
 - [x] Multi platform deployment support (Thanks to [MobileBlazorBindings](https://github.com/dotnet/MobileBlazorBindings))
@@ -197,7 +211,7 @@ Any other database engines can be supported as requested per need.
   - [x] CRUD (Create, Read, Update, Delete operations) (back and/or next) 
   - [x] Data Views (Select single or multiple, back and/or next)
 
-## Let's talk about the benefits of the OneLine multi platform solution scaffolding robot
+## Let's talk about the benefits of Botoneline
 - Reduces and cuts development time and deliverables.
 - Reduces and cuts the numbers of developers or team.
 - Reduces and cuts development bugs or errors margin to or almost 0% (I have done myself a few dozen of projects without any bugs or errors of any class).
@@ -222,11 +236,7 @@ Any other database engines can be supported as requested per need.
 
 For questions, quote or <a href="https://www.youtube.com/watch?v=oqxUwLM5_hc" target="_blank">demo</a> of the service you can contact me via email at anthony.revocodez@gmail.com
 
-Quotes are based on a tool which reverse engineering your database and estimates based on the tables, fields and table relationship design.
-
-### Pre Requisites of OneLine Robot
-- LibreTranslate web server on local/remote network (docker is what I use and should be prefered)
-- EF Core Tools (dotnet tool install --global dotnet-ef --version 5.0.15)
+Quotes are based on a Botoneline which reverse engineering your database and estimates based on the tables, fields and table relationship design.
 
 ## Roadmap
 

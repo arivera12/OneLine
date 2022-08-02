@@ -171,7 +171,7 @@ Any other database engines can be supported as requested per need.
 - [x] Application State
 - [x] Device
 - [x] Device Storage
-- [x] Notification
+- [x] In App Notifications (Push notification integration is on the way)
 - [x] Resource manager localizer
 - [x] Save file
 - [x] Supported cultures
@@ -240,10 +240,16 @@ Quotes are based on a Botoneline which reverse engineering your database and est
 
 ## Roadmap
 
-- Push notifications and notifications history Management (Cross Platform)
+- Push notifications and notifications history Management (Cross Platform, firebase/azure)
   - In-App notification and messages is available for now
-- In-App Blob Storage Manager (Like any web drive service like dropbox, google drive, one drive, etc)
-  - Read only view is available for now
+  - Improve messaging form
+- Confirm action by password
+- In-Component user defined (persistent or by expiration date) notification alerts
+- Add option for refreshing lists for certain options (add, edit, delete)
+- Add mechanism to load dropdowns only once
+  - Add filtering mechanisms so that dropdowns filter client side only when doing a single load.
+- Add upload .csv via file on Http Service Method
+- Change Actions to EventCallback
 - Cross Platform Device API's Implementations for Browser and Xamarin. 
   - Accelerometer
   - App Information
@@ -281,15 +287,12 @@ Quotes are based on a Botoneline which reverse engineering your database and est
   - Version Tracking
   - Vibrate
   - Web Authenticator
-- In-Component user defined (persistent or by expiration date) notification alerts
-- Create a translator service inside the tool to translate resource files from one language to another
 - Chat (Cross Platform)
   - From clients to app/service representative
   - Between users
   - Groups
 - App/service representative chat with connected clients
 - User invites other users to manage profile including access permissions management 
-- Confirm action by password
 
   
 ### Known Random Issues on Visual Studio

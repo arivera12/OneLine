@@ -234,11 +234,11 @@ Any other database engines can be supported as requested per need.
 
 ### WORK SMART NOT HARD.
 
-For questions, quote or <a href="https://www.youtube.com/watch?v=oqxUwLM5_hc" target="_blank">demo</a> of the service you can contact me via email at anthony.revocodez@gmail.com
+For questions, quote or <a href="https://www.youtube.com/watch?v=7CZL-Jo6TAE" target="_blank">demo</a> of the service you can contact me via email at onelinetool@gmail.com
 
 Quotes are based on a Botoneline which reverse engineering your database and estimates based on the tables, fields and table relationship design.
 
-## Roadmap
+## Roadmap Botoneline
 
 - Push notifications and notifications history Management (Cross Platform, firebase/azure)
   - In-App notification and messages is available for now

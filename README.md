@@ -247,6 +247,7 @@ Quotes are based on a Botoneline which reverse engineering your database and est
   - Improve messaging form
 - Confirm action by password
 - In-Component user defined (persistent or by expiration date) notification alerts
+- Add a batch search procedure on the api search methods
 - Add option for refreshing lists for certain options (add, edit, delete)
 - Add mechanism to load dropdowns only once
   - Add filtering mechanisms so that dropdowns filter client side only when doing a single load.

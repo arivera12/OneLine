@@ -3,14 +3,27 @@
     	<a href="https://www.nuget.org/packages/OneLine" target="_blank">
          <img src="https://buildstats.info/nuget/OneLine?v=3.0.108" />
      </a>
-     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSE2NMEG3F7QU&source=url" target="_blank">
-         <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" />
-     </a>
 </p>
 
 OneLine is a multiplatform, standardized, redefined framework.
 
-## <a href="https://www.youtube.com/watch?v=oqxUwLM5_hc" target="_blank">Demo (Spanish Language)</a>
+Botoneline is a bot that analyzes databases design and setups a generic multiplatform solution for you.
+
+## <a href="https://www.youtube.com/watch?v=7CZL-Jo6TAE" target="_blank">See Botoneline in Action!</a>
+
+## <a href="https://github.com/arivera12/OneLineGuideLine" target="_blank">See OneLine and Botoneline GuideLine!</a>
+
+### How it's possible a robot that develops?
+
+Yes, it's possible!
+
+I have been developing this robot since 2013.
+
+This robot resolve common patterns and some general patterns as well.
+
+Botoneline is being teached more everyday.
+
+I have developed 35+ applications with it.
 
 ## General technical features 
 
@@ -34,7 +47,7 @@ OneLine is a multiplatform, standardized, redefined framework.
 - [x] Eventable
 - [x] Listenable
 
-## OneLine multi platform solution scaffolding tool features  (Commercially available)
+## Botoneline features  (Commercially available)
 - [x] RAD (Rapid Application Development) and Prototyping
 - [x] WORE (Write once, run everywhere)
 - [x] Multi platform deployment support (Thanks to [MobileBlazorBindings](https://github.com/dotnet/MobileBlazorBindings))
@@ -160,7 +173,7 @@ Any other database engines can be supported as requested per need.
 - [x] Application State
 - [x] Device
 - [x] Device Storage
-- [x] Notification
+- [x] In App Notifications (Push notification integration is on the way)
 - [x] Resource manager localizer
 - [x] Save file
 - [x] Supported cultures
@@ -200,7 +213,7 @@ Any other database engines can be supported as requested per need.
   - [x] CRUD (Create, Read, Update, Delete operations) (back and/or next) 
   - [x] Data Views (Select single or multiple, back and/or next)
 
-## Let's talk about the benefits of the OneLine multi platform solution scaffolding tool
+## Let's talk about the benefits of Botoneline
 - Reduces and cuts development time and deliverables.
 - Reduces and cuts the numbers of developers or team.
 - Reduces and cuts development bugs or errors margin to or almost 0% (I have done myself a few dozen of projects without any bugs or errors of any class).
@@ -208,7 +221,7 @@ Any other database engines can be supported as requested per need.
 - The development from scratch application real estimated time will be cut from 62% to 84% (You will only need to develop for 38% to 26% of the project).
 - Extreme fast, optimized and high level development.
 - Less coding to resolve general or specific software patterns.
-- Less code means easier and less hard to maintain.
+- Less code means easier to maintain.
 - What are the things I need to do or should take care starting from this advantage point?
   - Adjust labels text and translations on forms and data views (This will be improved in the near future but what you will get out of the box is still great).
   - Apply business and security rules to the web api and the web user interface.
@@ -223,20 +236,23 @@ Any other database engines can be supported as requested per need.
 
 ### WORK SMART NOT HARD.
 
-For questions, quote or <a href="https://www.youtube.com/watch?v=oqxUwLM5_hc" target="_blank">demo</a> of the service you can contact me via email at anthony.revocodez@gmail.com
+For questions, quote or <a href="https://www.youtube.com/watch?v=7CZL-Jo6TAE" target="_blank">demo</a> of the service you can contact me via email at onelinetool@gmail.com
 
-Quotes are based on a tool which reverse engineering your database and estimates based on the tables, fields and table relationship design.
+Quotes are based on a Botoneline which reverse engineering your database and estimates based on the tables, fields and table relationship design.
 
-### Pre Requisites of OneLine Tool
-- LibreTranslate web server on local/remote network (docker is what I use and should be prefered)
-- EF Core Tools (dotnet tool install --global dotnet-ef --version 5.0.15)
+## Roadmap Botoneline
 
-## Roadmap
-
-- Push notifications and notifications history Management (Cross Platform)
+- Push notifications and notifications history Management (Cross Platform, firebase/azure)
   - In-App notification and messages is available for now
-- In-App Blob Storage Manager (Like any web drive service like dropbox, google drive, one drive, etc)
-  - Read only view is available for now
+  - Improve messaging form
+- Confirm action by password
+- In-Component user defined (persistent or by expiration date) notification alerts
+- Add a batch search procedure on the api search methods
+- Add option for refreshing lists for certain options (add, edit, delete)
+- Add mechanism to load dropdowns only once
+  - Add filtering mechanisms so that dropdowns filter client side only when doing a single load.
+- Add upload .csv via file on Http Service Method
+- Change Actions to EventCallback
 - Cross Platform Device API's Implementations for Browser and Xamarin. 
   - Accelerometer
   - App Information
@@ -274,15 +290,12 @@ Quotes are based on a tool which reverse engineering your database and estimates
   - Version Tracking
   - Vibrate
   - Web Authenticator
-- In-Component user defined (persistent or by expiration date) notification alerts
-- Create a translator service inside the tool to translate resource files from one language to another
 - Chat (Cross Platform)
   - From clients to app/service representative
   - Between users
   - Groups
 - App/service representative chat with connected clients
 - User invites other users to manage profile including access permissions management 
-- Confirm action by password
 
   
 ### Known Random Issues on Visual Studio

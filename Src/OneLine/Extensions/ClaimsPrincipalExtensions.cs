@@ -127,15 +127,15 @@ namespace OneLine.Extensions
             return principal.FindFirst(Constants.ClaimTypes.MMSGateway)?.Value;
         }
         /// <summary>
-        /// Gets the multimedia messaging service gateway by <see cref="Constants.ClaimTypes.Password"/>
+        /// Gets the application session wether is persistent or not <see cref="ClaimTypes.IsPersistent"/>
         /// </summary>
         /// <param name="principal"></param>
         /// <returns></returns>
-        public static string Password(this ClaimsPrincipal principal)
+        public static bool IsPersistent(this ClaimsPrincipal principal)
         {
             if (principal.IsNull())
                 throw new ArgumentNullException(nameof(principal));
-            return principal.FindFirst(Constants.ClaimTypes.Password)?.Value;
+            return principal.GetClaim<bool>(ClaimTypes.IsPersistent);
         }
     }
 }

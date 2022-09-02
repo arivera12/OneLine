@@ -12,6 +12,13 @@ namespace OneLine.Services
         public ApplicationConfigurationSource()
         {
         }
+        public ApplicationConfigurationSource(string configurationFilePath, Assembly configurationFileAssemblyFile, string resourceFilesBasePath, Assembly resourceFilesAssemblyFile)
+        {
+            ConfigurationFilePath = configurationFilePath;
+            ConfigurationFileAssemblyFile = configurationFileAssemblyFile;
+            ResourceFilesBasePath = resourceFilesBasePath;
+            ResourceFilesAssemblyFile = resourceFilesAssemblyFile;
+        }
     }
     public static partial class ServiceCollectionExtensions
     {

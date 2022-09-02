@@ -24,16 +24,6 @@ namespace OneLine.Services
         /// </summary>
         ResourceManager ResourceManager { get; set; }
         /// <summary>
-        /// Gets the current application locale from storage
-        /// </summary>
-        /// <returns></returns>
-        Task<string> GetApplicationLocale();
-        /// <summary>
-        /// Sets the current application locale in the storage and sets current thread culture
-        /// </summary>
-        /// <returns></returns>
-        Task SetApplicationLocale(string applicationLocale);
-        /// <summary>
         /// Sets the <see cref="System.Threading.Thread.CurrentThread.CurrentCulture"/> and 
         /// <see cref="System.Threading.Thread.CurrentThread.CurrentUICulture"/> with the current application locale
         /// </summary>

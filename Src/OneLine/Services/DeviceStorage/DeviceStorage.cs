@@ -131,11 +131,11 @@ namespace OneLine.Services
             {
                 if (useDevicePersistentStorageProvider)
                 {
-                    await LocalStorage.SetItem<T>(key, item);
+                    await LocalStorage.SetItem(key, item);
                 }
                 else
                 {
-                    await SessionStorage.SetItem<T>(key, item);
+                    await SessionStorage.SetItem(key, item);
                 }
             }
         }

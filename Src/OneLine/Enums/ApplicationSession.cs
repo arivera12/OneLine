@@ -5,7 +5,7 @@
     /// </summary>
     public enum ApplicationSession
     {
-        LocalStorage,
-        SessionStorage
+        SessionStorage,
+        LocalStorage
     }
 }

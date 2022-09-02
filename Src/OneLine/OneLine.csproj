@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Added try and catch on getting application user to bypass early jsruntime call error.</PackageReleaseNotes>
-    <Version>3.92</Version>
+    <PackageReleaseNotes>Removed DestinationUri from INotificationMessages.</PackageReleaseNotes>
+    <Version>3.93</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.92</AssemblyVersion>
-    <FileVersion>3.92</FileVersion>
+    <AssemblyVersion>3.93</AssemblyVersion>
+    <FileVersion>3.93</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

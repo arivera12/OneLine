@@ -25,10 +25,6 @@ namespace OneLine.Models
         /// </summary>
         string IconUri { get; set; }
         /// <summary>
-        /// The path to redirect to.
-        /// </summary>
-        string DestinationUri { get; set; }
-        /// <summary>
         /// The is deleted is to allow soft delete
         /// </summary>
         bool? IsDeleted { get; set; }

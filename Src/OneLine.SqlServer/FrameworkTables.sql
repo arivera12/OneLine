@@ -191,7 +191,6 @@ CREATE TABLE [dbo].[NotificationMessages](
 	[Title] [nvarchar](256) NULL,
 	[Message] [nvarchar](max) NOT NULL,
 	[IconUri] [nvarchar](512) NULL,
-	[DestinationUri] [nvarchar](256) NULL,
 	[IsReaded] [bit] NULL,
 	[IsDeleted] [bit] NULL,
 	[CreatedOn] [datetime] NOT NULL,

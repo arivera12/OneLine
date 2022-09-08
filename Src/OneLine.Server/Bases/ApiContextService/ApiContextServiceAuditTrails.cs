@@ -465,7 +465,7 @@ namespace OneLine.Bases
         public async Task UpdateRangeAuditedAsync<T>(IEnumerable<T> entities)
         {
             DbContext.UpdateRange(entities);
-            await DbContext.AddAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Update, HttpContextAccessor));
+            await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Update, HttpContextAccessor));
         }
         /// <summary>
         /// Updates a range of entities to the change tracker and audit it
@@ -476,7 +476,7 @@ namespace OneLine.Bases
         public void UpdateRangeAudited<T>(IEnumerable<T> entities, string transactionMessage)
         {
             DbContext.UpdateRange(entities);
-            DbContext.Add(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
+            DbContext.AddRange(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
         /// <summary>
         /// Updates a range of entities to the change tracker and audit it
@@ -488,7 +488,7 @@ namespace OneLine.Bases
         public async Task UpdateRangeAuditedAsync<T>(IEnumerable<T> entities, string transactionMessage)
         {
             DbContext.UpdateRange(entities);
-            await DbContext.AddAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
+            await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
         /// <summary>
         /// Remove a entity to the change tracker and audit it
@@ -542,7 +542,7 @@ namespace OneLine.Bases
         public void RemoveRangeAudited<T>(IEnumerable<T> entities)
         {
             DbContext.RemoveRange(entities);
-            DbContext.Add(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
+            DbContext.AddRange(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
         }
         /// <summary>
         /// Remove a range of entities to the change tracker and audit it
@@ -553,7 +553,7 @@ namespace OneLine.Bases
         public async Task RemoveRangeAuditedAsync<T>(IEnumerable<T> entities)
         {
             DbContext.RemoveRange(entities);
-            await DbContext.AddAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
+            await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
         }
         /// <summary>
         /// Remove a range of entities to the change tracker and audit it
@@ -564,7 +564,7 @@ namespace OneLine.Bases
         public void RemoveRangeAudited<T>(IEnumerable<T> entities, string transactionMessage)
         {
             DbContext.RemoveRange(entities);
-            DbContext.Add(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
+            DbContext.AddRange(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
         /// <summary>
         /// Remove a range of entities to the change tracker and audit it
@@ -576,7 +576,7 @@ namespace OneLine.Bases
         public async Task RemoveRangeAuditedAsync<T>(IEnumerable<T> entities, string transactionMessage)
         {
             DbContext.RemoveRange(entities);
-            await DbContext.AddAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
+            await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
     }
 }

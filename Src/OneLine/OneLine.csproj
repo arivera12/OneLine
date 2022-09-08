@@ -12,12 +12,12 @@
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <RepositoryType>C#</RepositoryType>
     <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Removed DestinationUri from INotificationMessages.</PackageReleaseNotes>
-    <Version>3.93</Version>
+    <PackageReleaseNotes>Fixed ApiContextService range of audittrails wrong method call.</PackageReleaseNotes>
+    <Version>3.94</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>3.93</AssemblyVersion>
-    <FileVersion>3.93</FileVersion>
+    <AssemblyVersion>3.94</AssemblyVersion>
+    <FileVersion>3.94</FileVersion>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>

@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [dbo].[AspNetRoleClaims]    Script Date: 12/4/2021 1:17:57 PM ******/
+﻿/****** Object:  Table [dbo].[AspNetRoleClaims]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -11,10 +11,10 @@ CREATE TABLE [dbo].[AspNetRoleClaims](
  CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetRoles]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[AspNetRoles]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27,10 +27,10 @@ CREATE TABLE [dbo].[AspNetRoles](
  CONSTRAINT [PK_AspNetRoles] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUserClaims]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[AspNetUserClaims]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -43,10 +43,10 @@ CREATE TABLE [dbo].[AspNetUserClaims](
  CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUserLogins]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[AspNetUserLogins]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -60,10 +60,10 @@ CREATE TABLE [dbo].[AspNetUserLogins](
 (
 	[LoginProvider] ASC,
 	[ProviderKey] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUserRoles]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[AspNetUserRoles]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -75,10 +75,10 @@ CREATE TABLE [dbo].[AspNetUserRoles](
 (
 	[UserId] ASC,
 	[RoleId] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUsers]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[AspNetUsers]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -116,10 +116,10 @@ CREATE TABLE [dbo].[AspNetUsers](
  CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AspNetUserTokens]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[AspNetUserTokens]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -134,10 +134,10 @@ CREATE TABLE [dbo].[AspNetUserTokens](
 	[UserId] ASC,
 	[LoginProvider] ASC,
 	[Name] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AuditTrails]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[AuditTrails]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -156,10 +156,10 @@ CREATE TABLE [dbo].[AuditTrails](
  CONSTRAINT [PK_audittrail_AuditTrailID] PRIMARY KEY CLUSTERED 
 (
 	[AuditTrailId] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ExceptionLogs]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[ExceptionLogs]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -177,10 +177,72 @@ CREATE TABLE [dbo].[ExceptionLogs](
  CONSTRAINT [PK_exceptionlogs_ExceptionLogID] PRIMARY KEY CLUSTERED 
 (
 	[ExceptionLogId] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[NotificationMessages]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[FirebaseCloudMessagingDeviceRegistrations]    Script Date: 9/7/2022 8:28:09 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FirebaseCloudMessagingDeviceRegistrations](
+	[FirebaseCloudMessagingDeviceRegistrationId] [nvarchar](256) NOT NULL,
+	[UserId] [nvarchar](450) NULL,
+	[IsDeleted] [bit] NULL,
+	[RecordRevisions] [int] NULL,
+	[CreatedBy] [nvarchar](128) NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[LastModifiedBy] [nvarchar](128) NULL,
+	[LastModifiedOn] [datetime] NULL,
+ CONSTRAINT [PK_FirebaseCloudMessagingDeviceRegistrations] PRIMARY KEY CLUSTERED 
+(
+	[FirebaseCloudMessagingDeviceRegistrationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[FirebaseCloudMessagingDeviceTopicSubscriptions]    Script Date: 9/7/2022 8:28:09 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FirebaseCloudMessagingDeviceTopicSubscriptions](
+	[FirebaseCloudMessagingDeviceTopicSubscriptionId] [nvarchar](128) NOT NULL,
+	[FirebaseCloudMessagingDeviceRegistrationId] [nvarchar](256) NOT NULL,
+	[FirebaseCloudMessagingTopicId] [nvarchar](128) NOT NULL,
+	[IsDeleted] [bit] NULL,
+	[RecordRevisions] [int] NULL,
+	[CreatedBy] [nvarchar](128) NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[LastModifiedBy] [nvarchar](128) NULL,
+	[LastModifiedOn] [datetime] NULL,
+ CONSTRAINT [PK_FirebaseCloudMessagingDeviceTopicSubscriptions] PRIMARY KEY CLUSTERED 
+(
+	[FirebaseCloudMessagingDeviceTopicSubscriptionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[FirebaseCloudMessagingTopics]    Script Date: 9/7/2022 8:28:09 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FirebaseCloudMessagingTopics](
+	[FirebaseCloudMessagingTopicId] [nvarchar](128) NOT NULL,
+	[UserId] [nvarchar](450) NULL,
+	[Name] [nvarchar](64) NOT NULL,
+	[IsDeleted] [bit] NULL,
+	[RecordRevisions] [int] NULL,
+	[CreatedBy] [nvarchar](128) NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[LastModifiedBy] [nvarchar](128) NULL,
+	[LastModifiedOn] [datetime] NULL,
+ CONSTRAINT [PK_FirebaseCloudMessagingTopics] PRIMARY KEY CLUSTERED 
+(
+	[FirebaseCloudMessagingTopicId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[NotificationMessages]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -198,10 +260,10 @@ CREATE TABLE [dbo].[NotificationMessages](
  CONSTRAINT [PK_NotificationMessages] PRIMARY KEY CLUSTERED 
 (
 	[NotificationMessageId] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SupportedCultures]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[SupportedCultures]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -218,10 +280,10 @@ CREATE TABLE [dbo].[SupportedCultures](
  CONSTRAINT [PK_SupportedCultures] PRIMARY KEY CLUSTERED 
 (
 	[SupportedCultureId] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TeleCommunicationServiceProviders]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[TeleCommunicationServiceProviders]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -239,10 +301,10 @@ CREATE TABLE [dbo].[TeleCommunicationServiceProviders](
  CONSTRAINT [PK_TeleCommunicationServiceProviders] PRIMARY KEY CLUSTERED 
 (
 	[TeleCommunicationServiceProviderId] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserBlobs]    Script Date: 12/4/2021 1:17:58 PM ******/
+/****** Object:  Table [dbo].[UserBlobs]    Script Date: 9/7/2022 8:28:09 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -263,7 +325,7 @@ CREATE TABLE [dbo].[UserBlobs](
  CONSTRAINT [PK_UserBlob] PRIMARY KEY CLUSTERED 
 (
 	[UserBlobId] ASC
-)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[AspNetRoleClaims]  WITH CHECK ADD  CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY([RoleId])
@@ -311,6 +373,26 @@ ALTER TABLE [dbo].[ExceptionLogs]  WITH CHECK ADD  CONSTRAINT [FK_ExceptionLogs_
 REFERENCES [dbo].[AspNetUsers] ([Id])
 GO
 ALTER TABLE [dbo].[ExceptionLogs] CHECK CONSTRAINT [FK_ExceptionLogs_AspNetUsers]
+GO
+ALTER TABLE [dbo].[FirebaseCloudMessagingDeviceRegistrations]  WITH CHECK ADD  CONSTRAINT [FK_FirebaseCloudMessagingDeviceRegistrations_AspNetUsers] FOREIGN KEY([UserId])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+GO
+ALTER TABLE [dbo].[FirebaseCloudMessagingDeviceRegistrations] CHECK CONSTRAINT [FK_FirebaseCloudMessagingDeviceRegistrations_AspNetUsers]
+GO
+ALTER TABLE [dbo].[FirebaseCloudMessagingDeviceTopicSubscriptions]  WITH CHECK ADD  CONSTRAINT [FK_FirebaseCloudMessagingDeviceTopicSubscriptions_FirebaseCloudMessagingDeviceRegistrations] FOREIGN KEY([FirebaseCloudMessagingDeviceRegistrationId])
+REFERENCES [dbo].[FirebaseCloudMessagingDeviceRegistrations] ([FirebaseCloudMessagingDeviceRegistrationId])
+GO
+ALTER TABLE [dbo].[FirebaseCloudMessagingDeviceTopicSubscriptions] CHECK CONSTRAINT [FK_FirebaseCloudMessagingDeviceTopicSubscriptions_FirebaseCloudMessagingDeviceRegistrations]
+GO
+ALTER TABLE [dbo].[FirebaseCloudMessagingDeviceTopicSubscriptions]  WITH CHECK ADD  CONSTRAINT [FK_FirebaseCloudMessagingDeviceTopicSubscriptions_FirebaseCloudMessagingTopics] FOREIGN KEY([FirebaseCloudMessagingTopicId])
+REFERENCES [dbo].[FirebaseCloudMessagingTopics] ([FirebaseCloudMessagingTopicId])
+GO
+ALTER TABLE [dbo].[FirebaseCloudMessagingDeviceTopicSubscriptions] CHECK CONSTRAINT [FK_FirebaseCloudMessagingDeviceTopicSubscriptions_FirebaseCloudMessagingTopics]
+GO
+ALTER TABLE [dbo].[FirebaseCloudMessagingTopics]  WITH CHECK ADD  CONSTRAINT [FK_FirebaseCloudMessagingTopics_AspNetUsers] FOREIGN KEY([UserId])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+GO
+ALTER TABLE [dbo].[FirebaseCloudMessagingTopics] CHECK CONSTRAINT [FK_FirebaseCloudMessagingTopics_AspNetUsers]
 GO
 ALTER TABLE [dbo].[NotificationMessages]  WITH CHECK ADD  CONSTRAINT [FK_NotificationMessages_AspNetUsers] FOREIGN KEY([UserId])
 REFERENCES [dbo].[AspNetUsers] ([Id])

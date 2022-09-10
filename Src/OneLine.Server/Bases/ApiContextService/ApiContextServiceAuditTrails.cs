@@ -365,7 +365,10 @@ namespace OneLine.Bases
         /// <returns></returns>
         public void AddRangeAudited<T>(IEnumerable<T> entities)
         {
-            DbContext.AddRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Add(entity);
+            }
             DbContext.AddRange(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Add, HttpContextAccessor));
         }
         /// <summary>
@@ -376,7 +379,10 @@ namespace OneLine.Bases
         /// <returns></returns>
         public async Task AddRangeAuditedAsync<T>(IEnumerable<T> entities)
         {
-            await DbContext.AddRangeAsync(entities);
+            foreach (var entity in entities)
+            {
+                await DbContext.AddAsync(entity);
+            }
             await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Add, HttpContextAccessor));
         }
         /// <summary>
@@ -387,7 +393,10 @@ namespace OneLine.Bases
         /// <param name="transactionMessage"></param>
         public void AddRangeAudited<T>(IEnumerable<T> entities, string transactionMessage)
         {
-            DbContext.AddRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Add(entity);
+            }
             DbContext.AddRange(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
         /// <summary>
@@ -399,7 +408,10 @@ namespace OneLine.Bases
         /// <returns></returns>
         public async Task AddRangeAuditedAsync<T>(IEnumerable<T> entities, string transactionMessage)
         {
-            await DbContext.AddRangeAsync(entities);
+            foreach (var entity in entities)
+            {
+                await DbContext.AddAsync(entity);
+            }
             await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
         /// <summary>
@@ -453,7 +465,10 @@ namespace OneLine.Bases
         /// <param name="entities"></param>
         public void UpdateRangeAudited<T>(IEnumerable<T> entities)
         {
-            DbContext.UpdateRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Update(entity);
+            }
             DbContext.AddRange(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Update, HttpContextAccessor));
         }
         /// <summary>
@@ -464,7 +479,10 @@ namespace OneLine.Bases
         /// <returns></returns>
         public async Task UpdateRangeAuditedAsync<T>(IEnumerable<T> entities)
         {
-            DbContext.UpdateRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Update(entity);
+            }
             await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Update, HttpContextAccessor));
         }
         /// <summary>
@@ -475,7 +493,10 @@ namespace OneLine.Bases
         /// <param name="transactionMessage"></param>
         public void UpdateRangeAudited<T>(IEnumerable<T> entities, string transactionMessage)
         {
-            DbContext.UpdateRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Update(entity);
+            }
             DbContext.AddRange(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
         /// <summary>
@@ -487,7 +508,10 @@ namespace OneLine.Bases
         /// <returns></returns>
         public async Task UpdateRangeAuditedAsync<T>(IEnumerable<T> entities, string transactionMessage)
         {
-            DbContext.UpdateRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Update(entity);
+            }
             await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
         /// <summary>
@@ -541,7 +565,10 @@ namespace OneLine.Bases
         /// <param name="entities"></param>
         public void RemoveRangeAudited<T>(IEnumerable<T> entities)
         {
-            DbContext.RemoveRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Remove(entity);
+            }
             DbContext.AddRange(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
         }
         /// <summary>
@@ -552,7 +579,10 @@ namespace OneLine.Bases
         /// <returns></returns>
         public async Task RemoveRangeAuditedAsync<T>(IEnumerable<T> entities)
         {
-            DbContext.RemoveRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Remove(entity);
+            }
             await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(TransactionType.Delete, HttpContextAccessor));
         }
         /// <summary>
@@ -563,7 +593,10 @@ namespace OneLine.Bases
         /// <param name="transactionMessage"></param>
         public void RemoveRangeAudited<T>(IEnumerable<T> entities, string transactionMessage)
         {
-            DbContext.RemoveRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Remove(entity);
+            }
             DbContext.AddRange(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
         /// <summary>
@@ -575,7 +608,10 @@ namespace OneLine.Bases
         /// <returns></returns>
         public async Task RemoveRangeAuditedAsync<T>(IEnumerable<T> entities, string transactionMessage)
         {
-            DbContext.RemoveRange(entities);
+            foreach (var entity in entities)
+            {
+                DbContext.Remove(entity);
+            }
             await DbContext.AddRangeAsync(entities.CreateRangeAuditTrails<T, TAuditTrails>(transactionMessage, HttpContextAccessor));
         }
     }

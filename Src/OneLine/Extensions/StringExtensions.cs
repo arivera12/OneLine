@@ -472,28 +472,24 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static string Encrypt(this string textData, string encryptionkey)
         {
-            using (RijndaelManaged objrij = new RijndaelManaged()
+            using var AES = Aes.Create("AesManaged");
+            AES.Mode = CipherMode.CBC;
+            AES.Padding = PaddingMode.PKCS7;
+            AES.KeySize = 0x80;
+            AES.BlockSize = 0x80;
+            byte[] passBytes = Encoding.UTF8.GetBytes(encryptionkey);
+            byte[] EncryptionkeyBytes = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            int len = passBytes.Length;
+            if (len > EncryptionkeyBytes.Length)
             {
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7,
-                KeySize = 0x80,
-                BlockSize = 0x80
-            })
-            {
-                byte[] passBytes = Encoding.UTF8.GetBytes(encryptionkey);
-                byte[] EncryptionkeyBytes = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                int len = passBytes.Length;
-                if (len > EncryptionkeyBytes.Length)
-                {
-                    len = EncryptionkeyBytes.Length;
-                }
-                Array.Copy(passBytes, EncryptionkeyBytes, len);
-                objrij.Key = EncryptionkeyBytes;
-                objrij.IV = EncryptionkeyBytes;
-                ICryptoTransform objtransform = objrij.CreateEncryptor();
-                byte[] textDataByte = Encoding.UTF8.GetBytes(textData);
-                return Convert.ToBase64String(objtransform.TransformFinalBlock(textDataByte, 0, textDataByte.Length));
+                len = EncryptionkeyBytes.Length;
             }
+            Array.Copy(passBytes, EncryptionkeyBytes, len);
+            AES.Key = EncryptionkeyBytes;
+            AES.IV = EncryptionkeyBytes;
+            ICryptoTransform objtransform = AES.CreateEncryptor();
+            byte[] textDataByte = Encoding.UTF8.GetBytes(textData);
+            return Convert.ToBase64String(objtransform.TransformFinalBlock(textDataByte, 0, textDataByte.Length));
         }
         /// <summary>
         /// Decrypts data using the supplied <paramref name="encryptionkey"/>
@@ -503,28 +499,25 @@ namespace OneLine.Extensions
         /// <returns></returns>
         public static string Decrypt(this string encryptedText, string encryptionkey)
         {
-            using (RijndaelManaged objrij = new RijndaelManaged()
+            using var AES = Aes.Create("AesManaged");
+            AES.Mode = CipherMode.CBC;
+            AES.Padding = PaddingMode.PKCS7;
+            AES.KeySize = 0x80;
+            AES.BlockSize = 0x80;
+
+            byte[] encryptedTextByte = Convert.FromBase64String(encryptedText);
+            byte[] passBytes = Encoding.UTF8.GetBytes(encryptionkey);
+            byte[] EncryptionkeyBytes = new byte[0x10];
+            int len = passBytes.Length;
+            if (len > EncryptionkeyBytes.Length)
             {
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7,
-                KeySize = 0x80,
-                BlockSize = 0x80
-            })
-            {
-                byte[] encryptedTextByte = Convert.FromBase64String(encryptedText);
-                byte[] passBytes = Encoding.UTF8.GetBytes(encryptionkey);
-                byte[] EncryptionkeyBytes = new byte[0x10];
-                int len = passBytes.Length;
-                if (len > EncryptionkeyBytes.Length)
-                {
-                    len = EncryptionkeyBytes.Length;
-                }
-                Array.Copy(passBytes, EncryptionkeyBytes, len);
-                objrij.Key = EncryptionkeyBytes;
-                objrij.IV = EncryptionkeyBytes;
-                byte[] TextByte = objrij.CreateDecryptor().TransformFinalBlock(encryptedTextByte, 0, encryptedTextByte.Length);
-                return Encoding.UTF8.GetString(TextByte);
+                len = EncryptionkeyBytes.Length;
             }
+            Array.Copy(passBytes, EncryptionkeyBytes, len);
+            AES.Key = EncryptionkeyBytes;
+            AES.IV = EncryptionkeyBytes;
+            byte[] TextByte = AES.CreateDecryptor().TransformFinalBlock(encryptedTextByte, 0, encryptedTextByte.Length);
+            return Encoding.UTF8.GetString(TextByte);
         }
         /// <summary>
         /// Converts a query <see cref="string"/> to <typeparamref name="T"/>

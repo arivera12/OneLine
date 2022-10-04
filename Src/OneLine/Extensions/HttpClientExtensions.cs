@@ -678,9 +678,9 @@ namespace OneLine.Extensions
             {
                 return await httpClient.SendAsync(httpRequestMessage);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
       

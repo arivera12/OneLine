@@ -1,12 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using OneLine.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using OneLine.Contracts;
 using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
 
 namespace OneLine.Messaging
 {

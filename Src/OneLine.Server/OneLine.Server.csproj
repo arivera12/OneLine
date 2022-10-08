@@ -4,20 +4,20 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>6</Version>
+    <Version>6.1</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine.Server is a project that can be used on a server backend. This package already includes OneLine.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
-    <PackageTags>netstandard, csharp, netcore, xamarin, blazor, entity-framework-core</PackageTags>
-    <PackageReleaseNotes>Migrated to NET6.0</PackageReleaseNotes>
+    <PackageTags></PackageTags>
+    <PackageReleaseNotes>Migrated to NET6.0 and maui.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>6</AssemblyVersion>
-    <FileVersion>6</FileVersion>
+    <AssemblyVersion>6.1</AssemblyVersion>
+    <FileVersion>6.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

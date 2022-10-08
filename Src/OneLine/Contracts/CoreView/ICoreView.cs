@@ -1,6 +1,4 @@
-﻿using OneLine.Services;
-
-namespace OneLine.Contracts
+﻿namespace OneLine.Contracts
 {
     /// <summary>
     /// Defines a base core view with most common actions and options

@@ -1,6 +1,7 @@
-﻿using OneLine.Contracts;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 
-namespace OneLine
+namespace OneLine.Contracts
 {
     public class ApplicationConfiguration : IApplicationConfiguration
     {

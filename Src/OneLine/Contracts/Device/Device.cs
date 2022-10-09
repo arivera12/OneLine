@@ -1,12 +1,9 @@
 ﻿using DeviceDetectorNET;
 using Microsoft.JSInterop;
-using OneLine.Contracts;
 using OneLine.Extensions;
 using System.Runtime.InteropServices;
 
-using OneLine.Contracts;
-
-namespace OneLine
+namespace OneLine.Contracts
 {
     public class Device : IDevice
     {

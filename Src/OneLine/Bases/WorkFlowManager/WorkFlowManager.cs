@@ -1,10 +1,6 @@
 ﻿using OneLine.Contracts;
 using OneLine.Extensions;
 using OneLine.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OneLine.Bases
 {
@@ -24,12 +20,12 @@ namespace OneLine.Bases
         {
             if (WorkFlowStateProcesses.IsNull() || !WorkFlowStateProcesses.Any())
                 throw new ArgumentNullException(nameof(WorkFlowStateProcesses));
-            if(Record.IsNull())
+            if (Record.IsNull())
                 throw new ArgumentNullException(nameof(Record));
-            if(StatePropertyName.IsNull())
+            if (StatePropertyName.IsNull())
                 throw new ArgumentNullException(nameof(StatePropertyName));
             var currentStateProperty = typeof(T).GetProperties().FirstOrDefault(w => w.PropertyType == typeof(TState) && w.Name == StatePropertyName(Record)).GetValue(Record);
-            if(currentStateProperty.IsNull())
+            if (currentStateProperty.IsNull())
                 throw new ArgumentNullException(nameof(currentStateProperty));
             var recordCurrentState = (TState)currentStateProperty;
             var nextAvailableWorkFlowStateProcessesFromCurrentState = WorkFlowStateProcesses.Where(w => w.CurrentState.Equals(recordCurrentState));

@@ -16,14 +16,14 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
     <Title>OneLine is an abstraction standardized redefined framework.</Title>
     <AssemblyVersion>6.1</AssemblyVersion>
-    <FileVersion>6.1</FileVersion>
-    <Version>6.1</Version>
+    <FileVersion>6.2</FileVersion>
+    <Version>6.2</Version>
     <Company />
     <Description>OneLine is an abstraction standardized redefined framework.</Description>
     <Copyright>Anthony Greg Rivera Cosme</Copyright>
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Migrated to MAUI and NET 6.0.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed cross platform implementation that was wrongly configured.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
@@ -55,6 +55,43 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="SendGrid" Version="9.28.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Contracts\ApplicationConfigurationSource\ApplicationConfigurationSource.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="Contracts\ApplicationConfiguration\ApplicationConfiguration.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="Contracts\ApplicationLocale\ApplicationLocale.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="Contracts\ApplicationState\ApplicationState.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="Contracts\DeviceStorage\DeviceStorage.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="Contracts\Device\Device.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="Contracts\Notification\Notification.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="Contracts\ResourceManagerLocalizer\ResourceManagerLocalizer.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="Contracts\SaveFile\SaveFile.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="Contracts\SupportedCultures\SupportedCultures.cs">
+      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Platforms\" />
   </ItemGroup>
 
 </Project>

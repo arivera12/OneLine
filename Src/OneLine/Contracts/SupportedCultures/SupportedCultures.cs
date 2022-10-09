@@ -1,7 +1,6 @@
-﻿using OneLine.Contracts;
-using System.Globalization;
+﻿using System.Globalization;
 
-namespace OneLine
+namespace OneLine.Contracts
 {
     public class SupportedCultures : ISupportedCultures
     {

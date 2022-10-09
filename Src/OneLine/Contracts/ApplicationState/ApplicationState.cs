@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
 using OneLine.Enums;
 using OneLine.Extensions;
-using OneLine.Contracts;
 
-namespace OneLine
+namespace OneLine.Contracts
 {
     public class ApplicationState : IApplicationState
     {

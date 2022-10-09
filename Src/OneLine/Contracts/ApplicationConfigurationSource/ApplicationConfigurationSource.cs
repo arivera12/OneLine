@@ -1,7 +1,6 @@
-﻿using OneLine.Contracts;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace OneLine
+namespace OneLine.Contracts
 {
     public class ApplicationConfigurationSource : IApplicationConfigurationSource
     {

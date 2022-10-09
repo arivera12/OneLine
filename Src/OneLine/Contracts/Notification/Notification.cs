@@ -1,8 +1,6 @@
 ﻿using BlazorNotification;
-using Microsoft.Extensions.DependencyInjection;
-using OneLine.Contracts
 
-namespace OneLine
+namespace OneLine.Contracts
 {
     public class Notification : INotification
     {

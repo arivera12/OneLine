@@ -1,8 +1,7 @@
-﻿using OneLine.Contracts;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Resources;
 
-namespace OneLine
+namespace OneLine.Contracts
 {
     public class ResourceManagerLocalizer : IResourceManagerLocalizer
     {

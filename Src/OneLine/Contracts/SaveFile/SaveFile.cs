@@ -1,8 +1,7 @@
 ﻿using BlazorDownloadFile;
-using OneLine.Contracts;
 using OneLine.Extensions;
 
-namespace OneLine
+namespace OneLine.Contracts
 {
     public class SaveFile : ISaveFile
     {

@@ -1,7 +1,6 @@
 ﻿using BlazorBrowserStorage;
-using OneLine.Contracts;
 
-namespace OneLine
+namespace OneLine.Contracts
 {
     public class DeviceStorage : IDeviceStorage
     {

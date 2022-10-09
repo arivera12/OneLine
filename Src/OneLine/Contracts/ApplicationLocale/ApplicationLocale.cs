@@ -1,6 +1,4 @@
-﻿using OneLine.Contracts;
-
-namespace OneLine
+﻿namespace OneLine.Contracts
 {
     public class ApplicationLocale : IApplicationLocale
     {

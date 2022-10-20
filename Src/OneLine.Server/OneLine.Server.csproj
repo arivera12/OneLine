@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>6.2</Version>
+    <Version>6.3</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine.Server is a project that can be used on a server backend. This package already includes OneLine.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,12 +12,12 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags></PackageTags>
-    <PackageReleaseNotes>Fixed cross platform implementation that was wrongly configured.</PackageReleaseNotes>
+    <PackageReleaseNotes>fixed SupportedCultures that was on wrong namespace</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>6.2</AssemblyVersion>
-    <FileVersion>6.2</FileVersion>
+    <AssemblyVersion>6.3</AssemblyVersion>
+    <FileVersion>6.3</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

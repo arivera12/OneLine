@@ -23,7 +23,7 @@
     <Copyright>Anthony Greg Rivera Cosme</Copyright>
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>fixed SupportedCultures that was on wrong namespace</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed cross platform implementation that was wrongly configured.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>

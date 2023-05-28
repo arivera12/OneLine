@@ -9,6 +9,7 @@
         bool IsTablet { get; }
         bool IsMobile { get; }
         bool IsXamarinPlatform { get; }
+        bool IsMauiPlatform { get; }
         bool IsAndroidDevice { get; }
         bool IstvOSDevice { get; }
         bool IsiOSDevice { get; }

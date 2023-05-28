@@ -32,7 +32,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return DeviceDetector?.IsDesktop() ?? DeviceInfo.Current.Idiom == DeviceIdiom.Desktop;
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                    return DeviceInfo.Current.Idiom == DeviceIdiom.Desktop;
+#else
+                    return DeviceDetector.IsDesktop();
+#endif
                 }
                 catch
                 {
@@ -46,7 +50,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return DeviceDetector?.IsTablet() ?? DeviceInfo.Current.Idiom == DeviceIdiom.Tablet;
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                    return DeviceInfo.Current.Idiom == DeviceIdiom.Tablet;
+#else
+                    return DeviceDetector.IsTablet();
+#endif
                 }
                 catch
                 {
@@ -60,7 +68,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return DeviceDetector?.IsMobile() ?? DeviceInfo.Current.Idiom == DeviceIdiom.Phone;
+#if ANDROID || IOS || MACCATALYST || WINDOWS  || Linux
+                    return DeviceInfo.Current.Idiom == DeviceIdiom.Phone;
+#else
+                    return DeviceDetector.IsMobile();
+#endif                                                                                                 
                 }
                 catch
                 {
@@ -72,6 +84,7 @@ namespace OneLine.Contracts
         {
             get
             {
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
                 try
                 {
                     return DeviceInfo.Current.Platform.Equals(DevicePlatform.Android) ||
@@ -88,6 +101,35 @@ namespace OneLine.Contracts
                 {
                     return false;
                 }
+#else
+                return false;
+#endif
+            }
+        }
+        public bool IsMauiPlatform
+        {
+            get
+            {
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                try
+                {
+                    return DeviceInfo.Current.Platform.Equals(DevicePlatform.Android) ||
+                  DeviceInfo.Current.Platform.Equals(DevicePlatform.Tizen) ||
+                  DeviceInfo.Current.Platform.Equals(DevicePlatform.iOS) ||
+                  DeviceInfo.Current.Platform.Equals(DevicePlatform.macOS) ||
+                  DeviceInfo.Current.Platform.Equals(DevicePlatform.Tizen) ||
+                  DeviceInfo.Current.Platform.Equals(DevicePlatform.WinUI) ||
+                  DeviceInfo.Current.Platform.Equals(DevicePlatform.MacCatalyst) ||
+                  DeviceInfo.Current.Platform.Equals(DevicePlatform.tvOS) ||
+                  DeviceInfo.Current.Platform.Equals(DevicePlatform.watchOS);
+                }
+                catch
+                {
+                    return false;
+                }
+#else
+                return false;
+#endif
             }
         }
         public bool IsAndroidDevice
@@ -96,7 +138,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return DeviceDetector?.GetOs().Match.Name.Equals("Android") ?? DeviceInfo.Current.Platform.Equals(DevicePlatform.Android);
+#if ANDROID
+                    return DeviceInfo.Current.Platform.Equals(DevicePlatform.Android);
+#else
+                    return DeviceDetector.GetOs().Match.Name.Equals("Android", StringComparison.InvariantCultureIgnoreCase);
+#endif
                 }
                 catch
                 {
@@ -110,7 +156,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
+#if IOS || MACCATALYST
                     return DeviceInfo.Current.Platform.Equals(DevicePlatform.tvOS);
+#else
+                    return DeviceDetector.GetOs().Match.Name.Equals("Apple TV", StringComparison.InvariantCultureIgnoreCase);
+#endif
                 }
                 catch
                 {
@@ -124,7 +174,17 @@ namespace OneLine.Contracts
             {
                 try
                 {
+#if WINDOWS
                     return DeviceInfo.Current.Platform.Equals(DevicePlatform.WinUI);
+#else
+                    return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows CE", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows IoT", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows Mobile", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows Phone", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows RT", StringComparison.InvariantCultureIgnoreCase);
+#endif
                 }
                 catch
                 {
@@ -138,7 +198,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
+#if MACCATALYST
                     return DeviceInfo.Current.Platform.Equals(DevicePlatform.MacCatalyst);
+#else
+                    return false;
+#endif
                 }
                 catch
                 {
@@ -152,7 +216,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return DeviceDetector?.GetOs().Match.Name.Equals("iOS") ?? DeviceInfo.Current.Platform.Equals(DevicePlatform.iOS);
+#if IOS
+                    return DeviceInfo.Current.Platform.Equals(DevicePlatform.iOS);
+#else
+                    return DeviceDetector.GetOs().Match.Name.Equals("iOS", StringComparison.InvariantCultureIgnoreCase);
+#endif
                 }
                 catch
                 {
@@ -166,7 +234,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return DeviceDetector?.GetOs().Match.Name.Equals("Mac") ?? DeviceInfo.Current.Platform.Equals(DevicePlatform.macOS);
+#if MACCATALYST
+                    return DeviceInfo.Current.Platform.Equals(DevicePlatform.macOS);
+#else
+                    return DeviceDetector.GetOs().Match.Name.Equals("Mac", StringComparison.InvariantCultureIgnoreCase);
+#endif
                 }
                 catch
                 {
@@ -180,7 +252,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return DeviceDetector?.GetOs().Match.Name.Equals("Tizen") ?? DeviceInfo.Current.Platform.Equals(DevicePlatform.Tizen);
+#if Linux
+                    return (IsLinuxOSPlatform && DeviceInfo.Current.Platform.Equals(DevicePlatform.Tizen))            
+#else
+                    return DeviceDetector.GetOs().Match.Name.Equals("Tizen", StringComparison.InvariantCultureIgnoreCase);
+#endif
                 }
                 catch
                 {
@@ -195,12 +271,12 @@ namespace OneLine.Contracts
                 try
                 {
                     return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Windows") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Windows CE") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Windows IoT") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Windows Mobile") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Windows Phone") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Windows RT");
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows CE", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows IoT", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows Mobile", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows Phone", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Windows RT", StringComparison.InvariantCultureIgnoreCase);
                 }
                 catch
                 {
@@ -215,19 +291,19 @@ namespace OneLine.Contracts
                 try
                 {
                     return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Arch Linux") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("CentOS") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Debian") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Fedora") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Kubuntu") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("GNU/Linux") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Lubuntu") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("VectorLinux") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("OpenBSD") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Red Hat") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("SUSE") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Ubuntu") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Xubuntu");
+                        DeviceDetector.GetOs().Match.Name.Equals("Arch Linux", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("CentOS", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Debian", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Fedora", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Kubuntu", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("GNU/Linux", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Lubuntu", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("VectorLinux", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("OpenBSD", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Red Hat", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("SUSE", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Ubuntu", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("Xubuntu", StringComparison.InvariantCultureIgnoreCase);
                 }
                 catch
                 {
@@ -242,8 +318,8 @@ namespace OneLine.Contracts
                 try
                 {
                     return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
-                        DeviceDetector.GetOs().Match.Name.Equals("Mac") ||
-                        DeviceDetector.GetOs().Match.Name.Equals("iOS");
+                        DeviceDetector.GetOs().Match.Name.Equals("Mac", StringComparison.InvariantCultureIgnoreCase) ||
+                        DeviceDetector.GetOs().Match.Name.Equals("iOS", StringComparison.InvariantCultureIgnoreCase);
                 }
                 catch
                 {
@@ -257,7 +333,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return DeviceInfo.Current.DeviceType.Equals(DeviceType.Physical);
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                    return IsXamarinPlatform && DeviceInfo.Current.DeviceType.Equals(DeviceType.Physical);
+#else
+                    return false;
+#endif
                 }
                 catch
                 {
@@ -271,7 +351,11 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return DeviceInfo.Current.DeviceType.Equals(DeviceType.Virtual);
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                    return IsXamarinPlatform && DeviceInfo.Current.DeviceType.Equals(DeviceType.Virtual);
+#else
+                    return false;
+#endif
                 }
                 catch
                 {
@@ -316,7 +400,7 @@ namespace OneLine.Contracts
             {
                 try
                 {
-                    return JSRuntime.IsNotNull() && !(JSRuntime is JSInProcessRuntime);
+                    return JSRuntime.IsNotNull() && JSRuntime is not JSInProcessRuntime;
                 }
                 catch
                 {

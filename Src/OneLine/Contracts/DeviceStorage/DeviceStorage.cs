@@ -4,18 +4,11 @@ namespace OneLine.Contracts
 {
     public class DeviceStorage : IDeviceStorage
     {
-        private IDevice Device { get; set; }
         private ILocalStorage LocalStorage { get; set; }
         private ISessionStorage SessionStorage { get; set; }
         private IDictionary<string, string> SessionStorageDictionary { get; set; }
-        public DeviceStorage(IDevice device)
+        public DeviceStorage(ILocalStorage localStorage, ISessionStorage sessionStorage)
         {
-            Device = device;
-            SessionStorageDictionary = new Dictionary<string, string>();
-        }
-        public DeviceStorage(IDevice device, ILocalStorage localStorage, ISessionStorage sessionStorage)
-        {
-            Device = device;
             SessionStorageDictionary = new Dictionary<string, string>();
             LocalStorage = localStorage;
             SessionStorage = sessionStorage;
@@ -23,117 +16,101 @@ namespace OneLine.Contracts
         /// <inheritdoc/>
         public async Task Clear(bool useDevicePersistentStorageProvider = false)
         {
-            if (Device.IsXamarinPlatform)
+            if (useDevicePersistentStorageProvider)
             {
-                if (useDevicePersistentStorageProvider)
-                {
-                    SecureStorage.RemoveAll();
-                }
-                else
-                {
-                    SessionStorageDictionary.Clear();
-                }
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                SecureStorage.RemoveAll();                   
+#else
+                await LocalStorage.Clear();
+#endif
             }
-            else if (Device.IsWebPlatform)
+            else
             {
-                if (useDevicePersistentStorageProvider)
-                {
-                    await LocalStorage.Clear();
-                }
-                else
-                {
-                    await SessionStorage.Clear();
-                }
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                SessionStorageDictionary.Clear();                   
+#else
+                await SessionStorage.Clear();
+#endif
             }
         }
         /// <inheritdoc/>
         public async Task<T> GetItem<T>(string key, bool useDevicePersistentStorageProvider = false)
         {
-            if (Device.IsXamarinPlatform)
+            if (useDevicePersistentStorageProvider)
             {
-                if (useDevicePersistentStorageProvider)
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                var stringValue = await SecureStorage.GetAsync(key);
+                if (!string.IsNullOrWhiteSpace(stringValue))
                 {
-                    var stringValue = await SecureStorage.GetAsync(key);
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);
+                }
+                else
+                {
+                    return default(T);
+                }
+#else
+                return await LocalStorage.GetItem<T>(key);
+#endif
+            }
+            else
+            {
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                if (SessionStorageDictionary.ContainsKey(key))
+                {
+                    var stringValue = SessionStorageDictionary[key];
                     if (!string.IsNullOrWhiteSpace(stringValue))
                     {
                         return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);
                     }
-                }
-                else
-                {
-                    if (SessionStorageDictionary.ContainsKey(key))
+                    else
                     {
-                        var stringValue = SessionStorageDictionary[key];
-                        if (!string.IsNullOrWhiteSpace(stringValue))
-                        {
-                            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);
-                        }
+                        return default(T);
                     }
                 }
+                return default(T);
+#else
+                return await SessionStorage.GetItem<T>(key);
+#endif     
             }
-            else if (Device.IsWebPlatform)
-            {
-                if (useDevicePersistentStorageProvider)
-                {
-                    return await LocalStorage.GetItem<T>(key);
-                }
-                else
-                {
-                    return await SessionStorage.GetItem<T>(key);
-                }
-            }
-            return default;
         }
         /// <inheritdoc/>
         public async Task RemoveItem(string key, bool useDevicePersistentStorageProvider = false)
         {
-            if (Device.IsXamarinPlatform)
+            if (useDevicePersistentStorageProvider)
             {
-                if (useDevicePersistentStorageProvider)
-                {
-                    SecureStorage.Remove(key);
-                }
-                else
-                {
-                    SessionStorageDictionary.Remove(key);
-                }
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                SecureStorage.Remove(key);
+#else
+                await LocalStorage.RemoveItem(key);
+#endif
             }
-            else if (Device.IsWebPlatform)
+            else
             {
-                if (useDevicePersistentStorageProvider)
-                {
-                    await LocalStorage.RemoveItem(key);
-                }
-                else
-                {
-                    await SessionStorage.RemoveItem(key);
-                }
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                SessionStorageDictionary.Remove(key);
+#else
+                await SessionStorage.RemoveItem(key);
+#endif
             }
         }
         /// <inheritdoc/>
         public async Task SetItem<T>(string key, T item, bool useDevicePersistentStorageProvider = false)
         {
-            if (Device.IsXamarinPlatform)
+            if (useDevicePersistentStorageProvider)
             {
-                if (useDevicePersistentStorageProvider)
-                {
-                    await SecureStorage.SetAsync(key, Newtonsoft.Json.JsonConvert.SerializeObject(item));
-                }
-                else
-                {
-                    SessionStorageDictionary.Add(key, Newtonsoft.Json.JsonConvert.SerializeObject(item));
-                }
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                await SecureStorage.SetAsync(key, Newtonsoft.Json.JsonConvert.SerializeObject(item));
+#else
+                await LocalStorage.SetItem(key, item);
+#endif
             }
-            else if (Device.IsWebPlatform)
+            else
             {
-                if (useDevicePersistentStorageProvider)
-                {
-                    await LocalStorage.SetItem(key, item);
-                }
-                else
-                {
-                    await SessionStorage.SetItem(key, item);
-                }
+#if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
+                SessionStorageDictionary.Add(key, Newtonsoft.Json.JsonConvert.SerializeObject(item));
+#else
+                await SessionStorage.SetItem(key, item);
+#endif
             }
         }
     }

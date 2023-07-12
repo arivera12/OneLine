@@ -171,7 +171,7 @@ CREATE TABLE [dbo].[ExceptionLogs](
 	[InnerException] [nvarchar](4000) NULL,
 	[Message] [nvarchar](4000) NULL,
 	[Source] [nvarchar](4000) NULL,
-	[StackTrace] [nvarchar](4000) NULL,
+	[StackTrace] [nvarchar](max) NULL,
 	[CreatedOn] [datetime] NOT NULL,
 	[CreatedBy] [nvarchar](450) NULL,
  CONSTRAINT [PK_exceptionlogs_ExceptionLogID] PRIMARY KEY CLUSTERED 

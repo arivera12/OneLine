@@ -18,8 +18,9 @@ namespace OneLine.Contracts
         {
             if (useDevicePersistentStorageProvider)
             {
+                
 #if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
-                SecureStorage.RemoveAll();                   
+                Directory.Delete(FileSystem.Current.AppDataDirectory, true);                  
 #else
                 await LocalStorage.Clear();
 #endif
@@ -39,15 +40,15 @@ namespace OneLine.Contracts
             if (useDevicePersistentStorageProvider)
             {
 #if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
-                var stringValue = await SecureStorage.GetAsync(key);
-                if (!string.IsNullOrWhiteSpace(stringValue))
+                if(File.Exists(Path.Combine(FileSystem.Current.AppDataDirectory, key)))
                 {
-                    return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);
+                    var stringValue = await File.ReadAllTextAsync(Path.Combine(FileSystem.Current.AppDataDirectory, key));
+                    if (!string.IsNullOrWhiteSpace(stringValue))
+                    {
+                        return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);
+                    }
                 }
-                else
-                {
-                    return default(T);
-                }
+                return default(T);
 #else
                 return await LocalStorage.GetItem<T>(key);
 #endif
@@ -79,7 +80,10 @@ namespace OneLine.Contracts
             if (useDevicePersistentStorageProvider)
             {
 #if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
-                SecureStorage.Remove(key);
+                if(File.Exists(Path.Combine(FileSystem.Current.AppDataDirectory, key)))
+                {
+                    File.Delete(Path.Combine(FileSystem.Current.AppDataDirectory, key));
+                }
 #else
                 await LocalStorage.RemoveItem(key);
 #endif
@@ -99,7 +103,7 @@ namespace OneLine.Contracts
             if (useDevicePersistentStorageProvider)
             {
 #if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
-                await SecureStorage.SetAsync(key, Newtonsoft.Json.JsonConvert.SerializeObject(item));
+                await File.WriteAllTextAsync(Path.Combine(FileSystem.Current.AppDataDirectory, key), Newtonsoft.Json.JsonConvert.SerializeObject(item));
 #else
                 await LocalStorage.SetItem(key, item);
 #endif
@@ -107,7 +111,7 @@ namespace OneLine.Contracts
             else
             {
 #if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
-                SessionStorageDictionary.Add(key, Newtonsoft.Json.JsonConvert.SerializeObject(item));
+                SessionStorageDictionary.Add(Path.Combine(FileSystem.Current.AppDataDirectory, key), Newtonsoft.Json.JsonConvert.SerializeObject(item));
 #else
                 await SessionStorage.SetItem(key, item);
 #endif

@@ -50,14 +50,15 @@ I have developed 35+ applications with it.
 ## Botoneline features  (Commercially available)
 - [x] RAD (Rapid Application Development) and Prototyping
 - [x] WORE (Write once, run everywhere)
-- [x] Multi platform deployment support (Thanks to [MobileBlazorBindings](https://github.com/dotnet/MobileBlazorBindings))
+- [x] Multi platform deployment support (Thanks to [MAUI](https://dotnet.microsoft.com/en-us/apps/maui))
   - [x] Web Api 
-  - [x] Blazor WAsm 
   - [x] Blazor Server
-  - [x] Android 4.4 onwards
-  - [x] iOS 12.0 onwards
-  - [ ] Windows Desktop and WPF (Under Development)
-  - [ ] MacOS Desktop (Under Development)
+  - [x] Android
+  - [x] iOS
+  - [x] Windows Desktop and WPF
+  - [x] MacOS Desktop 
+  - [x] Tizen
+  - [ ] Blazor WAsm (Under Development)
   - [ ] Linux (Planning TBA)
 - [x] Database Providers Supported Over Entity Framework Core
   - [x] SQL Server 2012 onwards
@@ -70,8 +71,8 @@ I have developed 35+ applications with it.
 Any other database engines can be supported as requested per need.
 
 ### Managements and Pre-implementations
-- [x] User account management
-- [x] Localized Emails Management
+- [x] Users account management
+- [x] Localized Emails Templates
 - [x] Authorization and authentication management using JWT
 - [x] Default security pre implemented (Admin only)
 - [x] Fully claims based security pre implemented
@@ -100,16 +101,15 @@ Any other database engines can be supported as requested per need.
   - [x] *FormViewComponent.razor
   - [x] *IndexViewComponent.razor
   - [x] *ListViewComponent.razor
-  - [x] *ModalOptionsComponent.razor
   - [x] *TableViewComponent.razor
   - [x] *TypeaheadComponent.razor
-- [x] Every UI component withing the same table context shares the same base UI class
+- [x] Every UI component shares the same base UI class
 - [x] Every UI component is editable and extendable as needed
 - [x] Device Oriented UI/UX
   - [x] Desktop
   - [x] Tablet
   - [x] Mobile
-- [x] Bootstrap 4 Template
+- [x] Bootstrap 5 Template
 - [x] Pre-Implemented Controllers with authorization and authentication
 - [x] Pre-Implemented Repositories as services and pre registered service container
   - [x] Repository and Service patterns have been redefined and reimplemented as Repository Service using Base Api Context Service
@@ -120,30 +120,30 @@ Any other database engines can be supported as requested per need.
 - [x] Search results are always paged by default
 - [x] CRUD methods are pre implemented supports single and multiple, also with performance multiple method.
 - [x] Multiple Blob Storage Provider Support (Thanks to [Storage.Net](https://github.com/aloneguid/storage))
-- [x] Microsoft Azure
-  - [x] Blob Storage
-  - [x] File Storage
-  - [x] Data Lake Gen 1
-  - [x] Data Lake Gen 2
-  - [x] Storage Queue
-  - [x] Event Hubs
-  - [x] Service Bus
-- [x] Amazon Web Services
-  - [x] Simple Storage Service (S3)
-  - [x] Simple Queue Service (SQS)
-- [x] Google Cloud Platform
-  - [x] Cloud Storage
-- [x] Misc
-  - [x] Azure Databricks DBFS
-  - [x] Service Fabric Reliable Collections
-  - [x] Azure Key Vault
-  - [x] Local Disk (Blobs, Messaging)
-  - [x] Zip Archive (Blobs)
-  - [x] In-Memory (Blobs, Messaging)
-  - [x] FTP (Blobs)
-- [x] Blobs Management is centralized and auto managed
-- [x] Blobs doesn't never need a child table to support multiple file upload references
-  - [x] Define a binary column field on your table and the tool will manage it for you saving the file reference in the binary column and the file in the physical storage.
+    - [x] Microsoft Azure
+      - [x] Blob Storage
+      - [x] File Storage
+      - [x] Data Lake Gen 1
+      - [x] Data Lake Gen 2
+      - [x] Storage Queue
+      - [x] Event Hubs
+      - [x] Service Bus
+    - [x] Amazon Web Services
+      - [x] Simple Storage Service (S3)
+      - [x] Simple Queue Service (SQS)
+    - [x] Google Cloud Platform
+      - [x] Cloud Storage
+    - [x] Misc
+      - [x] Azure Databricks DBFS
+      - [x] Service Fabric Reliable Collections
+      - [x] Azure Key Vault
+      - [x] Local Disk (Blobs, Messaging)
+      - [x] Zip Archive (Blobs)
+      - [x] In-Memory (Blobs, Messaging)
+      - [x] FTP (Blobs)
+    - [x] Blobs Management is centralized and auto managed
+    - [x] Blobs doesn't never need a child table to support multiple file upload references
+      - [x] Define a binary column field on your table and the tool will manage it for you saving the file reference in the binary column and the file in the physical storage.
 - [x] Server exceptions are pre-handled and recorded
 - [x] Every operation is auto audited with option of rolling back any operation at any time
 - [x] SDK export available to share from base project for .net

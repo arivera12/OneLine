@@ -6,7 +6,7 @@ namespace OneLine.Contracts
     {
         private ILocalStorage LocalStorage { get; set; }
         private ISessionStorage SessionStorage { get; set; }
-        private IDictionary<string, string> SessionStorageDictionary { get; set; }
+        public static IDictionary<string, string> SessionStorageDictionary { get; set; }
         public DeviceStorage(ILocalStorage localStorage, ISessionStorage sessionStorage)
         {
             SessionStorageDictionary = new Dictionary<string, string>();
@@ -56,9 +56,9 @@ namespace OneLine.Contracts
             else
             {
 #if ANDROID || IOS || MACCATALYST || WINDOWS || Linux
-                if (SessionStorageDictionary.ContainsKey(key))
+                if (SessionStorageDictionary.ContainsKey(Path.Combine(FileSystem.Current.AppDataDirectory, key)))
                 {
-                    var stringValue = SessionStorageDictionary[key];
+                    var stringValue = SessionStorageDictionary[Path.Combine(FileSystem.Current.AppDataDirectory, key)];
                     if (!string.IsNullOrWhiteSpace(stringValue))
                     {
                         return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringValue);

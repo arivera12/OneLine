@@ -15,15 +15,15 @@
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
     <Title>OneLine is an abstraction standardized redefined framework.</Title>
-    <AssemblyVersion>7.1</AssemblyVersion>
-    <FileVersion>7.1</FileVersion>
-    <Version>7.1</Version>
+    <AssemblyVersion>7.2</AssemblyVersion>
+    <FileVersion>7.2</FileVersion>
+    <Version>7.2</Version>
     <Company />
     <Description>OneLine is an abstraction standardized redefined framework.</Description>
     <Copyright>Anthony Greg Rivera Cosme</Copyright>
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Removed internal secure storage with plain storage to load up macos and ios without external configurations needs.</PackageReleaseNotes>
+    <PackageReleaseNotes>Small fix on device storage read operation.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>

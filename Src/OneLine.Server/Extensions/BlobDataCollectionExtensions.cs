@@ -31,13 +31,13 @@ namespace OneLine.Extensions
             {
                 throw new ArgumentException("The AllowedBlobMaxLength can't be zero or less.");
             }
-            if (formFileRules.AllowedMinimunFiles <= 0)
+            if (formFileRules.AllowedMinimumFiles <= 0)
             {
-                throw new ArgumentException("The AllowedMinimunFiles can't be zero or less.");
+                throw new ArgumentException("The AllowedMinimumFiles can't be zero or less.");
             }
-            if (formFileRules.AllowedMaximunFiles <= 0)
+            if (formFileRules.AllowedMaximumFiles <= 0)
             {
-                throw new ArgumentException("The AllowedMaximunFiles can't be zero or less.");
+                throw new ArgumentException("The AllowedMaximumFiles can't be zero or less.");
             }
             var blobs = predicate == null ? blobDatas : blobDatas.Where(predicate);
             if ((blobs.IsNull() || !blobDatas.Any()) && formFileRules.IsRequired || formFileRules.ForceUpload)
@@ -46,13 +46,13 @@ namespace OneLine.Extensions
             }
             else if (blobs.IsNotNull() && blobs.Any())
             {
-                if (blobs.Count() < formFileRules.AllowedMinimunFiles)
+                if (blobs.Count() < formFileRules.AllowedMinimumFiles)
                 {
-                    return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheCountOfFilesUploadedHasExceededTheMaximunAllowedFiles" };
+                    return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheCountOfFilesUploadedHasExceededTheMaximumAllowedFiles" };
                 }
-                if (blobs.Count() > formFileRules.AllowedMaximunFiles)
+                if (blobs.Count() > formFileRules.AllowedMaximumFiles)
                 {
-                    return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheCountOfFilesUploadedIsLessThanTheMinimunAllowedFiles" };
+                    return new ApiResponse<string>() { Status = ApiResponseStatus.Failed, Message = "TheCountOfFilesUploadedIsLessThanTheMinimumAllowedFiles" };
                 }
                 foreach (var blob in blobs)
                 {

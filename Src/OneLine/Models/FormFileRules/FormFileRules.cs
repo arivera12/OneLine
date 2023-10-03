@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OneLine.Models
+﻿namespace OneLine.Models
 {
     /// <summary>
     /// Implements a structure to set rules to a form file
@@ -14,9 +12,9 @@ namespace OneLine.Models
         /// <inheritdoc/>
         public string PropertyName { get; set; }
         /// <inheritdoc/>
-        public short AllowedMaximunFiles { get; set; }
+        public short AllowedMaximumFiles { get; set; }
         /// <inheritdoc/>
-        public short AllowedMinimunFiles { get; set; }
+        public short AllowedMinimumFiles { get; set; }
         /// <inheritdoc/>
         public long AllowedBlobMaxLength { get; set; }
         /// <inheritdoc/>
@@ -80,16 +78,16 @@ namespace OneLine.Models
         /// <param name="isRequired">Is the form file required?</param>
         /// <param name="propertyName">The property name which is being validated</param>
         /// <param name="accept">Tells the input file dialog which file types accept</param>
-        /// <param name="allowedMaximunFiles">The maximun allowed files</param>
-        /// <param name="allowedMinimunFiles">The minimun required files</param>
+        /// <param name="allowedMaximumFiles">The maximum allowed files</param>
+        /// <param name="allowedMinimumFiles">The minimum required files</param>
         /// <param name="allowedBlobMaxLength">The maximum file size in measured in bytes</param>
-        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximunFiles, short allowedMinimunFiles, long allowedBlobMaxLength)
+        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximumFiles, short allowedMinimumFiles, long allowedBlobMaxLength)
         {
             IsRequired = isRequired;
             PropertyName = propertyName;
             Accept = accept;
-            AllowedMaximunFiles = allowedMaximunFiles;
-            AllowedMinimunFiles = allowedMinimunFiles;
+            AllowedMaximumFiles = allowedMaximumFiles;
+            AllowedMinimumFiles = allowedMinimumFiles;
             AllowedBlobMaxLength = allowedBlobMaxLength;
         }
         /// <summary>
@@ -98,17 +96,17 @@ namespace OneLine.Models
         /// <param name="isRequired">Is the form file required?</param>
         /// <param name="propertyName">The property name which is being validated</param>
         /// <param name="accept">Tells the input file dialog which file types accept</param>
-        /// <param name="allowedMaximunFiles">The maximun allowed files</param>
-        /// <param name="allowedMinimunFiles">The minimun required files</param>
+        /// <param name="allowedMaximumFiles">The maximum allowed files</param>
+        /// <param name="allowedMinimumFiles">The minimum required files</param>
         /// <param name="allowedBlobMaxLength">The maximum file size in measured in bytes</param>
         /// <param name="allowedExtensions">The allowed file extensions</param>
-        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximunFiles, short allowedMinimunFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions)
+        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximumFiles, short allowedMinimumFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions)
         {
             IsRequired = isRequired;
             PropertyName = propertyName;
             Accept = accept;
-            AllowedMaximunFiles = allowedMaximunFiles;
-            AllowedMinimunFiles = allowedMinimunFiles;
+            AllowedMaximumFiles = allowedMaximumFiles;
+            AllowedMinimumFiles = allowedMinimumFiles;
             AllowedBlobMaxLength = allowedBlobMaxLength;
             AllowedExtensions = allowedExtensions;
         }
@@ -118,18 +116,18 @@ namespace OneLine.Models
         /// <param name="isRequired">Is the form file required?</param>
         /// <param name="propertyName">The property name which is being validated</param>
         /// <param name="accept">Tells the input file dialog which file types accept</param>
-        /// <param name="allowedMaximunFiles">The maximun allowed files</param>
-        /// <param name="allowedMinimunFiles">The minimun required files</param>
+        /// <param name="allowedMaximumFiles">The maximum allowed files</param>
+        /// <param name="allowedMinimumFiles">The minimum required files</param>
         /// <param name="allowedBlobMaxLength">The maximum file size in measured in bytes</param>
         /// <param name="allowedExtensions">The allowed file extensions</param>
         /// <param name="allowedContentTypes">The allowed content types</param>
-        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximunFiles, short allowedMinimunFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions, IEnumerable<string> allowedContentTypes)
+        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximumFiles, short allowedMinimumFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions, IEnumerable<string> allowedContentTypes)
         {
             IsRequired = isRequired;
             PropertyName = propertyName;
             Accept = accept;
-            AllowedMaximunFiles = allowedMaximunFiles;
-            AllowedMinimunFiles = allowedMinimunFiles;
+            AllowedMaximumFiles = allowedMaximumFiles;
+            AllowedMinimumFiles = allowedMinimumFiles;
             AllowedBlobMaxLength = allowedBlobMaxLength;
             AllowedExtensions = allowedExtensions;
             AllowedContentTypes = allowedContentTypes;
@@ -140,19 +138,19 @@ namespace OneLine.Models
         /// <param name="isRequired">Is the form file required?</param>
         /// <param name="propertyName">The property name which is being validated</param>
         /// <param name="accept">Tells the input file dialog which file types accept</param>
-        /// <param name="allowedMaximunFiles">The maximun allowed files</param>
-        /// <param name="allowedMinimunFiles">The minimun required files</param>
+        /// <param name="allowedMaximumFiles">The maximum allowed files</param>
+        /// <param name="allowedMinimumFiles">The minimum required files</param>
         /// <param name="allowedBlobMaxLength">The maximum file size in measured in bytes</param>
         /// <param name="allowedExtensions">The allowed file extensions</param>
         /// <param name="allowedContentTypes">The allowed content types</param>
         /// <param name="allowedContentDispositions">The allowed content dispositions</param>
-        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximunFiles, short allowedMinimunFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions, IEnumerable<string> allowedContentTypes, IEnumerable<string> allowedContentDispositions)
+        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximumFiles, short allowedMinimumFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions, IEnumerable<string> allowedContentTypes, IEnumerable<string> allowedContentDispositions)
         {
             IsRequired = isRequired;
             PropertyName = propertyName;
             Accept = accept;
-            AllowedMaximunFiles = allowedMaximunFiles;
-            AllowedMinimunFiles = allowedMinimunFiles;
+            AllowedMaximumFiles = allowedMaximumFiles;
+            AllowedMinimumFiles = allowedMinimumFiles;
             AllowedBlobMaxLength = allowedBlobMaxLength;
             AllowedContentTypes = allowedContentTypes;
             AllowedExtensions = allowedExtensions;
@@ -164,20 +162,20 @@ namespace OneLine.Models
         /// <param name="isRequired">Is the form file required?</param>
         /// <param name="propertyName">The property name which is being validated</param>
         /// <param name="accept">Tells the input file dialog which file types accept</param>
-        /// <param name="allowedMaximunFiles">The maximun allowed files</param>
-        /// <param name="allowedMinimunFiles">The minimun required files</param>
+        /// <param name="allowedMaximumFiles">The maximum allowed files</param>
+        /// <param name="allowedMinimumFiles">The minimum required files</param>
         /// <param name="allowedBlobMaxLength">The maximum file size in measured in bytes</param>
         /// <param name="allowedExtensions">The allowed file extensions</param>
         /// <param name="allowedContentTypes">The allowed content types</param>
         /// <param name="allowedContentDispositions">The allowed content dispositions</param>
         /// <param name="forceUpload">Forces a file/s to be uploaded</param>
-        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximunFiles, short allowedMinimunFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions, IEnumerable<string> allowedContentTypes, IEnumerable<string> allowedContentDispositions, bool forceUpload)
+        public FormFileRules(bool isRequired, string propertyName, string accept, short allowedMaximumFiles, short allowedMinimumFiles, long allowedBlobMaxLength, IEnumerable<string> allowedExtensions, IEnumerable<string> allowedContentTypes, IEnumerable<string> allowedContentDispositions, bool forceUpload)
         {
             IsRequired = isRequired;
             PropertyName = propertyName;
             Accept = accept;
-            AllowedMaximunFiles = allowedMaximunFiles;
-            AllowedMinimunFiles = allowedMinimunFiles;
+            AllowedMaximumFiles = allowedMaximumFiles;
+            AllowedMinimumFiles = allowedMinimumFiles;
             AllowedBlobMaxLength = allowedBlobMaxLength;
             AllowedContentTypes = allowedContentTypes;
             AllowedExtensions = allowedExtensions;

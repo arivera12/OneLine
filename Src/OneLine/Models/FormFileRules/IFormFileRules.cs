@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OneLine.Models
+﻿namespace OneLine.Models
 {
     /// <summary>
     /// Defines a structure to set rules to a form file
@@ -21,13 +19,13 @@ namespace OneLine.Models
         /// </summary>
         string PropertyName { get; set; }
         /// <summary>
-        /// The maximun allowed files.
+        /// The maximum allowed files.
         /// </summary>
-        short AllowedMaximunFiles { get; set; }
+        short AllowedMaximumFiles { get; set; }
         /// <summary>
-        /// The minimun allowed files.
+        /// The minimum allowed files.
         /// </summary>
-        short AllowedMinimunFiles { get; set; }
+        short AllowedMinimumFiles { get; set; }
         /// <summary>
         /// The allowed max length in bytes.
         /// </summary>

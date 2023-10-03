@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>7.2</Version>
+    <Version>7.3</Version>
     <Authors>Anthony G. Rivera Cosme</Authors>
     <Description>OneLine.Server is a project that can be used on a server backend. This package already includes OneLine.</Description>
     <Copyright>Anthony G. Rivera Cosme</Copyright>
@@ -12,12 +12,12 @@
     <PackageProjectUrl>https://github.com/arivera12/OneLine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arivera12/OneLine</RepositoryUrl>
     <PackageTags></PackageTags>
-    <PackageReleaseNotes>Small fix on device storage read operation.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed typo on class property and translations keys and texts.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>C#</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>7.2</AssemblyVersion>
-    <FileVersion>7.2</FileVersion>
+    <AssemblyVersion>7.3</AssemblyVersion>
+    <FileVersion>7.3</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
